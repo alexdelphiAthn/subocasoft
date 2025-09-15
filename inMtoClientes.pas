@@ -32,7 +32,10 @@ uses
   dxBevel, cxDBNavigator, System.UITypes, dxDateRanges, dxGDIPlusClasses,
   cxImage, Vcl.Menus, cxButtons, dxBar, Vcl.ToolWin, Vcl.ActnMan, Vcl.ActnCtrls,
   dxScrollbarAnnotations, cxDBLabel, Vcl.Grids, Vcl.DBGrids, cxRadioGroup,
-  cxGroupBox;
+  cxGroupBox, dxSkinBasic, dxSkinOffice2016Colorful, dxSkinOffice2016Dark,
+  dxSkinOffice2019Black, dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray,
+  dxSkinOffice2019White, dxSkinTheBezier, dxSkinVisualStudio2013Blue,
+  dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -131,7 +134,7 @@ type
     pnlHistoriaRight: TPanel;
     pnl3: TPanel;
     cxgrd5: TcxGrid;
-    cxgrdbtblvwHistoriasClientes: TcxGridDBTableView;
+    tvHistoriasClientes: TcxGridDBTableView;
     cxgrdbclmncxgrdtvtv1FECHA: TcxGridDBColumn;
     cxgrdbclmncxgrdtvtv1CODIGO_ARTICULO: TcxGridDBColumn;
     cxgrdbclmncxgrdtvtv1DESCRIPCION_ARTICULO: TcxGridDBColumn;
@@ -282,10 +285,9 @@ procedure TfrmMtoClientes.FormCreate(Sender: TObject);
 begin
   dmmClientes := TDMClientes.Create(nil);
   dsTablaG.DataSet := dmmClientes.unqryClientes;
-  cxgrdbtblvwHistoriasClientes.DataController.DataSource := dmmClientes.dsHistoria;
+  tvHistoriasClientes.DataController.DataSource := dmmClientes.dsHistoria;
   tvFacturacion.DataController.DataSource := dmmClientes.dsFacturas;
   tvLineasFacturacion.DataController.DataSource := dmmClientes.dsLinFac;
-
   inherited;
 end;
 
@@ -359,13 +361,13 @@ begin
    or (dmmClientes.unqryHistoria.State = dsEdit))  then
     dmmClientes.unqryHistoria.Post;
   for I := 0 to
-              cxgrdbtblvwHistoriasClientes.Controller.SelectedRecordCount - 1 do
+                       tvHistoriasClientes.Controller.SelectedRecordCount - 1 do
   begin
     ColumnIndex := cxgrdbclmncxgrdtvtv1ID.Index;
     RecordIndex :=
-         cxgrdbtblvwHistoriasClientes.Controller.SelectedRecords[I].RecordIndex;
+         tvHistoriasClientes.Controller.SelectedRecords[I].RecordIndex;
     sIdHistoria :=
-     VarToStr(cxgrdbtblvwHistoriasClientes.DataController.Values[RecordIndex,
+     VarToStr(tvHistoriasClientes.DataController.Values[RecordIndex,
                                                                   ColumnIndex]);
     dmmClientes.FacturarHistorias(sIdHistoria, sSerie, sNroFac, sNroLin);
     sResul := sResul + sSerie +'\'+ sNroFac + ' linea ' + sNroLin + sLineBreak;
@@ -375,8 +377,6 @@ begin
   ShowMessage('Se ha/n creado los documentos de borrador de venta ' +
                                          'correctamente '+ sLineBreak + sResul);
 end;
-
-
 
 procedure TfrmMtoClientes.cxdbtxtdtNIFPropertiesChange(Sender: TObject);
 //var

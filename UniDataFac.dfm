@@ -188,7 +188,6 @@ object dmFac: TdmFac
       
         'order by fecha_factura desc, serie_factura desc, F.NRO_FACTURA d' +
         'esc')
-    Active = True
     AutoCalcFields = False
     AfterInsert = zqryFacAfterInsert
     BeforePost = zqryFacBeforePost
@@ -464,7 +463,6 @@ object dmFac: TdmFac
     MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'SERIE_FACTURA;NRO_FACTURA'
     DetailFields = 'SERIE_FACTURA_LINEA;NRO_FACTURA_LINEA'
-    Active = True
     BeforeInsert = zqryLinFacBeforeInsert
     AfterInsert = unqryLinFacAfterInsert
     BeforePost = zqryLinFacBeforePost

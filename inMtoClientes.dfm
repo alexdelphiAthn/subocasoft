@@ -169,6 +169,7 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
+    ActivePage = tsFicha
     ExplicitWidth = 1021
     ExplicitHeight = 601
     inherited tsLista: TTabSheet
@@ -604,7 +605,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 294
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = cxtbsht3
+          Properties.ActivePage = cxtbsht2
           Properties.CustomButtons.Buttons = <>
           ClientRectBottom = 290
           ClientRectLeft = 4
@@ -816,10 +817,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
               Left = 853
               Top = 0
@@ -865,7 +862,7 @@ inherited frmMtoClientes: TfrmMtoClientes
                 Height = 255
                 Align = alClient
                 TabOrder = 0
-                object cxgrdbtblvwHistoriasClientes: TcxGridDBTableView
+                object tvHistoriasClientes: TcxGridDBTableView
                   Navigator.Buttons.ConfirmDelete = True
                   Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
@@ -1058,7 +1055,7 @@ inherited frmMtoClientes: TfrmMtoClientes
                   end
                 end
                 object cxgrdlvllv1: TcxGridLevel
-                  GridView = cxgrdbtblvwHistoriasClientes
+                  GridView = tvHistoriasClientes
                 end
               end
             end
@@ -1495,6 +1492,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
