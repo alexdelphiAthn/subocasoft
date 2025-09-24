@@ -3,7 +3,7 @@ unit UniDataConn;
 interface
 
 uses
-  SysUtils, Classes, DB, ADODB, DBAccess, Uni,
+  SysUtils, Classes, DB, ADODB, DBAccess, Uni, Vcl.Forms, Vcl.Dialogs,
   UniProvider, MySQLUniProvider, DASQLMonitor, UniSQLMonitor;
 
 type
@@ -12,6 +12,7 @@ type
     conUni: TUniConnection;
     procedure connBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
+    procedure conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
   private
     { Private declarations }
   public
@@ -52,6 +53,13 @@ begin
     Password := sPassword;
     Port := StrToIntDef(sPort, 3306);
   end;
+end;
+
+procedure TdmConn.conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
+begin
+  if Fail = true then
+    ShowMessage('Ha habido un error de conexión: ' + E.Message);
+  Application.Terminate;
 end;
 
 procedure TdmConn.DataModuleCreate(Sender: TObject);

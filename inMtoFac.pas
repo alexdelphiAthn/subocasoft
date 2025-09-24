@@ -984,7 +984,7 @@ begin
       ShowMessage('No hay internet');
       Exit;
     end;
-    if (dmmFac.unqryConsolidacion.FieldByName('ESTADO').AsString = 'OFFLINE') then
+    if (dmmFac.unqryFac.FieldByName('FASE_CONSOLIDACION_FACTURA').AsString = 'OFFLINE') then
     begin
       bProcessOK := LlamarWebServiceVerifactu(iIDConsolidacion);
       if bProcessOK then
