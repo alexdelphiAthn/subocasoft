@@ -113,7 +113,7 @@ var
 
 implementation
 
-uses inLibUser,
+uses //inLibUser,
      inLibVarGlob,
      inLibWin,
      inMtoClientes,

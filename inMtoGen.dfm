@@ -2,8 +2,8 @@ object frmMtoGen: TfrmMtoGen
   Left = 0
   Top = 119
   Caption = 'fT'
-  ClientHeight = 580
-  ClientWidth = 1185
+  ClientHeight = 579
+  ClientWidth = 1181
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -24,24 +24,22 @@ object frmMtoGen: TfrmMtoGen
   object pButtonPage: TPanel
     Left = 0
     Top = 0
-    Width = 987
-    Height = 580
+    Width = 983
+    Height = 579
     Align = alClient
     ParentBackground = False
     TabOrder = 1
     ExplicitWidth = 656
-    ExplicitHeight = 579
   end
   object pButtonRightBar: TPanel
-    Left = 987
+    Left = 983
     Top = 0
     Width = 198
-    Height = 580
+    Height = 579
     Align = alRight
     ParentBackground = False
     TabOrder = 2
     ExplicitLeft = 656
-    ExplicitHeight = 579
     object btnExportarExcel: TSpeedButton
       Left = 80
       Top = 106
@@ -265,8 +263,8 @@ object frmMtoGen: TfrmMtoGen
   object pcPantalla: TPageControl
     Left = 0
     Top = 0
-    Width = 987
-    Height = 580
+    Width = 983
+    Height = 579
     ActivePage = tsLista
     Align = alClient
     Font.Charset = ANSI_CHARSET
@@ -279,7 +277,6 @@ object frmMtoGen: TfrmMtoGen
     Style = tsFlatButtons
     TabOrder = 0
     ExplicitWidth = 656
-    ExplicitHeight = 579
     object tsLista: TTabSheet
       Caption = '&Lista'
       object cxGrdPrincipal: TcxGrid
@@ -365,7 +362,7 @@ object frmMtoGen: TfrmMtoGen
         ParentBackground = False
         ParentCtl3D = False
         TabOrder = 0
-        ExplicitWidth = 648
+        ExplicitWidth = 983
         object dxbvl1: TdxBevel
           Left = 5
           Top = 2

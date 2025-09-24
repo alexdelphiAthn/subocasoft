@@ -23,7 +23,7 @@ var
 
 implementation
 
-uses inLibDir, inLibtb, inLibUser, inMtoPrincipal;
+uses inLibDir, inLibtb, inMtoPrincipal;
 
 {$R *.dfm}
 

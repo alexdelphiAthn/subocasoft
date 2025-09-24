@@ -347,7 +347,7 @@ implementation
 uses
   inLibWin, inMtoGenSearch, inMtoModalFacRec, inMtoModalFacImp,
   inMtoModalFacRecImp, inLibDocumentoValidator, inLibData,
-  inLibVerifactuClient, inLibPermission, inMtoPrincipal, inMtoModalSubsanacion,
+  inLibVerifactuClient, inMtoPrincipal, inMtoModalSubsanacion,
   inMtoModalHistoriaCli, inLibJSON, inLibVarGlob, inLibJSONState;
 
 {$R *.dfm}
@@ -1448,7 +1448,6 @@ begin
     AColor := clWhite;
     ATextColor := clBlack;
   end;
-
   ACanvas.Brush.Color := AColor;
   ACanvas.FillRect(AViewInfo.Bounds);
   ACanvas.Font.Color := ATextColor;

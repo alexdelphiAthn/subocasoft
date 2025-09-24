@@ -1203,14 +1203,12 @@ object frmOpenApp: TfrmOpenApp
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   Menu = mnPrincipal
-  OldCreateOrder = True
   Position = poDefault
   Visible = True
   WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 21
   object dxstsbr1: TdxStatusBar
     Left = 0
@@ -1248,6 +1246,8 @@ object frmOpenApp: TfrmOpenApp
     Font.Height = -17
     Font.Name = 'Lucida Sans Unicode'
     Font.Style = []
+    ExplicitTop = 526
+    ExplicitWidth = 1089
   end
   object Memo: TcxMemo
     Left = 0
@@ -1255,6 +1255,8 @@ object frmOpenApp: TfrmOpenApp
     Align = alBottom
     TabOrder = 1
     Visible = False
+    ExplicitTop = 437
+    ExplicitWidth = 1089
     Height = 89
     Width = 1093
   end

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, inMtoGen, DB, ADODB, DBCtrls, StdCtrls,
-  ExtCtrls, Grids, DBGrids, ComCtrls, Buttons, Mask, UniDataInq, //dxCntner,
+  ExtCtrls, Grids, DBGrids, ComCtrls, Buttons, Mask, //UniDataInq, //dxCntner,
   //dxEditor, dxExEdtr, dxEdLib, dxDBELib,
   cxControls, cxContainer, cxEdit,
   cxTextEdit, cxMaskEdit, cxDBEdit, cxNavigator, cxLookAndFeelPainters,
@@ -34,7 +34,7 @@ uses
 
 implementation
 
-uses  inLibUser, inLibWin, inLibtb, inLibDir;
+uses inLibWin, inLibtb, inLibDir;
 
 procedure PonerAnchosTitulos(cxgrdtvVista: TcxGridDBTableView;
   sDes: string);
@@ -493,7 +493,7 @@ begin
     if (Form.Components[x] is tcxGridDBTableView) then
     begin
       GridTV := TcxGridDBTableView(Form.Components[x]);
-      GridTV.storetoIniFile(DirIni + oUser + '_' + Form.caption + '_' + GridTV.name + '.ini' ) ;
+      GridTV.storetoIniFile(DirIni + '_' + Form.caption + '_' + GridTV.name + '.ini' ) ;
     end;
   end;
 end;
@@ -511,8 +511,8 @@ begin
     if (Form.Components[x] is tcxGridDBTableView) then
     begin
       GridTV := TcxGridDBTableView(Form.Components[x]);
-      If FileExists(DirIni + oUser +'_'+ Form.Caption + '_' + GridTV.name + '.ini') then
-        GridTV.RestoreFromIniFile(DirIni + oUser + '_' +Form.caption + '_' + GridTV.name + '.ini' ) ;
+      If FileExists(DirIni + '_'+ Form.Caption + '_' + GridTV.name + '.ini') then
+        GridTV.RestoreFromIniFile(DirIni + '_' +Form.caption + '_' + GridTV.name + '.ini' ) ;
     end;
   end;
 end;
@@ -530,8 +530,8 @@ begin
     if (Form.Components[x] is tcxGridDBTableView) then
     begin
       Grid := TcxGridDBTableView(Form.Components[x]);
-      If FileExists(DirIni + oUser +'_'+ Form.Caption + '_' + Grid.name + '.ini') then
-        DeleteFile(DirIni + oUser + '_' +Form.caption + '_' + Grid.name + '.ini' ) ;
+      If FileExists(DirIni  +'_'+ Form.Caption + '_' + Grid.name + '.ini') then
+        DeleteFile(DirIni  + '_' +Form.caption + '_' + Grid.name + '.ini' ) ;
     end;
   end;
 end;

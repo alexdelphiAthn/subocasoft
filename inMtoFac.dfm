@@ -1,16 +1,15 @@
 inherited frmMtoFac: TfrmMtoFac
   Top = 0
   Caption = 'Borrador de Venta'
-  ClientHeight = 604
-  ClientWidth = 1234
+  ClientHeight = 603
+  ClientWidth = 1230
   Font.Height = -15
-  ExplicitWidth = 1250
-  ExplicitHeight = 643
-  PixelsPerInch = 96
+  ExplicitWidth = 1246
+  ExplicitHeight = 642
   TextHeight = 17
   inherited pButtonPage: TPanel
-    Width = 1044
-    Height = 604
+    Width = 1040
+    Height = 603
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -19,16 +18,16 @@ inherited frmMtoFac: TfrmMtoFac
     ExplicitHeight = 604
   end
   inherited pButtonRightBar: TPanel
-    Left = 1044
+    Left = 1040
     Width = 190
-    Height = 604
+    Height = 603
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
     Font.Height = -15
     ParentFont = False
-    ExplicitLeft = 1044
+    ExplicitLeft = 1048
     ExplicitWidth = 190
     ExplicitHeight = 604
     object btnRectificar: TSpeedButton [0]
@@ -222,8 +221,8 @@ inherited frmMtoFac: TfrmMtoFac
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 1044
-    Height = 604
+    Width = 1040
+    Height = 603
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -398,7 +397,7 @@ inherited frmMtoFac: TfrmMtoFac
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 1036
+        ExplicitWidth = 1040
         ExplicitHeight = 38
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -453,8 +452,6 @@ inherited frmMtoFac: TfrmMtoFac
       Margins.Right = 4
       Margins.Bottom = 4
       Font.Height = -8
-      ExplicitLeft = 4
-      ExplicitTop = 36
       ExplicitWidth = 1036
       ExplicitHeight = 564
       object pnl1: TPanel
@@ -474,6 +471,7 @@ inherited frmMtoFac: TfrmMtoFac
           DragThreshold = 2
           PositionAfterOpen = 24
           MinSize = 24
+          ExplicitWidth = 8
         end
         object cxpgcntrlFacturacx: TcxPageControl
           Left = 1
@@ -497,6 +495,10 @@ inherited frmMtoFac: TfrmMtoFac
           object tsLineasFactura: TcxTabSheet
             Caption = 'Lineas'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd5: TcxGrid
               Left = 0
               Top = 0
@@ -695,6 +697,10 @@ inherited frmMtoFac: TfrmMtoFac
           object ts8: TcxTabSheet
             Caption = 'Otros'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxlbl12: TcxLabel
               Left = 13
               Top = 16
@@ -721,6 +727,10 @@ inherited frmMtoFac: TfrmMtoFac
             Margins.Bottom = 2
             Caption = 'Historia Dental'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -890,6 +900,10 @@ inherited frmMtoFac: TfrmMtoFac
             Margins.Bottom = 2
             Caption = 'Recibos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnl4: TPanel
               Left = 0
               Top = 0
@@ -1179,6 +1193,10 @@ inherited frmMtoFac: TfrmMtoFac
           object tsVeriFactu: TcxTabSheet
             Caption = 'VeriFactu'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object scrlbx1: TScrollBox
               Left = 0
               Top = 0
@@ -1468,6 +1486,10 @@ inherited frmMtoFac: TfrmMtoFac
           object tsError: TcxTabSheet
             Caption = 'Eventos VeriFactu'
             ImageIndex = 6
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1601,7 +1623,7 @@ inherited frmMtoFac: TfrmMtoFac
       object pnl2: TPanel
         Left = 0
         Top = 0
-        Width = 1036
+        Width = 1032
         Height = 280
         Align = alTop
         Font.Charset = ANSI_CHARSET
@@ -1611,6 +1633,7 @@ inherited frmMtoFac: TfrmMtoFac
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 1036
         object pnl3: TPanel
           Left = 1
           Top = 1

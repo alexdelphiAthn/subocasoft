@@ -318,7 +318,7 @@ implementation
 uses
   inLibWin, inMtoGenSearch,  inMtoModalPreRec, inMtoModalPreImp,
   inMtoModalPreRecImp,
-  inLibPermission, inMtoPrincipal, inMtoModalHistoriaCli, inMtoModalPresuFac;
+  inMtoPrincipal, inMtoModalPresuFac;
 
 {$R *.dfm}
 

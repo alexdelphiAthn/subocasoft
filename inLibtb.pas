@@ -34,7 +34,7 @@ uses  SysUtils, Variants, DB, ADODB, ExtCtrls, DBCtrls, Controls, Grids,
 
 implementation
 
-uses UniData;
+//uses UniData;
 
 procedure esCadINI (clave, cadena, valor : string);
 var

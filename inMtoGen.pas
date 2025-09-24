@@ -24,7 +24,15 @@ uses
   dxSkinWhiteprint, cxLocalization,
   cxDataControllerConditionalFormattingRulesManagerDialog, cxLabel, dxBevel,
   cxDBNavigator, dxDateRanges, inMtoPrincipal, dxSkinBlue,
-  dxScrollbarAnnotations;
+  dxScrollbarAnnotations, dxSkinBasic, dxSkinBlack, dxSkinCaramel, dxSkinCoffee,
+  dxSkinDarkSide, dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
+  dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
+  dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinOffice2016Colorful,
+  dxSkinOffice2016Dark, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
+  dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinPumpkin, dxSkinSilver,
+  dxSkinTheBezier, dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
+  dxSkinVisualStudio2013Light;
 
 const
   B_NB_SAVE   = 7;
@@ -102,7 +110,7 @@ var
 
 implementation
 
-uses inLibDevExp, inLibUser, inLibDir, inLibWin, inLibtb ;
+uses inLibDevExp, inLibDir, inLibWin, inLibtb ;
 
 {$R *.dfm}
 {$R CXLOCALIZATION.res}
@@ -307,16 +315,16 @@ begin
   cxlclzr1.Active := True;
   cxlclzr1.Locale := 1034;
 
-  if oCaps = 'S' then
-  begin
-    //SetCaseTcxTextProperty(Sender as TComponent, ecUpperCase );
-    //chkCaseM.Checked := true;
-  end
-  else
-    begin
-      //SetCaseTcxTextProperty(Sender as TComponent, ecNormal);
-      //chkCaseM.Checked := false;
-    end;
+//  if oCaps = 'S' then
+//  begin
+//    //SetCaseTcxTextProperty(Sender as TComponent, ecUpperCase );
+//    //chkCaseM.Checked := true;
+//  end
+//  else
+//    begin
+//      //SetCaseTcxTextProperty(Sender as TComponent, ecNormal);
+//      //chkCaseM.Checked := false;
+//    end;
 end;
 
 procedure TfrmMtoGen.chkEditinListChange(Sender: TObject);
