@@ -4,7 +4,8 @@ interface
 uses
   System.SysUtils, System.RegularExpressions;
 type
-  TTipoDocumento = (tdNIF, tdNIE, tdCIF, tdPasaporte, tdTarjetaResidencia, tdDesconocido);
+  TTipoDocumento = (tdNIF, tdNIE, tdCIF, tdPasaporte,
+                                            tdTarjetaResidencia, tdDesconocido);
   TDocumentoValidator = class
   private
     // Letras para cálculo del NIF
@@ -129,6 +130,7 @@ begin
     Result := False;
   end;
 end;
+
 function TDocumentoValidator.CalcularDigitoControlCIF(const cif: string): Char;
 var
   suma, i, digito: Integer;
@@ -138,12 +140,14 @@ begin
   parteNumerica := Copy(cif, 2, 7);
   sumaPares := 0;
   sumaImpares := 0;
+
   // Sumar dígitos en posiciones pares (2º, 4º, 6º)
   for i := 2 to 6 do
   begin
     if (i mod 2) = 0 then
       sumaPares := sumaPares + StrToInt(parteNumerica[i]);
   end;
+
   // Para posiciones impares, multiplicar por 2 y sumar los dígitos del resultado
   for i := 1 to 7 do
   begin
@@ -153,18 +157,32 @@ begin
       sumaImpares := sumaImpares + (digito div 10) + (digito mod 10);
     end;
   end;
+
   suma := sumaPares + sumaImpares;
   digito := 10 - (suma mod 10);
   if digito = 10 then
     digito := 0;
+
   // Según el tipo de organización, puede ser número o letra
   case cif[1] of
-    'A', 'B', 'E', 'H': Result := Chr(Ord('0') + digito); // Número
-    'K', 'P', 'Q', 'S': Result := 'JABCDEFGHI'[digito + 1]; // Letra
+    // DÍGITO DE CONTROL NUMÉRICO
+    'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'U', 'V':
+      Result := Chr(Ord('0') + digito);
+
+    // DÍGITO DE CONTROL EN LETRA
+    'G', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'W':
+      Result := 'JABCDEFGHI'[digito + 1];
+
+    // Casos especiales de G: pueden ser número O letra
+    // Según documentación: las embajadas (tipo G) usan letra, el resto número
+    // Se mantiene letra por ser más restrictivo
+
   else
-    Result := Chr(Ord('0') + digito); // Por defecto número
+    // Por defecto número para casos no contemplados
+    Result := Chr(Ord('0') + digito);
   end;
 end;
+
 function TDocumentoValidator.ValidarCIF(const cif: string): Boolean;
 var
   cifLimpio: string;
