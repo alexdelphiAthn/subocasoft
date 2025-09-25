@@ -32,6 +32,8 @@ uses  SysUtils, Variants, DB, ADODB, ExtCtrls, DBCtrls, Controls, Grids,
      function FileSinExtension(sFile: string):string;
      procedure esCadINI (clave, cadena, valor : string);
      procedure esCadINIDir (clave, cadena, valor, sDir : string);
+     function FileSinExtension(sFile: string):string;
+     procedure esCadINI (clave, cadena, valor : string);
      //procedure CrearMiniMensaje(sTipoVen:String;sMensaje:String; mrMessage:TModalResult = mrOk); overload;
      //procedure CrearMiniMensaje(sTipoVen:String;sMensaje:String); overload;
 
@@ -72,7 +74,6 @@ begin
     free;
   end;
 end;
-
 
 function FileSinExtension(sFile: string):string;
 begin
@@ -167,6 +168,7 @@ end;
 //   (*
 //         Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=InquiPro;Data Source=BULY
 //   *)
+//   *)      
 //end;
 
 function LetraNIF(DNI: String): Char;
