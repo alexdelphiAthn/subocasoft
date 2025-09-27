@@ -63,44 +63,79 @@ Section "Facturacion (requerido)" SEC_MAIN
     WriteUninstaller "$INSTDIR\uninstaller.exe"
 SectionEnd
 
-# Sección opcional para MariaDB
-Section "Base de Datos MariaDB (Recomendado)" SEC_MARIADB
+# Sección opcional para MariaDB - AHORA DESELECCIONADA POR DEFECTO
+Section /o "Base de Datos MariaDB (Solo instalaciones nuevas)" SEC_MARIADB
+    # Verificar si ya existe una instalación de MariaDB
+    ReadRegStr $0 HKLM "SOFTWARE\MariaDB 10.11" "INSTALLDIR"
+    ${If} $0 != ""
+        MessageBox MB_YESNO|MB_ICONQUESTION "Se detectó MariaDB ya instalado en el sistema. ¿Desea continuar? Esto podría causar conflictos." IDYES continue_mariadb IDNO skip_mariadb
+        skip_mariadb:
+            DetailPrint "Instalación de MariaDB omitida - ya existe una instalación"
+            Goto end_mariadb
+        continue_mariadb:
+    ${EndIf}
+    
     DetailPrint "Instalando MariaDB silenciosamente..."
     SetOutPath $TEMP
     File "mariadb_installer.msi"
     
     # Instalar MariaDB
-    ExecWait 'msiexec /i "$TEMP\mariadb_installer.msi" DATADIR="$INSTDIR\BaseDatos\mariadb\data" PORT=3310 PASSWORD=Zamora2023 SERVICENAME=MariaDBFzam ADDLOCAL=ALL REMOVE=HeidiSQL /qn'
+    DetailPrint "Ejecutando instalador de MariaDB..."
+    ExecWait 'msiexec /i "$TEMP\mariadb_installer.msi" DATADIR="$INSTDIR\BaseDatos\mariadb\data" PORT=3310 PASSWORD=Zamora2023 SERVICENAME=MariaDBFzam ADDLOCAL=ALL REMOVE=HeidiSQL /qn' $1
     
-    # Marcar que MariaDB fue instalado
-    WriteRegStr HKLM "${REGPATH_UNINSTSUBKEY}" "MariaDBInstalled" "1"
+    ${If} $1 == 0
+        DetailPrint "MariaDB instalado correctamente"
+        # Marcar que MariaDB fue instalado por nuestro programa
+        WriteRegStr HKLM "${REGPATH_UNINSTSUBKEY}" "MariaDBInstalled" "1"
+        WriteRegStr HKLM "${REGPATH_UNINSTSUBKEY}" "MariaDBInstalledBy" "Subocasoft"
+    ${Else}
+        DetailPrint "Error en la instalación de MariaDB (código: $1)"
+        MessageBox MB_OK|MB_ICONEXCLAMATION "Hubo un error al instalar MariaDB. La aplicación funcionará pero necesitará configurar la base de datos manualmente."
+        WriteRegStr HKLM "${REGPATH_UNINSTSUBKEY}" "MariaDBInstalled" "0"
+    ${EndIf}
     
     # Limpiar archivo temporal
     Delete "$TEMP\mariadb_installer.msi"
+    
+    end_mariadb:
 SectionEnd
 
 # Descripciones de las secciones en español
 LangString DESC_MAIN ${LANG_SPANISH} "Instala los archivos principales del sistema de facturación (obligatorio)"
-LangString DESC_MARIADB ${LANG_SPANISH} "Instala el servidor de base de datos MariaDB. Se recomienda para el funcionamiento completo de la aplicación."
+LangString DESC_MARIADB ${LANG_SPANISH} "Instala el servidor de base de datos MariaDB. Recomendado SOLO para instalaciones nuevas. NO seleccionar en actualizaciones para preservar datos existentes."
 
-# Función para mostrar descripciones
+# Función para mostrar descripciones y validar selecciones
 Function .onSelChange
-    !insertmacro StartRadioButtons $1
-        !insertmacro RadioButton ${SEC_MAIN}
-        !insertmacro RadioButton ${SEC_MARIADB}
-    !insertmacro EndRadioButtons
+    # Verificar si es una actualización
+    ReadRegStr $0 HKLM "${REGPATH_UNINSTSUBKEY}" "DisplayVersion"
+    ${If} $0 != ""
+        # Es una actualización
+        ${If} ${SectionIsSelected} ${SEC_MARIADB}
+            MessageBox MB_YESNO|MB_ICONQUESTION "ADVERTENCIA: Se detectó una versión anterior de ${APPNAME}.$\n$\n¿Está seguro de que desea reinstalar MariaDB?$\nEsto podría sobrescribir su base de datos existente.$\n$\n¿Continuar?" IDYES keep_mariadb_selected
+            # Deseleccionar MariaDB si el usuario dice que no
+            SectionSetFlags ${SEC_MARIADB} 0
+            keep_mariadb_selected:
+        ${EndIf}
+    ${EndIf}
 FunctionEnd
 
-# Función de inicialización
+# Función de inicialización - CAMBIO PRINCIPAL AQUÍ
 Function .onInit
-    # Seleccionar por defecto ambas secciones
-    IntOp $0 ${SF_SELECTED} | ${SF_RO}
-    SectionSetFlags ${SEC_MAIN} $0
-    SectionSetFlags ${SEC_MARIADB} ${SF_SELECTED}
-    
-    # Establecer descripciones
-    StrCpy $1 "Instala los archivos principales del sistema de facturación (obligatorio)"
-    StrCpy $2 "Instala el servidor de base de datos MariaDB. Se recomienda para el funcionamiento completo de la aplicación."
+    # Verificar si ya existe una instalación
+    ReadRegStr $0 HKLM "${REGPATH_UNINSTSUBKEY}" "DisplayVersion"
+    ${If} $0 != ""
+        # Es una actualización
+        MessageBox MB_ICONINFORMATION "Se detectó ${APPNAME} v$0 instalado.$\n$\nEsta instalación actualizará a la versión ${VERSION}.$\n$\nPor defecto, MariaDB NO será reinstalado para preservar sus datos."
+        # Mantener MariaDB deseleccionado para actualizaciones
+        SectionSetFlags ${SEC_MAIN} ${SF_SELECTED}|${SF_RO}
+        SectionSetFlags ${SEC_MARIADB} 0  # Deseleccionado
+    ${Else}
+        # Primera instalación
+        MessageBox MB_ICONINFORMATION "Bienvenido a la instalación de ${APPNAME} v${VERSION}.$\n$\nPuede seleccionar instalar MariaDB si es una instalación nueva.$\nSi ya tiene una base de datos configurada, déjelo deseleccionado."
+        # En instalaciones nuevas, también dejar MariaDB deseleccionado por defecto
+        SectionSetFlags ${SEC_MAIN} ${SF_SELECTED}|${SF_RO}
+        SectionSetFlags ${SEC_MARIADB} 0  # Deseleccionado por defecto
+    ${EndIf}
 FunctionEnd
 
 # Sección de desinstalación
@@ -111,13 +146,29 @@ Section "Uninstall"
     Delete "$INSTDIR\Facturacion_Icon1.ico"
     Delete "$DESKTOP\${APPNAME}.lnk"
 
-    # Verificar si MariaDB fue instalado
+    # Verificar si MariaDB fue instalado POR NUESTRO PROGRAMA
     ReadRegStr $0 HKLM "${REGPATH_UNINSTSUBKEY}" "MariaDBInstalled"
-    StrCmp $0 "1" 0 +4
-        DetailPrint "Desinstalando MariaDB..."
-        # Usar el desinstalador de MariaDB
-        ExecWait 'sc stop "MariaDBFzam"'
-        ExecWait 'sc delete "MariaDBFzam"'
+    ReadRegStr $1 HKLM "${REGPATH_UNINSTSUBKEY}" "MariaDBInstalledBy"
+    
+    ${If} $0 == "1"
+    ${AndIf} $1 == "Subocasoft"
+        MessageBox MB_YESNO|MB_ICONQUESTION "¿Desea desinstalar también MariaDB?$\n$\nADVERTENCIA: Se perderán TODOS los datos de la base de datos." IDYES remove_mariadb IDNO keep_mariadb
+        remove_mariadb:
+            DetailPrint "Desinstalando MariaDB..."
+            # Detener y eliminar el servicio
+            ExecWait 'sc stop "MariaDBFzam"'
+            ExecWait 'sc delete "MariaDBFzam"'
+            # Intentar desinstalar MariaDB usando msiexec
+            ReadRegStr $2 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{MariaDB}" "UninstallString"
+            ${If} $2 != ""
+                ExecWait '$2 /qn'
+            ${EndIf}
+            DetailPrint "MariaDB desinstalado"
+            Goto continue_uninstall
+        keep_mariadb:
+            DetailPrint "MariaDB conservado en el sistema"
+        continue_uninstall:
+    ${EndIf}
 
     # Eliminar entradas del registro
     DeleteRegKey HKLM "${REGPATH_UNINSTSUBKEY}"
