@@ -9,8 +9,10 @@
 *.identcache
 *.tvsconfig
 *.dproj.local
-.vlb
-.identcache
+*.vlb
+*.identcache
+*.res
+*.rsp
 __history/
 __recovery/
 Win32/
