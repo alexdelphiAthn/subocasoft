@@ -32,10 +32,6 @@ uses  SysUtils, Variants, DB, ADODB, ExtCtrls, DBCtrls, Controls, Grids,
      function FileSinExtension(sFile: string):string;
      procedure esCadINI (clave, cadena, valor : string);
      procedure esCadINIDir (clave, cadena, valor, sDir : string);
-     function FileSinExtension(sFile: string):string;
-     procedure esCadINI (clave, cadena, valor : string);
-     //procedure CrearMiniMensaje(sTipoVen:String;sMensaje:String; mrMessage:TModalResult = mrOk); overload;
-     //procedure CrearMiniMensaje(sTipoVen:String;sMensaje:String); overload;
 
 
 implementation

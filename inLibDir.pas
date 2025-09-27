@@ -34,12 +34,7 @@ const
   CSIDL_COMMON_DESKTOPDIRECTORY  = $0019; { All Users\Desktop }
   CSIDL_APPDATA                  = $001a; { <user name>\Application Data }
   CSIDL_PRINTHOOD                = $001b; { <user name>\PrintHood }
-<<<<<<< HEAD
-  CSIDL_LOCAL_APPDATA            = $001c; { <user name>\AppData\Local\
-=======
-  CSIDL_LOCAL_APPDATA            = $001c; { <user name>\Local Settings\
->>>>>>> 7070966c2f8b0f47b614c41e7d394619665c4b1f
-                                               Application Data (non roaming) }
+  CSIDL_LOCAL_APPDATA            = $001c; { <user name>\AppData\Local\                                             Application Data (non roaming) }
   CSIDL_ALTSTARTUP               = $001d; { non localized startup }
   CSIDL_COMMON_ALTSTARTUP        = $001e; { non localized common startup }
   CSIDL_COMMON_FAVORITES         = $001f; { User favourites }
