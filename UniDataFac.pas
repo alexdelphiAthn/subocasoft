@@ -619,7 +619,6 @@ var
 begin
   unqrySol := TUniQuery.Create(nil);
   unqrySol.Connection := frmOpenApp.FDmConn.conUni;
-  Result := False;
   try
     with unqrySol do
     begin

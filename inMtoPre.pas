@@ -666,8 +666,8 @@ end;
 
 procedure TfrmMtoPre.cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA2Enter(
   Sender: TObject);
-var
-  buttonSelected : Integer;
+// var
+//   buttonSelected : Integer;
 begin
 end;
 

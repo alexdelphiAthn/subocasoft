@@ -30,7 +30,6 @@ uses inLibDir, inLibtb, inMtoPrincipal;
 
 procedure TdmConn.connBeforeConnect(Sender: TObject);
 var
-  sCodePage         ,
   sDatabase         ,
   sHostName         ,
   sPassword         ,
