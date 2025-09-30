@@ -4,7 +4,7 @@ object dmConn: TdmConn
   Width = 405
   object conUni: TUniConnection
     ProviderName = 'MySQL'
-    Port = 3306
+    Port = 3310
     Database = 'subocasana'
     SpecificOptions.Strings = (
       'MySQL.Charset=utf8'
@@ -13,6 +13,7 @@ object dmConn: TdmConn
     DefaultTransaction.DefaultCloseAction = taCommit
     Username = 'root'
     Server = '127.0.0.1'
+    Connected = True
     LoginPrompt = False
     BeforeConnect = connBeforeConnect
     Left = 216

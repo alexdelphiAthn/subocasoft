@@ -13,9 +13,7 @@ object frmPrintFac: TfrmPrintFac
   Font.Name = 'Lucida Sans Unicode'
   Font.Style = []
   FormStyle = fsStayOnTop
-  OldCreateOrder = True
   Scaled = False
-  PixelsPerInch = 96
   TextHeight = 23
   object pnl1: TPanel
     Left = 340
@@ -24,6 +22,8 @@ object frmPrintFac: TfrmPrintFac
     Height = 212
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 336
+    ExplicitHeight = 211
     object btnVistaPreliminar: TcxButton
       Left = -2
       Top = 0
@@ -48,6 +48,7 @@ object frmPrintFac: TfrmPrintFac
       Font.Style = []
       ParentFont = False
       OnClick = btnSalirClick
+      ExplicitTop = 167
     end
   end
   object edtNroFac: TcxTextEdit
@@ -97,7 +98,7 @@ object frmPrintFac: TfrmPrintFac
     TabOrder = 5
   end
   object frxrprt1: TfrxReport
-    Version = '6.9.3'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -151,6 +152,10 @@ object frmPrintFac: TfrmPrintFac
       MirrorMode = []
       object mdCabecera: TfrxMasterData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 335.378170000000000000
         Top = 18.897650000000000000
@@ -531,6 +536,10 @@ object frmPrintFac: TfrmPrintFac
       end
       object DetailData1: TfrxDetailData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 37.795300000000000000
         Top = 377.953000000000000000
@@ -625,6 +634,10 @@ object frmPrintFac: TfrmPrintFac
       end
       object PageFooter1: TfrxPageFooter
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 207.874150000000000000
         Top = 665.197280000000000000
@@ -647,7 +660,7 @@ object frmPrintFac: TfrmPrintFac
             'NIF 11957478-P'
             'PLAZA DE CRISTO REY, 5-5'#186'D'
             '49019 ZAMORA'
-            '98670100 654148218')
+            '980670100 654148218')
           ParentFont = False
         end
         object Picture1: TfrxPictureView
@@ -2543,6 +2556,10 @@ object frmPrintFac: TfrmPrintFac
       end
       object Footer1: TfrxFooter
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 166.299320000000000000
         Top = 438.425480000000000000
@@ -2706,7 +2723,7 @@ object frmPrintFac: TfrmPrintFac
     Top = 24
   end
   object fxrptSimple: TfrxReport
-    Version = '6.9.3'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -2714,7 +2731,7 @@ object frmPrintFac: TfrmPrintFac
     PrintOptions.Printer = 'Por defecto'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42481.634675740700000000
-    ReportOptions.LastChange = 43706.469558402800000000
+    ReportOptions.LastChange = 45930.375139398150000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
@@ -2748,6 +2765,10 @@ object frmPrintFac: TfrmPrintFac
       MirrorMode = []
       object mdCabecera: TfrxMasterData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 335.378170000000000000
         Top = 18.897650000000000000
@@ -2977,12 +2998,16 @@ object frmPrintFac: TfrmPrintFac
             'NIF 11957478-P'
             'PLAZA DE CRISTO REY, 5-5'#186'D'
             '49019 ZAMORA'
-            '98670100 654148218')
+            '980670100 654148218')
           ParentFont = False
         end
       end
       object DetailData1: TfrxDetailData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 37.795300000000000000
         Top = 377.953000000000000000
@@ -3061,6 +3086,10 @@ object frmPrintFac: TfrmPrintFac
       end
       object PageFooter1: TfrxPageFooter
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 52.913420000000000000
         Top = 665.197280000000000000
@@ -3086,6 +3115,10 @@ object frmPrintFac: TfrmPrintFac
       end
       object Footer1: TfrxFooter
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 166.299320000000000000
         Top = 438.425480000000000000
