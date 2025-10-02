@@ -2,28 +2,28 @@ object frmModalSubsanacion: TfrmModalSubsanacion
   Left = 0
   Top = 0
   Caption = 'Subsanaci'#243'n Manual de Factura'
-  ClientHeight = 619
-  ClientWidth = 892
+  ClientHeight = 618
+  ClientWidth = 888
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -17
   Font.Name = 'Lucida Sans'
   Font.Style = []
-  OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 19
   object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 892
-    Height = 560
+    Width = 888
+    Height = 559
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 896
+    ExplicitHeight = 560
     object gbDatosBasicos: TcxGroupBox
       Left = 15
       Top = 15
@@ -269,17 +269,19 @@ object frmModalSubsanacion: TfrmModalSubsanacion
   end
   object pnlButtons: TPanel
     Left = 0
-    Top = 560
-    Width = 892
+    Top = 559
+    Width = 888
     Height = 59
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 560
+    ExplicitWidth = 892
     DesignSize = (
-      892
+      888
       59)
     object btnAceptar: TcxButton
-      Left = 650
+      Left = 642
       Top = 10
       Width = 95
       Height = 32
@@ -289,9 +291,10 @@ object frmModalSubsanacion: TfrmModalSubsanacion
       LookAndFeel.SkinName = 'Blue'
       TabOrder = 0
       OnClick = btnAceptarClick
+      ExplicitLeft = 650
     end
     object btnCancelar: TcxButton
-      Left = 751
+      Left = 743
       Top = 10
       Width = 95
       Height = 32
@@ -301,6 +304,7 @@ object frmModalSubsanacion: TfrmModalSubsanacion
       LookAndFeel.SkinName = 'Blue'
       TabOrder = 1
       OnClick = btnCancelarClick
+      ExplicitLeft = 751
     end
   end
 end

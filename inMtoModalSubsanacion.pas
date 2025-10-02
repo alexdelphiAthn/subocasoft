@@ -11,7 +11,23 @@ uses
   cxMaskEdit, cxDropDownEdit, cxCalendar, cxMemo, cxSpinEdit, cxCurrencyEdit,
   cxCheckBox, cxRadioGroup, System.JSON, Data.DB, Uni, inLibVerifactuBuilder,
   inLibVerifactuClient, inMtoPrincipal, Vcl.ComCtrls, dxCore, cxDateUtils,
-  Vcl.Menus, inMtoModalSubsanacionLineas, dxSkinBlue;
+  Vcl.Menus, inMtoModalSubsanacionLineas, dxSkinBlue, dxSkinBasic, dxSkinBlack,
+  dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkroom, dxSkinDarkSide,
+  dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
+  dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMetropolis,
+  dxSkinMetropolisDark, dxSkinMoneyTwins, dxSkinOffice2007Black,
+  dxSkinOffice2007Blue, dxSkinOffice2007Green, dxSkinOffice2007Pink,
+  dxSkinOffice2007Silver, dxSkinOffice2010Black, dxSkinOffice2010Blue,
+  dxSkinOffice2010Silver, dxSkinOffice2013DarkGray, dxSkinOffice2013LightGray,
+  dxSkinOffice2013White, dxSkinOffice2016Colorful, dxSkinOffice2016Dark,
+  dxSkinOffice2019Black, dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray,
+  dxSkinOffice2019White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
+  dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringtime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinTheBezier,
+  dxSkinsDefaultPainters, dxSkinValentine, dxSkinVisualStudio2013Blue,
+  dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, dxSkinVS2010,
+  dxSkinWhiteprint, dxSkinXmas2008Blue;
 
 type
   TfrmModalSubsanacion = class(TForm)
@@ -404,7 +420,7 @@ begin
     txtPaisCliente.Text := FDatosOriginales.GetValue('pais_cliente').Value;
     // Manejo del tipo ID internacional
     PaisCliente := FDatosOriginales.GetValue('pais_cliente').Value;
-    if (PaisCliente <> 'ES') or (PaisCliente <> '') then
+    if not(SameText(PaisCliente,'ES')) then
     begin
       // Cliente extranjero - obtener tipo ID
       TipoIdValue := FDatosOriginales.GetValue('tipo_id_internacional').Value;
