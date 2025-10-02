@@ -18,6 +18,7 @@ __recovery/
 Win32/
 Win64/
 .git
+UniDataConn.dfm
 
 # Configuración sensible (MySQL, etc.)
 config.ini
