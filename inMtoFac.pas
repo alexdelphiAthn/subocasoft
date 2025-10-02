@@ -36,7 +36,8 @@ uses
   dxSkinOffice2016Dark, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
   dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinTheBezier,
   dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
-  dxSkinVisualStudio2013Light;
+  dxSkinVisualStudio2013Light, cxBlobEdit, dxShellDialogs, JvComponentBase,
+  JvEnterTab;
 
 type
 
