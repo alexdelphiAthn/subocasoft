@@ -11,12 +11,8 @@ uses
   inMtoPrincipal in 'inMtoPrincipal.pas' {frmOpenApp},
   UniDataConn in 'UniDataConn.pas' {dmConn: TDataModule},
   inLibDir in 'inLibDir.pas',
-  //inLibComp in 'inLibComp.pas',
   inLibWin in 'inLibWin.pas',
-  //inMtoParam in 'inMtoParam.pas' {frmParam},
   inLibDate in 'inLibDate.pas',
-  //MD5 in 'MD5.pas',
-  //inLibUser in 'inLibUser.pas',
   inLibDevExp in 'inLibDevExp.pas',
   inLibData in 'inLibData.pas',
   inMtoClientes in 'inMtoClientes.pas' {frmMtoClientes},
@@ -61,7 +57,8 @@ uses
   inLibJSONState in 'inLibJSONState.pas',
   inLibVerifactuBuilder in 'inLibVerifactuBuilder.pas',
   inMtoModalSubsanacion in 'inMtoModalSubsanacion.pas' {frmModalSubsanacion},
-  inMtoModalSubsanacionLineas in 'inMtoModalSubsanacionLineas.pas' {frmModalSubsanacionLineas};
+  inMtoModalSubsanacionLineas in 'inMtoModalSubsanacionLineas.pas' {frmModalSubsanacionLineas},
+  inMtoModalVisorFoto in 'inMtoModalVisorFoto.pas' {frmMtoVisorFoto};
 
 //inIni in 'inIni.pas';
 
@@ -71,5 +68,6 @@ begin
   Application.Initialize;
   Application.Title := 'Subocasana';
   Application.CreateForm(TfrmOpenApp, frmOpenApp);
+  Application.CreateForm(TfrmMtoVisorFoto, frmMtoVisorFoto);
   Application.Run;
 end.

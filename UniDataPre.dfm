@@ -1,5 +1,4 @@
 object dmPre: TdmPre
-  OldCreateOrder = True
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   Height = 369
@@ -51,6 +50,7 @@ object dmPre: TdmPre
       'DIBUJO_FACTURA=DIBUJO_FACTURA')
     DataSource = dsFacPrint
     BCDToCurrency = False
+    DataSetOptions = []
     Left = 208
     Top = 24
   end
@@ -71,6 +71,7 @@ object dmPre: TdmPre
       'ODONTOLOGO=ODONTOLOGO')
     DataSource = dsLinFacPrint
     BCDToCurrency = False
+    DataSetOptions = []
     Left = 288
     Top = 24
   end
@@ -891,6 +892,7 @@ object dmPre: TdmPre
       'TRATAMIENTOS=TRATAMIENTOS')
     DataSource = dsRecibosPrint
     BCDToCurrency = False
+    DataSetOptions = []
     Left = 368
     Top = 24
   end

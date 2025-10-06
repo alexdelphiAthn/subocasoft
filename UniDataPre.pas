@@ -217,7 +217,6 @@ begin
     unqryDibujos.Connection := FDmConn.conUni;
     unqrySeriesFac.Connection := FDmConn.conUni;
     unqryPaisesCli.Connection := FdmConn.conUni;
-
     //unstrdprcCrearFacturaAbono.Connection := FDmConn.conUni;
     //unstrdprcDuplicarFactura.Connection := FDmConn.conUni;
     unstrdprcCrearCliente.Connection := FDmConn.conUni;
@@ -232,6 +231,7 @@ begin
   unqryLinFac.MasterSource :=  (Self.Owner as TfrmMtoPre).dsTablaG;
   unqryRecibos.MasterSource := (Self.Owner as TfrmMtoPre).dsTablaG;
   unqryPaisesCli.MasterSource := (Self.Owner as TfrmMtoPre).dsTablaG;
+  unqryDibujos.MasterSource := (Self.Owner as TfrmMtoPre).dsTablaG;
   unqryFac.Open;
   dsLinFac.Dataset.Open;
   unqryDibujos.Open;
@@ -247,7 +247,6 @@ procedure TdmPre.DataModuleDestroy(Sender: TObject);
 begin
   dsLinFac.Dataset.Close;
   unqrySeries.Close;
-  //unqryHistoria.Close;
   unqryFac.Close;
   unqryFormaPago.Close;
   unqryDibujos.Close;

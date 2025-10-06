@@ -234,6 +234,10 @@
         <DCCReference Include="inMtoModalSubsanacionLineas.pas">
             <Form>frmModalSubsanacionLineas</Form>
         </DCCReference>
+        <DCCReference Include="inMtoModalVisorFoto.pas">
+            <Form>frmMtoVisorFoto</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -266,6 +270,12 @@
                 <Platform value="Win64">False</Platform>
             </Platforms>
             <Deployment Version="4">
+                <DeployFile LocalName="..\Facturacion\Win32\Debug\Facturacion.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Facturacion.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Facturacion.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployFile LocalName="\Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>

@@ -4,9 +4,8 @@ inherited frmMtoClientes: TfrmMtoClientes
   Caption = 'Pacientes'
   ClientHeight = 601
   ClientWidth = 1219
-  ExplicitWidth = 1235
-  ExplicitHeight = 640
-  PixelsPerInch = 96
+  ExplicitWidth = 1231
+  ExplicitHeight = 639
   TextHeight = 22
   inherited pButtonPage: TPanel
     Width = 1021
@@ -15,8 +14,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 1021
-    ExplicitHeight = 601
+    ExplicitWidth = 1017
+    ExplicitHeight = 600
   end
   inherited pButtonRightBar: TPanel
     Left = 1021
@@ -26,8 +25,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ParentFont = False
-    ExplicitLeft = 1021
-    ExplicitHeight = 601
+    ExplicitLeft = 1017
+    ExplicitHeight = 600
     object btn1: TSpeedButton [0]
       Left = 8
       Top = 165
@@ -56,7 +55,7 @@ inherited frmMtoClientes: TfrmMtoClientes
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 473
+      ExplicitTop = 472
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
         Top = 0
@@ -170,8 +169,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ActivePage = tsFicha
-    ExplicitWidth = 1021
-    ExplicitHeight = 601
+    ExplicitWidth = 1017
+    ExplicitHeight = 600
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
@@ -373,8 +372,6 @@ inherited frmMtoClientes: TfrmMtoClientes
       Margins.Right = 4
       Margins.Bottom = 4
       Font.Height = -19
-      ExplicitLeft = 4
-      ExplicitTop = 36
       ExplicitWidth = 1013
       ExplicitHeight = 561
       object pnl1: TPanel
@@ -384,6 +381,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 265
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 1009
         object cxdbtxtdtCODIGO_CLIENTE: TcxDBTextEdit
           Left = 68
           Top = 50
@@ -577,17 +575,17 @@ inherited frmMtoClientes: TfrmMtoClientes
         end
         object cxlbl17: TcxLabel
           Left = 372
-          Top = 10
+          Top = 21
           Caption = 'Apellidos'
         end
         object cxlbl15: TcxLabel
           Left = 194
-          Top = 10
+          Top = 21
           Caption = 'Nombre'
         end
         object cxlbl2: TcxLabel
           Left = 68
-          Top = 10
+          Top = 21
           Caption = 'C'#243'digo'
         end
       end
@@ -598,6 +596,8 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 296
         Align = alClient
         TabOrder = 1
+        ExplicitWidth = 1009
+        ExplicitHeight = 295
         object cxpgcntrl2: TcxPageControl
           Left = 1
           Top = 1
@@ -605,8 +605,10 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 294
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = cxtbsht2
+          Properties.ActivePage = tsFotos
           Properties.CustomButtons.Buttons = <>
+          ExplicitWidth = 1007
+          ExplicitHeight = 293
           ClientRectBottom = 290
           ClientRectLeft = 4
           ClientRectRight = 1007
@@ -1067,10 +1069,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1275,10 +1273,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1492,10 +1486,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
@@ -1668,6 +1658,76 @@ inherited frmMtoClientes: TfrmMtoClientes
               end
             end
           end
+          object tsFotos: TcxTabSheet
+            Caption = 'Fotos'
+            ImageIndex = 6
+            OnEnter = tsFotosEnter
+            ExplicitWidth = 999
+            ExplicitHeight = 256
+            object cxgrdFotos: TcxGrid
+              Left = 0
+              Top = 0
+              Width = 1003
+              Height = 257
+              Align = alClient
+              TabOrder = 0
+              ExplicitLeft = 488
+              ExplicitTop = 57
+              ExplicitWidth = 250
+              ExplicitHeight = 200
+              object tvFotos: TcxGridDBTableView
+                Navigator.Buttons.CustomButtons = <>
+                Navigator.Buttons.Delete.Visible = False
+                Navigator.Buttons.Edit.Visible = False
+                Navigator.Buttons.Filter.Visible = False
+                ScrollbarAnnotations.CustomAnnotations = <>
+                DataController.Summary.DefaultGroupSummaryItems = <>
+                DataController.Summary.FooterSummaryItems = <>
+                DataController.Summary.SummaryGroups = <>
+                OptionsView.ColumnAutoWidth = True
+                OptionsView.DataRowHeight = 100
+                OptionsView.GroupByBox = False
+              end
+              object cxgrdFotosDBCardView1: TcxGridDBCardView
+                Navigator.Buttons.CustomButtons = <>
+                ScrollbarAnnotations.CustomAnnotations = <>
+                OnCellDblClick = cxgrdFotosDBCardView1CellDblClick
+                DataController.DataSource = dsFotos
+                DataController.Summary.DefaultGroupSummaryItems = <>
+                DataController.Summary.FooterSummaryItems = <>
+                DataController.Summary.SummaryGroups = <>
+                OptionsBehavior.CellHints = True
+                OptionsData.CancelOnExit = False
+                OptionsData.Deleting = False
+                OptionsData.DeletingConfirmation = False
+                OptionsData.Editing = False
+                OptionsData.Inserting = False
+                OptionsSelection.CellSelect = False
+                OptionsView.CardAutoWidth = True
+                OptionsView.CardIndent = 8
+                OptionsView.CardWidth = 300
+                OptionsView.CellAutoHeight = True
+                object cxgrdFotosDBCardView1NombreArchivo: TcxGridDBCardViewRow
+                  DataBinding.FieldName = 'NombreArchivo'
+                  PropertiesClassName = 'TcxTextEditProperties'
+                  Position.BeginsLayer = True
+                end
+                object cxgrdFotosDBCardView1Fecha: TcxGridDBCardViewRow
+                  DataBinding.FieldName = 'Fecha'
+                  PropertiesClassName = 'TcxDateEditProperties'
+                  Position.BeginsLayer = True
+                end
+                object cxgrdFotosDBCardView1Miniatura: TcxGridDBCardViewRow
+                  DataBinding.FieldName = 'Miniatura'
+                  PropertiesClassName = 'TcxImageProperties'
+                  Position.BeginsLayer = True
+                end
+              end
+              object lvCardFotos: TcxGridLevel
+                GridView = cxgrdFotosDBCardView1
+              end
+            end
+          end
         end
       end
     end
@@ -1680,7 +1740,7 @@ inherited frmMtoClientes: TfrmMtoClientes
   object dxbrmngr1: TdxBarManager
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -12
     Font.Name = 'Lucida Sans'
     Font.Style = []
     Categories.Strings = (
@@ -1725,5 +1785,48 @@ inherited frmMtoClientes: TfrmMtoClientes
     Left = 1160
     Top = 320
     PixelsPerInch = 96
+  end
+  object dsFotos: TDataSource
+    DataSet = cdsFotos
+    Left = 560
+    Top = 384
+  end
+  object cdsFotos: TClientDataSet
+    PersistDataPacket.Data = {
+      710000009619E0BD01000000180000000300000000000300000071000D4E6F6D
+      6272654172636869766F020049000000010005574944544802000200FF000546
+      656368610400060000000000094D696E69617475726104004B00000001000753
+      55425459504502004900070042696E617279000000}
+    Active = True
+    Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'NombreArchivo'
+        DataType = ftString
+        Size = 255
+      end
+      item
+        Name = 'Fecha'
+        DataType = ftDate
+      end
+      item
+        Name = 'Miniatura'
+        DataType = ftBlob
+      end>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    Left = 424
+    Top = 384
+    object strngfldFotosNombreArchivo: TStringField
+      FieldName = 'NombreArchivo'
+      Size = 255
+    end
+    object dtfldFotosFecha: TDateField
+      FieldName = 'Fecha'
+    end
+    object blbfldFotosMiniatura: TBlobField
+      FieldName = 'Miniatura'
+    end
   end
 end

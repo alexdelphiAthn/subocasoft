@@ -7,7 +7,7 @@ uses
   Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels,
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
-  cxEdit, cxNavigator, DB, cxDBData, cxContainer,
+  cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg,
    cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
@@ -27,7 +27,7 @@ uses
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxLocalization, cxCalendar,
-  cxButtonEdit, cxCurrencyEdit, inMtoPrincipal,
+  cxButtonEdit, cxCurrencyEdit, inMtoPrincipal, inMtoModalVisorFoto,
   cxMemo, cxRichEdit, cxDataControllerConditionalFormattingRulesManagerDialog,
   dxBevel, cxDBNavigator, System.UITypes, dxDateRanges, dxGDIPlusClasses,
   cxImage, Vcl.Menus, cxButtons, dxBar, Vcl.ToolWin, Vcl.ActnMan, Vcl.ActnCtrls,
@@ -35,7 +35,8 @@ uses
   cxGroupBox, dxSkinBasic, dxSkinOffice2016Colorful, dxSkinOffice2016Dark,
   dxSkinOffice2019Black, dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray,
   dxSkinOffice2019White, dxSkinTheBezier, dxSkinVisualStudio2013Blue,
-  dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light;
+  dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, Datasnap.DBClient,
+  cxGridCardView, cxGridDBCardView, cxGridCustomLayoutView;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -218,6 +219,19 @@ type
     lblDB1: TcxDBLabel;
     btnCODIGO_CLIENTE: TcxDBButtonEdit;
     rgInternacional: TcxDBRadioGroup;
+    tsFotos: TcxTabSheet;
+    cxgrdFotos: TcxGrid;
+    tvFotos: TcxGridDBTableView;
+    dsFotos: TDataSource;
+    cdsFotos: TClientDataSet;
+    lvCardFotos: TcxGridLevel;
+    cxgrdFotosDBCardView1: TcxGridDBCardView;
+    cxgrdFotosDBCardView1NombreArchivo: TcxGridDBCardViewRow;
+    cxgrdFotosDBCardView1Fecha: TcxGridDBCardViewRow;
+    cxgrdFotosDBCardView1Miniatura: TcxGridDBCardViewRow;
+    strngfldFotosNombreArchivo: TStringField;
+    dtfldFotosFecha: TDateField;
+    blbfldFotosMiniatura: TBlobField;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cxgrdbclmncxgrdtvtv1DESCRIPCION_HISTORIAPropertiesButtonClick(
@@ -238,9 +252,24 @@ type
     procedure btnCODIGO_CLIENTEPropertiesButtonClick(Sender: TObject;
       AButtonIndex: Integer);
     procedure btnCODIGO_CLIENTEPropertiesChange(Sender: TObject);
+    procedure tsFotosEnter(Sender: TObject);
+    procedure cxgrdFotosDBCardView1CellDblClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
 
   private
-
+    procedure SincronizarThumbnails;
+    function ObtenerRutaPaciente: string;
+    function ObtenerRutaThumbnails: string;
+    function ObtenerNombreThumbnail(const ARutaArchivo: string): string;
+    function NecesitaActualizacion(const ARutaArchivo,
+                                   ARutaThumbnail: string): Boolean;
+    function CrearThumbnail(const ARutaImagen: string;
+                            ASize: Integer): TBitmap;
+    procedure CargarMiniaturas;
+    procedure MostrarFotoCompleta;
+    procedure AgregarFotoAGrid(const ARutaArchivo: string);
+    function ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
   public
     { Public declarations }
   end;
@@ -304,6 +333,352 @@ begin
           dmmClientes.unqryHistoria.Refresh;
    end;
 end;
+
+procedure TfrmMtoClientes.tsFotosEnter(Sender: TObject);
+
+begin
+  inherited;
+  SincronizarThumbnails;
+  CargarMiniaturas;
+end;
+
+
+function TfrmMtoClientes.ObtenerRutaPaciente: string;
+var sRuta:String;
+begin
+  sRuta := 'C:\fotos\' +
+                 dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString + '\';
+  if not DirectoryExists(sRuta) then
+  begin
+    ShowMessage('Este paciente no tiene carpeta de fotos');
+    sRuta := '';
+  end;
+  Result := sRuta;
+  //FRutaFotos := Result;
+end;
+
+procedure TfrmMtoClientes.AgregarFotoAGrid(const ARutaArchivo: string);
+var
+  Miniatura: TBitmap;
+  Stream: TMemoryStream;
+begin
+  Miniatura := ObtenerThumbnail(ARutaArchivo);
+  if Miniatura = nil then Exit;
+
+  Stream := TMemoryStream.Create;
+  try
+    Miniatura.SaveToStream(Stream);
+    Stream.Position := 0;
+    cdsFotos.Append;
+    cdsFotos.FieldByName('NombreArchivo').AsString := ExtractFileName(ARutaArchivo);
+    cdsFotos.FieldByName('Fecha').AsDateTime := FileDateToDateTime(FileAge(ARutaArchivo));
+    TBlobField(cdsFotos.FieldByName('Miniatura')).LoadFromStream(Stream);
+    cdsFotos.Post;
+  finally
+    Miniatura.Free;
+    Stream.Free;
+  end;
+end;
+
+function TfrmMtoClientes.ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
+var
+  RutaThumbnail: string;
+begin
+  RutaThumbnail := ObtenerRutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
+  Result := TBitmap.Create;
+  try
+    if FileExists(RutaThumbnail) then
+    begin
+      try
+        Result.LoadFromFile(RutaThumbnail);
+      except
+        FreeAndNil(Result);
+        Result := CrearThumbnail(ARutaArchivo, 160);
+      end;
+    end
+    else
+    begin
+      FreeAndNil(Result);
+      Result := CrearThumbnail(ARutaArchivo, 160);
+    end;
+  except
+    if Result = nil then
+    begin
+      Result := TBitmap.Create;
+      Result.Width := 160;
+      Result.Height := 160;
+    end;
+  end;
+end;
+
+procedure TfrmMtoClientes.CargarMiniaturas;
+var
+  SR: TSearchRec;
+  RutaPaciente: string;
+begin
+//  if FCodPaciente = '' then
+//  begin
+//    ShowMessage('No hay un código de paciente asignado');
+//    Exit;
+//  end;
+  Screen.Cursor := crHourGlass;
+  cdsFotos.DisableControls;
+  try
+    cdsFotos.EmptyDataSet;
+    RutaPaciente := ObtenerRutaPaciente;
+    //ActualizarEstado('Cargando fotos...');
+    // Cargar JPG
+    if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
+    begin
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+          AgregarFotoAGrid(RutaPaciente + SR.Name);
+      until FindNext(SR) <> 0;
+      FindClose(SR);
+    end;
+    // Cargar JPEG
+    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
+    begin
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+          AgregarFotoAGrid(RutaPaciente + SR.Name);
+      until FindNext(SR) <> 0;
+      FindClose(SR);
+    end;
+    //ActualizarEstado(Format('Listo - %d fotos cargadas', [ClientDataSet1.RecordCount]));
+  finally
+    cdsFotos.EnableControls;
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+function TfrmMtoClientes.ObtenerRutaThumbnails: string;
+begin
+  Result := 'C:\fotos\.thumbnails\' +
+                  dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString + '\';
+  if not DirectoryExists(Result) then
+    ForceDirectories(Result);
+end;
+
+function TfrmMtoClientes.ObtenerNombreThumbnail(const ARutaArchivo: string): string;
+begin
+  // Convertir foto1.jpg a foto1_thumb.bmp
+  Result := ChangeFileExt(ExtractFileName(ARutaArchivo), '_thumb.bmp');
+end;
+
+function TfrmMtoClientes.NecesitaActualizacion(const ARutaArchivo,
+  ARutaThumbnail: string): Boolean;
+var
+  FechaOriginal, FechaThumbnail: TDateTime;
+begin
+  // Si no existe el thumbnail, necesita crearse
+  if not FileExists(ARutaThumbnail) then
+  begin
+    Result := True;
+    Exit;
+  end;
+  // Si el archivo original es más nuevo que el thumbnail, necesita actualizarse
+  FechaOriginal := FileDateToDateTime(FileAge(ARutaArchivo));
+  FechaThumbnail := FileDateToDateTime(FileAge(ARutaThumbnail));
+  Result := FechaOriginal > FechaThumbnail;
+end;
+
+procedure TfrmMtoClientes.MostrarFotoCompleta;
+var
+  RutaArchivo: string;
+  VisorFoto: TfrmMtoVisorFoto;
+begin
+  if cdsFotos.IsEmpty then
+  begin
+    ShowMessage('No hay ninguna foto seleccionada');
+    Exit;
+  end;
+  RutaArchivo := ObtenerRutaPaciente +  cdsFotos.FieldByName('NombreArchivo').AsString;
+  if not FileExists(RutaArchivo) then
+  begin
+    ShowMessage('El archivo no existe: ' + RutaArchivo);
+    Exit;
+  end;
+  VisorFoto := TfrmMtoVisorFoto.Create(Self);
+  try
+    VisorFoto.MostrarImagen(RutaArchivo);
+  finally
+    VisorFoto.Free;
+  end;
+end;
+
+function TfrmMtoClientes.CrearThumbnail(const ARutaImagen: string;
+  ASize: Integer): TBitmap;
+var
+  ImagenOriginal: TJPEGImage;
+  Proporcion: Double;
+  NuevoAncho, NuevoAlto: Integer;
+begin
+  Result := TBitmap.Create;
+  ImagenOriginal := TJPEGImage.Create;
+  try
+    try
+      ImagenOriginal.LoadFromFile(ARutaImagen);
+      if ImagenOriginal.Width > ImagenOriginal.Height then
+      begin
+        Proporcion := ASize / ImagenOriginal.Width;
+        NuevoAncho := ASize;
+        NuevoAlto := Round(ImagenOriginal.Height * Proporcion);
+      end
+      else
+      begin
+        Proporcion := ASize / ImagenOriginal.Height;
+        NuevoAlto := ASize;
+        NuevoAncho := Round(ImagenOriginal.Width * Proporcion);
+      end;
+      if (NuevoAncho < 1) then
+        NuevoAncho := 1;
+      if (NuevoAlto < 1) then
+        NuevoAlto := 1;
+      Result.Width := NuevoAncho;
+      Result.Height := NuevoAlto;
+      Result.Canvas.StretchDraw(Rect(0, 0, NuevoAncho, NuevoAlto),
+                                ImagenOriginal);
+    except
+      on E: Exception do
+      begin
+        FreeAndNil(Result);
+        Result := TBitmap.Create;
+        Result.Width := ASize;
+        Result.Height := ASize;
+      end;
+    end;
+  finally
+    ImagenOriginal.Free;
+  end;
+end;
+
+procedure TfrmMtoClientes.SincronizarThumbnails;
+var
+  SR: TSearchRec;
+  RutaPaciente, RutaThumbnails: string;
+  ARutaArchivo, ARutaThumbnail: string;
+  Thumbnail: TBitmap;
+  TotalFotos, FotosProcesadas: Integer;
+begin
+//  if FCodPaciente = '' then Exit;
+//  if FSincronizando then Exit;
+
+  //FSincronizando := True;
+  Screen.Cursor := crHourGlass;
+  try
+    RutaPaciente := ObtenerRutaPaciente;
+    if RutaPaciente = '' then
+      Exit;
+    RutaThumbnails := ObtenerRutaThumbnails;
+
+    // Contar total de fotos
+    TotalFotos := 0;
+    if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
+    begin
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+          Inc(TotalFotos);
+      until FindNext(SR) <> 0;
+      FindClose(SR);
+    end;
+
+    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
+    begin
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+          Inc(TotalFotos);
+      until FindNext(SR) <> 0;
+      FindClose(SR);
+    end;
+
+    if TotalFotos = 0 then
+    begin
+      ShowMessage('No hay fotos para sincronizar');
+      Exit;
+    end;
+
+    //ActualizarEstado(Format('Sincronizando %d fotos...', [TotalFotos]));
+    FotosProcesadas := 0;
+
+    // Procesar archivos JPG
+    if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
+    begin
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+        begin
+          ARutaArchivo := RutaPaciente + SR.Name;
+          ARutaThumbnail := RutaThumbnails +
+                                           ObtenerNombreThumbnail(ARutaArchivo);
+
+          if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
+          begin
+            Inc(FotosProcesadas);
+//            ActualizarEstado(Format('Generando thumbnail %d/%d: %s',
+//              [FotosProcesadas, TotalFotos, SR.Name]));
+
+            Thumbnail := CrearThumbnail(ARutaArchivo, 160); //Más grande para cards
+            try
+              if Thumbnail <> nil then
+              begin
+                try
+                  Thumbnail.SaveToFile(ARutaThumbnail);
+                except
+                  // Error al guardar
+                end;
+              end;
+            finally
+              Thumbnail.Free;
+            end;
+          end;
+        end;
+      until FindNext(SR) <> 0;
+      FindClose(SR);
+    end;
+    // Procesar archivos JPEG
+    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
+    begin
+      repeat
+        if (SR.Name <> '.') and (SR.Name <> '..') then
+        begin
+          ARutaArchivo := RutaPaciente + SR.Name;
+          ARutaThumbnail := RutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
+
+          if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
+          begin
+            Inc(FotosProcesadas);
+//            ActualizarEstado(Format('Generando thumbnail %d/%d: %s',
+//              [FotosProcesadas, TotalFotos, SR.Name]));
+            Thumbnail := CrearThumbnail(ARutaArchivo, 160);
+            try
+              if Thumbnail <> nil then
+              begin
+                try
+                  Thumbnail.SaveToFile(ARutaThumbnail);
+                except
+                  // Error al guardar
+                end;
+              end;
+            finally
+              Thumbnail.Free;
+            end;
+          end;
+        end;
+      until FindNext(SR) <> 0;
+      FindClose(SR);
+    end;
+
+//    if FotosProcesadas > 0 then
+//      ActualizarEstado(Format('Sincronización completa: %d thumbnails generados', [FotosProcesadas]))
+//    else
+//      ActualizarEstado('Thumbnails ya están actualizados');
+
+  finally
+//    FSincronizando := False;
+    Screen.Cursor := crDefault;
+  end;
+end;
+
 
 procedure TfrmMtoClientes.btn1Click(Sender: TObject);
 begin
@@ -464,6 +839,14 @@ procedure TfrmMtoClientes.cxgrdbclmncxgrdtvtv1DESCRIPCION_HISTORIAPropertiesButt
 begin
   inherited;
   MostrarBlocdeNotas;
+end;
+
+procedure TfrmMtoClientes.cxgrdFotosDBCardView1CellDblClick(
+  Sender: TcxCustomGridTableView; ACellViewInfo: TcxGridTableDataCellViewInfo;
+  AButton: TMouseButton; AShift: TShiftState; var AHandled: Boolean);
+begin
+  inherited;
+  MostrarFotoCompleta;
 end;
 
 procedure TfrmMtoClientes.dxbbEtiquetasClick(Sender: TObject);

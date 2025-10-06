@@ -4,7 +4,7 @@ object dmConn: TdmConn
   Width = 405
   object conUni: TUniConnection
     ProviderName = 'MySQL'
-    Port = 3306
+    Port = 3307
     Database = 'subocasana'
     SpecificOptions.Strings = (
       'MySQL.Charset=utf8'
@@ -18,6 +18,6 @@ object dmConn: TdmConn
     BeforeConnect = connBeforeConnect
     Left = 216
     Top = 120
-    EncryptedPassword = 'A5FF9EFF92FF90FF8DFF9EFFCDFFCFFFCDFFCCFF'
+    EncryptedPassword = 'CEFFB9FFC9FFA8FFC9FF96FFCEFF95FFCEFF'
   end
 end
