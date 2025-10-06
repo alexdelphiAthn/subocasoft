@@ -351,7 +351,7 @@ begin
                  dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString + '\';
   if not DirectoryExists(sRuta) then
   begin
-    ShowMessage('Este paciente no tiene carpeta de fotos');
+    //ShowMessage('Este paciente no tiene carpeta de fotos');
     sRuta := '';
   end;
   Result := sRuta;
@@ -449,6 +449,8 @@ begin
     //ActualizarEstado(Format('Listo - %d fotos cargadas', [ClientDataSet1.RecordCount]));
   finally
     cdsFotos.EnableControls;
+    cdsFotos.AddIndex('idxFecha', 'Fecha', [ixDescending], '', '', 0);
+    cdsFotos.IndexName := 'idxFecha';
     Screen.Cursor := crDefault;
   end;
 end;
