@@ -598,7 +598,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         TabOrder = 1
         ExplicitWidth = 1009
         ExplicitHeight = 295
-        object cxpgcntrl2: TcxPageControl
+        object pcDetalleClientes: TcxPageControl
           Left = 1
           Top = 1
           Width = 1011
@@ -1671,10 +1671,8 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alClient
               TabOrder = 0
-              ExplicitLeft = 488
-              ExplicitTop = 57
-              ExplicitWidth = 250
-              ExplicitHeight = 200
+              ExplicitWidth = 999
+              ExplicitHeight = 256
               object tvFotos: TcxGridDBTableView
                 Navigator.Buttons.CustomButtons = <>
                 Navigator.Buttons.Delete.Visible = False
@@ -1734,6 +1732,7 @@ inherited frmMtoClientes: TfrmMtoClientes
   end
   inherited dsTablaG: TDataSource
     DataSet = DMClientes.unqryClientes
+    OnDataChange = dsTablaGDataChange
     Left = 308
     Top = 199
   end

@@ -209,7 +209,6 @@ type
     procedure cxgrdbclmntv1ODONTOLOGOPropertiesButtonClick(Sender: TObject;
       AButtonIndex: Integer);
     procedure btnNuevoPreClick(Sender: TObject);
-    procedure cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA2Enter(Sender: TObject);
     procedure cxgrdbclmntv1CODIGO_ARTICULO_LINEAPropertiesEditValueChanged(
       Sender: TObject);
     procedure cxgrd5Enter(Sender: TObject);
@@ -662,13 +661,6 @@ begin
   inherited;
   if ((Key = VK_DOWN) and (Shift = [ssShift])) then
       cxdbdtdtFECHA_FACTURA.DroppedDown := True;
-end;
-
-procedure TfrmMtoPre.cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA2Enter(
-  Sender: TObject);
-// var
-//   buttonSelected : Integer;
-begin
 end;
 
 procedure TfrmMtoPre.cxgrd5Enter(Sender: TObject);
@@ -1250,7 +1242,11 @@ begin
   inherited;
   if ((dmmPre <> nil) and (FDisplayBitmap <> nil) and
       (dmmPre.unqryDibujos.RecordCount > 0)) then
-    LoadImageFromDatabaseSilent;
+    LoadImageFromDatabaseSilent
+  else
+    if ((dmmPre <> nil) and (FDisplayBitmap <> nil) and
+        (dmmPre.unqryDibujos.RecordCount = 0)) then
+      btnNuevoClick(Sender);
 end;
 
 // Implementación de las funciones de conversión de coordenadas
@@ -1373,7 +1369,7 @@ begin
   //imagen guardada a la por defecto)
   FModified := True;
   UpdateButtonStates;
-  ShowMessage('Gráfico reseteado a la imagen por defecto.');
+  //ShowMessage('Gráfico reseteado a la imagen por defecto.');
 end;
 
 //procedure TfrmMtoPre.pbDibujoMouseDown(Sender: TObject; Button: TMouseButton;

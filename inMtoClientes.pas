@@ -50,7 +50,7 @@ type
     cxlbl6: TcxLabel;
     cxdbtxtdtEMAIL: TcxDBTextEdit;
     pnl2: TPanel;
-    cxpgcntrl2: TcxPageControl;
+    pcDetalleClientes: TcxPageControl;
     cxtbsht3: TcxTabSheet;
     cxlbl7: TcxLabel;
     cxlbl8: TcxLabel;
@@ -256,6 +256,7 @@ type
     procedure cxgrdFotosDBCardView1CellDblClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
+    procedure dsTablaGDataChange(Sender: TObject; Field: TField);
 
   private
     procedure SincronizarThumbnails;
@@ -563,7 +564,6 @@ var
 begin
 //  if FCodPaciente = '' then Exit;
 //  if FSincronizando then Exit;
-
   //FSincronizando := True;
   Screen.Cursor := crHourGlass;
   try
@@ -571,7 +571,6 @@ begin
     if RutaPaciente = '' then
       Exit;
     RutaThumbnails := ObtenerRutaThumbnails;
-
     // Contar total de fotos
     TotalFotos := 0;
     if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
@@ -582,7 +581,6 @@ begin
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-
     if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
     begin
       repeat
@@ -591,16 +589,13 @@ begin
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-
     if TotalFotos = 0 then
     begin
       ShowMessage('No hay fotos para sincronizar');
       Exit;
     end;
-
     //ActualizarEstado(Format('Sincronizando %d fotos...', [TotalFotos]));
     FotosProcesadas := 0;
-
     // Procesar archivos JPG
     if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
     begin
@@ -610,13 +605,11 @@ begin
           ARutaArchivo := RutaPaciente + SR.Name;
           ARutaThumbnail := RutaThumbnails +
                                            ObtenerNombreThumbnail(ARutaArchivo);
-
           if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
           begin
             Inc(FotosProcesadas);
 //            ActualizarEstado(Format('Generando thumbnail %d/%d: %s',
 //              [FotosProcesadas, TotalFotos, SR.Name]));
-
             Thumbnail := CrearThumbnail(ARutaArchivo, 160); //Más grande para cards
             try
               if Thumbnail <> nil then
@@ -643,7 +636,6 @@ begin
         begin
           ARutaArchivo := RutaPaciente + SR.Name;
           ARutaThumbnail := RutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
-
           if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
           begin
             Inc(FotosProcesadas);
@@ -667,12 +659,10 @@ begin
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-
 //    if FotosProcesadas > 0 then
 //      ActualizarEstado(Format('Sincronización completa: %d thumbnails generados', [FotosProcesadas]))
 //    else
 //      ActualizarEstado('Thumbnails ya están actualizados');
-
   finally
 //    FSincronizando := False;
     Screen.Cursor := crDefault;
@@ -847,6 +837,18 @@ procedure TfrmMtoClientes.cxgrdFotosDBCardView1CellDblClick(
 begin
   inherited;
   MostrarFotoCompleta;
+end;
+
+procedure TfrmMtoClientes.dsTablaGDataChange(Sender: TObject; Field: TField);
+begin
+  inherited;
+  if Assigned(dsTablaG.Dataset) then
+    if (dsTablaG.DataSet.State = dsBrowse) then
+      if pcDetalleClientes.ActivePage = tsFotos then
+      begin
+        SincronizarThumbnails;
+        CargarMiniaturas;
+      end;
 end;
 
 procedure TfrmMtoClientes.dxbbEtiquetasClick(Sender: TObject);
