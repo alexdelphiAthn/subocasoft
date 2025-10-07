@@ -283,7 +283,7 @@ var
 implementation
 
 uses
-  inLibWin, inMtoModalHistoriaCli, inMtoGenSearch, inLibDevExp,
+  inLibWin, inMtoModalHistoriaCli, inMtoGenSearch, inLibDevExp, inLibVarGlob,
   inMtoModalCliEti, inLibDocumentoValidator, inMtoModalCliCues;
 
 {$R *.dfm}
@@ -347,7 +347,7 @@ end;
 function TfrmMtoClientes.ObtenerRutaPaciente: string;
 var sRuta:String;
 begin
-  sRuta := 'C:\fotos\' +
+  sRuta := FFotosPath +
                  dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString + '\';
   if not DirectoryExists(sRuta) then
   begin
@@ -457,7 +457,7 @@ end;
 
 function TfrmMtoClientes.ObtenerRutaThumbnails: string;
 begin
-  Result := 'C:\fotos\.thumbnails\' +
+  Result := FFotosPath+'.thumbnails\' +
                   dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString + '\';
   if not DirectoryExists(Result) then
     ForceDirectories(Result);

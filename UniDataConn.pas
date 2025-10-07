@@ -24,7 +24,7 @@ var
 
 implementation
 
-uses inLibDir, inLibtb, inMtoPrincipal;
+uses inLibDir, inLibtb, inMtoPrincipal, inLibVarGlob;
 
 {$R *.dfm}
 
@@ -41,6 +41,7 @@ begin
   sPassword :=  leCadINIDir('ConnData', 'Password','Zamora2023', GetUserFolder);
   sPort :=  leCadINIDir('ConnData', 'Puerto','3306', GetUserFolder);
   sUser :=  leCadINIDir('ConnData', 'User', 'root', GetUserFolder);
+  FFotosPath := leCadINIDir('ConnData', 'DirFotos', 'c:\Fotos\', GetUserFolder);
   with Conuni do
   begin
     ConnectString := 'Provider Name=MySQL;User ID=' + sUser + ';Password=' +

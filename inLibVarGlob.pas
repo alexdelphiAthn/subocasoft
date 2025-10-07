@@ -4,9 +4,10 @@ interface
 
 var
   Fversion:string;
+  FFotosPath:string;
 
 implementation
 
 initialization
-  Fversion := '109.202509300915';
+  Fversion := '109.202510070716';
 end.
