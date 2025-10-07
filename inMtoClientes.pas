@@ -273,6 +273,8 @@ type
     function ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
   public
     { Public declarations }
+  private
+    FRutaPaciente:String;
   end;
   procedure ShowMtoClientes(Owner       : TComponent); overload;
   procedure ShowMtoClientes(Owner       : TComponent; sEmail: String); overload;
@@ -284,7 +286,7 @@ implementation
 
 uses
   inLibWin, inMtoModalHistoriaCli, inMtoGenSearch, inLibDevExp, inLibVarGlob,
-  inMtoModalCliEti, inLibDocumentoValidator, inMtoModalCliCues;
+  inMtoModalCliEti, inLibDocumentoValidator, inMtoModalCliCues, inLibtb;
 
 {$R *.dfm}
 
@@ -343,19 +345,53 @@ begin
   CargarMiniaturas;
 end;
 
-
 function TfrmMtoClientes.ObtenerRutaPaciente: string;
-var sRuta:String;
+var
+  sRuta: string;
+  sCodigo: string;
+  SearchRec: TSearchRec;
+  bEncontrado: Boolean;
 begin
-  sRuta := FFotosPath +
-                 dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString + '\';
-  if not DirectoryExists(sRuta) then
+  Result := '';
+  sCodigo := Trim(dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString);
+
+  if sCodigo = '' then
+    Exit;
+
+  bEncontrado := False;
+
+  // Buscar carpetas en el directorio base
+  if FindFirst(FFotosPath + '*.*', faDirectory, SearchRec) = 0 then
   begin
-    //ShowMessage('Este paciente no tiene carpeta de fotos');
+    try
+      repeat
+        // Ignorar '.' y '..'
+        if (SearchRec.Name <> '.') and (SearchRec.Name <> '..') and
+           (SearchRec.Attr and faDirectory = faDirectory) then
+        begin
+          // Buscar si el nombre de la carpeta contiene el código del cliente
+          // Por ejemplo: "ALFONSO 32" contiene "32"
+          if SameText(sCodigo, SoloNumeros(SearchRec.Name)) then
+          begin
+            sRuta := IncludeTrailingPathDelimiter(FFotosPath + SearchRec.Name);
+            FRutaPaciente := sRuta;
+            bEncontrado := True;
+            Break;
+          end;
+        end;
+      until FindNext(SearchRec) <> 0;
+    finally
+      FindClose(SearchRec);
+    end;
+  end;
+
+  if not bEncontrado then
+  begin
+    // ShowMessage('Este paciente no tiene carpeta de fotos');
     sRuta := '';
   end;
+
   Result := sRuta;
-  //FRutaFotos := Result;
 end;
 
 procedure TfrmMtoClientes.AgregarFotoAGrid(const ARutaArchivo: string);
@@ -426,7 +462,7 @@ begin
   cdsFotos.DisableControls;
   try
     cdsFotos.EmptyDataSet;
-    RutaPaciente := ObtenerRutaPaciente;
+    RutaPaciente := FRutaPaciente;
     //ActualizarEstado('Cargando fotos...');
     // Cargar JPG
     if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
@@ -496,7 +532,7 @@ begin
     ShowMessage('No hay ninguna foto seleccionada');
     Exit;
   end;
-  RutaArchivo := ObtenerRutaPaciente +  cdsFotos.FieldByName('NombreArchivo').AsString;
+  RutaArchivo := FRutaPaciente +  cdsFotos.FieldByName('NombreArchivo').AsString;
   if not FileExists(RutaArchivo) then
   begin
     ShowMessage('El archivo no existe: ' + RutaArchivo);

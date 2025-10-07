@@ -1577,8 +1577,49 @@ end;
 
 procedure TfrmMtoFac.btnCODIGO_CLIENTEKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+  var
+    sCodigo:string;
 begin
   inherited;
+  if Key = VK_RETURN then
+  begin
+    sCodigo := dmmFac.unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
+    with dmmFac.unstrdprcGetDataCliente do
+    begin
+      ParamByName('pCODIGO_CLIENTE').AsString :=
+                   dmmFac.unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
+      ExecProc;
+      if Trim(ParamByName('pRAZONSOCIAL_CLIENTE').AsString) <> '' then
+      begin
+        dmmFac.unqryFac.FindField('RAZONSOCIAL_CLIENTE_FACTURA').AsString :=
+          ParamByName('pRAZONSOCIAL_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('NOMBRE').AsString :=
+          ParamByName('pNOMBRE').AsString;
+        dmmFac.unqryFac.FindField('APELLIDOS').AsString :=
+          ParamByName('pAPELLIDOS').AsString;
+        dmmFac.unqryFac.FindField('NIF_CLIENTE_FACTURA').AsString :=
+          ParamByName('pNIF_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('MOVIL_CLIENTE_FACTURA').AsString :=
+          ParamByName('pMOVIL_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('EMAIL_CLIENTE_FACTURA').AsString :=
+          ParamByName('pEMAIL_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('DIRECCION1_CLIENTE_FACTURA').AsString :=
+          ParamByName('pDIRECCION1_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('DIRECCION2_CLIENTE_FACTURA').AsString :=
+          ParamByName('pDIRECCION2_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('POBLACION_CLIENTE_FACTURA').AsString :=
+          ParamByName('pPOBLACION_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('PROVINCIA_CLIENTE_FACTURA').AsString :=
+          ParamByName('pPROVINCIA_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('CPOSTAL_CLIENTE_FACTURA').AsString :=
+          ParamByName('pCPOSTAL_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('PAIS_CLIENTE_FACTURA').AsString :=
+          ParamByName('pPAIS_CLIENTE').AsString;
+        dmmFac.unqryFac.FindField('TIPOID_INT_CLIENTE_FACTURA').AsString :=
+        ParamByName('pTIPOID_INT_CLIENTE').AsString;
+      end;
+    end;
+  end;
   // Reservado para futuras funcionalidades
 end;
 
