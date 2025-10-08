@@ -508,10 +508,53 @@ end;
 
 procedure TfrmMtoPre.btnCODIGO_CLIENTEKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+  var
+    sCodigo:string;
 begin
   inherited;
-//  if ((Key = VK_RETURN) and (Shift = [ssCtrl])) then
-//    btnBuscar_Clientes_ActivosClick(nil);
+  if Key = VK_RETURN then
+  begin
+    with dmmPre do
+    begin
+    sCodigo := unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
+    with .unstrdprcGetDataCliente do
+    begin
+      ParamByName('pCODIGO_CLIENTE').AsString :=
+                   unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
+      ExecProc;
+      if Trim(ParamByName('pRAZONSOCIAL_CLIENTE').AsString) <> '' then
+      begin
+        unqryFac.FindField('RAZONSOCIAL_CLIENTE_FACTURA').AsString :=
+         ParamByName('pRAZONSOCIAL_CLIENTE').AsString;
+        unqryFac.FindField('NOMBRE').AsString :=
+         ParamByName('pNOMBRE').AsString;
+        unqryFac.FindField('APELLIDOS').AsString :=
+         ParamByName('pAPELLIDOS').AsString;
+        unqryFac.FindField('NIF_CLIENTE_FACTURA').AsString :=
+         ParamByName('pNIF_CLIENTE').AsString;
+        unqryFac.FindField('MOVIL_CLIENTE_FACTURA').AsString :=
+         ParamByName('pMOVIL_CLIENTE').AsString;
+        unqryFac.FindField('EMAIL_CLIENTE_FACTURA').AsString :=
+         ParamByName('pEMAIL_CLIENTE').AsString;
+        unqryFac.FindField('DIRECCION1_CLIENTE_FACTURA').AsString :=
+         ParamByName('pDIRECCION1_CLIENTE').AsString;
+        unqryFac.FindField('DIRECCION2_CLIENTE_FACTURA').AsString :=
+         ParamByName('pDIRECCION2_CLIENTE').AsString;
+        unqryFac.FindField('POBLACION_CLIENTE_FACTURA').AsString :=
+         ParamByName('pPOBLACION_CLIENTE').AsString;
+        unqryFac.FindField('PROVINCIA_CLIENTE_FACTURA').AsString :=
+         ParamByName('pPROVINCIA_CLIENTE').AsString;
+        unqryFac.FindField('CPOSTAL_CLIENTE_FACTURA').AsString :=
+         ParamByName('pCPOSTAL_CLIENTE').AsString;
+        unqryFac.FindField('PAIS_CLIENTE_FACTURA').AsString :=
+         ParamByName('pPAIS_CLIENTE').AsString;
+        unqryFac.FindField('TIPOID_INT_CLIENTE_FACTURA').AsString :=
+        ParamByName('pTIPOID_INT_CLIENTE').AsString;
+      end;
+    end;
+  end;
+  end;
+  // Reservado para futuras funcionalidades
 end;
 
 procedure TfrmMtoPre.btnCODIGO_CLIENTEPropertiesButtonClick(Sender: TObject;
