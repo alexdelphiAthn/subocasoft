@@ -102,6 +102,7 @@ inherited frmMtoFac: TfrmMtoFac
         ExplicitWidth = 188
         inherited lblEditMode: TLabel
           Width = 188
+          ExplicitWidth = 188
         end
       end
       inherited Panel4: TPanel
@@ -109,6 +110,7 @@ inherited frmMtoFac: TfrmMtoFac
         ExplicitWidth = 188
         inherited lblTablaOrigen: TLabel
           Width = 188
+          ExplicitWidth = 188
         end
       end
     end
@@ -141,8 +143,8 @@ inherited frmMtoFac: TfrmMtoFac
       inherited cxGrdPrincipal: TcxGrid
         Width = 1028
         Height = 519
-        ExplicitWidth = 1024
-        ExplicitHeight = 518
+        ExplicitWidth = 1028
+        ExplicitHeight = 519
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -288,7 +290,7 @@ inherited frmMtoFac: TfrmMtoFac
       end
       inherited pnTopGrid: TPanel
         Width = 1028
-        ExplicitWidth = 1024
+        ExplicitWidth = 1028
         inherited edtBusqGlobal: TcxTextEdit
           ExplicitHeight = 30
         end
@@ -309,6 +311,8 @@ inherited frmMtoFac: TfrmMtoFac
         Height = 282
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 1024
+        ExplicitHeight = 281
         object cxspl1: TcxSplitter
           Left = 1
           Top = 1
@@ -319,6 +323,7 @@ inherited frmMtoFac: TfrmMtoFac
           DragThreshold = 2
           PositionAfterOpen = 24
           MinSize = 24
+          ExplicitWidth = 1022
         end
         object cxpgcntrlFacturacx: TcxPageControl
           Left = 1
@@ -335,6 +340,8 @@ inherited frmMtoFac: TfrmMtoFac
           TabOrder = 1
           Properties.ActivePage = tsVeriFactu
           Properties.CustomButtons.Buttons = <>
+          ExplicitWidth = 1022
+          ExplicitHeight = 271
           ClientRectBottom = 268
           ClientRectLeft = 4
           ClientRectRight = 1022
@@ -1024,6 +1031,8 @@ inherited frmMtoFac: TfrmMtoFac
           object tsVeriFactu: TcxTabSheet
             Caption = 'VeriFactu'
             ImageIndex = 5
+            ExplicitWidth = 1014
+            ExplicitHeight = 237
             object scrlbx1: TScrollBox
               Left = 0
               Top = 0
@@ -1031,19 +1040,20 @@ inherited frmMtoFac: TfrmMtoFac
               Height = 238
               HorzScrollBar.Position = 42
               VertScrollBar.ButtonSize = 20
-              VertScrollBar.Position = 412
               Align = alClient
               TabOrder = 0
+              ExplicitWidth = 1014
+              ExplicitHeight = 237
               object lbl18: TLabel
                 Left = 2
-                Top = 200
+                Top = 612
                 Width = 176
                 Height = 19
                 Caption = 'PETICION_COMPLETA'
               end
               object lbl17: TLabel
                 Left = 1
-                Top = -352
+                Top = 60
                 Width = 188
                 Height = 19
                 Caption = 'RESPUESTA_COMPLETA'
@@ -1051,7 +1061,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl13: TLabel
                 Left = 32
-                Top = 131
+                Top = 543
                 Width = 140
                 Height = 19
                 Caption = 'QRCODE_BASE64'
@@ -1059,7 +1069,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl12: TLabel
                 Left = 38
-                Top = 64
+                Top = 476
                 Width = 134
                 Height = 19
                 Caption = 'VERIFACTU_URL'
@@ -1067,7 +1077,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl11: TLabel
                 Left = 59
-                Top = -2
+                Top = 410
                 Width = 109
                 Height = 19
                 Caption = 'CHAIN_HASH'
@@ -1075,7 +1085,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl10: TLabel
                 Left = 50
-                Top = -51
+                Top = 361
                 Width = 136
                 Height = 19
                 Caption = 'CHAIN_NUMBER'
@@ -1083,7 +1093,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl9: TLabel
                 Left = 79
-                Top = -99
+                Top = 313
                 Width = 109
                 Height = 19
                 Caption = 'ISSUED_TIME'
@@ -1091,7 +1101,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl8: TLabel
                 Left = 66
-                Top = -148
+                Top = 264
                 Width = 118
                 Height = 19
                 Caption = 'ISSUER_IRS_ID'
@@ -1099,7 +1109,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl7: TLabel
                 Left = 100
-                Top = -196
+                Top = 216
                 Width = 84
                 Height = 19
                 Caption = 'QUEUE_ID'
@@ -1107,7 +1117,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl6: TLabel
                 Left = 83
-                Top = -245
+                Top = 167
                 Width = 101
                 Height = 19
                 Caption = 'REQUEST_ID'
@@ -1115,7 +1125,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl: TLabel
                 Left = 19
-                Top = -390
+                Top = 22
                 Width = 170
                 Height = 19
                 Caption = 'ID_CONSOLIDACION'
@@ -1123,7 +1133,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl15: TLabel
                 Left = 404
-                Top = -188
+                Top = 224
                 Width = 205
                 Height = 19
                 Caption = 'FECHA_PROCESAMIENTO'
@@ -1131,7 +1141,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object lbl16: TLabel
                 Left = 344
-                Top = -392
+                Top = 20
                 Width = 65
                 Height = 19
                 Caption = 'ESTADO'
@@ -1139,7 +1149,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object btnReconsolidar: TSpeedButton
                 Left = 810
-                Top = -293
+                Top = 119
                 Width = 217
                 Height = 52
                 Cursor = crHandPoint
@@ -1148,7 +1158,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object btnConsultarEstado: TSpeedButton
                 Left = 810
-                Top = -386
+                Top = 26
                 Width = 217
                 Height = 39
                 Cursor = crHandPoint
@@ -1157,7 +1167,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object btnCancelarFactura: TSpeedButton
                 Left = 810
-                Top = -340
+                Top = 72
                 Width = 217
                 Height = 39
                 Cursor = crHandPoint
@@ -1166,7 +1176,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object btnSubsanacion: TSpeedButton
                 Left = 810
-                Top = -234
+                Top = 178
                 Width = 217
                 Height = 52
                 Cursor = crHandPoint
@@ -1175,7 +1185,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object spQUEUE_ID: TcxDBSpinEdit
                 Left = 198
-                Top = -204
+                Top = 208
                 DataBinding.DataField = 'QUEUE_ID'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1184,7 +1194,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object cxdbmRESPUESTA_COMPLETA: TcxDBMemo
                 Left = 198
-                Top = -356
+                Top = 56
                 DataBinding.DataField = 'RESPUESTA_COMPLETA'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1194,7 +1204,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object cxdbmQRCODE_BASE64: TcxDBMemo
                 Left = 185
-                Top = 105
+                Top = 517
                 DataBinding.DataField = 'QRCODE_BASE64'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1204,7 +1214,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object cxdbmVERIFACTU_URL: TcxDBMemo
                 Left = 185
-                Top = 38
+                Top = 450
                 DataBinding.DataField = 'VERIFACTU_URL'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1214,7 +1224,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object txtCHAIN_HASH: TcxDBTextEdit
                 Left = 185
-                Top = -10
+                Top = 402
                 DataBinding.DataField = 'CHAIN_HASH'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1223,7 +1233,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object txtCHAIN_NUMBER: TcxDBTextEdit
                 Left = 198
-                Top = -59
+                Top = 353
                 DataBinding.DataField = 'CHAIN_NUMBER'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1232,7 +1242,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object dteISSUED_TIME: TcxDBDateEdit
                 Left = 198
-                Top = -107
+                Top = 305
                 DataBinding.DataField = 'ISSUED_TIME'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1241,7 +1251,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object txtISSUER_IRS_ID: TcxDBTextEdit
                 Left = 198
-                Top = -156
+                Top = 256
                 DataBinding.DataField = 'ISSUER_IRS_ID'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1250,7 +1260,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object imgQRCODE_PNG: TcxDBImage
                 Left = 606
-                Top = -395
+                Top = 17
                 DataBinding.DataField = 'QRCODE_PNG'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.FitMode = ifmProportionalStretch
@@ -1262,7 +1272,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object txtREQUEST_ID: TcxDBTextEdit
                 Left = 198
-                Top = -253
+                Top = 159
                 DataBinding.DataField = 'REQUEST_ID'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1271,7 +1281,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object spID_CONSOLIDACION: TcxDBSpinEdit
                 Left = 198
-                Top = -398
+                Top = 14
                 DataBinding.DataField = 'ID_CONSOLIDACION'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1280,7 +1290,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object cxdbmPETICION_COMPLETA1: TcxDBMemo
                 Left = 185
-                Top = 175
+                Top = 587
                 DataBinding.DataField = 'PETICION_COMPLETA'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1290,7 +1300,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object dteFECHA_PROCESAMIENTO: TcxDBDateEdit
                 Left = 617
-                Top = -196
+                Top = 216
                 DataBinding.DataField = 'FECHA_PROCESAMIENTO'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.DisplayFormat = 'dd/mm/yyyy hh:nn:ss'
@@ -1301,7 +1311,7 @@ inherited frmMtoFac: TfrmMtoFac
               end
               object txtESTADO: TcxDBTextEdit
                 Left = 425
-                Top = -400
+                Top = 12
                 DataBinding.DataField = 'ESTADO'
                 DataBinding.DataSource = dmFac.dsConsolidacion
                 Properties.ReadOnly = True
@@ -1456,6 +1466,7 @@ inherited frmMtoFac: TfrmMtoFac
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 1024
         object pnl3: TPanel
           Left = 1
           Top = 1

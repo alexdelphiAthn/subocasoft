@@ -804,35 +804,24 @@ function TVerifactuClient.ConsultarEstadoFactura(const QueueId: Integer;
 var
   URL: string;
   HTTPResult: TVerifactuResult;
+  HTTPClient: THTTPClient;
+  Response: IHTTPResponse;
+  RequestBody: string;
+
 begin
   Result := '';
   try
-//    // Cargar configuración si es necesario
-//    if not CargarConfiguracion then
-//    begin
-//      LogError('Error al cargar configuración para consulta de estado');
-//      Exit;
-//    end;
-    // Obtener URL del endpoint
-    URL := FConfig.URLState;
+    HTTPClient := THTTPClient.Create;
+    HTTPClient.ContentType := 'application/json';
+    HTTPClient.CustomHeaders[FConfig.Username] := FConfig.Password;
+        URL := FConfig.URLState;
     if not EndsStr('/', URL) then
       URL := URL + '/';
     URL := URL + (IntToStr(QueueId));
-//    if URL = '' then
-//    begin
-//      LogError('URL de consulta de estado está vacía');
-//      Exit;
-//    end;
-
-    // Enviar petición GET usando REST
-    HTTPResult := EnviarPeticionGET(URL);
-
-    if HTTPResult.Success then
-    begin
-      Result := HTTPResult.ResponseContent;
-//      LogOperacion('Consulta Estado QueueId: ' + IntToStr(QueueId),
-//                                                              Numero, Serie );
-    end
+    Response := HTTPClient.Get(URL,
+                             TStringStream.Create(RequestBody, TEncoding.UTF8));
+    if Response.StatusCode = 200 then
+      Result := Response.ContentAsString()
     else
     begin
       LogError(Format('Error consultando estado factura QueueId %d: %s',
@@ -846,6 +835,34 @@ begin
     end;
   end;
 end;
+
+
+//    // Cargar configuración si es necesario
+//    if not CargarConfiguracion then
+//    begin
+//      LogError('Error al cargar configuración para consulta de estado');
+//      Exit;
+//    end;
+    // Obtener URL del endpoint
+//    URL := FConfig.URLState;
+//    if not EndsStr('/', URL) then
+//      URL := URL + '/';
+//    URL := URL + (IntToStr(QueueId));
+//    if URL = '' then
+//    begin
+//      LogError('URL de consulta de estado está vacía');
+//      Exit;
+//    end;
+
+    // Enviar petición GET usando REST
+    //HTTPResult := EnviarPeticionGET(URL);
+
+//    if HTTPResult.Success then
+//    begin
+//      Result := HTTPResult.ResponseContent;
+////      LogOperacion('Consulta Estado QueueId: ' + IntToStr(QueueId),
+////                                                              Numero, Serie );
+//    end
 
 function TVerifactuClient.ValidarFactura(const Serie: string;
                                          const Numero: Integer): Boolean;
