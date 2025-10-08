@@ -632,7 +632,7 @@ BEGIN
 												`PROVINCIA_CLIENTE_FACTURA`,
 												`CPOSTAL_CLIENTE_FACTURA`,
 												`PAIS_CLIENTE_FACTURA`,
-                                                `TIPOID_INT_CLIENTE_FACTURA`,
+                        `TIPOID_INT_CLIENTE_FACTURA`,
 												@pfecha,
 												`TOTAL_LIQUIDO_FACTURA`,
 												`FORMA_PAGO_FACTURA`,
@@ -1210,3 +1210,73 @@ DELIMITER ;
 
 UPDATE suboc_clientes set PAIS_CLIENTE = 'ES';
 UPDATE suboc_facturas set PAIS_CLIENTE_FACTURA = 'ES';
+
+DROP PROCEDURE IF EXISTS `PRC_GET_DATA_CLIENTE`;
+DELIMITER $
+CREATE PROCEDURE `PRC_GET_DATA_CLIENTE`(
+    IN `pCODIGO_CLIENTE` int(10),
+    OUT `pRAZONSOCIAL_CLIENTE` varchar(200),
+    OUT `pNOMBRE` varchar(100),
+    OUT `pAPELLIDOS` varchar(100),
+    OUT `pNIF_CLIENTE` varchar(50),
+    OUT `pMOVIL_CLIENTE` varchar(40),
+    OUT `pEMAIL_CLIENTE` varchar(200),
+    OUT `pDIRECCION1_CLIENTE` varchar(200),
+    OUT `pDIRECCION2_CLIENTE` varchar(200),
+    OUT `pPOBLACION_CLIENTE` varchar(200),
+    OUT `pPROVINCIA_CLIENTE` varchar(200),
+    OUT `pCPOSTAL_CLIENTE` varchar(15),
+    OUT `pPAIS_CLIENTE` varchar(150),
+    OUT `pTIPOID_INT_CLIENTE` varchar(20) )
+BEGIN
+  IF EXISTS(SELECT 1 
+            FROM suboc_clientes
+            WHERE `CODIGO_CLIENTE` = pCODIGO_CLIENTE) THEN
+    
+    SELECT `RAZONSOCIAL_CLIENTE`,
+           `NOMBRE`,
+           `APELLIDOS`,
+           `NIF_CLIENTE`,
+           `MOVIL_CLIENTE`,
+           `EMAIL_CLIENTE`,
+           `DIRECCION1_CLIENTE`,
+           `DIRECCION2_CLIENTE`,
+           `POBLACION_CLIENTE`,
+           `PROVINCIA_CLIENTE`,
+           `CPOSTAL_CLIENTE`,
+           `PAIS_CLIENTE`,
+           `TIPOID_INT_CLIENTE`
+    INTO   pRAZONSOCIAL_CLIENTE,
+           pNOMBRE,
+           pAPELLIDOS,
+           pNIF_CLIENTE,
+           pMOVIL_CLIENTE,
+           pEMAIL_CLIENTE,
+           pDIRECCION1_CLIENTE,
+           pDIRECCION2_CLIENTE,
+           pPOBLACION_CLIENTE,
+           pPROVINCIA_CLIENTE,
+           pCPOSTAL_CLIENTE,
+           pPAIS_CLIENTE,
+           pTIPOID_INT_CLIENTE
+    FROM suboc_clientes
+    WHERE `CODIGO_CLIENTE` = pCODIGO_CLIENTE;
+    
+  ELSE
+    -- Inicializar todas las variables OUT, no solo una
+    SET pRAZONSOCIAL_CLIENTE = '';
+    SET pNOMBRE = '';
+    SET pAPELLIDOS = '';
+    SET pNIF_CLIENTE = '';
+    SET pMOVIL_CLIENTE = '';
+    SET pEMAIL_CLIENTE = '';
+    SET pDIRECCION1_CLIENTE = '';
+    SET pDIRECCION2_CLIENTE = '';
+    SET pPOBLACION_CLIENTE = '';
+    SET pPROVINCIA_CLIENTE = '';
+    SET pCPOSTAL_CLIENTE = '';
+    SET pPAIS_CLIENTE = '';
+    SET pTIPOID_INT_CLIENTE = '';
+  END IF;
+END $
+DELIMITER ;
