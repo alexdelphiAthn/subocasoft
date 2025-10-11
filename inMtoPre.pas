@@ -517,7 +517,7 @@ begin
     with dmmPre do
     begin
     sCodigo := unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
-    with .unstrdprcGetDataCliente do
+    with unstrdprcGetDataCliente do
     begin
       ParamByName('pCODIGO_CLIENTE').AsString :=
                    unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
