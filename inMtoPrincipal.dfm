@@ -1246,8 +1246,8 @@ object frmOpenApp: TfrmOpenApp
     Font.Height = -17
     Font.Name = 'Lucida Sans Unicode'
     Font.Style = []
-    ExplicitTop = 526
-    ExplicitWidth = 1089
+    ExplicitTop = 518
+    ExplicitWidth = 1087
   end
   object Memo: TcxMemo
     Left = 0
@@ -1255,8 +1255,8 @@ object frmOpenApp: TfrmOpenApp
     Align = alBottom
     TabOrder = 1
     Visible = False
-    ExplicitTop = 437
-    ExplicitWidth = 1089
+    ExplicitTop = 429
+    ExplicitWidth = 1087
     Height = 89
     Width = 1093
   end
