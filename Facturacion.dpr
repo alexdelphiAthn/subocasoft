@@ -58,7 +58,8 @@ uses
   inLibVerifactuBuilder in 'inLibVerifactuBuilder.pas',
   inMtoModalSubsanacion in 'inMtoModalSubsanacion.pas' {frmModalSubsanacion},
   inMtoModalSubsanacionLineas in 'inMtoModalSubsanacionLineas.pas' {frmModalSubsanacionLineas},
-  inMtoModalVisorFoto in 'inMtoModalVisorFoto.pas' {frmMtoVisorFoto};
+  inMtoModalVisorFoto in 'inMtoModalVisorFoto.pas' {frmMtoVisorFoto},
+  uEncryptHelper in '..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas';
 
 //inIni in 'inIni.pas';
 

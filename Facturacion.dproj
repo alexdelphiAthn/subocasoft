@@ -238,6 +238,7 @@
             <Form>frmMtoVisorFoto</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

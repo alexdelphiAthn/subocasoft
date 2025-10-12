@@ -1,10 +1,11 @@
 object dmConn: TdmConn
   OnCreate = DataModuleCreate
-  Height = 239
-  Width = 405
+  Height = 299
+  Width = 506
+  PixelsPerInch = 120
   object conUni: TUniConnection
     ProviderName = 'MySQL'
-    Port = 3307
+    Port = 3306
     Database = 'subocasana'
     SpecificOptions.Strings = (
       'MySQL.Charset=utf8'
@@ -16,8 +17,8 @@ object dmConn: TdmConn
     Connected = True
     LoginPrompt = False
     BeforeConnect = connBeforeConnect
-    Left = 216
-    Top = 120
-    EncryptedPassword = 'CEFFB9FFC9FFA8FFC9FF96FFCEFF95FFCEFF'
+    Left = 270
+    Top = 150
+    EncryptedPassword = 'A5FF9EFF92FF90FF8DFF9EFFCDFFCFFFCDFFCCFF'
   end
 end
