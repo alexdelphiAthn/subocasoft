@@ -14,7 +14,6 @@ object dmConn: TdmConn
     DefaultTransaction.DefaultCloseAction = taCommit
     Username = 'root'
     Server = '127.0.0.1'
-    Connected = True
     LoginPrompt = False
     BeforeConnect = connBeforeConnect
     Left = 270
