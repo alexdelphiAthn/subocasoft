@@ -355,13 +355,10 @@ begin
   Result.Encoding := TEncoding.Default;
   Result.Name := 'ANSI/Default';
   Result.HasBOM := False;
-
   if not FileExists(rutaArchivo) then
     Exit;
-
   // Primero detectar BOM manualmente
   bomInfo := DetectarBOM(rutaArchivo);
-
   if bomInfo.HasBOM then
   begin
     // Si tiene BOM, usar esa información
@@ -374,12 +371,10 @@ begin
     try
       detectedEncoding := nil;
       contenido.LoadFromFile(rutaArchivo, detectedEncoding);
-
       if Assigned(detectedEncoding) then
       begin
         Result.Encoding := detectedEncoding;
         Result.HasBOM := False;
-
         if detectedEncoding = TEncoding.UTF8 then
           Result.Name := 'UTF-8 (sin BOM)'
         else if detectedEncoding = TEncoding.Unicode then
@@ -400,13 +395,11 @@ begin
         else
           Result.Name := 'Codificación desconocida';
       end;
-
     finally
       contenido.Free;
     end;
   end;
 end;
-
 function DetectarBOM(const rutaArchivo: string): TEncodingInfo;
 var
   stream: TFileStream;
@@ -416,14 +409,11 @@ begin
   Result.Encoding := nil;
   Result.Name := '';
   Result.HasBOM := False;
-
   stream := TFileStream.Create(rutaArchivo, fmOpenRead);
   try
     if stream.Size < 2 then
       Exit;
-
     bytesLeidos := stream.Read(bom, Min(4, stream.Size));
-
     // Verificar BOMs en orden de longitud (más largo primero)
 //    if (bytesLeidos >= 4) and (bom[0] = $FF) and (bom[1] = $FE) and
 //       (bom[2] = $00) and (bom[3] = $00) then
@@ -462,12 +452,10 @@ begin
       Result.Name := 'UTF-16 BE (con BOM)';
       Result.HasBOM := True;
     end;
-
   finally
     stream.Free;
   end;
 end;
-
 function EsProbablementeUTF8(const rutaArchivo: string): Boolean;
 var
   stream: TFileStream;
@@ -478,16 +466,13 @@ begin
   Result := False;
   secuenciasUTF8 := 0;
   totalBytes := 0;
-
   stream := TFileStream.Create(rutaArchivo, fmOpenRead);
   try
     bytesLeidos := stream.Read(buffer, SizeOf(buffer));
     if bytesLeidos = 0 then
       Exit;
-
     i := 0;
     esValido := True;
-
     while (i < bytesLeidos) and esValido do
     begin
       if buffer[i] < $80 then
@@ -538,16 +523,13 @@ begin
         // Byte inválido para UTF-8
         esValido := False;
       end;
-
       Inc(totalBytes);
     end;
-
     // Es probablemente UTF-8 si:
     // 1. Todas las secuencias son válidas
     // 2. Tiene al menos algunas secuencias UTF-8 multibyte
     // 3. O si no hay bytes > 127 (ASCII puro, compatible con UTF-8)
     Result := esValido and ((secuenciasUTF8 > 0) or (totalBytes > 0));
-
   finally
     stream.Free;
   end;
