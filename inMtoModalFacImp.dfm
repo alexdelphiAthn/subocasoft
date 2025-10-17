@@ -22,8 +22,8 @@ object frmPrintFac: TfrmPrintFac
     Height = 212
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 336
-    ExplicitHeight = 211
+    ExplicitLeft = 334
+    ExplicitHeight = 203
     object btnVistaPreliminar: TcxButton
       Left = -2
       Top = 0
@@ -48,7 +48,7 @@ object frmPrintFac: TfrmPrintFac
       Font.Style = []
       ParentFont = False
       OnClick = btnSalirClick
-      ExplicitTop = 167
+      ExplicitTop = 159
     end
   end
   object edtNroFac: TcxTextEdit
