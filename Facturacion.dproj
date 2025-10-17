@@ -99,10 +99,10 @@
         <VerInfo_Keys>CompanyName=Astrako Soft;FileVersion=1.0.4.0;InternalName=;LegalCopyright=Astrako Soft;LegalTrademarks=Astrako Soft;OriginalFilename=;ProductName=SubocaSana;ProductVersion=1.0.0.0;Comments=Principal Programmer Alejandro Laorden Hidalgo;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName)</VerInfo_Keys>
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_Release>4</VerInfo_Release>
-        <BRCC_OutputDir>C:\DISCO DURO\proyectos\subocasana\facturacion\res\</BRCC_OutputDir>
-        <DCC_ExeOutput>C:\DISCO DURO\proyectos\subocasoft\Facturacion\Win32\Debug\</DCC_ExeOutput>
-        <DCC_DcuOutput>C:\DISCO DURO\proyectos\subocasoft\Facturacion\Win32\Debug\dcu\</DCC_DcuOutput>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <BRCC_OutputDir>C:\DISCO DURO\proyectos\subocasoft\subocasoft\res\</BRCC_OutputDir>
+        <DCC_ExeOutput>C:\DISCO DURO\proyectos\subocasoft\subocasoft\Facturacion\Win32\Debug\</DCC_ExeOutput>
+        <DCC_DcuOutput>C:\DISCO DURO\proyectos\subocasoft\subocasoft\Facturacion\Win32\Debug\dcu\</DCC_DcuOutput>
+        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -260,10 +260,8 @@
                     <Source Name="MainSource">Facturacion.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dcldxHttpIndyRequestRS26.bpl">Express Cross Platform Library Indy Request Handler by Developer Express Inc.</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dcldxMapControlRS26.bpl">ExpressMapControl by Developer Express Inc.</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\20.0\Bpl\dcldxPSdxMapControlLnkRS26.bpl">ExpressPrinting System ReportLink for ExpressMap Control by Developer Express Inc.</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Platforms>
