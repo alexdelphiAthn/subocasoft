@@ -4,9 +4,8 @@ inherited frmMtoContadores: TfrmMtoContadores
   ClientHeight = 374
   ClientWidth = 850
   Font.Height = -17
-  ExplicitWidth = 866
-  ExplicitHeight = 413
-  PixelsPerInch = 96
+  ExplicitWidth = 862
+  ExplicitHeight = 412
   TextHeight = 19
   inherited pButtonPage: TPanel
     Width = 692
@@ -15,8 +14,8 @@ inherited frmMtoContadores: TfrmMtoContadores
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 692
-    ExplicitHeight = 374
+    ExplicitWidth = 686
+    ExplicitHeight = 365
   end
   inherited pButtonRightBar: TPanel
     Left = 692
@@ -26,9 +25,9 @@ inherited frmMtoContadores: TfrmMtoContadores
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitLeft = 692
+    ExplicitLeft = 686
     ExplicitWidth = 158
-    ExplicitHeight = 374
+    ExplicitHeight = 365
     inherited pButtonGen: TPanel
       Top = 246
       Width = 156
@@ -39,7 +38,7 @@ inherited frmMtoContadores: TfrmMtoContadores
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 246
+      ExplicitTop = 237
       ExplicitWidth = 156
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
@@ -155,8 +154,8 @@ inherited frmMtoContadores: TfrmMtoContadores
     Margins.Right = 4
     Margins.Bottom = 4
     Font.Height = -17
-    ExplicitWidth = 692
-    ExplicitHeight = 374
+    ExplicitWidth = 686
+    ExplicitHeight = 365
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
@@ -175,8 +174,8 @@ inherited frmMtoContadores: TfrmMtoContadores
         Margins.Bottom = 4
         Font.Height = -17
         ExplicitTop = 34
-        ExplicitWidth = 684
-        ExplicitHeight = 303
+        ExplicitWidth = 678
+        ExplicitHeight = 294
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -229,7 +228,7 @@ inherited frmMtoContadores: TfrmMtoContadores
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 684
+        ExplicitWidth = 678
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -300,11 +299,11 @@ inherited frmMtoContadores: TfrmMtoContadores
       'INSERT INTO suboc_contadores'
       
         '  (TIPODOC_CONTADOR, EJERCICIO_CONTADOR, SERIE_CONTADOR, CONTADO' +
-        'R_CONTADOR, DEFAULT_CONTADOR)'
+        'R_CONTADOR, DEFAULT_CONTADOR, DEFSIMPL_CONTADOR)'
       'VALUES'
       
         '  (:TIPODOC_CONTADOR, :EJERCICIO_CONTADOR, :SERIE_CONTADOR, :CON' +
-        'TADOR_CONTADOR, :DEFAULT_CONTADOR)')
+        'TADOR_CONTADOR, :DEFAULT_CONTADOR, :DEFSIMPL_CONTADOR)')
     SQLDelete.Strings = (
       'DELETE FROM suboc_contadores'
       'WHERE'
@@ -318,14 +317,18 @@ inherited frmMtoContadores: TfrmMtoContadores
       
         '  TIPODOC_CONTADOR = :TIPODOC_CONTADOR, EJERCICIO_CONTADOR = :EJ' +
         'ERCICIO_CONTADOR, SERIE_CONTADOR = :SERIE_CONTADOR, CONTADOR_CON' +
-        'TADOR = :CONTADOR_CONTADOR, DEFAULT_CONTADOR = :DEFAULT_CONTADOR'
+        'TADOR = :CONTADOR_CONTADOR, DEFAULT_CONTADOR = :DEFAULT_CONTADOR' +
+        ', DEFSIMPL_CONTADOR = :DEFSIMPL_CONTADOR'
       'WHERE'
       
         '  TIPODOC_CONTADOR = :Old_TIPODOC_CONTADOR AND EJERCICIO_CONTADO' +
         'R = :Old_EJERCICIO_CONTADOR AND SERIE_CONTADOR = :Old_SERIE_CONT' +
         'ADOR')
     SQLLock.Strings = (
-      'SELECT * FROM suboc_contadores'
+      
+        'SELECT TIPODOC_CONTADOR, EJERCICIO_CONTADOR, SERIE_CONTADOR, CON' +
+        'TADOR_CONTADOR, DEFAULT_CONTADOR, DEFSIMPL_CONTADOR FROM suboc_c' +
+        'ontadores'
       'WHERE'
       
         '  TIPODOC_CONTADOR = :Old_TIPODOC_CONTADOR AND EJERCICIO_CONTADO' +
@@ -335,7 +338,8 @@ inherited frmMtoContadores: TfrmMtoContadores
     SQLRefresh.Strings = (
       
         'SELECT TIPODOC_CONTADOR, EJERCICIO_CONTADOR, SERIE_CONTADOR, CON' +
-        'TADOR_CONTADOR, DEFAULT_CONTADOR FROM suboc_contadores'
+        'TADOR_CONTADOR, DEFAULT_CONTADOR, DEFSIMPL_CONTADOR FROM suboc_c' +
+        'ontadores'
       'WHERE'
       
         '  TIPODOC_CONTADOR = :TIPODOC_CONTADOR AND EJERCICIO_CONTADOR = ' +

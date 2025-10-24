@@ -1366,7 +1366,8 @@ begin
   inherited;
   if (dmmFac <> nil) then
   begin
-    if ((dmmFac.unqryFac.State = dsInsert)) then
+    if ((dmmFac.unqryFac.State = dsInsert) or
+        (dmmFac.unqryFac.State = dsEdit)) then
     begin
       e := Sender as TcxCustomEdit;
       if dmmFac.SerieEsSimp(VarToStr(e.EditingValue)) then
