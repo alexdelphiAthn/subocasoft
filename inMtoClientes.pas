@@ -36,7 +36,7 @@ uses
   dxSkinOffice2019Black, dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray,
   dxSkinOffice2019White, dxSkinTheBezier, dxSkinVisualStudio2013Blue,
   dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, Datasnap.DBClient,
-  cxGridCardView, cxGridDBCardView, cxGridCustomLayoutView;
+  cxGridCardView, cxGridDBCardView, cxGridCustomLayoutView, system.ioutils;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -402,61 +402,78 @@ begin
   Result := sRuta;
 end;
 
-procedure TfrmMtoClientes.AgregarFotoAGrid(iIndex:Integer;
-                                           const ARutaArchivo: string);
+procedure TfrmMtoClientes.AgregarFotoAGrid(iIndex: Integer; const ARutaArchivo: string);
 var
   Miniatura: TBitmap;
   Stream: TMemoryStream;
 begin
+  if not FileExists(ARutaArchivo) then
+    Exit;
   Miniatura := ObtenerThumbnail(ARutaArchivo);
-  if Miniatura = nil then Exit;
+  if Miniatura = nil then  // ← Esto ahora funciona correctamente
+    Exit;
   Stream := TMemoryStream.Create;
   try
-    Miniatura.SaveToStream(Stream);
-    Stream.Position := 0;
-    cdsFotos.Append;
-    cdsFotos.FieldByName('Index').AsInteger := iIndex;
-    cdsFotos.FieldByName('RutaFoto').AsString := ARutaArchivo;
-    cdsFotos.FieldByName('NombreArchivo').AsString :=
-                                                  ExtractFileName(ARutaArchivo);
-    cdsFotos.FieldByName('Fecha').AsDateTime :=
-                                      FileDateToDateTime(FileAge(ARutaArchivo));
-    TBlobField(cdsFotos.FieldByName('Miniatura')).LoadFromStream(Stream);
-    cdsFotos.Post;
+    try
+      Miniatura.SaveToStream(Stream);
+      Stream.Position := 0;
+      cdsFotos.Append;
+      cdsFotos.FieldByName('Index').AsInteger := iIndex;
+      cdsFotos.FieldByName('RutaFoto').AsString := ARutaArchivo;
+      cdsFotos.FieldByName('NombreArchivo').AsString := ExtractFileName(ARutaArchivo);
+      cdsFotos.FieldByName('Fecha').AsDateTime :=
+                                            TFile.GetCreationTime(ARutaArchivo);
+      TBlobField(cdsFotos.FieldByName('Miniatura')).LoadFromStream(Stream);
+      cdsFotos.Post;
+    finally
+      Miniatura.Free;  // ← Ahora seguro porque si es nil no llegas aquí
+    end;
   finally
-    Miniatura.Free;
     Stream.Free;
   end;
 end;
 
 function TfrmMtoClientes.ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
 var
-  RutaThumbnail: string;
+  Jpg: TJPEGImage;
+  BmpTemp: TBitmap;
+  RatioW, RatioH: Double;
+  NewWidth, NewHeight: Integer;
 begin
-  RutaThumbnail := ObtenerRutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
-  Result := TBitmap.Create;
+  Result := nil;
+  if not FileExists(ARutaArchivo) then
+    Exit;
+  Jpg := nil;
+  BmpTemp := nil;
   try
-    if FileExists(RutaThumbnail) then
+    Jpg := TJPEGImage.Create;
+    try
+      Jpg.LoadFromFile(ARutaArchivo);
+    except
+      Exit; // Si falla cargar el JPG, salir
+    end;
+    BmpTemp := TBitmap.Create;
+    // Calcular dimensiones del thumbnail manteniendo proporción
+    if Jpg.Width > Jpg.Height then
     begin
-      try
-        Result.LoadFromFile(RutaThumbnail);
-      except
-        FreeAndNil(Result);
-        Result := CrearThumbnail(ARutaArchivo, 160);
-      end;
+      NewWidth := 100;
+      NewHeight := Round((Jpg.Height / Jpg.Width) * 100);
     end
     else
     begin
-      FreeAndNil(Result);
-      Result := CrearThumbnail(ARutaArchivo, 160);
+      NewHeight := 100;
+      NewWidth := Round((Jpg.Width / Jpg.Height) * 100);
     end;
-  except
-    if Result = nil then
-    begin
-      Result := TBitmap.Create;
-      Result.Width := 160;
-      Result.Height := 160;
-    end;
+    BmpTemp.Width := NewWidth;
+    BmpTemp.Height := NewHeight;
+    BmpTemp.Canvas.StretchDraw(Rect(0, 0, NewWidth, NewHeight), Jpg);
+    Result := TBitmap.Create;
+    Result.Assign(BmpTemp);
+  finally
+    if Assigned(Jpg) then
+      Jpg.Free;
+    if Assigned(BmpTemp) then
+      BmpTemp.Free;
   end;
 end;
 
@@ -492,6 +509,9 @@ var
   SR: TSearchRec;
   RutaPaciente: string;
   iIndex:Integer;
+  Lista: TStringList;
+  i: Integer;
+  FechaCreacion: TDateTime;
 begin
   Screen.Cursor := crHourGlass;
   cdsFotos.DisableControls;
@@ -508,17 +528,60 @@ begin
       Exit;
     end;
     // Cargar JPG
+    Lista := TStringList.Create;
     if ( (FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0) ) then
     begin
+//      repeat
+//        if (SR.Name <> '.') and (SR.Name <> '..') then
+//          AgregarFotoAGrid(iIndex, RutaPaciente + SR.Name);
+//        Inc(iIndex);
+//      until FindNext(SR) <> 0;
       repeat
         if (SR.Name <> '.') and (SR.Name <> '..') then
-          AgregarFotoAGrid(iIndex, RutaPaciente + SR.Name);
-        Inc(iIndex);
+        begin
+          FechaCreacion := TFile.GetCreationTime(RutaPaciente + SR.Name);
+          // Guardar con formato que permite ordenar: fecha + nombre
+          Lista.AddObject(
+            FormatDateTime('yyyymmddhhnnss', FechaCreacion) + '|' + SR.Name,
+            TObject(Trunc(FechaCreacion)));
+        end;
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-    // Cargar JPEG si es necesario...
+//    Lista.Sort;
+//    // Agregar al grid
+//    for i := 0 to Lista.Count - 1 do
+//    begin
+//      // Extraer el nombre después del pipe
+//      var NombreArchivo := Copy(Lista[i], Pos('|', Lista[i]) + 1, MaxInt);
+//      AgregarFotoAGrid(i, RutaPaciente + NombreArchivo);
+//    end;
+//    // Cargar JPEG si es necesario...
+    Lista.Sort;
+
+// Agregar al grid
+    for i := 0 to Lista.Count - 1 do
+    begin
+      var PosicionPipe := Pos('|', Lista[i]);
+      if PosicionPipe > 0 then
+      begin
+        var NombreArchivo := Copy(Lista[i], PosicionPipe + 1, MaxInt);
+        var RutaCompleta := RutaPaciente + NombreArchivo;
+        OutputDebugString(PChar('Procesando: ' + IntToStr(i) + ' - ' + RutaCompleta));
+        try
+          AgregarFotoAGrid(i, RutaCompleta);
+          OutputDebugString(PChar('OK: ' + IntToStr(i)));
+        except
+          on E: Exception do
+          begin
+            ShowMessage('Error en archivo #' + IntToStr(i) + ': ' + RutaCompleta + #13#10 + E.Message);
+            Break;
+          end;
+        end;
+      end;
+    end;
   finally
+    Lista.Free;
     cdsFotos.EnableControls;
     Screen.Cursor := crDefault;
   end;
@@ -878,7 +941,8 @@ begin
 end;
 
 procedure TfrmMtoClientes.VerGaleriaFotos;
-//var
+var
+  iIndex:Integer;
 //  ListaFotos: TStringList;
 //  ListaMiniaturas: TStringList;
 //  Marca: TBookmark;
@@ -913,7 +977,7 @@ begin
     begin
       Application.CreateForm(TfrmMtoVisorFoto, frmMtoVisorFoto);
       try
-        var iIndex := cdsFotos.FieldByName('Index').AsInteger;
+        iIndex := cdsFotos.FieldByName('Index').AsInteger;
         frmMtoVisorFoto.MostrarImagenes(cdsFotos, iIndex);
       finally
         frmMtoVisorFoto.Free;
@@ -1024,27 +1088,28 @@ end;
 procedure TfrmMtoClientes.dsTablaGDataChange(Sender: TObject; Field: TField);
 begin
   inherited;
-  if Assigned(dsTablaG.Dataset) then
-  begin
-    if (dsTablaG.DataSet.State = dsBrowse) then
+  if Assigned(dsTablaG) then
+    if Assigned(dsTablaG.Dataset) then
     begin
-      // Desconectar el datasource del grid de fotos
-      if Assigned(dsFotos) then
-        dsFotos.DataSet := nil;
-
-      // Liberar completamente
-      LiberarClientDataSetFotos;
-      cdsFotos := nil;
-
-      // Si estamos en la pestaña de fotos, recargar
-      if pcDetalleClientes.ActivePage = tsFotos then
+      if (dsTablaG.DataSet.State = dsBrowse) then
       begin
-        CrearClientDataSetFotos;
-        SincronizarThumbnails;
-        CargarMiniaturas;
+        // Desconectar el datasource del grid de fotos
+        if Assigned(dsFotos) then
+          dsFotos.DataSet := nil;
+
+        // Liberar completamente
+        LiberarClientDataSetFotos;
+        cdsFotos := nil;
+
+        // Si estamos en la pestaña de fotos, recargar
+        if pcDetalleClientes.ActivePage = tsFotos then
+        begin
+          CrearClientDataSetFotos;
+          SincronizarThumbnails;
+          CargarMiniaturas;
+        end;
       end;
     end;
-  end;
 end;
 
 procedure TfrmMtoClientes.dxbbEtiquetasClick(Sender: TObject);
