@@ -255,12 +255,13 @@ type
     procedure btnCODIGO_CLIENTEPropertiesButtonClick(Sender: TObject;
       AButtonIndex: Integer);
     procedure btnCODIGO_CLIENTEPropertiesChange(Sender: TObject);
-    procedure tsFotosEnter(Sender: TObject);
+    //procedure tsFotosEnter(Sender: TObject);
     procedure cxgrdFotosDBCardView1CellDblClick(Sender: TcxCustomGridTableView;
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
     procedure dsTablaGDataChange(Sender: TObject; Field: TField);
     procedure btnVerGaleriaClick(Sender: TObject);
+    procedure pcDetalleClientesChange(Sender: TObject);
 
   private
     procedure SincronizarThumbnails;
@@ -274,8 +275,11 @@ type
     procedure CargarMiniaturas;
     procedure VerGaleriaFotos;
     procedure MostrarFotoCompleta;
-    procedure AgregarFotoAGrid(const ARutaArchivo: string);
+    procedure AgregarFotoAGrid(iIndex:Integer; const ARutaArchivo: string);
     function ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
+    procedure CrearClientDataSetFotos;
+    procedure LiberarClientDataSetFotos;
+    procedure VaciarClientDataSetFotos;
   public
     { Public declarations }
   private
@@ -325,6 +329,7 @@ begin
   tvHistoriasClientes.DataController.DataSource := dmmClientes.dsHistoria;
   tvFacturacion.DataController.DataSource := dmmClientes.dsFacturas;
   tvLineasFacturacion.DataController.DataSource := dmmClientes.dsLinFac;
+  cdsFotos := nil;
   inherited;
 end;
 
@@ -342,13 +347,16 @@ begin
    end;
 end;
 
-procedure TfrmMtoClientes.tsFotosEnter(Sender: TObject);
-
-begin
-  inherited;
-  SincronizarThumbnails;
-  CargarMiniaturas;
-end;
+//procedure TfrmMtoClientes.tsFotosEnter(Sender: TObject);
+//
+//begin
+//  inherited;
+//    // *** CREAR cdsFotos SI NO EXISTE ***
+//  if cdsFotos = nil then
+//    CrearClientDataSetFotos;
+//  SincronizarThumbnails;
+//  CargarMiniaturas;
+//end;
 
 function TfrmMtoClientes.ObtenerRutaPaciente: string;
 var
@@ -394,7 +402,8 @@ begin
   Result := sRuta;
 end;
 
-procedure TfrmMtoClientes.AgregarFotoAGrid(const ARutaArchivo: string);
+procedure TfrmMtoClientes.AgregarFotoAGrid(iIndex:Integer;
+                                           const ARutaArchivo: string);
 var
   Miniatura: TBitmap;
   Stream: TMemoryStream;
@@ -406,6 +415,7 @@ begin
     Miniatura.SaveToStream(Stream);
     Stream.Position := 0;
     cdsFotos.Append;
+    cdsFotos.FieldByName('Index').AsInteger := iIndex;
     cdsFotos.FieldByName('RutaFoto').AsString := ARutaArchivo;
     cdsFotos.FieldByName('NombreArchivo').AsString :=
                                                   ExtractFileName(ARutaArchivo);
@@ -450,45 +460,66 @@ begin
   end;
 end;
 
+procedure TfrmMtoClientes.pcDetalleClientesChange(Sender: TObject);
+begin
+  inherited;
+  if pcDetalleClientes.ActivePage = tsFotos then
+  begin
+    // CRÍTICO: Limpiar la ruta anterior del paciente
+    FRutaPaciente := '';
+
+    // SIEMPRE liberar y recrear para evitar datos antiguos
+    LiberarClientDataSetFotos;
+    cdsFotos := nil;
+
+    // Recrear todo desde cero
+    CrearClientDataSetFotos;
+
+    // Esto actualizará FRutaPaciente con el cliente actual
+    if ObtenerRutaPaciente <> '' then
+    begin
+      SincronizarThumbnails;
+      CargarMiniaturas;
+    end;
+    // Si ObtenerRutaPaciente devuelve '', el dataset queda vacío
+  end
+  else
+    LiberarClientDataSetFotos;
+end;
+
 procedure TfrmMtoClientes.CargarMiniaturas;
 var
   SR: TSearchRec;
   RutaPaciente: string;
+  iIndex:Integer;
 begin
-//  if FCodPaciente = '' then
-//  begin
-//    ShowMessage('No hay un código de paciente asignado');
-//    Exit;
-//  end;
   Screen.Cursor := crHourGlass;
   cdsFotos.DisableControls;
   try
     cdsFotos.EmptyDataSet;
-    RutaPaciente := FRutaPaciente;
-    //ActualizarEstado('Cargando fotos...');
+    iIndex := 0;
+    // CRÍTICO: Obtener la ruta del cliente ACTUAL, no usar FRutaPaciente cacheada
+    RutaPaciente := ObtenerRutaPaciente;
+    // Si no hay ruta, salir sin mostrar error (cliente sin fotos)
+    if RutaPaciente = '' then
+    begin
+      cdsFotos.EnableControls;
+      Screen.Cursor := crDefault;
+      Exit;
+    end;
     // Cargar JPG
-    if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
+    if ( (FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0) ) then
     begin
       repeat
         if (SR.Name <> '.') and (SR.Name <> '..') then
-          AgregarFotoAGrid(RutaPaciente + SR.Name);
+          AgregarFotoAGrid(iIndex, RutaPaciente + SR.Name);
+        Inc(iIndex);
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-    // Cargar JPEG
-    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
-    begin
-      repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
-          AgregarFotoAGrid(RutaPaciente + SR.Name);
-      until FindNext(SR) <> 0;
-      FindClose(SR);
-    end;
-    //ActualizarEstado(Format('Listo - %d fotos cargadas', [ClientDataSet1.RecordCount]));
+    // Cargar JPEG si es necesario...
   finally
     cdsFotos.EnableControls;
-    cdsFotos.AddIndex('idxFecha', 'Fecha', [ixDescending], '', '', 0);
-    cdsFotos.IndexName := 'idxFecha';
     Screen.Cursor := crDefault;
   end;
 end;
@@ -545,6 +576,64 @@ begin
     VisorFoto.MostrarImagen(RutaArchivo);
   finally
     VisorFoto.Free;
+  end;
+end;
+
+procedure TfrmMtoClientes.CrearClientDataSetFotos;
+begin
+  // Si ya está creado, salir
+  if cdsFotos <> nil then
+    Exit;
+  // Crear el ClientDataSet
+  cdsFotos := TClientDataSet.Create(Self);
+  // Configurar los campos
+  with cdsFotos.FieldDefs do
+  begin
+    Clear;
+    Add('Index', ftInteger);
+    Add('RutaFoto', ftString, 500);
+    Add('NombreArchivo', ftString, 255);
+    Add('Fecha', ftDate);
+    Add('Miniatura', ftBlob);
+  end;
+  // Crear el dataset en memoria
+  cdsFotos.CreateDataSet;
+//  cdsFotos.AddIndex('idxFecha', 'Fecha', [ixDescending], '', '', 0);
+//  cdsFotos.IndexName := 'idxFecha';
+  // Conectar al DataSource existente
+  if (dsFotos <> nil) then
+    dsFotos.DataSet := cdsFotos;
+end;
+
+procedure TfrmMtoClientes.VaciarClientDataSetFotos;
+begin
+  if cdsFotos <> nil then
+  begin
+    // *** CLAVE: Desconectar DataSource para forzar actualización visual ***
+    if dsFotos <> nil then
+      dsFotos.DataSet := nil;
+    // Cerrar y recrear vacío
+    if cdsFotos.Active then
+      cdsFotos.Close;
+    cdsFotos.CreateDataSet;
+    // Reconectar DataSource
+    if dsFotos <> nil then
+      dsFotos.DataSet := cdsFotos;
+  end;
+end;
+
+procedure TfrmMtoClientes.LiberarClientDataSetFotos;
+begin
+  if cdsFotos <> nil then
+  begin
+    // Desconectar del DataSource
+    if dsFotos <> nil then
+      dsFotos.DataSet := nil;
+    // Cerrar si está activo
+    if cdsFotos.Active then
+      cdsFotos.Close;
+    // Liberar
+    FreeAndNil(cdsFotos);
   end;
 end;
 
@@ -789,12 +878,12 @@ begin
 end;
 
 procedure TfrmMtoClientes.VerGaleriaFotos;
-var
-  ListaFotos: TStringList;
-  ListaMiniaturas: TStringList;
-  Marca: TBookmark;
+//var
+//  ListaFotos: TStringList;
+//  ListaMiniaturas: TStringList;
+//  Marca: TBookmark;
 begin
-  if cdsFotos.IsEmpty then
+    if (cdsFotos = nil) or (cdsFotos.IsEmpty) then
   begin
     ShowMessage('No hay fotos para mostrar');
     Exit;
@@ -824,7 +913,8 @@ begin
     begin
       Application.CreateForm(TfrmMtoVisorFoto, frmMtoVisorFoto);
       try
-        frmMtoVisorFoto.MostrarImagenes(cdsFotos, 0);
+        var iIndex := cdsFotos.FieldByName('Index').AsInteger;
+        frmMtoVisorFoto.MostrarImagenes(cdsFotos, iIndex);
       finally
         frmMtoVisorFoto.Free;
         frmMtoVisorFoto := nil;
@@ -835,7 +925,6 @@ begin
 //    ListaMiniaturas.Free;
 //  end;
 end;
-
 procedure TfrmMtoClientes.cxdbtxtdtNIFPropertiesChange(Sender: TObject);
 //var
 //  validator: TDocumentoValidator;
@@ -929,19 +1018,33 @@ procedure TfrmMtoClientes.cxgrdFotosDBCardView1CellDblClick(
   AButton: TMouseButton; AShift: TShiftState; var AHandled: Boolean);
 begin
   inherited;
-  MostrarFotoCompleta;
+  VerGaleriaFotos;
 end;
 
 procedure TfrmMtoClientes.dsTablaGDataChange(Sender: TObject; Field: TField);
 begin
   inherited;
   if Assigned(dsTablaG.Dataset) then
+  begin
     if (dsTablaG.DataSet.State = dsBrowse) then
+    begin
+      // Desconectar el datasource del grid de fotos
+      if Assigned(dsFotos) then
+        dsFotos.DataSet := nil;
+
+      // Liberar completamente
+      LiberarClientDataSetFotos;
+      cdsFotos := nil;
+
+      // Si estamos en la pestaña de fotos, recargar
       if pcDetalleClientes.ActivePage = tsFotos then
       begin
+        CrearClientDataSetFotos;
         SincronizarThumbnails;
         CargarMiniaturas;
       end;
+    end;
+  end;
 end;
 
 procedure TfrmMtoClientes.dxbbEtiquetasClick(Sender: TObject);
@@ -984,6 +1087,7 @@ procedure TfrmMtoClientes.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
   inherited;
+  LiberarClientDataSetFotos;
   FreeAndNil(dmmClientes);
 end;
 

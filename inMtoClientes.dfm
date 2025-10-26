@@ -4,8 +4,6 @@ inherited frmMtoClientes: TfrmMtoClientes
   Caption = 'Pacientes'
   ClientHeight = 601
   ClientWidth = 1248
-  ExplicitLeft = 3
-  ExplicitTop = 3
   ExplicitWidth = 1260
   ExplicitHeight = 639
   TextHeight = 22
@@ -16,7 +14,7 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 1015
+    ExplicitWidth = 1044
     ExplicitHeight = 592
   end
   inherited pButtonRightBar: TPanel
@@ -27,9 +25,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ParentFont = False
-    ExplicitLeft = 1019
-    ExplicitTop = 86
-    ExplicitHeight = 601
+    ExplicitLeft = 1044
+    ExplicitHeight = 592
     object btn1: TSpeedButton [0]
       Left = 8
       Top = 165
@@ -172,7 +169,7 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ActivePage = tsFicha
-    ExplicitWidth = 1015
+    ExplicitWidth = 1044
     ExplicitHeight = 592
     inherited tsLista: TTabSheet
       Margins.Left = 4
@@ -190,7 +187,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Right = 4
         Margins.Bottom = 4
         ExplicitTop = 49
-        ExplicitWidth = 1013
+        ExplicitWidth = 1042
         ExplicitHeight = 512
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
@@ -318,7 +315,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 1013
+        ExplicitWidth = 1042
         ExplicitHeight = 49
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -384,7 +381,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 265
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 1007
+        ExplicitWidth = 1036
         object cxdbtxtdtCODIGO_CLIENTE: TcxDBTextEdit
           Left = 68
           Top = 50
@@ -599,7 +596,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 296
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 1007
+        ExplicitWidth = 1036
         ExplicitHeight = 287
         object pcDetalleClientes: TcxPageControl
           Left = 1
@@ -610,7 +607,8 @@ inherited frmMtoClientes: TfrmMtoClientes
           TabOrder = 0
           Properties.ActivePage = tsFotos
           Properties.CustomButtons.Buttons = <>
-          ExplicitWidth = 1005
+          OnChange = pcDetalleClientesChange
+          ExplicitWidth = 1034
           ExplicitHeight = 285
           ClientRectBottom = 290
           ClientRectLeft = 4
@@ -619,7 +617,6 @@ inherited frmMtoClientes: TfrmMtoClientes
           object cxtbsht3: TcxTabSheet
             Caption = 'Domicilio fiscal'
             ImageIndex = 0
-            ExplicitWidth = 1003
             object cxlbl7: TcxLabel
               Left = 38
               Top = 19
@@ -759,7 +756,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
-            ExplicitWidth = 1003
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23
@@ -824,7 +820,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
-            ExplicitWidth = 1003
             object pnlHistoriaRight: TPanel
               Left = 882
               Top = 0
@@ -836,7 +831,6 @@ inherited frmMtoClientes: TfrmMtoClientes
               Margins.Bottom = 2
               Align = alRight
               TabOrder = 0
-              ExplicitLeft = 853
               object btnFacturarSeleccionados: TcxButton
                 Left = 5
                 Top = 6
@@ -864,7 +858,6 @@ inherited frmMtoClientes: TfrmMtoClientes
               Margins.Bottom = 2
               Align = alClient
               TabOrder = 1
-              ExplicitWidth = 853
               object cxgrd5: TcxGrid
                 Left = 1
                 Top = 1
@@ -872,7 +865,6 @@ inherited frmMtoClientes: TfrmMtoClientes
                 Height = 255
                 Align = alClient
                 TabOrder = 0
-                ExplicitWidth = 851
                 object tvHistoriasClientes: TcxGridDBTableView
                   Navigator.Buttons.ConfirmDelete = True
                   Navigator.Buttons.CustomButtons = <>
@@ -1078,7 +1070,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
-            ExplicitWidth = 1003
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1086,7 +1077,6 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 1003
               object tvFacturacion: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
                 Navigator.Buttons.CustomButtons = <>
@@ -1284,7 +1274,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
-            ExplicitWidth = 1003
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1292,7 +1281,6 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 1003
               object cxGridDBTableView1: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
                 Navigator.Buttons.CustomButtons = <>
@@ -1499,7 +1487,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
-            ExplicitWidth = 1003
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
@@ -1507,7 +1494,6 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 208
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 1003
               object tv1: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
                 Navigator.Buttons.CustomButtons = <>
@@ -1635,7 +1621,6 @@ inherited frmMtoClientes: TfrmMtoClientes
               Margins.Bottom = 2
               Align = alTop
               TabOrder = 1
-              ExplicitWidth = 1003
               object lbl1: TLabel
                 Left = 18
                 Top = 15
@@ -1677,8 +1662,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           object tsFotos: TcxTabSheet
             Caption = 'Fotos'
             ImageIndex = 6
-            OnEnter = tsFotosEnter
-            ExplicitWidth = 997
+            ExplicitWidth = 1026
             ExplicitHeight = 248
             object cxgrdFotos: TcxGrid
               Left = 0
@@ -1687,7 +1671,7 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 997
+              ExplicitWidth = 895
               ExplicitHeight = 248
               object tvFotos: TcxGridDBTableView
                 Navigator.Buttons.CustomButtons = <>
@@ -1748,7 +1732,8 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alRight
               TabOrder = 1
-              ExplicitLeft = 872
+              ExplicitLeft = 895
+              ExplicitHeight = 248
               object btnVerGaleria: TcxButton
                 Left = 2
                 Top = 2
@@ -1825,33 +1810,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Top = 384
   end
   object cdsFotos: TClientDataSet
-    PersistDataPacket.Data = {
-      8E0000009619E0BD0100000018000000040000000000030000008E000D4E6F6D
-      6272654172636869766F020049000000010005574944544802000200FF000546
-      656368610400060000000000094D696E69617475726104004B00000001000753
-      55425459504502004900070042696E617279000852757461466F746F02004900
-      0000010005574944544802000200FF000000}
-    Active = True
     Aggregates = <>
-    FieldDefs = <
-      item
-        Name = 'NombreArchivo'
-        DataType = ftString
-        Size = 255
-      end
-      item
-        Name = 'Fecha'
-        DataType = ftDate
-      end
-      item
-        Name = 'Miniatura'
-        DataType = ftBlob
-      end
-      item
-        Name = 'RutaFoto'
-        DataType = ftString
-        Size = 255
-      end>
+    FieldDefs = <>
     IndexDefs = <>
     Params = <>
     StoreDefs = True

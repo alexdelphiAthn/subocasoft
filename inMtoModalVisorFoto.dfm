@@ -24,8 +24,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Color = clGray
     ParentColor = False
     TabOrder = 0
-    ExplicitWidth = 800
-    ExplicitHeight = 376
+    ExplicitWidth = 747
+    ExplicitHeight = 402
     object Image1: TImage
       Left = 0
       Top = 0
@@ -45,8 +45,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 454
-    ExplicitWidth = 794
+    ExplicitTop = 443
+    ExplicitWidth = 747
     object btnAnterior: TSpeedButton
       Left = 127
       Top = 6
@@ -87,20 +87,16 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 96
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 495
-    ExplicitWidth = 794
-    object dxImageSlider1: TdxImageSlider
+    ExplicitTop = 484
+    ExplicitWidth = 747
+    object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
       Width = 751
       Height = 94
       Align = alClient
-      Images = cxImageCollection1
-      PreviewOptions.Position = posLeft
-      OnClick = dxImageSlider1Click
-      ExplicitTop = -4
-      ExplicitWidth = 798
-      ExplicitHeight = 99
+      BorderStyle = bsNone
+      TabOrder = 0
     end
   end
   object pnlZoom: TPanel
@@ -110,7 +106,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 41
     Align = alTop
     TabOrder = 3
-    ExplicitWidth = 794
+    ExplicitWidth = 747
     object lblZoom: TLabel
       Left = 200
       Top = 14
@@ -158,9 +154,5 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       Caption = 'Siguiente ->'
       OnClick = btnSiguienteClick
     end
-  end
-  object cxImageCollection1: TcxImageCollection
-    Left = 392
-    Top = 304
   end
 end

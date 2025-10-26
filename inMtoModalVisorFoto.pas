@@ -29,7 +29,6 @@ type
     Image1: TImage;
     pnlNavigation: TPanel;
     pnlCarrusel: TPanel;
-    dxImageSlider1: TdxImageSlider;
     btnAnterior: TSpeedButton;
     btnSiguiente: TSpeedButton;
     pnlZoom: TPanel;
@@ -39,13 +38,14 @@ type
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
-    cxImageCollection1: TcxImageCollection;
     btnPrimera: TSpeedButton;
     btnUltima: TSpeedButton;
+    ScrollBoxMiniaturas: TScrollBox;
     procedure FormCreate(Sender: TObject);
     procedure btnZoomInClick(Sender: TObject);
     procedure btnZoomOutClick(Sender: TObject);
     procedure btnZoom100Click(Sender: TObject);
+    procedure MiniaturaClick(Sender: TObject);
     procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -57,7 +57,7 @@ type
     procedure Image1DblClick(Sender: TObject);
     procedure btnAnteriorClick(Sender: TObject);
     procedure btnSiguienteClick(Sender: TObject);
-    procedure dxImageSlider1Click(Sender: TObject);
+    //procedure dxImageSlider1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnPrimeraClick(Sender: TObject);
     procedure btnUltimaClick(Sender: TObject);
@@ -77,6 +77,7 @@ type
     procedure CargarCarrusel;
     procedure ActualizarBotonesNavegacion;
     procedure MostrarImagenPorIndice(AIndice: Integer);
+    procedure ResaltarMiniatura(AIndice: Integer);
   public
     procedure MostrarImagen(const ARutaArchivo: string);
     procedure MostrarImagenes(const AListaArchivos: TStringList;
@@ -106,12 +107,12 @@ begin
   WindowState := wsMaximized;
   // Configurar carrusel
   //dxImageSlider1.ShowNavigation := True;
-  dxImageSlider1.Height := 120;
+//  dxImageSlider1.Height := 120;
   pnlCarrusel.Height := 130;
   pnlCarrusel.Align := alBottom;
   // Ocultar navegación por defecto
-  pnlNavigation.Visible := False;
-  pnlCarrusel.Visible := False;
+  //pnlNavigation.Visible := False;
+  //pnlCarrusel.Visible := False;
 end;
 procedure TfrmMtoVisorFoto.FormDestroy(Sender: TObject);
 begin
@@ -180,46 +181,39 @@ begin
   end;
 end;
 
-procedure TfrmMtoVisorFoto.CargarCarrusel;
-var
-  Item: TcxImageCollectionItem;
-  JPEGImage: TJPEGImage;
-  BlobStream: TStream;
-  BookmarkActual: TBookmark;
+procedure TfrmMtoVisorFoto.MiniaturaClick(Sender: TObject);
 begin
-  // Limpiar colección antes de cargar
-  //cxImageCollection1.Clear;
-  if not Assigned(FClientDataSet) or not FClientDataSet.Active then
-    Exit;
-//  BookmarkActual := FClientDataSet.GetBookmark;
-//  try
-  FClientDataSet.First;
-  while not FClientDataSet.Eof do
+  if Sender is TImage then
   begin
-    FListaImagenes.Add(FClientDataSet.FieldByName('RutaFoto').AsString);
-    // Añadir item a la colección
-    Item := cxImageCollection1.Items.Add;
-    JPEGImage := TJPEGImage.Create;
-    try
-      // Crear stream desde el campo BLOB
-      BlobStream := FClientDataSet.CreateBlobStream(
-                               FClientDataSet.FieldByName('Miniatura'), bmRead);
-      try
-        JPEGImage.LoadFromStream(BlobStream);
-        Item.Picture.Assign(JPEGImage);
-      finally
-        BlobStream.Free;
-      end;
-    finally
-      JPEGImage.Free;
-    end;
-    FClientDataSet.Next;
+    MostrarImagenPorIndice(TImage(Sender).Tag);
+    ResaltarMiniatura(TImage(Sender).Tag);
   end;
-//  finally
-//    if FClientDataSet.BookmarkValid(BookmarkActual) then
-//      FClientDataSet.GotoBookmark(BookmarkActual);
-//    FClientDataSet.FreeBookmark(BookmarkActual);
-//  end;
+end;
+
+procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer);
+var
+  i: Integer;
+  Img: TImage;
+begin
+  // Quitar resaltado de todas
+  for i := 0 to ScrollBoxMiniaturas.ControlCount - 1 do
+  begin
+    if ScrollBoxMiniaturas.Controls[i] is TImage then
+    begin
+      Img := TImage(ScrollBoxMiniaturas.Controls[i]);
+      if Img.Tag = AIndice then
+      begin
+        // Resaltar la seleccionada
+        //Img.BorderStyle := bsSingle;
+        TPanel(Img.Parent).Color := clHighlight;
+      end
+      else
+      begin
+        // Normal
+        //Img.BorderStyle := bsNone;
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmMtoVisorFoto.MostrarImagenPorIndice(AIndice: Integer);
@@ -228,11 +222,82 @@ begin
   begin
     FIndiceActual := AIndice;
     CargarImagen(FListaImagenes[AIndice]);
-//    if dxImageSlider1.Images.Count > AIndice then
-    dxImageSlider1.ItemIndex := AIndice;
+    ResaltarMiniatura(AIndice);
     ActualizarBotonesNavegacion;
   end;
 end;
+
+procedure TfrmMtoVisorFoto.CargarCarrusel;
+var
+  BlobStream: TStream;
+  BMPImage: TBitmap;
+  Img: TImage;
+  X: Integer;
+begin
+  // Limpiar miniaturas anteriores
+  while ScrollBoxMiniaturas.ControlCount > 0 do
+    ScrollBoxMiniaturas.Controls[0].Free;
+
+  if not Assigned(FClientDataSet) or not FClientDataSet.Active then
+    Exit;
+
+  X := 5;
+  FClientDataSet.First;
+
+  while not FClientDataSet.Eof do
+  begin
+    FListaImagenes.Add(FClientDataSet.FieldByName('RutaFoto').AsString);
+
+    // Crear miniatura
+    Img := TImage.Create(ScrollBoxMiniaturas);
+    Img.Parent := ScrollBoxMiniaturas;
+    Img.Left := X;
+    Img.Top := 5;
+    Img.Width := 100;
+    Img.Height := 100;
+    Img.Stretch := True;
+    Img.Proportional := True;
+    Img.Center := True;
+    Img.Tag := FClientDataSet.FieldByName('Index').AsInteger; // Índice
+    Img.OnClick := MiniaturaClick;
+    Img.Cursor := crHandPoint;
+    // Borde para resaltar
+    //Img.ParentBackground := False;
+    // Cargar imagen desde BLOB
+    BMPImage := TBitmap.Create;
+    try
+      BlobStream := FClientDataSet.CreateBlobStream(
+                           FClientDataSet.FieldByName('Miniatura'), bmRead);
+      try
+        BMPImage.LoadFromStream(BlobStream);
+        Img.Picture.Graphic := BMPImage;
+      finally
+        BlobStream.Free;
+      end;
+    finally
+      BMPImage.Free;
+    end;
+
+    Inc(X, 110); // Espacio entre miniaturas
+    FClientDataSet.Next;
+  end;
+
+  // Resaltar la primera miniatura
+  if ScrollBoxMiniaturas.ControlCount > 0 then
+    ResaltarMiniatura(0);
+end;
+
+//procedure TfrmMtoVisorFoto.MostrarImagenPorIndice(AIndice: Integer);
+//begin
+//  if (AIndice >= 0) and (AIndice < FListaImagenes.Count) then
+//  begin
+//    FIndiceActual := AIndice;
+//    CargarImagen(FListaImagenes[AIndice]);
+////    if dxImageSlider1.Images.Count > AIndice then
+//    dxImageSlider1.ItemIndex := AIndice;
+//    ActualizarBotonesNavegacion;
+//  end;
+//end;
 
 procedure TfrmMtoVisorFoto.ActualizarBotonesNavegacion;
 begin
@@ -323,11 +388,11 @@ begin
   MostrarImagenPorIndice(FListaImagenes.Count - 1);
 end;
 
-procedure TfrmMtoVisorFoto.dxImageSlider1Click(Sender: TObject);
-begin
-  if dxImageSlider1.ItemIndex >= 0 then
-    MostrarImagenPorIndice(dxImageSlider1.ItemIndex);
-end;
+//procedure TfrmMtoVisorFoto.dxImageSlider1Click(Sender: TObject);
+//begin
+//  if dxImageSlider1.ItemIndex >= 0 then
+//    MostrarImagenPorIndice(dxImageSlider1.ItemIndex);
+//end;
 
 procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
 begin

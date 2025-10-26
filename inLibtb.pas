@@ -251,21 +251,16 @@ begin
     Result := #0;
 end;
 
-function SoloNumeros(S:String):String;
+function SoloNumeros(S: String): String;
 var
-  i,j: Integer;
-  N: String;
+  i: Integer;
 begin
-  j := 1;
-  N := StringOfChar('0', 8);
+  Result := '';
   for i := 1 to Length(S) do
-    if ( (S[i] >= '0') and
-     (S[i] <= '9') ) then
-    begin
-      N[j] := S[i];
-      j := j + 1;
-    end;
-  Result := N;
+  begin
+    if (S[i] >= '0') and (S[i] <= '9') then
+      Result := Result + S[i];
+  end;
 end;
 
 function SonNumeros(S:String):boolean;
