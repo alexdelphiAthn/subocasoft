@@ -194,25 +194,41 @@ procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer);
 var
   i: Integer;
   Img: TImage;
+  Shap:TShape;
 begin
   // Quitar resaltado de todas
   for i := 0 to ScrollBoxMiniaturas.ControlCount - 1 do
   begin
-    if ScrollBoxMiniaturas.Controls[i] is TImage then
+    if ScrollBoxMiniaturas.Controls[i] is TShape then
     begin
-      Img := TImage(ScrollBoxMiniaturas.Controls[i]);
-      if Img.Tag = AIndice then
+      Shap := TShape(ScrollBoxMiniaturas.Controls[i]);
+      if (Shap.Tag = AIndice) then
       begin
-        // Resaltar la seleccionada
-        //Img.BorderStyle := bsSingle;
-        TPanel(Img.Parent).Color := clHighlight;
+        Shap.Pen.Color := clBlue;
+        Shap.Pen.Width := 2;
       end
       else
-      begin
-        // Normal
-        //Img.BorderStyle := bsNone;
-      end;
+        begin
+          Shap.Pen.Color := clBlack;
+          Shap.Pen.Width := 1;
+        end;
     end;
+//    if ScrollBoxMiniaturas.Controls[i] is TImage then
+//    begin
+//      Img := TImage(ScrollBoxMiniaturas.Controls[i]);
+//      if Img.Tag = AIndice then
+//      begin
+//        // Resaltar la seleccionada
+//        //Img.BorderStyle := bsSingle;
+//        Shape.Pen.Color := clYellow;
+//        TPanel(Img.Parent).Color := clHighlight;
+//      end
+//      else
+//      begin
+//        // Normal
+//        //Img.BorderStyle := bsNone;
+//      end;
+//    end;
   end;
 end;
 
@@ -231,19 +247,18 @@ procedure TfrmMtoVisorFoto.CargarCarrusel;
 var
   BlobStream: TStream;
   BMPImage: TBitmap;
+  Shape : TShape;
   Img: TImage;
   X: Integer;
+  HintImg : string;
 begin
   // Limpiar miniaturas anteriores
   while ScrollBoxMiniaturas.ControlCount > 0 do
     ScrollBoxMiniaturas.Controls[0].Free;
-
   if not Assigned(FClientDataSet) or not FClientDataSet.Active then
     Exit;
-
   X := 5;
   FClientDataSet.First;
-
   while not FClientDataSet.Eof do
   begin
     FListaImagenes.Add(FClientDataSet.FieldByName('RutaFoto').AsString);
@@ -261,8 +276,24 @@ begin
     Img.Tag := FClientDataSet.FieldByName('Index').AsInteger; // Índice
     Img.OnClick := MiniaturaClick;
     Img.Cursor := crHandPoint;
+    Img.ShowHint := True;
+    HintImg := FClientDataSet.FieldByName('NombreArchivo').AsString;
+    HintImg := HintImg + #13#10 + 'Fecha: ' + FormatDateTime('dd/mm/yyyy hh:nn',
+                                FClientDataSet.FieldByName('Fecha').AsDateTime);
+    Img.Hint := HintImg;
     // Borde para resaltar
     //Img.ParentBackground := False;
+    Shape := TShape.Create(ScrollBoxMiniaturas);
+    Shape.Parent := ScrollBoxMiniaturas;
+    Shape.Left := Img.Left - 1;
+    Shape.Top := Img.Top - 1;
+    Shape.Width := Img.Width + 2;  // ancho imagen + 2
+    Shape.Height := Img.Height + 2; // alto imagen + 2
+    Shape.Brush.Style := bsClear;
+    Shape.Pen.Color := clBlack;
+    Shape.Tag := Img.Tag;
+    Shape.SendToBack;
+    Img.BringToFront;
     // Cargar imagen desde BLOB
     BMPImage := TBitmap.Create;
     try

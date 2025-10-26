@@ -11,9 +11,11 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
+  OldCreateOrder = True
   WindowState = wsMaximized
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  PixelsPerInch = 96
   TextHeight = 13
   object ScrollBox1: TScrollBox
     Left = 0
@@ -24,8 +26,6 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Color = clGray
     ParentColor = False
     TabOrder = 0
-    ExplicitWidth = 747
-    ExplicitHeight = 402
     object Image1: TImage
       Left = 0
       Top = 0
@@ -45,12 +45,10 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 443
-    ExplicitWidth = 747
     object btnAnterior: TSpeedButton
       Left = 127
       Top = 6
-      Width = 74
+      Width = 75
       Height = 25
       Caption = '<- Anterior'
       OnClick = btnAnteriorClick
@@ -58,7 +56,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     object btnSiguiente: TSpeedButton
       Left = 207
       Top = 6
-      Width = 66
+      Width = 75
       Height = 25
       Caption = 'Siguiente ->'
       OnClick = btnSiguienteClick
@@ -72,9 +70,9 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = btnPrimeraClick
     end
     object btnUltima: TSpeedButton
-      Left = 272
+      Left = 288
       Top = 6
-      Width = 105
+      Width = 96
       Height = 25
       Caption = #218'ltima ->|'
       OnClick = btnUltimaClick
@@ -87,8 +85,6 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 96
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 484
-    ExplicitWidth = 747
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
@@ -106,7 +102,6 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 41
     Align = alTop
     TabOrder = 3
-    ExplicitWidth = 747
     object lblZoom: TLabel
       Left = 200
       Top = 14

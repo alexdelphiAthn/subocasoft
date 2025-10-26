@@ -1,8 +1,8 @@
 object dmConn: TdmConn
+  OldCreateOrder = True
   OnCreate = DataModuleCreate
   Height = 299
   Width = 506
-  PixelsPerInch = 120
   object conUni: TUniConnection
     ProviderName = 'MySQL'
     Port = 3306
