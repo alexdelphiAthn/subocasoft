@@ -232,6 +232,9 @@ type
     strngfldFotosNombreArchivo: TStringField;
     dtfldFotosFecha: TDateField;
     blbfldFotosMiniatura: TBlobField;
+    Panel1: TPanel;
+    btnVerGaleria: TcxButton;
+    cdsFotosRutaFoto: TStringField;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cxgrdbclmncxgrdtvtv1DESCRIPCION_HISTORIAPropertiesButtonClick(
@@ -257,6 +260,7 @@ type
       ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
       AShift: TShiftState; var AHandled: Boolean);
     procedure dsTablaGDataChange(Sender: TObject; Field: TField);
+    procedure btnVerGaleriaClick(Sender: TObject);
 
   private
     procedure SincronizarThumbnails;
@@ -268,6 +272,7 @@ type
     function CrearThumbnail(const ARutaImagen: string;
                             ASize: Integer): TBitmap;
     procedure CargarMiniaturas;
+    procedure VerGaleriaFotos;
     procedure MostrarFotoCompleta;
     procedure AgregarFotoAGrid(const ARutaArchivo: string);
     function ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
@@ -354,12 +359,9 @@ var
 begin
   Result := '';
   sCodigo := Trim(dsTablaG.Dataset.FieldByName('CODIGO_CLIENTE').AsString);
-
   if sCodigo = '' then
     Exit;
-
   bEncontrado := False;
-
   // Buscar carpetas en el directorio base
   if FindFirst(FFotosPath + '*.*', faDirectory, SearchRec) = 0 then
   begin
@@ -384,13 +386,11 @@ begin
       FindClose(SearchRec);
     end;
   end;
-
   if not bEncontrado then
   begin
     // ShowMessage('Este paciente no tiene carpeta de fotos');
     sRuta := '';
   end;
-
   Result := sRuta;
 end;
 
@@ -401,14 +401,16 @@ var
 begin
   Miniatura := ObtenerThumbnail(ARutaArchivo);
   if Miniatura = nil then Exit;
-
   Stream := TMemoryStream.Create;
   try
     Miniatura.SaveToStream(Stream);
     Stream.Position := 0;
     cdsFotos.Append;
-    cdsFotos.FieldByName('NombreArchivo').AsString := ExtractFileName(ARutaArchivo);
-    cdsFotos.FieldByName('Fecha').AsDateTime := FileDateToDateTime(FileAge(ARutaArchivo));
+    cdsFotos.FieldByName('RutaFoto').AsString := ARutaArchivo;
+    cdsFotos.FieldByName('NombreArchivo').AsString :=
+                                                  ExtractFileName(ARutaArchivo);
+    cdsFotos.FieldByName('Fecha').AsDateTime :=
+                                      FileDateToDateTime(FileAge(ARutaArchivo));
     TBlobField(cdsFotos.FieldByName('Miniatura')).LoadFromStream(Stream);
     cdsFotos.Post;
   finally
@@ -532,7 +534,7 @@ begin
     ShowMessage('No hay ninguna foto seleccionada');
     Exit;
   end;
-  RutaArchivo := FRutaPaciente +  cdsFotos.FieldByName('NombreArchivo').AsString;
+  RutaArchivo := FRutaPaciente + cdsFotos.FieldByName('NombreArchivo').AsString;
   if not FileExists(RutaArchivo) then
   begin
     ShowMessage('El archivo no existe: ' + RutaArchivo);
@@ -779,6 +781,59 @@ begin
   dmmClientes.unqryLinFac.Refresh;
   ShowMessage('Se ha/n creado los documentos de borrador de venta ' +
                                          'correctamente '+ sLineBreak + sResul);
+end;
+
+procedure TfrmMtoClientes.btnVerGaleriaClick(Sender: TObject);
+begin
+  VerGaleriaFotos;
+end;
+
+procedure TfrmMtoClientes.VerGaleriaFotos;
+var
+  ListaFotos: TStringList;
+  ListaMiniaturas: TStringList;
+  Marca: TBookmark;
+begin
+  if cdsFotos.IsEmpty then
+  begin
+    ShowMessage('No hay fotos para mostrar');
+    Exit;
+  end;
+//  ListaFotos := TStringList.Create;
+//  ListaMiniaturas := TStringList.Create;
+//  try
+//    Marca := cdsFotos.GetBookmark;
+//    cdsFotos.DisableControls;
+//    try
+//      cdsFotos.First;
+//      while not cdsFotos.Eof do
+//      begin
+//        if FileExists(cdsFotos.FieldByName('RutaFoto').AsString) then
+//        begin
+//          ListaFotos.Add(cdsFotos.FieldByName('RutaFoto').AsString);
+//          ListaMiniaturas.Add(cdsFotos.FieldByName('RutaMiniatura').AsString);
+//        end;
+//        cdsFotos.Next;
+//      end;
+//      cdsFotos.GotoBookmark(Marca);
+//      cdsFotos.FreeBookmark(Marca);
+//    finally
+//      cdsFotos.EnableControls;
+//    end;
+    if cdsFotos.RecordCount > 0 then
+    begin
+      Application.CreateForm(TfrmMtoVisorFoto, frmMtoVisorFoto);
+      try
+        frmMtoVisorFoto.MostrarImagenes(cdsFotos, 0);
+      finally
+        frmMtoVisorFoto.Free;
+        frmMtoVisorFoto := nil;
+      end;
+    end;
+//  finally
+//    ListaFotos.Free;
+//    ListaMiniaturas.Free;
+//  end;
 end;
 
 procedure TfrmMtoClientes.cxdbtxtdtNIFPropertiesChange(Sender: TObject);
