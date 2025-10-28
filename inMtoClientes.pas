@@ -8,7 +8,7 @@ uses
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg,
-   cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
+  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
   dxBarBuiltInMenu, cxPC, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
@@ -26,7 +26,7 @@ uses
   dxSkinSeven, dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus,
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
-  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxLocalization, cxCalendar,
+  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxLocalization,cxCalendar,
   cxButtonEdit, cxCurrencyEdit, inMtoPrincipal, inMtoModalVisorFoto,
   cxMemo, cxRichEdit, cxDataControllerConditionalFormattingRulesManagerDialog,
   dxBevel, cxDBNavigator, System.UITypes, dxDateRanges, dxGDIPlusClasses,
@@ -120,10 +120,13 @@ type
     cxgrdlvlcxgrd1Level2: TcxGridLevel;
     tvLineasFacturacion: TcxGridDBTableView;
     cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1LINEA_LINEA: TcxGridDBColumn;
-    cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1CODIGO_ARTICULO_LINEA: TcxGridDBColumn;
-    cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1DESCRIPCION_ARTICULO_LINEA: TcxGridDBColumn;
+    cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1CODIGO_ARTICULO_LINEA:
+                                                                TcxGridDBColumn;
+    cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1DESCRIPCION_ARTICULO_LINEA:
+                                                                TcxGridDBColumn;
     cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1ZONA: TcxGridDBColumn;
-    cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1PRECIOVENTA_ARTICULO_LINEA: TcxGridDBColumn;
+    cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1PRECIOVENTA_ARTICULO_LINEA:
+                                                                TcxGridDBColumn;
     cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1CANTIDAD_LINEA: TcxGridDBColumn;
     cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1SUM_TOTAL_LINEA: TcxGridDBColumn;
     cxgrdbclmncxgrdbtblvwcxgrd1DBTableView1ODONTOLOGO: TcxGridDBColumn;
@@ -519,7 +522,7 @@ begin
   try
     cdsFotos.EmptyDataSet;
     iIndex := 0;
-    // CRÍTICO: Obtener la ruta del cliente ACTUAL, no usar FRutaPaciente cacheada
+    // CRÍTICO: Obtener la ruta del cliente ACTUAL,
     RutaPaciente := ObtenerRutaPaciente;
     // Si no hay ruta, salir sin mostrar error (cliente sin fotos)
     if RutaPaciente = '' then
@@ -553,14 +556,16 @@ begin
     begin
       NombreArchivo := Copy(Lista[i], PosicionPipe + 1, MaxInt);
       RutaCompleta := RutaPaciente + NombreArchivo;
-      //OutputDebugString(PChar('Procesando: ' + IntToStr(i) + ' - ' + RutaCompleta));
+      //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +
+                                                      // ' - ' + RutaCompleta));
       try
         AgregarFotoAGrid(i, RutaCompleta);
         //OutputDebugString(PChar('OK: ' + IntToStr(i)));
       except
         on E: Exception do
         begin
-          ShowMessage('Error en archivo #' + IntToStr(i) + ': ' + RutaCompleta + #13#10 + E.Message);
+          ShowMessage('Error en archivo #' + IntToStr(i) + ': ' +
+                       RutaCompleta + #13#10 + E.Message);
           Break;
         end;
       end;
@@ -580,14 +585,15 @@ begin
     ForceDirectories(Result);
 end;
 
-function TfrmMtoClientes.ObtenerNombreThumbnail(const ARutaArchivo: string): string;
+function TfrmMtoClientes.ObtenerNombreThumbnail(
+                                            const ARutaArchivo: string): string;
 begin
   // Convertir foto1.jpg a foto1_thumb.bmp
   Result := ChangeFileExt(ExtractFileName(ARutaArchivo), '_thumb.bmp');
 end;
 
 function TfrmMtoClientes.NecesitaActualizacion(const ARutaArchivo,
-  ARutaThumbnail: string): Boolean;
+                                               ARutaThumbnail: string): Boolean;
 var
   FechaOriginal, FechaThumbnail: TDateTime;
 begin
