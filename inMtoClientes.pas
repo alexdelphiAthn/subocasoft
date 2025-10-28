@@ -507,11 +507,12 @@ end;
 procedure TfrmMtoClientes.CargarMiniaturas;
 var
   SR: TSearchRec;
-  RutaPaciente: string;
+  RutaPaciente, NombreArchivo, RutaCompleta: string;
   iIndex:Integer;
   Lista: TStringList;
   i: Integer;
   FechaCreacion: TDateTime;
+  PosicionPipe :Integer;
 begin
   Screen.Cursor := crHourGlass;
   cdsFotos.DisableControls;
@@ -541,42 +542,26 @@ begin
         begin
           FechaCreacion := TFile.GetCreationTime(RutaPaciente + SR.Name);
           // Guardar con formato que permite ordenar: fecha + nombre
-          Lista.AddObject(
-            FormatDateTime('yyyymmddhhnnss', FechaCreacion) + '|' + SR.Name,
-            TObject(Trunc(FechaCreacion)));
+          Lista.AddObject( SR.Name, TObject(Trunc(FechaCreacion)));
         end;
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-//    Lista.Sort;
-//    // Agregar al grid
-//    for i := 0 to Lista.Count - 1 do
-//    begin
-//      // Extraer el nombre después del pipe
-//      var NombreArchivo := Copy(Lista[i], Pos('|', Lista[i]) + 1, MaxInt);
-//      AgregarFotoAGrid(i, RutaPaciente + NombreArchivo);
-//    end;
-//    // Cargar JPEG si es necesario...
     Lista.Sort;
-
 // Agregar al grid
     for i := 0 to Lista.Count - 1 do
     begin
-      var PosicionPipe := Pos('|', Lista[i]);
-      if PosicionPipe > 0 then
-      begin
-        var NombreArchivo := Copy(Lista[i], PosicionPipe + 1, MaxInt);
-        var RutaCompleta := RutaPaciente + NombreArchivo;
-        OutputDebugString(PChar('Procesando: ' + IntToStr(i) + ' - ' + RutaCompleta));
-        try
-          AgregarFotoAGrid(i, RutaCompleta);
-          OutputDebugString(PChar('OK: ' + IntToStr(i)));
-        except
-          on E: Exception do
-          begin
-            ShowMessage('Error en archivo #' + IntToStr(i) + ': ' + RutaCompleta + #13#10 + E.Message);
-            Break;
-          end;
+      NombreArchivo := Copy(Lista[i], PosicionPipe + 1, MaxInt);
+      RutaCompleta := RutaPaciente + NombreArchivo;
+      //OutputDebugString(PChar('Procesando: ' + IntToStr(i) + ' - ' + RutaCompleta));
+      try
+        AgregarFotoAGrid(i, RutaCompleta);
+        //OutputDebugString(PChar('OK: ' + IntToStr(i)));
+      except
+        on E: Exception do
+        begin
+          ShowMessage('Error en archivo #' + IntToStr(i) + ': ' + RutaCompleta + #13#10 + E.Message);
+          Break;
         end;
       end;
     end;

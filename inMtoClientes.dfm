@@ -346,7 +346,6 @@ inherited frmMtoClientes: TfrmMtoClientes
           ExplicitLeft = 162
           ExplicitTop = 11
           ExplicitWidth = 184
-          ExplicitHeight = 30
           Width = 184
         end
         inherited cxlblBusq: TcxLabel
@@ -816,6 +815,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
               Left = 882
               Top = 0
@@ -1066,6 +1069,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1270,6 +1277,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1483,6 +1494,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
