@@ -61,6 +61,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure btnPrimeraClick(Sender: TObject);
     procedure btnUltimaClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     FZoomFactor: Double;
     FIsDragging: Boolean;
@@ -157,13 +158,19 @@ begin
 //  FIndiceActual := AIndiceInicial;
 //  if FListaImagenes.Count > 0 then
 //  begin
-    FClientDataSet := cdsFotos;
-    CargarCarrusel;
+  FClientDataSet := cdsFotos;
+  FListaImagenes.Clear; // Limpiar lista antes de cargar
+
+  CargarCarrusel;
+   if FListaImagenes.Count > 0 then
     MostrarImagenPorIndice(AIndiceInicial);
 //    pnlNavigation.Visible := FListaImagenes.Count > 1;
 //    pnlCarrusel.Visible := FListaImagenes.Count > 1;
 //  end;
   ShowModal;
+//  FZoomFactor := CalcularFactorFit;
+//    // Si la imagen ya cabe sin escalar, el factor será 1.0 (no cambia nada)
+//  AplicarZoom;
 end;
 
 procedure TfrmMtoVisorFoto.CargarImagen(const ARutaArchivo: string);
@@ -196,9 +203,12 @@ procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer);
 var
   i: Integer;
   Img: TImage;
-  Shap:TShape;
+  Shap: TShape;
+  MiniaturaSeleccionada: TImage;
 begin
-  // Quitar resaltado de todas
+  MiniaturaSeleccionada := nil;
+
+  // Quitar resaltado de todas y buscar la seleccionada
   for i := 0 to ScrollBoxMiniaturas.ControlCount - 1 do
   begin
     if ScrollBoxMiniaturas.Controls[i] is TShape then
@@ -207,30 +217,22 @@ begin
       if (Shap.Tag = AIndice) then
       begin
         Shap.Pen.Color := clBlue;
-        Shap.Pen.Width := 2;
+        Shap.Pen.Width := 3;
       end
       else
-        begin
-          Shap.Pen.Color := clBlack;
-          Shap.Pen.Width := 1;
-        end;
+      begin
+        Shap.Pen.Color := clBlack;
+        Shap.Pen.Width := 1;
+      end;
     end;
-//    if ScrollBoxMiniaturas.Controls[i] is TImage then
-//    begin
-//      Img := TImage(ScrollBoxMiniaturas.Controls[i]);
-//      if Img.Tag = AIndice then
-//      begin
-//        // Resaltar la seleccionada
-//        //Img.BorderStyle := bsSingle;
-//        Shape.Pen.Color := clYellow;
-//        TPanel(Img.Parent).Color := clHighlight;
-//      end
-//      else
-//      begin
-//        // Normal
-//        //Img.BorderStyle := bsNone;
-//      end;
-//    end;
+
+    // Buscar la imagen seleccionada
+    if ScrollBoxMiniaturas.Controls[i] is TImage then
+    begin
+      Img := TImage(ScrollBoxMiniaturas.Controls[i]);
+      if Img.Tag = AIndice then
+        MiniaturaSeleccionada := Img;
+    end;
   end;
 end;
 
@@ -278,13 +280,16 @@ begin
   // Limpiar miniaturas anteriores
   while ScrollBoxMiniaturas.ControlCount > 0 do
     ScrollBoxMiniaturas.Controls[0].Free;
+
   if not Assigned(FClientDataSet) or not FClientDataSet.Active then
     Exit;
+
   X := 5;
   FClientDataSet.First;
   while not FClientDataSet.Eof do
   begin
     FListaImagenes.Add(FClientDataSet.FieldByName('RutaFoto').AsString);
+
     // Crear miniatura
     Img := TImage.Create(ScrollBoxMiniaturas);
     Img.Parent := ScrollBoxMiniaturas;
@@ -295,27 +300,23 @@ begin
     Img.Stretch := True;
     Img.Proportional := True;
     Img.Center := True;
-    Img.Tag := FClientDataSet.FieldByName('Index').AsInteger; // Índice
+    Img.Tag := FClientDataSet.FieldByName('Index').AsInteger;
     Img.OnClick := MiniaturaClick;
     Img.Cursor := crHandPoint;
-    Img.ShowHint := True;
-    //HintImg := FClientDataSet.FieldByName('NombreArchivo').AsString;
-    HintImg := HintImg + #13#10 + 'Fecha: ' + FormatDateTime('dd/mm/yyyy hh:nn',
-                                FClientDataSet.FieldByName('Fecha').AsDateTime);
-    Img.Hint := HintImg;
+
     // Borde para resaltar
-    //Img.ParentBackground := False;
     Shape := TShape.Create(ScrollBoxMiniaturas);
     Shape.Parent := ScrollBoxMiniaturas;
     Shape.Left := Img.Left - 1;
     Shape.Top := Img.Top - 1;
-    Shape.Width := Img.Width + 2;  // ancho imagen + 2
-    Shape.Height := Img.Height + 2; // alto imagen + 2
+    Shape.Width := Img.Width + 2;
+    Shape.Height := Img.Height + 2;
     Shape.Brush.Style := bsClear;
     Shape.Pen.Color := clBlack;
     Shape.Tag := Img.Tag;
     Shape.SendToBack;
     Img.BringToFront;
+
     // Cargar imagen desde BLOB
     BMPImage := TBitmap.Create;
     try
@@ -331,9 +332,16 @@ begin
       BMPImage.Free;
     end;
 
-    Inc(X, 110); // Espacio entre miniaturas
+    Inc(X, 110);
     FClientDataSet.Next;
   end;
+
+  // AÑADIR ESTAS LÍNEAS:
+  // Forzar actualización del ScrollBox
+  ScrollBoxMiniaturas.HorzScrollBar.Range := X + 10;
+  // X es la última posición + un margen
+  ScrollBoxMiniaturas.Invalidate;
+  Application.ProcessMessages;
 
   // Resaltar la primera miniatura
   if ScrollBoxMiniaturas.ControlCount > 0 then
@@ -504,4 +512,14 @@ begin
     VK_END: MostrarImagenPorIndice(FListaImagenes.Count - 1); // Fin - última imagen
   end;
 end;
+
+procedure TfrmMtoVisorFoto.FormResize(Sender: TObject);
+begin
+  if (FIndiceActual >= 0) and (not FOriginalBitmap.Empty) then
+  begin
+    FZoomFactor := CalcularFactorFit;
+    AplicarZoom;
+  end;
+end;
+
 end.

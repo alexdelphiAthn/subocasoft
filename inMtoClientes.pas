@@ -265,8 +265,8 @@ type
     //procedure pcDetalleClientesChange(Sender: TObject);
     procedure cxButton1Click(Sender: TObject);
     procedure pcDetalleClientesChange(Sender: TObject);
-
   private
+    procedure CargaFotos;
     procedure SincronizarThumbnails;
     function ObtenerRutaPaciente: string;
     function ObtenerRutaThumbnails: string;
@@ -427,10 +427,11 @@ begin
       Stream.Position := 0;
       cdsFotos.Append;
       cdsFotos.FieldByName('Index').AsInteger := iIndex;
-      cdsFotos.FieldByName('RutaFoto').AsString := ARutaArchivo;
-      cdsFotos.FieldByName('NombreArchivo').AsString := ExtractFileName(ARutaArchivo);
+      cdsFotos.FieldByName('RutaFoto').AsString := ARutaJpg;
+      cdsFotos.FieldByName('NombreArchivo').AsString :=
+                                                  ExtractFileName(ARutaJpg);
       cdsFotos.FieldByName('Fecha').AsDateTime :=
-                                            TFile.GetCreationTime(ARutaArchivo);
+                                            TFile.GetCreationTime(ARutaJpg);
       TBlobField(cdsFotos.FieldByName('Miniatura')).LoadFromStream(Stream);
       cdsFotos.Post;
     finally
@@ -488,6 +489,11 @@ end;
 procedure TfrmMtoClientes.pcDetalleClientesChange(Sender: TObject);
 begin
   inherited;
+  CargaFotos;
+end;
+
+procedure TfrmMtoClientes.CargaFotos;
+begin
   if pcDetalleClientes.ActivePage = tsFotos then
   begin
     // CRÍTICO: Limpiar la ruta anterior del paciente
@@ -503,7 +509,7 @@ begin
     // Esto actualizará FRutaPaciente con el cliente actual
     if ObtenerRutaPaciente <> '' then
     begin
-      //SincronizarThumbnails;
+      SincronizarThumbnails;
       CargarMiniaturas;
     end;
     // Si ObtenerRutaPaciente devuelve '', el dataset queda vacío
@@ -515,7 +521,7 @@ end;
 procedure TfrmMtoClientes.CargarMiniaturas;
 var
   SR: TSearchRec;
-  RutaPaciente, NombreArchivo, RutaCompleta: string;
+  RutaPaciente, RutaThumbnail, NombreArchivo, NombreMini, RutaCompleta: string;
   iIndex:Integer;
   Lista: TStringList;
   i: Integer;
@@ -527,7 +533,8 @@ begin
   cdsFotos.EmptyDataSet;
   iIndex := 0;
   // CRÍTICO: Obtener la ruta del cliente ACTUAL,
-  RutaPaciente := ObtenerRutaThumbnails;
+  RutaPaciente := ObtenerRutaPaciente;
+  RutaThumbnail := ObtenerRutaThumbnails;
   // Si no hay ruta, salir sin mostrar error (cliente sin fotos)
   if RutaPaciente = '' then
   begin
@@ -539,7 +546,7 @@ begin
     try
     // Cargar Miniaturas
     Lista := TStringList.Create;
-    if ( (FindFirst(RutaPaciente + '*.bmp', faAnyFile, SR) = 0) ) then
+    if ( (FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0) ) then
     begin
   //      repeat
   //        if (SR.Name <> '.') and (SR.Name <> '..') then
@@ -561,18 +568,17 @@ begin
       for i := 0 to Lista.Count - 1 do
       begin
         NombreArchivo := Lista[i];
-        RutaCompleta := RutaPaciente + NombreArchivo;
+        RutaCompleta := RutaThumbnail + ObtenerNombreThumbnail(NombreArchivo);
         //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +
-                                                        // ' - ' + RutaCompleta));
+                                                      // ' - ' + RutaCompleta));
         try
           //var aStopWatch := TStopWatch.StartNew;
-          AgregarFotoAGrid(i, RutaCompleta, ObtenerRutaPaciente);
+          AgregarFotoAGrid(i, RutaCompleta, ObtenerRutaPaciente + NombreArchivo);
           //aStopWatch.Stop;
 //          inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
 //                                  Format('%.2f mseg en cargar  %s',
 //                                        [aStopwatch.Elapsed.TotalMilliseconds,
 //                                         RutaCompleta]));
-
           //OutputDebugString(PChar('OK: ' + IntToStr(i)));
         except
           on E: Exception do
@@ -586,6 +592,7 @@ begin
     finally
       Lista.Free;
       cdsFotos.EnableControls;
+      cdsFotos.First;
       Screen.Cursor := crDefault;
     end;
   end;
@@ -1133,9 +1140,10 @@ begin
         if Assigned(dsFotos) then
           dsFotos.DataSet := nil;
         // Liberar completamente
-        LiberarClientDataSetFotos;
+        //LiberarClientDataSetFotos;
         cdsFotos := nil;
         // Si estamos en la pestaña de fotos, recargar
+        CargaFotos;
       end;
     end;
 end;
