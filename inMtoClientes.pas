@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels,
+  Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels, System.Diagnostics,
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg,
@@ -235,8 +235,6 @@ type
     strngfldFotosNombreArchivo: TStringField;
     dtfldFotosFecha: TDateField;
     blbfldFotosMiniatura: TBlobField;
-    Panel1: TPanel;
-    btnVerGaleria: TcxButton;
     cdsFotosRutaFoto: TStringField;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -264,6 +262,8 @@ type
       AShift: TShiftState; var AHandled: Boolean);
     procedure dsTablaGDataChange(Sender: TObject; Field: TField);
     procedure btnVerGaleriaClick(Sender: TObject);
+    //procedure pcDetalleClientesChange(Sender: TObject);
+    procedure cxButton1Click(Sender: TObject);
     procedure pcDetalleClientesChange(Sender: TObject);
 
   private
@@ -278,7 +278,8 @@ type
     procedure CargarMiniaturas;
     procedure VerGaleriaFotos;
     procedure MostrarFotoCompleta;
-    procedure AgregarFotoAGrid(iIndex:Integer; const ARutaArchivo: string);
+    procedure AgregarFotoAGrid(iIndex:Integer; const ARutaArchivo,
+                                                     ARutaJpg: string);
     function ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
     procedure CrearClientDataSetFotos;
     procedure LiberarClientDataSetFotos;
@@ -287,6 +288,7 @@ type
     { Public declarations }
   private
     FRutaPaciente:String;
+    Stopwatch: TStopwatch;
   end;
   procedure ShowMtoClientes(Owner       : TComponent); overload;
   procedure ShowMtoClientes(Owner       : TComponent; sEmail: String); overload;
@@ -405,14 +407,17 @@ begin
   Result := sRuta;
 end;
 
-procedure TfrmMtoClientes.AgregarFotoAGrid(iIndex: Integer; const ARutaArchivo: string);
+procedure TfrmMtoClientes.AgregarFotoAGrid(iIndex: Integer;
+                                           const ARutaArchivo,
+                                                 ARutaJpg: string);
 var
   Miniatura: TBitmap;
   Stream: TMemoryStream;
 begin
   if not FileExists(ARutaArchivo) then
     Exit;
-  Miniatura := ObtenerThumbnail(ARutaArchivo);
+  Miniatura := TBitmap.Create;//ObtenerThumbnail(ARutaArchivo);
+  Miniatura.LoadFromFile(ARutaArchivo);
   if Miniatura = nil then  // ← Esto ahora funciona correctamente
     Exit;
   Stream := TMemoryStream.Create;
@@ -498,7 +503,7 @@ begin
     // Esto actualizará FRutaPaciente con el cliente actual
     if ObtenerRutaPaciente <> '' then
     begin
-      SincronizarThumbnails;
+      //SincronizarThumbnails;
       CargarMiniaturas;
     end;
     // Si ObtenerRutaPaciente devuelve '', el dataset queda vacío
@@ -519,61 +524,70 @@ var
 begin
   Screen.Cursor := crHourGlass;
   cdsFotos.DisableControls;
-  try
-    cdsFotos.EmptyDataSet;
-    iIndex := 0;
-    // CRÍTICO: Obtener la ruta del cliente ACTUAL,
-    RutaPaciente := ObtenerRutaPaciente;
-    // Si no hay ruta, salir sin mostrar error (cliente sin fotos)
-    if RutaPaciente = '' then
-    begin
-      cdsFotos.EnableControls;
-      Screen.Cursor := crDefault;
-      Exit;
-    end;
-    // Cargar JPG
-    Lista := TStringList.Create;
-    if ( (FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0) ) then
-    begin
-//      repeat
-//        if (SR.Name <> '.') and (SR.Name <> '..') then
-//          AgregarFotoAGrid(iIndex, RutaPaciente + SR.Name);
-//        Inc(iIndex);
-//      until FindNext(SR) <> 0;
-      repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
-        begin
-          FechaCreacion := TFile.GetCreationTime(RutaPaciente + SR.Name);
-          // Guardar con formato que permite ordenar: fecha + nombre
-          Lista.AddObject( SR.Name, TObject(Trunc(FechaCreacion)));
-        end;
-      until FindNext(SR) <> 0;
-      FindClose(SR);
-    end;
-    Lista.Sort;
-// Agregar al grid
-    for i := 0 to Lista.Count - 1 do
-    begin
-      NombreArchivo := Copy(Lista[i], PosicionPipe + 1, MaxInt);
-      RutaCompleta := RutaPaciente + NombreArchivo;
-      //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +
-                                                      // ' - ' + RutaCompleta));
-      try
-        AgregarFotoAGrid(i, RutaCompleta);
-        //OutputDebugString(PChar('OK: ' + IntToStr(i)));
-      except
-        on E: Exception do
-        begin
-          ShowMessage('Error en archivo #' + IntToStr(i) + ': ' +
-                       RutaCompleta + #13#10 + E.Message);
-          Break;
-        end;
-      end;
-    end;
-  finally
-    Lista.Free;
+  cdsFotos.EmptyDataSet;
+  iIndex := 0;
+  // CRÍTICO: Obtener la ruta del cliente ACTUAL,
+  RutaPaciente := ObtenerRutaThumbnails;
+  // Si no hay ruta, salir sin mostrar error (cliente sin fotos)
+  if RutaPaciente = '' then
+  begin
     cdsFotos.EnableControls;
     Screen.Cursor := crDefault;
+  end
+  else
+  begin
+    try
+    // Cargar Miniaturas
+    Lista := TStringList.Create;
+    if ( (FindFirst(RutaPaciente + '*.bmp', faAnyFile, SR) = 0) ) then
+    begin
+  //      repeat
+  //        if (SR.Name <> '.') and (SR.Name <> '..') then
+  //          AgregarFotoAGrid(iIndex, RutaPaciente + SR.Name);
+  //        Inc(iIndex);
+  //      until FindNext(SR) <> 0;
+        repeat
+          if (SR.Name <> '.') and (SR.Name <> '..') then
+          begin
+            //FechaCreacion := TFile.GetCreationTime(RutaPaciente + SR.Name);
+            // Guardar con formato que permite ordenar: fecha + nombre
+            Lista.Add(SR.Name);
+          end;
+        until FindNext(SR) <> 0;
+        FindClose(SR);
+      end;
+      Lista.Sort;
+  // Agregar al grid
+      for i := 0 to Lista.Count - 1 do
+      begin
+        NombreArchivo := Lista[i];
+        RutaCompleta := RutaPaciente + NombreArchivo;
+        //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +
+                                                        // ' - ' + RutaCompleta));
+        try
+          //var aStopWatch := TStopWatch.StartNew;
+          AgregarFotoAGrid(i, RutaCompleta, ObtenerRutaPaciente);
+          //aStopWatch.Stop;
+//          inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+//                                  Format('%.2f mseg en cargar  %s',
+//                                        [aStopwatch.Elapsed.TotalMilliseconds,
+//                                         RutaCompleta]));
+
+          //OutputDebugString(PChar('OK: ' + IntToStr(i)));
+        except
+          on E: Exception do
+          begin
+            ShowMessage('Error en archivo #' + IntToStr(i) + ': ' +
+                         RutaCompleta + #13#10 + E.Message);
+            Break;
+          end;
+        end;
+      end;
+    finally
+      Lista.Free;
+      cdsFotos.EnableControls;
+      Screen.Cursor := crDefault;
+    end;
   end;
 end;
 
@@ -601,12 +615,14 @@ begin
   if not FileExists(ARutaThumbnail) then
   begin
     Result := True;
-    Exit;
+  end
+  else
+  begin
+    // Si el archivo original es más nuevo que el thumbnail, necesita actualizarse
+    FechaOriginal := FileDateToDateTime(FileAge(ARutaArchivo));
+    FechaThumbnail := FileDateToDateTime(FileAge(ARutaThumbnail));
+    Result := FechaOriginal > FechaThumbnail;
   end;
-  // Si el archivo original es más nuevo que el thumbnail, necesita actualizarse
-  FechaOriginal := FileDateToDateTime(FileAge(ARutaArchivo));
-  FechaThumbnail := FileDateToDateTime(FileAge(ARutaThumbnail));
-  Result := FechaOriginal > FechaThumbnail;
 end;
 
 procedure TfrmMtoClientes.MostrarFotoCompleta;
@@ -764,14 +780,14 @@ begin
       until FindNext(SR) <> 0;
       FindClose(SR);
     end;
-    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
-    begin
-      repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
-          Inc(TotalFotos);
-      until FindNext(SR) <> 0;
-      FindClose(SR);
-    end;
+//    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
+//    begin
+//      repeat
+//        if (SR.Name <> '.') and (SR.Name <> '..') then
+//          Inc(TotalFotos);
+//      until FindNext(SR) <> 0;
+//      FindClose(SR);
+//    end;
     if TotalFotos = 0 then
     begin
       ShowMessage('No hay fotos para sincronizar');
@@ -980,6 +996,35 @@ begin
 //    ListaMiniaturas.Free;
 //  end;
 end;
+procedure TfrmMtoClientes.cxButton1Click(Sender: TObject);
+begin
+  inherited;
+
+  if pcDetalleClientes.ActivePage = tsFotos then
+  begin
+    STopWatch := TStopWatch.StartNew;
+    CrearClientDataSetFotos;
+    StopWatch.Stop;
+    inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+                                  Format('%.2f mseg en CrearClientDataSetFotos',
+                                        [Stopwatch.Elapsed.TotalMilliseconds]));
+    STopWatch := TStopWatch.StartNew;
+    SincronizarThumbnails;
+    StopWatch.Stop;
+    inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+                                  Format('%.2f mseg en SincronizarThumnails',
+                                        [Stopwatch.Elapsed.TotalMilliseconds]));
+    STopWatch := TStopWatch.StartNew;
+    cxgrdFotosDBCardView1.DataController.DataSource := nil;
+    CargarMiniaturas;
+    cxgrdFotosDBCardView1.DataController.DataSource := dsFotos;
+    StopWatch.Stop;
+    inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+                                  Format('%.2f mseg en CargarMiniaturas',
+                                        [Stopwatch.Elapsed.TotalMilliseconds]));
+  end;
+end;
+
 procedure TfrmMtoClientes.cxdbtxtdtNIFPropertiesChange(Sender: TObject);
 //var
 //  validator: TDocumentoValidator;
@@ -1087,18 +1132,10 @@ begin
         // Desconectar el datasource del grid de fotos
         if Assigned(dsFotos) then
           dsFotos.DataSet := nil;
-
         // Liberar completamente
         LiberarClientDataSetFotos;
         cdsFotos := nil;
-
         // Si estamos en la pestaña de fotos, recargar
-        if pcDetalleClientes.ActivePage = tsFotos then
-        begin
-          CrearClientDataSetFotos;
-          SincronizarThumbnails;
-          CargarMiniaturas;
-        end;
       end;
     end;
 end;

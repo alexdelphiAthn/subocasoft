@@ -3,7 +3,7 @@
         <ProjectGuid>{A011166C-D86F-4142-8B7A-D4017C2D8C25}</ProjectGuid>
         <MainSource>Facturacion.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
@@ -271,15 +271,15 @@
                 <Platform value="Win64">False</Platform>
             </Platforms>
             <Deployment Version="3">
+                <DeployFile LocalName="Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Facturacion.exe" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName="\Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="..\Facturacion\Win32\Debug\Facturacion.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Facturacion.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Facturacion.exe" Configuration="Release" Class="ProjectOutput"/>
-                <DeployFile LocalName="\Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

@@ -22,7 +22,7 @@ uses
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVisualStudio2013Blue,
   dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, dxSkinVS2010,
   dxSkinWhiteprint, dxSkinXmas2008Blue, dxImageSlider, data.DB,
-  datasnap.DBClient, cxClasses;
+  datasnap.DBClient, cxClasses, system.math;
 type
   TfrmMtoVisorFoto = class(TForm)
     ScrollBox1: TScrollBox;
@@ -78,6 +78,7 @@ type
     procedure ActualizarBotonesNavegacion;
     procedure MostrarImagenPorIndice(AIndice: Integer);
     procedure ResaltarMiniatura(AIndice: Integer);
+    function CalcularFactorFit: Double;
   public
     procedure MostrarImagen(const ARutaArchivo: string);
     procedure MostrarImagenes(const AListaArchivos: TStringList;
@@ -174,7 +175,8 @@ begin
     JPEGImage.LoadFromFile(ARutaArchivo);
     FOriginalBitmap.Assign(JPEGImage);
     // Resetear zoom
-    FZoomFactor := 1.0;
+    FZoomFactor := CalcularFactorFit;
+    // Si la imagen ya cabe sin escalar, el factor será 1.0 (no cambia nada)
     AplicarZoom;
   finally
     JPEGImage.Free;
@@ -243,6 +245,27 @@ begin
   end;
 end;
 
+function TfrmMtoVisorFoto.CalcularFactorFit: Double;
+var
+  AnchoBox, AltoBox: Integer;
+  RatioW, RatioH: Double;
+begin
+  // Dimensiones visibles del ScrollBox (excluye scrollbars)
+  AnchoBox := ScrollBox1.ClientWidth;
+  AltoBox   := ScrollBox1.ClientHeight;
+
+  // Evitamos división por cero (por si la imagen está vacía)
+  if (FOriginalBitmap.Width = 0) or (FOriginalBitmap.Height = 0) then
+    Exit(1.0);
+
+  // Ratio ancho/alto del contenedor vs. de la imagen
+  RatioW := AnchoBox / FOriginalBitmap.Width;
+  RatioH := AltoBox   / FOriginalBitmap.Height;
+
+  // El factor que hace que *ambos* lados entren es el menor de los dos
+  Result := Min(RatioW, RatioH);
+end;
+
 procedure TfrmMtoVisorFoto.CargarCarrusel;
 var
   BlobStream: TStream;
@@ -262,7 +285,6 @@ begin
   while not FClientDataSet.Eof do
   begin
     FListaImagenes.Add(FClientDataSet.FieldByName('RutaFoto').AsString);
-
     // Crear miniatura
     Img := TImage.Create(ScrollBoxMiniaturas);
     Img.Parent := ScrollBoxMiniaturas;
@@ -277,7 +299,7 @@ begin
     Img.OnClick := MiniaturaClick;
     Img.Cursor := crHandPoint;
     Img.ShowHint := True;
-    HintImg := FClientDataSet.FieldByName('NombreArchivo').AsString;
+    //HintImg := FClientDataSet.FieldByName('NombreArchivo').AsString;
     HintImg := HintImg + #13#10 + 'Fecha: ' + FormatDateTime('dd/mm/yyyy hh:nn',
                                 FClientDataSet.FieldByName('Fecha').AsDateTime);
     Img.Hint := HintImg;

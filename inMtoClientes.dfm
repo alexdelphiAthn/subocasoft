@@ -602,7 +602,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 294
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = tsFotos
+          Properties.ActivePage = cxtbsht1
           Properties.CustomButtons.Buttons = <>
           OnChange = pcDetalleClientesChange
           ClientRectBottom = 290
@@ -815,10 +815,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
               Left = 882
               Top = 0
@@ -1069,10 +1065,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1277,10 +1269,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1494,10 +1482,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
@@ -1676,10 +1660,11 @@ inherited frmMtoClientes: TfrmMtoClientes
             object cxgrdFotos: TcxGrid
               Left = 0
               Top = 0
-              Width = 901
+              Width = 1032
               Height = 257
               Align = alClient
               TabOrder = 0
+              ExplicitWidth = 901
               object tvFotos: TcxGridDBTableView
                 Navigator.Buttons.CustomButtons = <>
                 Navigator.Buttons.Delete.Visible = False
@@ -1708,45 +1693,32 @@ inherited frmMtoClientes: TfrmMtoClientes
                 OptionsData.Editing = False
                 OptionsData.Inserting = False
                 OptionsSelection.CellSelect = False
-                OptionsView.CardAutoWidth = True
+                OptionsView.CaptionSeparator = #0
                 OptionsView.CardIndent = 8
-                OptionsView.CardWidth = 300
+                OptionsView.CardWidth = 150
                 OptionsView.CellAutoHeight = True
                 object cxgrdFotosDBCardView1NombreArchivo: TcxGridDBCardViewRow
                   DataBinding.FieldName = 'NombreArchivo'
                   PropertiesClassName = 'TcxTextEditProperties'
+                  Visible = False
                   Position.BeginsLayer = True
                 end
                 object cxgrdFotosDBCardView1Fecha: TcxGridDBCardViewRow
                   DataBinding.FieldName = 'Fecha'
                   PropertiesClassName = 'TcxDateEditProperties'
+                  Visible = False
                   Position.BeginsLayer = True
                 end
                 object cxgrdFotosDBCardView1Miniatura: TcxGridDBCardViewRow
                   DataBinding.FieldName = 'Miniatura'
                   PropertiesClassName = 'TcxImageProperties'
                   Position.BeginsLayer = True
+                  Position.Width = 150
+                  IsCaptionAssigned = True
                 end
               end
               object lvCardFotos: TcxGridLevel
                 GridView = cxgrdFotosDBCardView1
-              end
-            end
-            object Panel1: TPanel
-              Left = 901
-              Top = 0
-              Width = 131
-              Height = 257
-              Align = alRight
-              TabOrder = 1
-              object btnVerGaleria: TcxButton
-                Left = 2
-                Top = 2
-                Width = 127
-                Height = 49
-                Caption = 'Ver Galeria'
-                TabOrder = 0
-                OnClick = btnVerGaleriaClick
               end
             end
           end
