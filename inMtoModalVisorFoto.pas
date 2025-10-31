@@ -205,6 +205,10 @@ var
   Img: TImage;
   Shap: TShape;
   MiniaturaSeleccionada: TImage;
+  AnchoMiniatura: Integer;
+  MiniaturasPorPantalla: Integer;
+  MiniaturasALaIzquierda: Integer;
+  PosicionDestino: Integer;
 begin
   MiniaturaSeleccionada := nil;
 
@@ -226,13 +230,35 @@ begin
       end;
     end;
 
-    // Buscar la imagen seleccionada
     if ScrollBoxMiniaturas.Controls[i] is TImage then
     begin
       Img := TImage(ScrollBoxMiniaturas.Controls[i]);
       if Img.Tag = AIndice then
         MiniaturaSeleccionada := Img;
     end;
+  end;
+
+  if Assigned(MiniaturaSeleccionada) then
+  begin
+    // Cada miniatura ocupa 110 píxeles (100 de ancho + 10 de separación)
+    AnchoMiniatura := 110;
+
+    // Calcular cuántas miniaturas caben en el área visible
+    MiniaturasPorPantalla := ScrollBoxMiniaturas.ClientWidth div AnchoMiniatura;
+
+    // Calcular cuántas miniaturas deberían quedar a la izquierda para centrar la seleccionada
+    MiniaturasALaIzquierda := MiniaturasPorPantalla div 2;
+
+    // Calcular la posición de scroll:
+    // índice actual menos las que van a la izquierda, multiplicado por el ancho
+    PosicionDestino := (AIndice - MiniaturasALaIzquierda) * AnchoMiniatura;
+
+    // Si es negativo, ir al inicio
+    if PosicionDestino < 0 then
+      PosicionDestino := 0;
+
+    ScrollBoxMiniaturas.HorzScrollBar.Position := PosicionDestino;
+    ScrollBoxMiniaturas.Update;
   end;
 end;
 
