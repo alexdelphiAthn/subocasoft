@@ -4,9 +4,8 @@ inherited frmMtoClientes: TfrmMtoClientes
   Caption = 'Pacientes'
   ClientHeight = 601
   ClientWidth = 1248
-  ExplicitWidth = 1264
-  ExplicitHeight = 640
-  PixelsPerInch = 96
+  ExplicitWidth = 1260
+  ExplicitHeight = 639
   TextHeight = 22
   inherited pButtonPage: TPanel
     Width = 1050
@@ -15,8 +14,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 1050
-    ExplicitHeight = 601
+    ExplicitWidth = 1044
+    ExplicitHeight = 592
   end
   inherited pButtonRightBar: TPanel
     Left = 1050
@@ -26,8 +25,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ParentFont = False
-    ExplicitLeft = 1050
-    ExplicitHeight = 601
+    ExplicitLeft = 1044
+    ExplicitHeight = 592
     object btn1: TSpeedButton [0]
       Left = 8
       Top = 165
@@ -56,7 +55,7 @@ inherited frmMtoClientes: TfrmMtoClientes
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 473
+      ExplicitTop = 464
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
         Top = 0
@@ -170,8 +169,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ActivePage = tsFicha
-    ExplicitWidth = 1050
-    ExplicitHeight = 601
+    ExplicitWidth = 1044
+    ExplicitHeight = 592
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
@@ -346,6 +345,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           ExplicitLeft = 162
           ExplicitTop = 11
           ExplicitWidth = 184
+          ExplicitHeight = 30
           Width = 184
         end
         inherited cxlblBusq: TcxLabel
@@ -381,6 +381,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 265
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 1036
         object cxdbtxtdtCODIGO_CLIENTE: TcxDBTextEdit
           Left = 68
           Top = 50
@@ -402,6 +403,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Left = 30
           Top = 203
           Caption = 'Raz'#243'n Social Fiscal'
+          TabOrder = 9
         end
         object cxdbtxtdtTELEFONO2: TcxDBTextEdit
           Left = 529
@@ -415,11 +417,13 @@ inherited frmMtoClientes: TfrmMtoClientes
           Left = 258
           Top = 153
           Caption = 'Tel'#233'fonos'
+          TabOrder = 10
         end
         object cxlbl6: TcxLabel
           Left = 258
           Top = 104
           Caption = 'Email'
+          TabOrder = 11
         end
         object cxdbtxtdtEMAIL: TcxDBTextEdit
           Left = 319
@@ -433,6 +437,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Left = 65
           Top = 153
           Caption = 'Nif'
+          TabOrder = 12
         end
         object cxdbtxtdtNIF: TcxDBTextEdit
           Left = 105
@@ -576,16 +581,19 @@ inherited frmMtoClientes: TfrmMtoClientes
           Left = 372
           Top = 21
           Caption = 'Apellidos'
+          TabOrder = 13
         end
         object cxlbl15: TcxLabel
           Left = 194
           Top = 21
           Caption = 'Nombre'
+          TabOrder = 14
         end
         object cxlbl2: TcxLabel
           Left = 68
           Top = 21
           Caption = 'C'#243'digo'
+          TabOrder = 15
         end
       end
       object pnl2: TPanel
@@ -595,6 +603,8 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 296
         Align = alClient
         TabOrder = 1
+        ExplicitWidth = 1036
+        ExplicitHeight = 287
         object pcDetalleClientes: TcxPageControl
           Left = 1
           Top = 1
@@ -602,9 +612,11 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 294
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = cxtbsht1
+          Properties.ActivePage = cxtbsht3
           Properties.CustomButtons.Buttons = <>
           OnChange = pcDetalleClientesChange
+          ExplicitWidth = 1034
+          ExplicitHeight = 285
           ClientRectBottom = 290
           ClientRectLeft = 4
           ClientRectRight = 1036
@@ -616,11 +628,13 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 38
               Top = 19
               Caption = 'Direcci'#243'n 1'
+              TabOrder = 0
             end
             object cxlbl8: TcxLabel
               Left = 15
               Top = 99
               Caption = 'C'#243'digo Postal'
+              TabOrder = 8
             end
             object cxdbtxtdt8: TcxDBTextEdit
               Left = 168
@@ -634,6 +648,7 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 54
               Top = 139
               Caption = 'Poblaci'#243'n'
+              TabOrder = 9
             end
             object cxdbtxtdt9: TcxDBTextEdit
               Left = 168
@@ -655,11 +670,13 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 59
               Top = 179
               Caption = 'Provincia'
+              TabOrder = 10
             end
             object cxlbl16: TcxLabel
               Left = 108
               Top = 219
               Caption = 'Pa'#237's'
+              TabOrder = 11
             end
             object cxdbtxtdtDireccion: TcxDBTextEdit
               Left = 168
@@ -673,11 +690,13 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 38
               Top = 59
               Caption = 'Direcci'#243'n 2'
+              TabOrder = 12
             end
             object cxlbl18: TcxLabel
               Left = 14
               Top = 250
               Caption = 'IBAN Bancario'
+              TabOrder = 14
             end
             object cxdbtxtdtPAIS_CLIENTE: TcxDBTextEdit
               Left = 168
@@ -700,6 +719,7 @@ inherited frmMtoClientes: TfrmMtoClientes
               Top = 213
               DataBinding.DataField = 'NOMBRE_SPA_PAIS'
               DataBinding.DataSource = DMClientes.dsPaises
+              TabOrder = 15
               Height = 35
               Width = 324
             end
@@ -751,6 +771,8 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
+            ExplicitWidth = 1026
+            ExplicitHeight = 248
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23
@@ -763,6 +785,7 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 107
               Top = 27
               Caption = 'Profesi'#243'n'
+              TabOrder = 1
             end
             object cxedtPROFESION_CLIENTE: TcxDBTextEdit
               Left = 225
@@ -776,11 +799,13 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 58
               Top = 116
               Caption = 'Observaciones'
+              TabOrder = 3
             end
             object cxlbl13: TcxLabel
               Left = 99
               Top = 71
               Caption = 'Referencia'
+              TabOrder = 4
             end
             object cxedtPROFESION_CLIENTE1: TcxDBTextEdit
               Left = 225
@@ -794,6 +819,7 @@ inherited frmMtoClientes: TfrmMtoClientes
               Left = 3
               Top = 168
               Caption = 'Fecha de nacimiento'
+              TabOrder = 7
             end
             object cxdbdtdt1: TcxDBDateEdit
               Left = 225
@@ -815,6 +841,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
               Left = 882
               Top = 0
@@ -862,14 +892,9 @@ inherited frmMtoClientes: TfrmMtoClientes
                 TabOrder = 0
                 object tvHistoriasClientes: TcxGridDBTableView
                   Navigator.Buttons.ConfirmDelete = True
-                  Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
-                  ScrollbarAnnotations.CustomAnnotations = <>
                   DataController.DataModeController.SmartRefresh = True
                   DataController.DataSource = DMClientes.dsHistoria
-                  DataController.Summary.DefaultGroupSummaryItems = <>
-                  DataController.Summary.FooterSummaryItems = <>
-                  DataController.Summary.SummaryGroups = <>
                   OptionsBehavior.GoToNextCellOnEnter = True
                   OptionsCustomize.ColumnGrouping = False
                   OptionsSelection.MultiSelect = True
@@ -973,15 +998,10 @@ inherited frmMtoClientes: TfrmMtoClientes
                   end
                 end
                 object cxgrdbndtblvwtv2: TcxGridDBBandedTableView
-                  Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
-                  ScrollbarAnnotations.CustomAnnotations = <>
                   DataController.DetailKeyFieldNames = 'AppointmentId'
                   DataController.KeyFieldNames = 'PerId'
                   DataController.MasterKeyFieldNames = 'AppointmentId'
-                  DataController.Summary.DefaultGroupSummaryItems = <>
-                  DataController.Summary.FooterSummaryItems = <>
-                  DataController.Summary.SummaryGroups = <>
                   OptionsView.GroupByBox = False
                   Bands = <
                     item
@@ -1065,6 +1085,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1074,14 +1098,9 @@ inherited frmMtoClientes: TfrmMtoClientes
               TabOrder = 0
               object tvFacturacion: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = DMClientes.dsFacturas
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsBehavior.GoToNextCellOnEnter = True
                 OptionsCustomize.ColumnGrouping = False
                 OptionsData.Deleting = False
@@ -1186,15 +1205,10 @@ inherited frmMtoClientes: TfrmMtoClientes
                 end
               end
               object tvLineasFacturacion: TcxGridDBTableView
-                Navigator.Buttons.CustomButtons = <>
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataSource = DMClientes.dsLinFac
                 DataController.DetailKeyFieldNames = 'NRO_FACTURA_LINEA; SERIE_FACTURA_LINEA'
                 DataController.KeyFieldNames = 'LINEA_LINEA'
                 DataController.MasterKeyFieldNames = 'NRO_FACTURA; SERIE_FACTURA'
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsBehavior.ColumnHeaderHints = False
                 OptionsCustomize.ColumnFiltering = False
                 OptionsCustomize.ColumnGrouping = False
@@ -1269,6 +1283,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1278,14 +1296,9 @@ inherited frmMtoClientes: TfrmMtoClientes
               TabOrder = 0
               object cxGridDBTableView1: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = DMClientes.dsPresupuestos
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsBehavior.GoToNextCellOnEnter = True
                 OptionsCustomize.ColumnGrouping = False
                 OptionsData.Deleting = False
@@ -1401,15 +1414,10 @@ inherited frmMtoClientes: TfrmMtoClientes
                 end
               end
               object cxGridDBTableView2: TcxGridDBTableView
-                Navigator.Buttons.CustomButtons = <>
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataSource = DMClientes.dsLinPre
                 DataController.DetailKeyFieldNames = 'NRO_FACTURA_LINEA; SERIE_FACTURA_LINEA'
                 DataController.KeyFieldNames = 'LINEA_LINEA'
                 DataController.MasterKeyFieldNames = 'NRO_FACTURA; SERIE_FACTURA'
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsBehavior.ColumnHeaderHints = False
                 OptionsCustomize.ColumnFiltering = False
                 OptionsCustomize.ColumnGrouping = False
@@ -1482,6 +1490,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
@@ -1491,18 +1503,13 @@ inherited frmMtoClientes: TfrmMtoClientes
               TabOrder = 0
               object tv1: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Buttons.Insert.Visible = False
                 Navigator.Buttons.Delete.Enabled = False
                 Navigator.Buttons.Delete.Visible = False
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = DMClientes.dsCuestionarioPreguntas
                 DataController.Options = [dcoCaseInsensitive, dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding]
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsBehavior.GoToNextCellOnEnter = True
                 OptionsCustomize.ColumnGrouping = False
                 OptionsData.Deleting = False
@@ -1522,15 +1529,10 @@ inherited frmMtoClientes: TfrmMtoClientes
                 end
               end
               object cxgrdbndtblvw1: TcxGridDBBandedTableView
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DetailKeyFieldNames = 'AppointmentId'
                 DataController.KeyFieldNames = 'PerId'
                 DataController.MasterKeyFieldNames = 'AppointmentId'
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsView.GroupByBox = False
                 Bands = <
                   item
@@ -1664,28 +1666,17 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 901
               object tvFotos: TcxGridDBTableView
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Buttons.Delete.Visible = False
                 Navigator.Buttons.Edit.Visible = False
                 Navigator.Buttons.Filter.Visible = False
-                ScrollbarAnnotations.CustomAnnotations = <>
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsView.ColumnAutoWidth = True
                 OptionsView.DataRowHeight = 100
                 OptionsView.GroupByBox = False
               end
               object cxgrdFotosDBCardView1: TcxGridDBCardView
-                Navigator.Buttons.CustomButtons = <>
-                ScrollbarAnnotations.CustomAnnotations = <>
                 OnCellDblClick = cxgrdFotosDBCardView1CellDblClick
                 DataController.DataSource = dsFotos
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsBehavior.CellHints = True
                 OptionsData.CancelOnExit = False
                 OptionsData.Deleting = False
