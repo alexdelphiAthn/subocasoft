@@ -198,7 +198,6 @@ begin
     ResaltarMiniatura(TImage(Sender).Tag);
   end;
 end;
-
 procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer);
 var
   i: Integer;
@@ -298,16 +297,13 @@ begin
   // Limpiar miniaturas anteriores
   while ScrollBoxMiniaturas.ControlCount > 0 do
     ScrollBoxMiniaturas.Controls[0].Free;
-
   if not Assigned(FClientDataSet) or not FClientDataSet.Active then
     Exit;
-
   X := 5;
   FClientDataSet.First;
   while not FClientDataSet.Eof do
   begin
     FListaImagenes.Add(FClientDataSet.FieldByName('RutaFoto').AsString);
-
     // Crear miniatura
     Img := TImage.Create(ScrollBoxMiniaturas);
     Img.Parent := ScrollBoxMiniaturas;
@@ -321,7 +317,6 @@ begin
     Img.Tag := FClientDataSet.FieldByName('Index').AsInteger;
     Img.OnClick := MiniaturaClick;
     Img.Cursor := crHandPoint;
-
     // Borde para resaltar
     Shape := TShape.Create(ScrollBoxMiniaturas);
     Shape.Parent := ScrollBoxMiniaturas;
@@ -334,7 +329,6 @@ begin
     Shape.Tag := Img.Tag;
     Shape.SendToBack;
     Img.BringToFront;
-
     // Cargar imagen desde BLOB
     BMPImage := TBitmap.Create;
     try
@@ -349,7 +343,6 @@ begin
     finally
       BMPImage.Free;
     end;
-
     Inc(X, 110);
     FClientDataSet.Next;
   end;

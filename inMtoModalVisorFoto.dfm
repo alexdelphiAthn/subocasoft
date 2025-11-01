@@ -2,8 +2,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Left = 0
   Top = 0
   Caption = 'Visor de Imagen'
-  ClientHeight = 589
-  ClientWidth = 753
+  ClientHeight = 580
+  ClientWidth = 747
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,18 +11,16 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = True
   WindowState = wsMaximized
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnResize = FormResize
-  PixelsPerInch = 96
   TextHeight = 13
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 41
-    Width = 753
-    Height = 411
+    Width = 747
+    Height = 402
     Align = alClient
     Color = clGray
     ParentColor = False
@@ -41,8 +39,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   end
   object pnlNavigation: TPanel
     Left = 0
-    Top = 452
-    Width = 753
+    Top = 443
+    Width = 747
     Height = 41
     Align = alBottom
     TabOrder = 1
@@ -81,8 +79,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   end
   object pnlCarrusel: TPanel
     Left = 0
-    Top = 493
-    Width = 753
+    Top = 484
+    Width = 747
     Height = 96
     Align = alBottom
     TabOrder = 2
@@ -94,12 +92,13 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
+      ExplicitWidth = 745
     end
   end
   object pnlZoom: TPanel
     Left = 0
     Top = 0
-    Width = 753
+    Width = 747
     Height = 41
     Align = alTop
     TabOrder = 3
