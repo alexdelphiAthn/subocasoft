@@ -116,12 +116,14 @@ begin
   //pnlNavigation.Visible := False;
   //pnlCarrusel.Visible := False;
 end;
+
 procedure TfrmMtoVisorFoto.FormDestroy(Sender: TObject);
 begin
   FOriginalBitmap.Free;
   FListaImagenes.Free;
   //FListaMiniaturas.Free;
 end;
+
 procedure TfrmMtoVisorFoto.MostrarImagen(const ARutaArchivo: string);
 var
   Lista: TStringList;
@@ -134,6 +136,7 @@ begin
     Lista.Free;
   end;
 end;
+
 procedure TfrmMtoVisorFoto.MostrarImagenes(const AListaArchivos: TStringList;
   AIndiceInicial: Integer = 0);
 begin
@@ -198,6 +201,7 @@ begin
     ResaltarMiniatura(TImage(Sender).Tag);
   end;
 end;
+
 procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer);
 var
   i: Integer;

@@ -11,10 +11,12 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
+  OldCreateOrder = True
   WindowState = wsMaximized
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnResize = FormResize
+  PixelsPerInch = 96
   TextHeight = 13
   object ScrollBox1: TScrollBox
     Left = 0

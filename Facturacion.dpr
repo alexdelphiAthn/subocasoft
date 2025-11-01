@@ -22,6 +22,7 @@ uses
   inMtoContadores in 'inMtoContadores.pas' {frmMtoContadores},
   Vcl.Themes,
   Vcl.Styles,
+  dxCore,
   inMtoArticulos in 'inMtoArticulos.pas' {frmMtoArticulos},
   UniDataArticulos in 'UniDataArticulos.pas' {DMArticulos: TDataModule},
   UniDataClientes in 'UniDataClientes.pas' {DMClientes: TDataModule},
@@ -66,6 +67,10 @@ uses
 {$R *.res}
 
 begin
+    TdxDiacriticStringOptions.ComparisonMode :=
+                                   TdxDiacriticStringComparisonMode.Insensitive;
+  TdxDiacriticStringOptions.NormalizationMode :=
+                                     TdxDiacriticStringNormalizationMode.System;
   Application.Initialize;
   Application.Title := 'Subocasana';
   Application.CreateForm(TfrmOpenApp, frmOpenApp);
