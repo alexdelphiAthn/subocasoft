@@ -12,6 +12,7 @@ object frmMtoGen: TfrmMtoGen
   Font.Style = []
   FormStyle = fsMDIChild
   KeyPreview = True
+  OldCreateOrder = True
   Position = poDefault
   Visible = True
   OnActivate = FormActivate
@@ -20,6 +21,7 @@ object frmMtoGen: TfrmMtoGen
   OnKeyPress = FormKeyPress
   OnKeyUp = FormKeyUp
   OnShow = FormShow
+  PixelsPerInch = 96
   TextHeight = 22
   object pButtonPage: TPanel
     Left = 0
@@ -29,7 +31,6 @@ object frmMtoGen: TfrmMtoGen
     Align = alClient
     ParentBackground = False
     TabOrder = 1
-    ExplicitWidth = 656
   end
   object pButtonRightBar: TPanel
     Left = 983
@@ -39,7 +40,6 @@ object frmMtoGen: TfrmMtoGen
     Align = alRight
     ParentBackground = False
     TabOrder = 2
-    ExplicitLeft = 656
     object btnExportarExcel: TSpeedButton
       Left = 80
       Top = 106
@@ -92,7 +92,7 @@ object frmMtoGen: TfrmMtoGen
     end
     object pButtonGen: TPanel
       Left = 1
-      Top = 421
+      Top = 420
       Width = 196
       Height = 158
       Align = alBottom
@@ -101,7 +101,6 @@ object frmMtoGen: TfrmMtoGen
       Constraints.MinWidth = 98
       ParentBackground = False
       TabOrder = 2
-      ExplicitTop = 420
       object sbGrabar: TSpeedButton
         Left = 1
         Top = 25
@@ -245,7 +244,6 @@ object frmMtoGen: TfrmMtoGen
       Margins.Top = 2
       Margins.Right = 2
       Margins.Bottom = 2
-      Buttons.CustomButtons = <>
       Buttons.PageSize = 10
       Buttons.Insert.Visible = False
       Buttons.Delete.Visible = False
@@ -276,14 +274,13 @@ object frmMtoGen: TfrmMtoGen
     ParentFont = False
     Style = tsFlatButtons
     TabOrder = 0
-    ExplicitWidth = 656
     object tsLista: TTabSheet
       Caption = '&Lista'
       object cxGrdPrincipal: TcxGrid
         Left = 0
         Top = 43
-        Width = 979
-        Height = 497
+        Width = 975
+        Height = 496
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -292,12 +289,9 @@ object frmMtoGen: TfrmMtoGen
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        ExplicitWidth = 648
-        ExplicitHeight = 496
         object cxGrdDBTabPrin: TcxGridDBTableView
           OnDblClick = cxGrdDBTabPrinDblClick
           Navigator.Buttons.OnButtonClick = cxGrdDBTabPrinNavigatorButtonsButtonClick
-          Navigator.Buttons.CustomButtons = <>
           Navigator.Buttons.First.Hint = 'Va al primer Registro'
           Navigator.Buttons.First.Visible = False
           Navigator.Buttons.PriorPage.Hint = 'Va a la p'#225'gina anterior'
@@ -332,12 +326,9 @@ object frmMtoGen: TfrmMtoGen
           Navigator.Buttons.GotoBookmark.Visible = False
           Navigator.Buttons.Filter.Hint = 'Filtro personalizado'
           Navigator.Visible = True
-          ScrollbarAnnotations.CustomAnnotations = <>
           DataController.DataSource = dsTablaG
+          DataController.Filter.Options = [fcoCaseInsensitive]
           DataController.Options = [dcoCaseInsensitive, dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding]
-          DataController.Summary.DefaultGroupSummaryItems = <>
-          DataController.Summary.FooterSummaryItems = <>
-          DataController.Summary.SummaryGroups = <>
           OptionsBehavior.AlwaysShowEditor = True
           OptionsBehavior.GoToNextCellOnEnter = True
           OptionsBehavior.IncSearch = True
@@ -354,7 +345,7 @@ object frmMtoGen: TfrmMtoGen
       object pnTopGrid: TPanel
         Left = 0
         Top = 0
-        Width = 979
+        Width = 975
         Height = 43
         Align = alTop
         BevelOuter = bvNone
@@ -362,7 +353,6 @@ object frmMtoGen: TfrmMtoGen
         ParentBackground = False
         ParentCtl3D = False
         TabOrder = 0
-        ExplicitWidth = 983
         object dxbvl1: TdxBevel
           Left = 5
           Top = 2
@@ -435,6 +425,7 @@ object frmMtoGen: TfrmMtoGen
           Margins.Right = 2
           Margins.Bottom = 2
           Caption = 'Texto a buscar'
+          TabOrder = 2
         end
         object cxdbnvgtr1: TcxDBNavigator
           Left = 317
@@ -445,7 +436,6 @@ object frmMtoGen: TfrmMtoGen
           Margins.Top = 2
           Margins.Right = 2
           Margins.Bottom = 2
-          Buttons.CustomButtons = <>
           Buttons.PageSize = 10
           Buttons.Filter.Visible = False
           DataSource = dsTablaG
@@ -462,6 +452,10 @@ object frmMtoGen: TfrmMtoGen
       Font.Style = []
       ImageIndex = 1
       ParentFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
   end
   object dsTablaG: TDataSource
