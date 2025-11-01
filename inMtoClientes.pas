@@ -678,6 +678,7 @@ begin
   if (dsFotos <> nil) then
     dsFotos.DataSet := cdsFotos;
 end;
+
 procedure TfrmMtoClientes.VaciarClientDataSetFotos;
 begin
   if cdsFotos <> nil then
@@ -694,6 +695,7 @@ begin
       dsFotos.DataSet := cdsFotos;
   end;
 end;
+
 procedure TfrmMtoClientes.LiberarClientDataSetFotos;
 begin
   if cdsFotos <> nil then
