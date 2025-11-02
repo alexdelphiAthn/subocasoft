@@ -1241,8 +1241,8 @@ object frmOpenApp: TfrmOpenApp
         MinWidth = 160
         Width = 160
       end>
-    ExplicitTop = 518
-    ExplicitWidth = 1087
+    ExplicitTop = 581
+    ExplicitWidth = 1080
   end
   object Memo: TcxMemo
     Left = 0
@@ -1250,8 +1250,8 @@ object frmOpenApp: TfrmOpenApp
     Align = alBottom
     TabOrder = 1
     Visible = False
-    ExplicitTop = 429
-    ExplicitWidth = 1087
+    ExplicitTop = 492
+    ExplicitWidth = 1080
     Height = 89
     Width = 1084
   end

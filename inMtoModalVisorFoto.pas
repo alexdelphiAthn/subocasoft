@@ -111,7 +111,7 @@ begin
   // Configurar carrusel
   //dxImageSlider1.ShowNavigation := True;
 //  dxImageSlider1.Height := 120;
-  pnlCarrusel.Height := 140;
+  pnlCarrusel.Height := 170;
   pnlCarrusel.Align := alBottom;
   // Ocultar navegación por defecto
   //pnlNavigation.Visible := False;
@@ -266,7 +266,6 @@ var
   XForm: TXForm;
 begin
   if FOriginalBitmap.Empty then Exit;
-
   Screen.Cursor := crHourGlass;
   try
     BitmapRotado := TBitmap.Create;
@@ -275,10 +274,8 @@ begin
       BitmapRotado.Width := FOriginalBitmap.Height;
       BitmapRotado.Height := FOriginalBitmap.Width;
       BitmapRotado.PixelFormat := FOriginalBitmap.PixelFormat;
-
       // Configurar el modo de mapeo para rotación
       SetGraphicsMode(BitmapRotado.Canvas.Handle, GM_ADVANCED);
-
       // Crear la matriz de transformación para rotar 90º a la derecha
       XForm.eM11 := 0;   // Rotación 90º derecha
       XForm.eM12 := 1;
@@ -286,15 +283,11 @@ begin
       XForm.eM22 := 0;
       XForm.eDx := BitmapRotado.Width;  // Traslación en X
       XForm.eDy := 0;    // Traslación en Y
-
       SetWorldTransform(BitmapRotado.Canvas.Handle, XForm);
-
       // Dibujar la imagen original con la transformación aplicada
       BitmapRotado.Canvas.Draw(0, 0, FOriginalBitmap);
-
       // Reemplazar el bitmap original
       FOriginalBitmap.Assign(BitmapRotado);
-
       // Recalcular zoom y aplicar
       FZoomFactor := CalcularFactorFit;
       AplicarZoom;
@@ -363,7 +356,7 @@ begin
     Img.Left := X;
     Img.Top := 5;
     Img.Width := 140;
-    Img.Height := 130;
+    Img.Height := 140;
     Img.Stretch := True;
     Img.Proportional := True;
     Img.Center := True;
@@ -528,36 +521,37 @@ end;
 
 procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
 var
-  MousePos: TPoint;
-  CenterX, CenterY: Integer;
+  PuntoMouse: TPoint;
+  PuntoEnImagen: TPoint;
   ScrollPosX, ScrollPosY: Integer;
   ZoomAnterior: Double;
 begin
-  // Guardar el zoom anterior
   ZoomAnterior := FZoomFactor;
 
-  // Obtener la posición del mouse en coordenadas del Image1
-  MousePos := Image1.ScreenToClient(Mouse.CursorPos);
+  // Obtener posición del mouse en el ScrollBox
+  PuntoMouse := ScrollBox1.ScreenToClient(Mouse.CursorPos);
 
-  // Calcular el punto en la imagen original (antes del zoom)
-  CenterX := Round(MousePos.X / ZoomAnterior);
-  CenterY := Round(MousePos.Y / ZoomAnterior);
+  // Calcular posición absoluta en la imagen escalada actual
+  PuntoEnImagen.X := PuntoMouse.X + ScrollBox1.HorzScrollBar.Position;
+  PuntoEnImagen.Y := PuntoMouse.Y + ScrollBox1.VertScrollBar.Position;
 
-  // Aplicar el zoom (incrementar 0.5 o lo que prefieras)
+  // Aplicar zoom
   if FZoomFactor < 5.0 then
   begin
     FZoomFactor := FZoomFactor + 0.5;
     AplicarZoom;
 
-    // Calcular la nueva posición del punto clickeado después del zoom
-    ScrollPosX := Round(CenterX * FZoomFactor) - (ScrollBox1.ClientWidth div 2);
-    ScrollPosY := Round(CenterY * FZoomFactor) - (ScrollBox1.ClientHeight div 2);
+    // El punto debe mantenerse en la misma proporción relativa
+    // Calcular nuevo scroll para centrar ese punto
+    ScrollPosX := Round(PuntoEnImagen.X * (FZoomFactor / ZoomAnterior)) -
+                                                                   PuntoMouse.X;
+    ScrollPosY := Round(PuntoEnImagen.Y * (FZoomFactor / ZoomAnterior)) -
+                                                                   PuntoMouse.Y;
 
-    // Asegurar que no se sale de los límites
-    if ScrollPosX < 0 then ScrollPosX := 0;
-    if ScrollPosY < 0 then ScrollPosY := 0;
+    // Limitar a rangos válidos
+    ScrollPosX := Max(0, Min(ScrollPosX, ScrollBox1.HorzScrollBar.Range - ScrollBox1.ClientWidth));
+    ScrollPosY := Max(0, Min(ScrollPosY, ScrollBox1.VertScrollBar.Range - ScrollBox1.ClientHeight));
 
-    // Centrar el ScrollBox en el punto clickeado
     ScrollBox1.HorzScrollBar.Position := ScrollPosX;
     ScrollBox1.VertScrollBar.Position := ScrollPosY;
   end;

@@ -11,23 +11,21 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
-  OldCreateOrder = True
   WindowState = wsMaximized
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnResize = FormResize
-  PixelsPerInch = 96
   TextHeight = 13
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 41
     Width = 747
-    Height = 415
+    Height = 399
     Align = alClient
     Color = clGray
     ParentColor = False
     TabOrder = 0
-    ExplicitHeight = 408
+    ExplicitHeight = 392
     object Image1: TImage
       Left = 0
       Top = 0
@@ -42,21 +40,21 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   end
   object pnlCarrusel: TPanel
     Left = 0
-    Top = 456
+    Top = 440
     Width = 747
-    Height = 124
+    Height = 140
     Align = alBottom
     TabOrder = 1
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
       Width = 745
-      Height = 122
+      Height = 138
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
       ExplicitTop = 6
-      ExplicitHeight = 89
+      ExplicitHeight = 117
     end
   end
   object pnlZoom: TPanel
@@ -66,15 +64,16 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 41
     Align = alTop
     TabOrder = 2
+    ExplicitWidth = 743
     object lblZoom: TLabel
-      Left = 236
+      Left = 240
       Top = 14
       Width = 62
       Height = 13
       Caption = 'Zoom: 100%'
     end
     object SpeedButton1: TSpeedButton
-      Left = 16
+      Left = 14
       Top = 8
       Width = 50
       Height = 25
@@ -82,7 +81,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = btnZoomInClick
     end
     object SpeedButton2: TSpeedButton
-      Left = 72
+      Left = 70
       Top = 8
       Width = 50
       Height = 25
@@ -90,7 +89,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = btnZoomOutClick
     end
     object SpeedButton3: TSpeedButton
-      Left = 128
+      Left = 127
       Top = 8
       Width = 49
       Height = 25
@@ -98,23 +97,23 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = btnZoom100Click
     end
     object btnAnterior: TSpeedButton
-      Left = 344
+      Left = 399
       Top = 8
-      Width = 105
+      Width = 63
       Height = 25
       Caption = '<- Anterior'
       OnClick = btnAnteriorClick
     end
     object btnSiguiente: TSpeedButton
-      Left = 455
+      Left = 460
       Top = 8
-      Width = 105
+      Width = 69
       Height = 25
       Caption = 'Siguiente ->'
       OnClick = btnSiguienteClick
     end
     object btnPrimera: TSpeedButton
-      Left = 304
+      Left = 367
       Top = 8
       Width = 34
       Height = 25
@@ -122,15 +121,15 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = btnPrimeraClick
     end
     object btnUltima: TSpeedButton
-      Left = 569
+      Left = 527
       Top = 8
-      Width = 34
+      Width = 32
       Height = 25
       Caption = '->|'
       OnClick = btnUltimaClick
     end
     object Rotar90dcha: TSpeedButton
-      Left = 641
+      Left = 588
       Top = 8
       Width = 88
       Height = 25
@@ -138,7 +137,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = Rotar90dchaClick
     end
     object btnAjustar: TSpeedButton
-      Left = 181
+      Left = 183
       Top = 8
       Width = 44
       Height = 25
