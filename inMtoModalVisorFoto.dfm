@@ -89,12 +89,11 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
-      Width = 751
+      Width = 745
       Height = 94
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
-      ExplicitWidth = 745
     end
   end
   object pnlZoom: TPanel

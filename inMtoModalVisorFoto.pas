@@ -78,7 +78,7 @@ type
     procedure CargarCarrusel;
     procedure ActualizarBotonesNavegacion;
     procedure MostrarImagenPorIndice(AIndice: Integer);
-    procedure ResaltarMiniatura(AIndice: Integer);
+    procedure ResaltarMiniatura(AIndice: Integer; bClick:Boolean = false);
     function CalcularFactorFit: Double;
   public
     procedure MostrarImagen(const ARutaArchivo: string);
@@ -198,11 +198,12 @@ begin
   if Sender is TImage then
   begin
     MostrarImagenPorIndice(TImage(Sender).Tag);
-    ResaltarMiniatura(TImage(Sender).Tag);
+    ResaltarMiniatura(TImage(Sender).Tag, true);
   end;
 end;
 
-procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer);
+procedure TfrmMtoVisorFoto.ResaltarMiniatura(AIndice: Integer;
+                                             bClick:Boolean = false);
 var
   i: Integer;
   Img: TImage;
@@ -238,6 +239,7 @@ begin
         MiniaturaSeleccionada := Img;
     end;
   end;
+  if not bClick then
   if Assigned(MiniaturaSeleccionada) then
   begin
     // Cada miniatura ocupa 110 píxeles (100 de ancho + 10 de separación)

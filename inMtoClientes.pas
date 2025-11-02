@@ -8,7 +8,7 @@ uses
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg,
-  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
+  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses, DateUtils,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
   dxBarBuiltInMenu, cxPC, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
@@ -18,7 +18,7 @@ uses
   dxSkinDarkSide, dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle,
   dxSkinFoggy, dxSkinGlassOceans, dxSkinHighContrast, dxSkiniMaginary,
   dxSkinLilian, dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin,
-  dxSkinMetropolis, dxSkinMetropolisDark, dxSkinMoneyTwins,
+  dxSkinMetropolis, dxSkinMetropolisDark, dxSkinMoneyTwins, ShellAPI,
   dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
   dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinOffice2010Black,
   dxSkinOffice2010Blue, dxSkinOffice2010Silver, dxSkinOffice2013DarkGray,
@@ -236,6 +236,7 @@ type
     dtfldFotosFecha: TDateField;
     blbfldFotosMiniatura: TBlobField;
     cdsFotosRutaFoto: TStringField;
+    lblProgreso: TcxLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cxgrdbclmncxgrdtvtv1DESCRIPCION_HISTORIAPropertiesButtonClick(
@@ -265,7 +266,9 @@ type
     //procedure pcDetalleClientesChange(Sender: TObject);
     procedure cxButton1Click(Sender: TObject);
     procedure pcDetalleClientesChange(Sender: TObject);
+    procedure img1DblClick(Sender: TObject);
   private
+    procedure CrearTodasMiniaturas;
     procedure CargaFotos;
     procedure SincronizarThumbnails;
     function ObtenerRutaPaciente: string;
@@ -284,6 +287,10 @@ type
     procedure CrearClientDataSetFotos;
     procedure LiberarClientDataSetFotos;
     procedure VaciarClientDataSetFotos;
+    procedure ProcesarMiniaturasPaciente(
+                                      const ARutaPaciente: string;
+                                      var ATotalFotos, AFotosGeneradas: Integer;
+                                      AErrores: TStringList);
   public
     { Public declarations }
   private
@@ -336,6 +343,12 @@ begin
   tvLineasFacturacion.DataController.DataSource := dmmClientes.dsLinFac;
   cdsFotos := nil;
   inherited;
+end;
+
+procedure TfrmMtoClientes.img1DblClick(Sender: TObject);
+begin
+  inherited;
+  CrearTodasMiniaturas;
 end;
 
 procedure TfrmMtoClientes.MostrarBlocdeNotas;
@@ -712,7 +725,7 @@ begin
 end;
 
 function TfrmMtoClientes.CrearThumbnail(const ARutaImagen: string;
-  ASize: Integer): TBitmap;
+                                        ASize: Integer): TBitmap;
 var
   ImagenOriginal: TJPEGImage;
   Proporcion: Double;
@@ -757,6 +770,156 @@ begin
   end;
 end;
 
+procedure TfrmMtoClientes.CrearTodasMiniaturas;
+var
+  SearchRec: TSearchRec;
+  CarpetaPaciente, CarpetaThumbnails: string;
+  TotalPacientes, PacientesProcesados: Integer;
+  TotalFotos, FotosGeneradas: Integer;
+  Errores: TStringList;
+  Inicio: TDateTime;
+begin
+  if (MessageDlg('Este proceso generará miniaturas para TODOS los pacientes. ' +
+                'Puede tardar varios minutos. ¿Continuar?',
+                mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then
+    Exit;
+  Screen.Cursor := crHourGlass;
+  Errores := TStringList.Create;
+  try
+    Inicio := Now;
+    TotalPacientes := 0;
+    PacientesProcesados := 0;
+    TotalFotos := 0;
+    FotosGeneradas := 0;
+    // Contar total de carpetas de pacientes
+    if FindFirst(FFotosPath + '*.*', faDirectory, SearchRec) = 0 then
+    begin
+      repeat
+        if (SearchRec.Name <> '.') and (SearchRec.Name <> '..') and
+           (SearchRec.Attr and faDirectory = faDirectory) then
+          Inc(TotalPacientes);
+      until FindNext(SearchRec) <> 0;
+      FindClose(SearchRec);
+    end;
+    if TotalPacientes = 0 then
+    begin
+      ShowMessage('No se encontraron carpetas de pacientes');
+      Exit;
+    end;
+    // Recorrer todas las carpetas de pacientes
+    if FindFirst(FFotosPath + '*.*', faDirectory, SearchRec) = 0 then
+    begin
+      repeat
+        if (SearchRec.Name <> '.') and (SearchRec.Name <> '..') and
+           (SearchRec.Attr and faDirectory = faDirectory) then
+        begin
+          Inc(PacientesProcesados);
+          CarpetaPaciente :=
+                      IncludeTrailingPathDelimiter(FFotosPath + SearchRec.Name);
+          // Actualizar estado en pantalla
+          Application.ProcessMessages;
+          // Si tienes un label de estado:
+           lblProgreso.Caption := Format('Procesando paciente %d de %d: %s',
+                         [PacientesProcesados, TotalPacientes, SearchRec.Name]);
+          try
+            // Procesar este paciente
+            ProcesarMiniaturasPaciente(CarpetaPaciente,
+                                       TotalFotos,
+                                       FotosGeneradas, Errores);
+          except
+            on E: Exception do
+              Errores.Add(Format('Error en carpeta %s: %s',
+                                 [SearchRec.Name, E.Message]));
+          end;
+        end;
+      until FindNext(SearchRec) <> 0;
+      FindClose(SearchRec);
+    end;
+
+    // Mostrar resumen
+    ShowMessage(Format('Proceso completado en %d segundos:%s' +
+                      'Pacientes procesados: %d%s' +
+                      'Total fotos encontradas: %d%s' +
+                      'Miniaturas generadas: %d%s' +
+                      'Errores: %d',
+                      [SecondsBetween(Now, Inicio), sLineBreak,
+                       PacientesProcesados, sLineBreak,
+                       TotalFotos, sLineBreak,
+                       FotosGeneradas, sLineBreak,
+                       Errores.Count]));
+    // Si hubo errores, mostrarlos
+    if Errores.Count > 0 then
+    begin
+      if MessageDlg('Hubo errores durante el proceso. ¿Desea ver el detalle?',
+                    mtWarning, [mbYes, mbNo], 0) = mrYes then
+      begin
+        // Guardar log de errores
+        Errores.SaveToFile(FFotosPath + 'errores_miniaturas.txt');
+        ShellExecute(0, 'open', PChar(FFotosPath + 'errores_miniaturas.txt'),
+                     nil, nil, SW_SHOW);
+      end;
+    end;
+
+  finally
+    Errores.Free;
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TfrmMtoClientes.ProcesarMiniaturasPaciente(
+                                      const ARutaPaciente: string;
+                                      var ATotalFotos, AFotosGeneradas: Integer;
+                                      AErrores: TStringList);
+var
+  SR: TSearchRec;
+  RutaThumbnails: string;
+  ARutaArchivo, ARutaThumbnail: string;
+  Thumbnail: TBitmap;
+  CodigoPaciente: string;
+begin
+  // Extraer código de paciente del nombre de carpeta
+  CodigoPaciente :=
+      SoloNumeros(ExtractFileName(ExcludeTrailingPathDelimiter(ARutaPaciente)));
+
+  // Crear carpeta de thumbnails
+  RutaThumbnails := FFotosPath + '.thumbnails\' + CodigoPaciente + '\';
+  if not DirectoryExists(RutaThumbnails) then
+    ForceDirectories(RutaThumbnails);
+  // Procesar JPG
+  if FindFirst(ARutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
+  begin
+    repeat
+      if (SR.Name <> '.') and (SR.Name <> '..') then
+      begin
+        Inc(ATotalFotos);
+        ARutaArchivo := ARutaPaciente + SR.Name;
+        ARutaThumbnail := RutaThumbnails + ChangeFileExt(SR.Name, '_thumb.bmp');
+        // Generar solo si no existe o está desactualizado
+        if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
+        begin
+          try
+            Thumbnail := CrearThumbnail(ARutaArchivo, 160);
+            try
+              if Thumbnail <> nil then
+              begin
+                Thumbnail.SaveToFile(ARutaThumbnail);
+                Inc(AFotosGeneradas);
+              end;
+            finally
+              Thumbnail.Free;
+            end;
+          except
+            on E: Exception do
+              AErrores.Add(Format('%s\%s: %s',
+                                  [CodigoPaciente, SR.Name, E.Message]));
+          end;
+        end;
+      end;
+    until FindNext(SR) <> 0;
+    FindClose(SR);
+  end;
+end;
+
 procedure TfrmMtoClientes.SincronizarThumbnails;
 var
   SR: TSearchRec;
@@ -768,7 +931,7 @@ begin
 //  if FCodPaciente = '' then Exit;
 //  if FSincronizando then Exit;
   //FSincronizando := True;
-  Screen.Cursor := crHourGlass;
+  Screen.Cursor:= crHourGlass;
   try
     RutaPaciente := ObtenerRutaPaciente;
     if RutaPaciente = '' then
