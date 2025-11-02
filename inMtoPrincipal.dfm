@@ -2,8 +2,8 @@ object frmOpenApp: TfrmOpenApp
   Left = 0
   Top = 68
   Caption = 'SubocaSoft Version 109 Veri*Factu'
-  ClientHeight = 561
-  ClientWidth = 1093
+  ClientHeight = 616
+  ClientWidth = 1084
   Color = clAqua
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -1212,8 +1212,8 @@ object frmOpenApp: TfrmOpenApp
   TextHeight = 21
   object dxstsbr1: TdxStatusBar
     Left = 0
-    Top = 527
-    Width = 1093
+    Top = 582
+    Width = 1084
     Height = 34
     Margins.Left = 2
     Margins.Top = 2
@@ -1241,24 +1241,19 @@ object frmOpenApp: TfrmOpenApp
         MinWidth = 160
         Width = 160
       end>
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -17
-    Font.Name = 'Lucida Sans Unicode'
-    Font.Style = []
     ExplicitTop = 518
     ExplicitWidth = 1087
   end
   object Memo: TcxMemo
     Left = 0
-    Top = 438
+    Top = 493
     Align = alBottom
     TabOrder = 1
     Visible = False
     ExplicitTop = 429
     ExplicitWidth = 1087
     Height = 89
-    Width = 1093
+    Width = 1084
   end
   object tmr1: TTimer
     OnTimer = tmr1Timer
@@ -1397,13 +1392,13 @@ object frmOpenApp: TfrmOpenApp
     StyleFocused.LookAndFeel.NativeStyle = True
     StyleHot.LookAndFeel.Kind = lfOffice11
     StyleHot.LookAndFeel.NativeStyle = True
+    StyleReadOnly.LookAndFeel.Kind = lfOffice11
+    StyleReadOnly.LookAndFeel.NativeStyle = True
     Left = 192
     Top = 144
     PixelsPerInch = 96
   end
   object cxlkndflcntrlrLookAndFeelController1: TcxLookAndFeelController
-    Kind = lfFlat
-    SkinName = 'SkinOffice2007Blue'
     Left = 72
     Top = 144
   end

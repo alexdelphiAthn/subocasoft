@@ -471,8 +471,40 @@ end;
 //end;
 
 procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
+var
+  MousePos: TPoint;
+  CenterX, CenterY: Integer;
+  ScrollPosX, ScrollPosY: Integer;
+  ZoomAnterior: Double;
 begin
-  btnZoomInClick(Sender);
+  // Guardar el zoom anterior
+  ZoomAnterior := FZoomFactor;
+
+  // Obtener la posición del mouse en coordenadas del Image1
+  MousePos := Image1.ScreenToClient(Mouse.CursorPos);
+
+  // Calcular el punto en la imagen original (antes del zoom)
+  CenterX := Round(MousePos.X / ZoomAnterior);
+  CenterY := Round(MousePos.Y / ZoomAnterior);
+
+  // Aplicar el zoom (incrementar 0.5 o lo que prefieras)
+  if FZoomFactor < 5.0 then
+  begin
+    FZoomFactor := FZoomFactor + 0.5;
+    AplicarZoom;
+
+    // Calcular la nueva posición del punto clickeado después del zoom
+    ScrollPosX := Round(CenterX * FZoomFactor) - (ScrollBox1.ClientWidth div 2);
+    ScrollPosY := Round(CenterY * FZoomFactor) - (ScrollBox1.ClientHeight div 2);
+
+    // Asegurar que no se sale de los límites
+    if ScrollPosX < 0 then ScrollPosX := 0;
+    if ScrollPosY < 0 then ScrollPosY := 0;
+
+    // Centrar el ScrollBox en el punto clickeado
+    ScrollBox1.HorzScrollBar.Position := ScrollPosX;
+    ScrollBox1.VertScrollBar.Position := ScrollPosY;
+  end;
 end;
 
 procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject; Button: TMouseButton;
