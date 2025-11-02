@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels, System.Diagnostics,
-  cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
+  cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue, Uni,
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg,
   cxCheckBox, cxTextEdit, cxGridLevel, cxClasses, DateUtils,
@@ -267,7 +267,14 @@ type
     procedure cxButton1Click(Sender: TObject);
     procedure pcDetalleClientesChange(Sender: TObject);
     procedure img1DblClick(Sender: TObject);
+    procedure lblProgresoDblClick(Sender: TObject);
   private
+    function ObtenerDatosPaciente(const ACodigoPaciente: string;
+                                  out ARazonSocial: string): Boolean;
+    function RenombrarCarpetaPaciente(const ACarpetaActual: string;
+                                      const ACodigoPaciente: string;
+                                      const ARazonSocial: string;
+                                      out ANuevaCarpeta: string): Boolean;
     procedure CrearTodasMiniaturas;
     procedure CargaFotos;
     procedure SincronizarThumbnails;
@@ -287,6 +294,7 @@ type
     procedure CrearClientDataSetFotos;
     procedure LiberarClientDataSetFotos;
     procedure VaciarClientDataSetFotos;
+    procedure RenombrarCarpetasPacientes;
     procedure ProcesarMiniaturasPaciente(
                                       const ARutaPaciente: string;
                                       var ATotalFotos, AFotosGeneradas: Integer;
@@ -349,6 +357,12 @@ procedure TfrmMtoClientes.img1DblClick(Sender: TObject);
 begin
   inherited;
   CrearTodasMiniaturas;
+end;
+
+procedure TfrmMtoClientes.lblProgresoDblClick(Sender: TObject);
+begin
+  inherited;
+  RenombrarCarpetasPacientes;
 end;
 
 procedure TfrmMtoClientes.MostrarBlocdeNotas;
@@ -835,7 +849,6 @@ begin
       until FindNext(SearchRec) <> 0;
       FindClose(SearchRec);
     end;
-
     // Mostrar resumen
     ShowMessage(Format('Proceso completado en %d segundos:%s' +
                       'Pacientes procesados: %d%s' +
@@ -859,7 +872,6 @@ begin
                      nil, nil, SW_SHOW);
       end;
     end;
-
   finally
     Errores.Free;
     Screen.Cursor := crDefault;
@@ -917,6 +929,189 @@ begin
       end;
     until FindNext(SR) <> 0;
     FindClose(SR);
+  end;
+end;
+
+// *** FUNCIÓN PARA OBTENER DATOS DEL PACIENTE ***
+function TfrmMtoClientes.ObtenerDatosPaciente(const ACodigoPaciente: string;
+                                             out ARazonSocial: string): Boolean;
+var
+  qryTemp: TUniQuery;
+begin
+  Result := False;
+  ARazonSocial := '';
+
+  if Trim(ACodigoPaciente) = '' then
+    Exit;
+
+  qryTemp := TUniQuery.Create(nil);
+  try
+    qryTemp.Connection := dmmClientes.unqryClientes.Connection;
+    qryTemp.SQL.Text := 'SELECT RAZONSOCIAL_CLIENTE ' +
+                        'FROM suboc_clientes ' +
+                        'WHERE CODIGO_CLIENTE = :pCodigo';
+    qryTemp.ParamByName('pCodigo').AsString := ACodigoPaciente;
+    try
+      qryTemp.Open;
+      if not qryTemp.IsEmpty then
+      begin
+        ARazonSocial :=
+                      Trim(qryTemp.FieldByName('RAZONSOCIAL_CLIENTE').AsString);
+        Result := True;
+      end;
+      qryTemp.Close;
+    except
+      on E: Exception do
+      begin
+        Result := False;
+      end;
+    end;
+  finally
+    qryTemp.Free;
+  end;
+end;
+
+// *** FUNCIÓN PARA RENOMBRAR CARPETA ***
+function TfrmMtoClientes.RenombrarCarpetaPaciente(const ACarpetaActual: string;
+                                                   const ACodigoPaciente: string;
+                                                   const ARazonSocial: string;
+                                                   out ANuevaCarpeta: string): Boolean;
+var
+  NombreLimpio: string;
+  RutaBase: string;
+begin
+  Result := False;
+  ANuevaCarpeta := '';
+
+  // Obtener ruta base (sin el nombre de la carpeta actual)
+  RutaBase := ExtractFilePath(ExcludeTrailingPathDelimiter(ACarpetaActual));
+
+  // Limpiar caracteres inválidos del nombre
+  NombreLimpio := ARazonSocial;
+
+  // Crear nuevo nombre: "CODIGO RAZONSOCIAL"
+  ANuevaCarpeta := RutaBase + ACodigoPaciente + ' ' + NombreLimpio + '\';
+
+  // Si ya tiene el nombre correcto, no hacer nada
+  if SameText(ACarpetaActual, ANuevaCarpeta) then
+  begin
+    Result := True;
+    Exit;
+  end;
+
+  // Si ya existe una carpeta con ese nombre, no renombrar
+  if DirectoryExists(ANuevaCarpeta) then
+  begin
+    // Solo retornar true si es exactamente la misma carpeta
+    Result := SameText(ACarpetaActual, ANuevaCarpeta);
+    Exit;
+  end;
+
+  // Intentar renombrar
+  try
+    Result := RenameFile(ExcludeTrailingPathDelimiter(ACarpetaActual),
+                        ExcludeTrailingPathDelimiter(ANuevaCarpeta));
+  except
+    on E: Exception do
+      Result := False;
+  end;
+end;
+
+// *** VERSIÓN SOLO PARA RENOMBRAR (SIN GENERAR MINIATURAS) ***
+procedure TfrmMtoClientes.RenombrarCarpetasPacientes;
+var
+  SearchRec: TSearchRec;
+  CarpetaActual, NuevaCarpeta: string;
+  TotalCarpetas, CarpetasRenombradas, CarpetasNoEncontradas: Integer;
+  Errores: TStringList;
+  CodigoPaciente, RazonSocial: string;
+  ListaCarpetas: TStringList;
+  i: Integer;
+begin
+  if MessageDlg('Este proceso renombrará TODAS las carpetas de pacientes ' +
+                'al formato: CODIGOPACIENTE RAZONSOCIAL' +
+                 sLineBreak + sLineBreak +
+                '¿Continuar?',
+                mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
+    Exit;
+
+  Screen.Cursor := crHourGlass;
+  Errores := TStringList.Create;
+  ListaCarpetas := TStringList.Create;
+  try
+    TotalCarpetas := 0;
+    CarpetasRenombradas := 0;
+    CarpetasNoEncontradas := 0;
+
+    // Recopilar carpetas
+    if FindFirst(FFotosPath + '*.*', faDirectory, SearchRec) = 0 then
+    begin
+      repeat
+        if (SearchRec.Name <> '.') and (SearchRec.Name <> '..') and
+           (SearchRec.Attr and faDirectory = faDirectory) then
+        begin
+          ListaCarpetas.Add(SearchRec.Name);
+          Inc(TotalCarpetas);
+        end;
+      until FindNext(SearchRec) <> 0;
+      FindClose(SearchRec);
+    end;
+
+    // Procesar carpetas
+    for i := 0 to ListaCarpetas.Count - 1 do
+    begin
+      CarpetaActual := IncludeTrailingPathDelimiter(FFotosPath + ListaCarpetas[i]);
+      CodigoPaciente := SoloNumeros(ListaCarpetas[i]);
+
+      if ObtenerDatosPaciente(CodigoPaciente, RazonSocial) then
+      begin
+        if RenombrarCarpetaPaciente(CarpetaActual, CodigoPaciente,
+                                    RazonSocial, NuevaCarpeta) then
+        begin
+          if not SameText(CarpetaActual, NuevaCarpeta) then
+          begin
+            Inc(CarpetasRenombradas);
+            Errores.Add(Format('✓ RENOMBRADO: "%s" -> "%s"',
+                              [ListaCarpetas[i],
+                               ExtractFileName(ExcludeTrailingPathDelimiter(NuevaCarpeta))]));
+          end;
+        end
+        else
+        begin
+          Errores.Add(Format('✗ ERROR: No se pudo renombrar "%s"', [ListaCarpetas[i]]));
+        end;
+      end
+      else
+      begin
+        Inc(CarpetasNoEncontradas);
+        Errores.Add(Format('⚠ NO ENCONTRADO EN BD: "%s" (Código: %s)',
+                          [ListaCarpetas[i], CodigoPaciente]));
+      end;
+    end;
+
+    ShowMessage(Format('Proceso completado:%s' +
+                      'Total carpetas: %d%s' +
+                      'Carpetas renombradas: %d%s' +
+                      'No encontradas en BD: %d',
+                      [sLineBreak, TotalCarpetas, sLineBreak,
+                       CarpetasRenombradas, sLineBreak,
+                       CarpetasNoEncontradas]));
+
+    if Errores.Count > 0 then
+    begin
+      if MessageDlg('¿Ver log de cambios?', mtInformation, [mbYes, mbNo], 0) = mrYes then
+      begin
+        Errores.SaveToFile(FFotosPath + 'log_renombrado_carpetas.txt');
+        ShellExecute(Application.Handle, 'open',
+                     PChar(FFotosPath + 'log_renombrado_carpetas.txt'),
+                     nil, nil, SW_SHOWNORMAL);
+      end;
+    end;
+
+  finally
+    Errores.Free;
+    ListaCarpetas.Free;
+    Screen.Cursor := crDefault;
   end;
 end;
 

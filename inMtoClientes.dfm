@@ -4,6 +4,7 @@ inherited frmMtoClientes: TfrmMtoClientes
   Caption = 'Pacientes'
   ClientHeight = 601
   ClientWidth = 1248
+  ExplicitLeft = -136
   ExplicitWidth = 1264
   ExplicitHeight = 640
   PixelsPerInch = 96
@@ -602,6 +603,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Left = 828
           Top = 51
           TabOrder = 16
+          OnDblClick = lblProgresoDblClick
         end
       end
       object pnl2: TPanel
@@ -618,7 +620,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 294
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = tsFotos
+          Properties.ActivePage = cxtbsht1
           Properties.CustomButtons.Buttons = <>
           OnChange = pcDetalleClientesChange
           ClientRectBottom = 290
