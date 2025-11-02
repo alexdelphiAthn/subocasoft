@@ -73,6 +73,7 @@ type
     //FListaMiniaturas: TStringList;
     FIndiceActual: Integer;
     FClientDataSet: TClientDataSet;
+    //FLastMouseX, FLastMouseY : Integer;
     procedure CargarImagen(const ARutaArchivo: string);
     procedure AplicarZoom;
     procedure ActualizarLabelZoom;
@@ -520,62 +521,74 @@ end;
 //    MostrarImagenPorIndice(dxImageSlider1.ItemIndex);
 //end;
 
+// Y ahora usa esas coordenadas en el DblClick:
+
 procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
 var
-  PuntoMouse: TPoint;
-  PuntoAbsolutoEnImagenEscalada: TPoint;
-  PuntoEnImagenOriginal: TPoint;
-  NuevaPosicionDespuesZoom: TPoint;
-  ScrollPosX, ScrollPosY: Integer;
-  ZoomAnterior: Double;
+  PuntoClick: TPoint;
+  PuntoEnImagenEscalada: TPoint;
+  PuntoEnOriginal: record X, Y: Double; end;
+  PuntoDespuesZoom: record X, Y: Double; end;
+  NuevaPosScroll: TPoint;
+  NuevoAnchoImagen, NuevoAltoImagen: Integer;
+  ZoomAnterior, NuevoZoom: Double;
 begin
+  if FOriginalBitmap.Empty then Exit;
+  if FZoomFactor >= 5.0 then Exit;
   ZoomAnterior := FZoomFactor;
-
-  // 1. Obtener posición del mouse en el ScrollBox
-  PuntoMouse := ScrollBox1.ScreenToClient(Mouse.CursorPos);
-
-  // 2. Calcular posición ABSOLUTA en la imagen escalada actual
-  PuntoAbsolutoEnImagenEscalada.X := PuntoMouse.X + ScrollBox1.HorzScrollBar.Position;
-  PuntoAbsolutoEnImagenEscalada.Y := PuntoMouse.Y + ScrollBox1.VertScrollBar.Position;
-
-  // 3. Convertir a coordenadas de la imagen ORIGINAL (sin zoom)
-  PuntoEnImagenOriginal.X := Round(PuntoAbsolutoEnImagenEscalada.X / ZoomAnterior);
-  PuntoEnImagenOriginal.Y := Round(PuntoAbsolutoEnImagenEscalada.Y / ZoomAnterior);
-
-  // 4. Aplicar el nuevo zoom
-  if FZoomFactor < 5.0 then
-  begin
-    FZoomFactor := FZoomFactor + 0.5;
-    AplicarZoom;
-
-    // 5. Calcular dónde estará ese punto después del zoom
-    NuevaPosicionDespuesZoom.X := Round(PuntoEnImagenOriginal.X * FZoomFactor);
-    NuevaPosicionDespuesZoom.Y := Round(PuntoEnImagenOriginal.Y * FZoomFactor);
-
-    // 6. Para centrar ese punto, el scroll debe ser:
-    //    posición_del_punto - (mitad_del_area_visible)
-    ScrollPosX := NuevaPosicionDespuesZoom.X - (ScrollBox1.ClientWidth div 2);
-    ScrollPosY := NuevaPosicionDespuesZoom.Y - (ScrollBox1.ClientHeight div 2);
-
-    // 7. Limitar a rangos válidos
-    ScrollPosX := Max(0, ScrollPosX);
-    ScrollPosY := Max(0, ScrollPosY);
-
-    // Límite superior
-    if ScrollPosX > Image1.Width - ScrollBox1.ClientWidth then
-      ScrollPosX := Max(0, Image1.Width - ScrollBox1.ClientWidth);
-    if ScrollPosY > Image1.Height - ScrollBox1.ClientHeight then
-      ScrollPosY := Max(0, Image1.Height - ScrollBox1.ClientHeight);
-
-    // 8. Aplicar el scroll para centrar
-    ScrollBox1.HorzScrollBar.Position := ScrollPosX;
-    ScrollBox1.VertScrollBar.Position := ScrollPosY;
-  end;
+  NuevoZoom := ZoomAnterior + 0.5;
+  // Obtener posición del mouse
+  GetCursorPos(PuntoClick);
+  PuntoClick := ScrollBox1.ScreenToClient(PuntoClick);
+  // Sumar scroll actual para obtener posición absoluta en imagen escalada
+  PuntoEnImagenEscalada.X := PuntoClick.X + ScrollBox1.HorzScrollBar.Position;
+  PuntoEnImagenEscalada.Y := PuntoClick.Y + ScrollBox1.VertScrollBar.Position;
+  // Convertir a coordenadas de imagen original (mantener precisión con Double)
+  PuntoEnOriginal.X := PuntoEnImagenEscalada.X / ZoomAnterior;
+  PuntoEnOriginal.Y := PuntoEnImagenEscalada.Y / ZoomAnterior;
+  // Validar que está dentro de la imagen
+  if ( (PuntoEnOriginal.X < 0) or
+       (PuntoEnOriginal.X >= FOriginalBitmap.Width) or
+       (PuntoEnOriginal.Y < 0) or
+       (PuntoEnOriginal.Y >= FOriginalBitmap.Height) ) then
+    Exit;
+  // Calcular tamaño futuro de la imagen
+  NuevoAnchoImagen := Round(FOriginalBitmap.Width * NuevoZoom);
+  NuevoAltoImagen := Round(FOriginalBitmap.Height * NuevoZoom);
+  // Calcular dónde estará el punto después del zoom (mantener Double)
+  PuntoDespuesZoom.X := PuntoEnOriginal.X * NuevoZoom;
+  PuntoDespuesZoom.Y := PuntoEnOriginal.Y * NuevoZoom;
+  // Aplicar zoom
+  FZoomFactor := NuevoZoom;
+  AplicarZoom;
+  // Calcular scroll para centrar EXACTAMENTE (usar Double hasta el final)
+  NuevaPosScroll.X := Round(PuntoDespuesZoom.X -
+                            (ScrollBox1.ClientWidth / 2.0));
+  NuevaPosScroll.Y := Round(PuntoDespuesZoom.Y -
+                            (ScrollBox1.ClientHeight / 2.0));
+  // Aplicar límites
+  NuevaPosScroll.X := Max(0, Min(NuevaPosScroll.X, NuevoAnchoImagen -
+                                                   ScrollBox1.ClientWidth));
+  NuevaPosScroll.Y := Max(0, Min(NuevaPosScroll.Y, NuevoAltoImagen -
+                                                   ScrollBox1.ClientHeight));
+  // Asegurar que no sean negativos por si
+  // la imagen es más pequeña que el ScrollBox
+  if NuevaPosScroll.X < 0 then NuevaPosScroll.X := 0;
+  if NuevaPosScroll.Y < 0 then NuevaPosScroll.Y := 0;
+  // Aplicar scroll
+  ScrollBox1.HorzScrollBar.Position := NuevaPosScroll.X;
+  ScrollBox1.VertScrollBar.Position := NuevaPosScroll.Y;
 end;
 
-procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject;
+                                           Button: TMouseButton;
+                                           Shift: TShiftState;
+                                           X, Y: Integer);
 begin
+  // Guardar posición del mouse
+//  FLastMouseX := X;
+//  FLastMouseY := Y;
+
   if Button = mbLeft then
   begin
     FIsDragging := True;
@@ -586,7 +599,6 @@ begin
     Image1.Cursor := crDrag;
   end;
 end;
-
 procedure TfrmMtoVisorFoto.Image1MouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);
 var

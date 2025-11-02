@@ -25,7 +25,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Color = clGray
     ParentColor = False
     TabOrder = 0
-    ExplicitHeight = 392
+    ExplicitWidth = 743
+    ExplicitHeight = 398
     object Image1: TImage
       Left = 0
       Top = 0
@@ -45,6 +46,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Height = 140
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 439
+    ExplicitWidth = 743
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
@@ -53,8 +56,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
-      ExplicitTop = 6
-      ExplicitHeight = 117
+      ExplicitWidth = 741
     end
   end
   object pnlZoom: TPanel
