@@ -27,20 +27,19 @@ type
   TfrmMtoVisorFoto = class(TForm)
     ScrollBox1: TScrollBox;
     Image1: TImage;
-    pnlNavigation: TPanel;
     pnlCarrusel: TPanel;
-    btnAnterior: TSpeedButton;
-    btnSiguiente: TSpeedButton;
     pnlZoom: TPanel;
     lblZoom: TLabel;
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
-    SpeedButton5: TSpeedButton;
+    btnAnterior: TSpeedButton;
+    btnSiguiente: TSpeedButton;
+    ScrollBoxMiniaturas: TScrollBox;
     btnPrimera: TSpeedButton;
     btnUltima: TSpeedButton;
-    ScrollBoxMiniaturas: TScrollBox;
+    Rotar90dcha: TSpeedButton;
+    btnAjustar: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure btnZoomInClick(Sender: TObject);
     procedure btnZoomOutClick(Sender: TObject);
@@ -62,6 +61,8 @@ type
     procedure btnPrimeraClick(Sender: TObject);
     procedure btnUltimaClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure Rotar90dchaClick(Sender: TObject);
+    procedure btnAjustarClick(Sender: TObject);
   private
     FZoomFactor: Double;
     FIsDragging: Boolean;
@@ -110,7 +111,7 @@ begin
   // Configurar carrusel
   //dxImageSlider1.ShowNavigation := True;
 //  dxImageSlider1.Height := 120;
-  pnlCarrusel.Height := 130;
+  pnlCarrusel.Height := 140;
   pnlCarrusel.Align := alBottom;
   // Ocultar navegación por defecto
   //pnlNavigation.Visible := False;
@@ -229,7 +230,7 @@ begin
       else
       begin
         Shap.Pen.Color := clBlack;
-        Shap.Pen.Width := 1;
+        Shap.Pen.Width := 2;
       end;
     end;
     if ScrollBoxMiniaturas.Controls[i] is TImage then
@@ -243,7 +244,7 @@ begin
   if Assigned(MiniaturaSeleccionada) then
   begin
     // Cada miniatura ocupa 110 píxeles (100 de ancho + 10 de separación)
-    AnchoMiniatura := 110;
+    AnchoMiniatura := 140;
     // Calcular cuántas miniaturas caben en el área visible
     MiniaturasPorPantalla := ScrollBoxMiniaturas.ClientWidth div AnchoMiniatura;
     // Calcular cuántas miniaturas deberían quedar a la izquierda para centrar la seleccionada
@@ -256,6 +257,52 @@ begin
       PosicionDestino := 0;
     ScrollBoxMiniaturas.HorzScrollBar.Position := PosicionDestino;
     ScrollBoxMiniaturas.Update;
+  end;
+end;
+
+procedure TfrmMtoVisorFoto.Rotar90dchaClick(Sender: TObject);
+var
+  BitmapRotado: TBitmap;
+  XForm: TXForm;
+begin
+  if FOriginalBitmap.Empty then Exit;
+
+  Screen.Cursor := crHourGlass;
+  try
+    BitmapRotado := TBitmap.Create;
+    try
+      // El ancho del rotado es el alto del original y viceversa
+      BitmapRotado.Width := FOriginalBitmap.Height;
+      BitmapRotado.Height := FOriginalBitmap.Width;
+      BitmapRotado.PixelFormat := FOriginalBitmap.PixelFormat;
+
+      // Configurar el modo de mapeo para rotación
+      SetGraphicsMode(BitmapRotado.Canvas.Handle, GM_ADVANCED);
+
+      // Crear la matriz de transformación para rotar 90º a la derecha
+      XForm.eM11 := 0;   // Rotación 90º derecha
+      XForm.eM12 := 1;
+      XForm.eM21 := -1;  // AQUÍ estaba el error, faltaba el signo menos
+      XForm.eM22 := 0;
+      XForm.eDx := BitmapRotado.Width;  // Traslación en X
+      XForm.eDy := 0;    // Traslación en Y
+
+      SetWorldTransform(BitmapRotado.Canvas.Handle, XForm);
+
+      // Dibujar la imagen original con la transformación aplicada
+      BitmapRotado.Canvas.Draw(0, 0, FOriginalBitmap);
+
+      // Reemplazar el bitmap original
+      FOriginalBitmap.Assign(BitmapRotado);
+
+      // Recalcular zoom y aplicar
+      FZoomFactor := CalcularFactorFit;
+      AplicarZoom;
+    finally
+      BitmapRotado.Free;
+    end;
+  finally
+    Screen.Cursor := crDefault;
   end;
 end;
 
@@ -315,8 +362,8 @@ begin
     Img.Parent := ScrollBoxMiniaturas;
     Img.Left := X;
     Img.Top := 5;
-    Img.Width := 100;
-    Img.Height := 100;
+    Img.Width := 140;
+    Img.Height := 130;
     Img.Stretch := True;
     Img.Proportional := True;
     Img.Center := True;
@@ -349,7 +396,7 @@ begin
     finally
       BMPImage.Free;
     end;
-    Inc(X, 110);
+    Inc(X, 150);
     FClientDataSet.Next;
   end;
   // AÑADIR ESTAS LÍNEAS:
@@ -440,6 +487,15 @@ procedure TfrmMtoVisorFoto.btnZoom100Click(Sender: TObject);
 begin
   FZoomFactor := 1.0;
   AplicarZoom;
+end;
+
+procedure TfrmMtoVisorFoto.btnAjustarClick(Sender: TObject);
+begin
+  if (FIndiceActual >= 0) and (not FOriginalBitmap.Empty) then
+  begin
+    FZoomFactor := CalcularFactorFit;
+    AplicarZoom;
+  end;
 end;
 
 procedure TfrmMtoVisorFoto.btnAnteriorClick(Sender: TObject);

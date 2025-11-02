@@ -11,22 +11,23 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Font.Name = 'Tahoma'
   Font.Style = []
   KeyPreview = True
+  OldCreateOrder = True
   WindowState = wsMaximized
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnResize = FormResize
+  PixelsPerInch = 96
   TextHeight = 13
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 41
     Width = 747
-    Height = 402
+    Height = 415
     Align = alClient
     Color = clGray
     ParentColor = False
     TabOrder = 0
-    ExplicitWidth = 741
-    ExplicitHeight = 393
+    ExplicitHeight = 408
     object Image1: TImage
       Left = 0
       Top = 0
@@ -39,66 +40,23 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnMouseUp = Image1MouseUp
     end
   end
-  object pnlNavigation: TPanel
-    Left = 0
-    Top = 443
-    Width = 747
-    Height = 41
-    Align = alBottom
-    TabOrder = 1
-    ExplicitTop = 434
-    ExplicitWidth = 741
-    object btnAnterior: TSpeedButton
-      Left = 127
-      Top = 6
-      Width = 75
-      Height = 25
-      Caption = '<- Anterior'
-      OnClick = btnAnteriorClick
-    end
-    object btnSiguiente: TSpeedButton
-      Left = 207
-      Top = 6
-      Width = 75
-      Height = 25
-      Caption = 'Siguiente ->'
-      OnClick = btnSiguienteClick
-    end
-    object btnPrimera: TSpeedButton
-      Left = 46
-      Top = 6
-      Width = 75
-      Height = 25
-      Caption = '|<- Primera'
-      OnClick = btnPrimeraClick
-    end
-    object btnUltima: TSpeedButton
-      Left = 288
-      Top = 6
-      Width = 96
-      Height = 25
-      Caption = #218'ltima ->|'
-      OnClick = btnUltimaClick
-    end
-  end
   object pnlCarrusel: TPanel
     Left = 0
-    Top = 484
+    Top = 456
     Width = 747
-    Height = 96
+    Height = 124
     Align = alBottom
-    TabOrder = 2
-    ExplicitTop = 475
-    ExplicitWidth = 741
+    TabOrder = 1
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
       Width = 745
-      Height = 94
+      Height = 122
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
-      ExplicitWidth = 739
+      ExplicitTop = 6
+      ExplicitHeight = 89
     end
   end
   object pnlZoom: TPanel
@@ -107,10 +65,9 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     Width = 747
     Height = 41
     Align = alTop
-    TabOrder = 3
-    ExplicitWidth = 741
+    TabOrder = 2
     object lblZoom: TLabel
-      Left = 200
+      Left = 236
       Top = 14
       Width = 62
       Height = 13
@@ -135,12 +92,12 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     object SpeedButton3: TSpeedButton
       Left = 128
       Top = 8
-      Width = 60
+      Width = 49
       Height = 25
       Caption = '100%'
       OnClick = btnZoom100Click
     end
-    object SpeedButton4: TSpeedButton
+    object btnAnterior: TSpeedButton
       Left = 344
       Top = 8
       Width = 105
@@ -148,13 +105,45 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       Caption = '<- Anterior'
       OnClick = btnAnteriorClick
     end
-    object SpeedButton5: TSpeedButton
+    object btnSiguiente: TSpeedButton
       Left = 455
       Top = 8
       Width = 105
       Height = 25
       Caption = 'Siguiente ->'
       OnClick = btnSiguienteClick
+    end
+    object btnPrimera: TSpeedButton
+      Left = 304
+      Top = 8
+      Width = 34
+      Height = 25
+      Caption = '|<-'
+      OnClick = btnPrimeraClick
+    end
+    object btnUltima: TSpeedButton
+      Left = 569
+      Top = 8
+      Width = 34
+      Height = 25
+      Caption = '->|'
+      OnClick = btnUltimaClick
+    end
+    object Rotar90dcha: TSpeedButton
+      Left = 641
+      Top = 8
+      Width = 88
+      Height = 25
+      Caption = 'Rotar 90'#186' Dcha'
+      OnClick = Rotar90dchaClick
+    end
+    object btnAjustar: TSpeedButton
+      Left = 181
+      Top = 8
+      Width = 44
+      Height = 25
+      Caption = 'Ajustar'
+      OnClick = btnAjustarClick
     end
   end
 end
