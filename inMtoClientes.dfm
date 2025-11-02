@@ -4,7 +4,6 @@ inherited frmMtoClientes: TfrmMtoClientes
   Caption = 'Pacientes'
   ClientHeight = 601
   ClientWidth = 1248
-  ExplicitLeft = -136
   ExplicitWidth = 1264
   ExplicitHeight = 640
   PixelsPerInch = 96
@@ -845,6 +844,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
               Left = 882
               Top = 0
@@ -1085,6 +1088,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1279,6 +1286,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1482,6 +1493,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
@@ -1647,6 +1662,10 @@ inherited frmMtoClientes: TfrmMtoClientes
           object tsFotos: TcxTabSheet
             Caption = 'Fotos'
             ImageIndex = 6
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrdFotos: TcxGrid
               Left = 0
               Top = 0

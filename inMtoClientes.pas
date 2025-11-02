@@ -972,10 +972,10 @@ begin
 end;
 
 // *** FUNCIÓN PARA RENOMBRAR CARPETA ***
-function TfrmMtoClientes.RenombrarCarpetaPaciente(const ACarpetaActual: string;
-                                                   const ACodigoPaciente: string;
-                                                   const ARazonSocial: string;
-                                                   out ANuevaCarpeta: string): Boolean;
+function TfrmMtoClientes.RenombrarCarpetaPaciente( const ACarpetaActual: string;
+                                                  const ACodigoPaciente: string;
+                                                     const ARazonSocial: string;
+                                            out ANuevaCarpeta: string): Boolean;
 var
   NombreLimpio: string;
   RutaBase: string;
@@ -1034,7 +1034,6 @@ begin
                 '¿Continuar?',
                 mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
     Exit;
-
   Screen.Cursor := crHourGlass;
   Errores := TStringList.Create;
   ListaCarpetas := TStringList.Create;
@@ -1042,7 +1041,6 @@ begin
     TotalCarpetas := 0;
     CarpetasRenombradas := 0;
     CarpetasNoEncontradas := 0;
-
     // Recopilar carpetas
     if FindFirst(FFotosPath + '*.*', faDirectory, SearchRec) = 0 then
     begin
@@ -1056,7 +1054,6 @@ begin
       until FindNext(SearchRec) <> 0;
       FindClose(SearchRec);
     end;
-
     // Procesar carpetas
     for i := 0 to ListaCarpetas.Count - 1 do
     begin
@@ -1073,12 +1070,14 @@ begin
             Inc(CarpetasRenombradas);
             Errores.Add(Format('✓ RENOMBRADO: "%s" -> "%s"',
                               [ListaCarpetas[i],
-                               ExtractFileName(ExcludeTrailingPathDelimiter(NuevaCarpeta))]));
+                               ExtractFileName(ExcludeTrailingPathDelimiter(
+                                                              NuevaCarpeta))]));
           end;
         end
         else
         begin
-          Errores.Add(Format('✗ ERROR: No se pudo renombrar "%s"', [ListaCarpetas[i]]));
+          Errores.Add(Format('✗ ERROR: No se pudo renombrar "%s"',
+                             [ListaCarpetas[i]]));
         end;
       end
       else
@@ -1088,7 +1087,6 @@ begin
                           [ListaCarpetas[i], CodigoPaciente]));
       end;
     end;
-
     ShowMessage(Format('Proceso completado:%s' +
                       'Total carpetas: %d%s' +
                       'Carpetas renombradas: %d%s' +
@@ -1096,7 +1094,6 @@ begin
                       [sLineBreak, TotalCarpetas, sLineBreak,
                        CarpetasRenombradas, sLineBreak,
                        CarpetasNoEncontradas]));
-
     if Errores.Count > 0 then
     begin
       if MessageDlg('¿Ver log de cambios?', mtInformation, [mbYes, mbNo], 0) = mrYes then
@@ -1107,7 +1104,6 @@ begin
                      nil, nil, SW_SHOWNORMAL);
       end;
     end;
-
   finally
     Errores.Free;
     ListaCarpetas.Free;
