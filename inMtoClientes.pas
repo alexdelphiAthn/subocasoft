@@ -417,6 +417,7 @@ begin
           begin
             sRuta := IncludeTrailingPathDelimiter(FFotosPath + SearchRec.Name);
             FRutaPaciente := sRuta;
+            //ShowMessage('ruta paciente encontrada: ' + FRutaPaciente);
             bEncontrado := True;
             Break;
           end;
@@ -523,6 +524,7 @@ procedure TfrmMtoClientes.CargaFotos;
 begin
   if pcDetalleClientes.ActivePage = tsFotos then
   begin
+    try
     // CRÍTICO: Limpiar la ruta anterior del paciente
     FRutaPaciente := '';
     // SIEMPRE liberar y recrear para evitar datos antiguos
@@ -535,6 +537,12 @@ begin
     begin
       SincronizarThumbnails;
       CargarMiniaturas;
+    end;
+    except
+      on E: Exception do
+          begin
+            ShowMessage('Error ' +  E.Message);
+          end;
     end;
     // Si ObtenerRutaPaciente devuelve '', el dataset queda vacío
   end
@@ -597,6 +605,7 @@ begin
                                                       // ' - ' + RutaCompleta));
         try
           //var aStopWatch := TStopWatch.StartNew;
+          //ShowMessage('Cargando miniatura: ' + RutaCompleta);
           AgregarFotoAGrid(i, RutaCompleta, ObtenerRutaPaciente + NombreArchivo);
           //aStopWatch.Stop;
 //          inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
@@ -877,7 +886,6 @@ begin
     Screen.Cursor := crDefault;
   end;
 end;
-
 procedure TfrmMtoClientes.ProcesarMiniaturasPaciente(
                                       const ARutaPaciente: string;
                                       var ATotalFotos, AFotosGeneradas: Integer;
@@ -892,7 +900,6 @@ begin
   // Extraer código de paciente del nombre de carpeta
   CodigoPaciente :=
       SoloNumeros(ExtractFileName(ExcludeTrailingPathDelimiter(ARutaPaciente)));
-
   // Crear carpeta de thumbnails
   RutaThumbnails := FFotosPath + '.thumbnails\' + CodigoPaciente + '\';
   if not DirectoryExists(RutaThumbnails) then
@@ -931,7 +938,6 @@ begin
     FindClose(SR);
   end;
 end;
-
 // *** FUNCIÓN PARA OBTENER DATOS DEL PACIENTE ***
 function TfrmMtoClientes.ObtenerDatosPaciente(const ACodigoPaciente: string;
                                              out ARazonSocial: string): Boolean;
@@ -940,10 +946,8 @@ var
 begin
   Result := False;
   ARazonSocial := '';
-
   if Trim(ACodigoPaciente) = '' then
     Exit;
-
   qryTemp := TUniQuery.Create(nil);
   try
     qryTemp.Connection := dmmClientes.unqryClientes.Connection;
@@ -970,7 +974,6 @@ begin
     qryTemp.Free;
   end;
 end;
-
 // *** FUNCIÓN PARA RENOMBRAR CARPETA ***
 function TfrmMtoClientes.RenombrarCarpetaPaciente( const ACarpetaActual: string;
                                                   const ACodigoPaciente: string;
@@ -982,23 +985,18 @@ var
 begin
   Result := False;
   ANuevaCarpeta := '';
-
   // Obtener ruta base (sin el nombre de la carpeta actual)
   RutaBase := ExtractFilePath(ExcludeTrailingPathDelimiter(ACarpetaActual));
-
   // Limpiar caracteres inválidos del nombre
   NombreLimpio := ARazonSocial;
-
   // Crear nuevo nombre: "CODIGO RAZONSOCIAL"
   ANuevaCarpeta := RutaBase + ACodigoPaciente + ' ' + NombreLimpio + '\';
-
   // Si ya tiene el nombre correcto, no hacer nada
   if SameText(ACarpetaActual, ANuevaCarpeta) then
   begin
     Result := True;
     Exit;
   end;
-
   // Si ya existe una carpeta con ese nombre, no renombrar
   if DirectoryExists(ANuevaCarpeta) then
   begin
@@ -1006,7 +1004,6 @@ begin
     Result := SameText(ACarpetaActual, ANuevaCarpeta);
     Exit;
   end;
-
   // Intentar renombrar
   try
     Result := RenameFile(ExcludeTrailingPathDelimiter(ACarpetaActual),
@@ -1016,7 +1013,6 @@ begin
       Result := False;
   end;
 end;
-
 // *** VERSIÓN SOLO PARA RENOMBRAR (SIN GENERAR MINIATURAS) ***
 procedure TfrmMtoClientes.RenombrarCarpetasPacientes;
 var
@@ -1059,7 +1055,6 @@ begin
     begin
       CarpetaActual := IncludeTrailingPathDelimiter(FFotosPath + ListaCarpetas[i]);
       CodigoPaciente := SoloNumeros(ListaCarpetas[i]);
-
       if ObtenerDatosPaciente(CodigoPaciente, RazonSocial) then
       begin
         if RenombrarCarpetaPaciente(CarpetaActual, CodigoPaciente,

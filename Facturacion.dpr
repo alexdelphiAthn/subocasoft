@@ -1,11 +1,9 @@
-﻿// JCL_DEBUG_EXPERT_GENERATEJDBG ON
-// JCL_DEBUG_EXPERT_INSERTJDBG ON
-// JCL_DEBUG_EXPERT_DELETEMAPFILE ON
-program Facturacion;
+﻿program Facturacion;
 
 uses
   Forms,
   Controls,
+  MidasLib,
   inMtoGen in 'inMtoGen.pas' {frmMtoGen},
   inLibtb in 'inLibtb.pas',
   inMtoPrincipal in 'inMtoPrincipal.pas' {frmOpenApp},
