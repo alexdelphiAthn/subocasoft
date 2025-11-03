@@ -22,7 +22,7 @@ uses
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVisualStudio2013Blue,
   dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, dxSkinVS2010,
   dxSkinWhiteprint, dxSkinXmas2008Blue, dxImageSlider, data.DB,
-  datasnap.DBClient, cxClasses, system.math;
+  datasnap.DBClient, cxClasses, system.math, GDIPAPI, GDIPOBJ;
 type
   TfrmMtoVisorFoto = class(TForm)
     ScrollBox1: TScrollBox;
@@ -63,6 +63,8 @@ type
     procedure FormResize(Sender: TObject);
     procedure Rotar90dchaClick(Sender: TObject);
     procedure btnAjustarClick(Sender: TObject);
+  private
+    function ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
   private
     FZoomFactor: Double;
     FIsDragging: Boolean;
@@ -180,18 +182,57 @@ end;
 
 procedure TfrmMtoVisorFoto.CargarImagen(const ARutaArchivo: string);
 var
-  JPEGImage: TJPEGImage;
+  GPBitmap: TGPBitmap;
+  GPGraphics: TGPGraphics;
+  Orientacion: Integer;
 begin
-  JPEGImage := TJPEGImage.Create;
+  // Limpiar video si estaba reproduciendo
+//  LimpiarReproductor;
+//  FPanelVideo.Visible := False;
+  Image1.Visible := True;
+  Image1.BringToFront;
+
   try
-    JPEGImage.LoadFromFile(ARutaArchivo);
-    FOriginalBitmap.Assign(JPEGImage);
-    // Resetear zoom
-    FZoomFactor := CalcularFactorFit;
-    // Si la imagen ya cabe sin escalar, el factor será 1.0 (no cambia nada)
-    AplicarZoom;
-  finally
-    JPEGImage.Free;
+    // 1. Leer orientación EXIF
+    Orientacion := ObtenerOrientacionEXIF(ARutaArchivo);
+
+    // 2. Cargar con GDI+
+    GPBitmap := TGPBitmap.Create(ARutaArchivo);
+    try
+      // 3. Aplicar rotación según EXIF
+      case Orientacion of
+        3: GPBitmap.RotateFlip(Rotate180FlipNone);
+        6: GPBitmap.RotateFlip(Rotate90FlipNone);
+        8: GPBitmap.RotateFlip(Rotate270FlipNone);
+      end;
+
+      // 4. Convertir a TBitmap
+      FOriginalBitmap.Width := GPBitmap.GetWidth;
+      FOriginalBitmap.Height := GPBitmap.GetHeight;
+      FOriginalBitmap.PixelFormat := pf24bit;
+
+      GPGraphics := TGPGraphics.Create(FOriginalBitmap.Canvas.Handle);
+      try
+        GPGraphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+        GPGraphics.DrawImage(GPBitmap, 0, 0,
+                            FOriginalBitmap.Width, FOriginalBitmap.Height);
+      finally
+        GPGraphics.Free;
+      end;
+
+      // 5. Aplicar zoom
+      FZoomFactor := CalcularFactorFit;
+      AplicarZoom;
+
+    finally
+      GPBitmap.Free;
+    end;
+
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Error al cargar la imagen: ' + E.Message);
+    end;
   end;
 end;
 
@@ -645,6 +686,36 @@ begin
   begin
     FZoomFactor := CalcularFactorFit;
     AplicarZoom;
+  end;
+end;
+
+function TfrmMtoVisorFoto.ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
+var
+  Image: TGPImage;
+  PropItem: PPropertyItem;
+  PropSize: UINT;
+begin
+  Result := 1; // Valor por defecto (sin rotación)
+
+  Image := TGPImage.Create(ARutaImagen);
+  try
+    // PropertyTagOrientation = $0112
+    PropSize := Image.GetPropertyItemSize($0112);
+    if PropSize > 0 then
+    begin
+      GetMem(PropItem, PropSize);
+      try
+        if Image.GetPropertyItem($0112, PropSize, PropItem) = Ok then
+        begin
+          if PropItem.type_ = PropertyTagTypeShort then
+            Result := PWord(PropItem.value)^;
+        end;
+      finally
+        FreeMem(PropItem);
+      end;
+    end;
+  finally
+    Image.Free;
   end;
 end;
 
