@@ -1657,6 +1657,8 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 257
               Align = alClient
               TabOrder = 0
+              ExplicitLeft = 72
+              ExplicitTop = 16
               object tvFotos: TcxGridDBTableView
                 Navigator.Buttons.Delete.Visible = False
                 Navigator.Buttons.Edit.Visible = False
@@ -1688,8 +1690,10 @@ inherited frmMtoClientes: TfrmMtoClientes
                 object cxgrdFotosDBCardView1Fecha: TcxGridDBCardViewRow
                   DataBinding.FieldName = 'Fecha'
                   PropertiesClassName = 'TcxDateEditProperties'
-                  Visible = False
                   Position.BeginsLayer = True
+                  Styles.Content = cxStyle1
+                  Styles.Caption = cxStyle1
+                  Styles.CaptionRow = cxStyle1
                 end
                 object cxgrdFotosDBCardView1Miniatura: TcxGridDBCardViewRow
                   DataBinding.FieldName = 'Miniatura'
@@ -1789,6 +1793,19 @@ inherited frmMtoClientes: TfrmMtoClientes
     object cdsFotosRutaFoto: TStringField
       FieldName = 'RutaFoto'
       Size = 255
+    end
+  end
+  object cxStyleRepository1: TcxStyleRepository
+    Left = 240
+    Top = 400
+    PixelsPerInch = 96
+    object cxStyle1: TcxStyle
+      AssignedValues = [svFont]
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Lucida Sans'
+      Font.Style = []
     end
   end
 end

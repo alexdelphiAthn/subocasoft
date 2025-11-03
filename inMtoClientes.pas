@@ -7,8 +7,8 @@ uses
   Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels, System.Diagnostics,
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue, Uni,
   dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
-  cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg,
-  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses, DateUtils,
+  cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg, SYSTEM.Types,
+  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses, DateUtils, GDIPAPI, GDIPOBJ,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
   dxBarBuiltInMenu, cxPC, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
@@ -237,6 +237,8 @@ type
     blbfldFotosMiniatura: TBlobField;
     cdsFotosRutaFoto: TStringField;
     lblProgreso: TcxLabel;
+    cxStyleRepository1: TcxStyleRepository;
+    cxStyle1: TcxStyle;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cxgrdbclmncxgrdtvtv1DESCRIPCION_HISTORIAPropertiesButtonClick(
@@ -269,6 +271,9 @@ type
     procedure img1DblClick(Sender: TObject);
     procedure lblProgresoDblClick(Sender: TObject);
   private
+    function ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
+    function RotarBitmap(ASource: TBitmap;
+                         AOrientacion: Integer): TBitmap;
     function ObtenerDatosPaciente(const ACodigoPaciente: string;
                                   out ARazonSocial: string): Boolean;
     function RenombrarCarpetaPaciente(const ACarpetaActual: string;
@@ -751,34 +756,48 @@ function TfrmMtoClientes.CrearThumbnail(const ARutaImagen: string;
                                         ASize: Integer): TBitmap;
 var
   ImagenOriginal: TJPEGImage;
+  BmpOriginal, BmpCorregido: TBitmap;
   Proporcion: Double;
   NuevoAncho, NuevoAlto: Integer;
+  Orientacion: Integer;
 begin
   Result := TBitmap.Create;
   ImagenOriginal := TJPEGImage.Create;
+  BmpOriginal := nil;
+  BmpCorregido := nil;
   try
     try
+      // Leer orientación EXIF ANTES de cargar el JPEG
+      Orientacion := ObtenerOrientacionEXIF(ARutaImagen);
+      // Cargar JPEG
       ImagenOriginal.LoadFromFile(ARutaImagen);
-      if ImagenOriginal.Width > ImagenOriginal.Height then
+      // Convertir a Bitmap
+      BmpOriginal := TBitmap.Create;
+      BmpOriginal.Assign(ImagenOriginal);
+      // Aplicar rotación según EXIF
+      BmpCorregido := RotarBitmap(BmpOriginal, Orientacion);
+      if BmpCorregido = nil then
+        Exit;
+      // Calcular proporción del thumbnail
+      if BmpCorregido.Width > BmpCorregido.Height then
       begin
-        Proporcion := ASize / ImagenOriginal.Width;
+        Proporcion := ASize / BmpCorregido.Width;
         NuevoAncho := ASize;
-        NuevoAlto := Round(ImagenOriginal.Height * Proporcion);
+        NuevoAlto := Round(BmpCorregido.Height * Proporcion);
       end
       else
       begin
-        Proporcion := ASize / ImagenOriginal.Height;
+        Proporcion := ASize / BmpCorregido.Height;
         NuevoAlto := ASize;
-        NuevoAncho := Round(ImagenOriginal.Width * Proporcion);
+        NuevoAncho := Round(BmpCorregido.Width * Proporcion);
       end;
-      if (NuevoAncho < 1) then
-        NuevoAncho := 1;
-      if (NuevoAlto < 1) then
-        NuevoAlto := 1;
+      if (NuevoAncho < 1) then NuevoAncho := 1;
+      if (NuevoAlto < 1) then NuevoAlto := 1;
       Result.Width := NuevoAncho;
       Result.Height := NuevoAlto;
+      // Crear thumbnail del bitmap corregido
       Result.Canvas.StretchDraw(Rect(0, 0, NuevoAncho, NuevoAlto),
-                                ImagenOriginal);
+                                BmpCorregido);
     except
       on E: Exception do
       begin
@@ -786,9 +805,15 @@ begin
         Result := TBitmap.Create;
         Result.Width := ASize;
         Result.Height := ASize;
+        Result.Canvas.Brush.Color := clWhite;
+        Result.Canvas.FillRect(Rect(0, 0, ASize, ASize));
       end;
     end;
   finally
+    if Assigned(BmpCorregido) then
+      BmpCorregido.Free;
+    if Assigned(BmpOriginal) then
+      BmpOriginal.Free;
     ImagenOriginal.Free;
   end;
 end;
@@ -886,6 +911,7 @@ begin
     Screen.Cursor := crDefault;
   end;
 end;
+
 procedure TfrmMtoClientes.ProcesarMiniaturasPaciente(
                                       const ARutaPaciente: string;
                                       var ATotalFotos, AFotosGeneradas: Integer;
@@ -1536,6 +1562,109 @@ begin
   inherited;
   LiberarClientDataSetFotos;
   FreeAndNil(dmmClientes);
+end;
+
+function TfrmMtoClientes.ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
+var
+  Image: TGPImage;
+  PropItem: PPropertyItem;
+  PropSize: UINT;
+begin
+  Result := 1; // Valor por defecto (sin rotación)
+
+  Image := TGPImage.Create(ARutaImagen);
+  try
+    // PropertyTagOrientation = $0112
+    PropSize := Image.GetPropertyItemSize($0112);
+    if PropSize > 0 then
+    begin
+      GetMem(PropItem, PropSize);
+      try
+        if Image.GetPropertyItem($0112, PropSize, PropItem) = Ok then
+        begin
+          if PropItem.type_ = PropertyTagTypeShort then
+            Result := PWord(PropItem.value)^;
+        end;
+      finally
+        FreeMem(PropItem);
+      end;
+    end;
+  finally
+    Image.Free;
+  end;
+end;
+
+function TfrmMtoClientes.RotarBitmap(ASource: TBitmap; AOrientacion: Integer): TBitmap;
+var
+  TempBmp: TBitmap;
+begin
+  Result := TBitmap.Create;
+  case AOrientacion of
+    1: // Normal - sin rotación
+      Result.Assign(ASource);
+    3: // Rotado 180°
+      begin
+        Result.Width := ASource.Width;
+        Result.Height := ASource.Height;
+        Result.Canvas.StretchDraw(
+          Rect(Result.Width, Result.Height, 0, 0),
+          ASource
+        );
+      end;
+    6: // Rotado 90° horario (más común en móviles)
+      begin
+        Result.Width := ASource.Height;
+        Result.Height := ASource.Width;
+        TempBmp := TBitmap.Create;
+        try
+          TempBmp.Width := Result.Width;
+          TempBmp.Height := Result.Height;
+          TempBmp.Canvas.Brush.Color := clWhite;
+          TempBmp.Canvas.FillRect(Rect(0, 0, TempBmp.Width, TempBmp.Height));
+          SetGraphicsMode(TempBmp.Canvas.Handle, GM_ADVANCED);
+          var XForm: TXForm;
+          XForm.eM11 := 0;
+          XForm.eM12 := -1;
+          XForm.eM21 := 1;
+          XForm.eM22 := 0;
+          XForm.eDx := 0;
+          XForm.eDy := ASource.Width;
+          SetWorldTransform(TempBmp.Canvas.Handle, XForm);
+          TempBmp.Canvas.Draw(0, 0, ASource);
+          Result.Assign(TempBmp);
+        finally
+          TempBmp.Free;
+        end;
+      end;
+    8: // Rotado 90° antihorario
+      begin
+        Result.Width := ASource.Height;
+        Result.Height := ASource.Width;
+        TempBmp := TBitmap.Create;
+        try
+          TempBmp.Width := Result.Width;
+          TempBmp.Height := Result.Height;
+          TempBmp.Canvas.Brush.Color := clWhite;
+          TempBmp.Canvas.FillRect(Rect(0, 0, TempBmp.Width, TempBmp.Height));
+          SetGraphicsMode(TempBmp.Canvas.Handle, GM_ADVANCED);
+          var XForm: TXForm;
+          XForm.eM11 := 0;
+          XForm.eM12 := 1;
+          XForm.eM21 := -1;
+          XForm.eM22 := 0;
+          XForm.eDx := ASource.Height;
+          XForm.eDy := 0;
+          SetWorldTransform(TempBmp.Canvas.Handle, XForm);
+          TempBmp.Canvas.Draw(0, 0, ASource);
+          Result.Assign(TempBmp);
+        finally
+          TempBmp.Free;
+        end;
+      end;
+  else
+    // Otras orientaciones - devolver sin rotar
+    Result.Assign(ASource);
+  end;
 end;
 
 end.

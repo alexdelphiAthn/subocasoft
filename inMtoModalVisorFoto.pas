@@ -365,6 +365,9 @@ begin
     Img.Tag := FClientDataSet.FieldByName('Index').AsInteger;
     Img.OnClick := MiniaturaClick;
     Img.Cursor := crHandPoint;
+    Img.ShowHint := True;
+    Img.Hint := FormatDateTime('dd/mm/yyyy',
+                               FClientDataset.FieldByName('Fecha').AsDateTime);
     // Borde para resaltar
     Shape := TShape.Create(ScrollBoxMiniaturas);
     Shape.Parent := ScrollBoxMiniaturas;
@@ -579,7 +582,6 @@ begin
   ScrollBox1.HorzScrollBar.Position := NuevaPosScroll.X;
   ScrollBox1.VertScrollBar.Position := NuevaPosScroll.Y;
 end;
-
 procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject;
                                            Button: TMouseButton;
                                            Shift: TShiftState;
@@ -588,7 +590,6 @@ begin
   // Guardar posición del mouse
 //  FLastMouseX := X;
 //  FLastMouseY := Y;
-
   if Button = mbLeft then
   begin
     FIsDragging := True;
