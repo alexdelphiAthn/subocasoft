@@ -3,7 +3,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Top = 0
   Caption = 'Visor de Imagen'
   ClientHeight = 579
-  ClientWidth = 743
+  ClientWidth = 833
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 41
-    Width = 743
+    Width = 833
     Height = 398
     Align = alClient
     Color = clGray
@@ -42,7 +42,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   object pnlCarrusel: TPanel
     Left = 0
     Top = 439
-    Width = 743
+    Width = 833
     Height = 140
     Align = alBottom
     TabOrder = 1
@@ -51,7 +51,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
-      Width = 741
+      Width = 831
       Height = 138
       Align = alClient
       BorderStyle = bsNone
@@ -62,7 +62,7 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   object pnlZoom: TPanel
     Left = 0
     Top = 0
-    Width = 743
+    Width = 833
     Height = 41
     Align = alTop
     TabOrder = 2
@@ -145,6 +145,14 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       Height = 25
       Caption = 'Ajustar'
       OnClick = btnAjustarClick
+    end
+    object btnOpenFolder: TSpeedButton
+      Left = 682
+      Top = 8
+      Width = 119
+      Height = 25
+      Caption = 'Abrir Carpeta Paciente'
+      OnClick = btnOpenFolderClick
     end
   end
 end

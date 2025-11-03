@@ -22,7 +22,7 @@ uses
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVisualStudio2013Blue,
   dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, dxSkinVS2010,
   dxSkinWhiteprint, dxSkinXmas2008Blue, dxImageSlider, data.DB,
-  datasnap.DBClient, cxClasses, system.math, GDIPAPI, GDIPOBJ;
+  datasnap.DBClient, cxClasses, system.math, GDIPAPI, GDIPOBJ, shellapi;
 type
   TfrmMtoVisorFoto = class(TForm)
     ScrollBox1: TScrollBox;
@@ -40,6 +40,7 @@ type
     btnUltima: TSpeedButton;
     Rotar90dcha: TSpeedButton;
     btnAjustar: TSpeedButton;
+    btnOpenFolder: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure btnZoomInClick(Sender: TObject);
     procedure btnZoomOutClick(Sender: TObject);
@@ -63,6 +64,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure Rotar90dchaClick(Sender: TObject);
     procedure btnAjustarClick(Sender: TObject);
+    procedure btnOpenFolderClick(Sender: TObject);
   private
     function ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
   private
@@ -186,16 +188,11 @@ var
   GPGraphics: TGPGraphics;
   Orientacion: Integer;
 begin
-  // Limpiar video si estaba reproduciendo
-//  LimpiarReproductor;
-//  FPanelVideo.Visible := False;
   Image1.Visible := True;
   Image1.BringToFront;
-
   try
     // 1. Leer orientación EXIF
     Orientacion := ObtenerOrientacionEXIF(ARutaArchivo);
-
     // 2. Cargar con GDI+
     GPBitmap := TGPBitmap.Create(ARutaArchivo);
     try
@@ -205,12 +202,10 @@ begin
         6: GPBitmap.RotateFlip(Rotate90FlipNone);
         8: GPBitmap.RotateFlip(Rotate270FlipNone);
       end;
-
       // 4. Convertir a TBitmap
       FOriginalBitmap.Width := GPBitmap.GetWidth;
       FOriginalBitmap.Height := GPBitmap.GetHeight;
       FOriginalBitmap.PixelFormat := pf24bit;
-
       GPGraphics := TGPGraphics.Create(FOriginalBitmap.Canvas.Handle);
       try
         GPGraphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
@@ -219,15 +214,12 @@ begin
       finally
         GPGraphics.Free;
       end;
-
       // 5. Aplicar zoom
       FZoomFactor := CalcularFactorFit;
       AplicarZoom;
-
     finally
       GPBitmap.Free;
     end;
-
   except
     on E: Exception do
     begin
@@ -541,6 +533,41 @@ procedure TfrmMtoVisorFoto.btnAnteriorClick(Sender: TObject);
 begin
   if FIndiceActual > 0 then
     MostrarImagenPorIndice(FIndiceActual - 1);
+end;
+
+procedure TfrmMtoVisorFoto.btnOpenFolderClick(Sender: TObject);
+var
+  RutaCarpeta: string;
+  RutaArchivoActual: string;
+begin
+  // Obtener la ruta del archivo actual
+  if (FIndiceActual >= 0) and (FIndiceActual < FListaImagenes.Count) then
+  begin
+    RutaArchivoActual := FListaImagenes[FIndiceActual];
+
+    // Extraer la carpeta del archivo
+    RutaCarpeta := ExtractFilePath(RutaArchivoActual);
+
+    // Verificar que existe
+    if DirectoryExists(RutaCarpeta) then
+    begin
+      // Abrir Windows Explorer y seleccionar el archivo actual
+      ShellExecute(Application.Handle,
+                   'open',
+                   'explorer.exe',
+                   PChar('/select,"' + RutaArchivoActual + '"'),
+                   nil,
+                   SW_SHOWNORMAL);
+    end
+    else
+    begin
+      ShowMessage('No se encontró la carpeta: ' + RutaCarpeta);
+    end;
+  end
+  else
+  begin
+    ShowMessage('No hay ningún archivo seleccionado');
+  end;
 end;
 
 procedure TfrmMtoVisorFoto.btnPrimeraClick(Sender: TObject);
