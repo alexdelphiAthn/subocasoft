@@ -22,21 +22,16 @@ uses
   dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
   dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinOffice2010Black,
   dxSkinOffice2010Blue, dxSkinOffice2010Silver, dxSkinOffice2013DarkGray,
-  dxSkinOffice2013LightGray, dxSkinOffice2013White, dxSkinPumpkin,
+  dxSkinOffice2013LightGray, dxSkinOffice2013White, dxSkinPumpkin, dexif,
+  dxDateRanges, dxScrollbarAnnotations, Vcl.Menus, cxCalendar, cxButtonEdit,
+  cxCurrencyEdit, cxImage, Datasnap.DBClient, dxBar, cxGridCardView, dMetaData,
+  cxGridDBCardView, cxGridCustomLayoutView, cxGroupBox, cxRadioGroup, cxDBLabel,
+  dxGDIPlusClasses, cxButtons, cxLocalization, dxBevel, cxDBNavigator,
   dxSkinSeven, dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus,
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
-  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxLocalization,cxCalendar,
-  cxButtonEdit, cxCurrencyEdit, inMtoPrincipal, inMtoModalVisorFoto,
-  cxMemo, cxRichEdit, cxDataControllerConditionalFormattingRulesManagerDialog,
-  dxBevel, cxDBNavigator, System.UITypes, dxDateRanges, dxGDIPlusClasses,
-  cxImage, Vcl.Menus, cxButtons, dxBar, Vcl.ToolWin, Vcl.ActnMan, Vcl.ActnCtrls,
-  dxScrollbarAnnotations, cxDBLabel, Vcl.Grids, Vcl.DBGrids, cxRadioGroup,
-  cxGroupBox, dxSkinBasic, dxSkinOffice2016Colorful, dxSkinOffice2016Dark,
-  dxSkinOffice2019Black, dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray,
-  dxSkinOffice2019White, dxSkinTheBezier, dxSkinVisualStudio2013Blue,
-  dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, Datasnap.DBClient,
-  cxGridCardView, cxGridDBCardView, cxGridCustomLayoutView, system.ioutils;
+  inMtoPrincipal, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
+  system.ioutils;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -290,6 +285,7 @@ type
                                    ARutaThumbnail: string): Boolean;
     function CrearThumbnail(const ARutaImagen: string;
                             ASize: Integer): TBitmap;
+    function ObtenerFechaExif(const RutaArchivo: string): TDateTime;
     procedure CargarMiniaturas;
     procedure VerGaleriaFotos;
     procedure MostrarFotoCompleta;
@@ -320,7 +316,8 @@ implementation
 
 uses
   inLibWin, inMtoModalHistoriaCli, inMtoGenSearch, inLibDevExp, inLibVarGlob,
-  inMtoModalCliEti, inLibDocumentoValidator, inMtoModalCliCues, inLibtb;
+  inMtoModalCliEti, inLibDocumentoValidator, inMtoModalCliCues, inLibtb,
+  inMtoModalVisorFoto;
 
 {$R *.dfm}
 
@@ -464,7 +461,7 @@ begin
       cdsFotos.FieldByName('NombreArchivo').AsString :=
                                                       ExtractFileName(ARutaJpg);
       cdsFotos.FieldByName('Fecha').AsDateTime :=
-                                            TFile.GetCreationTime(ARutaJpg);
+                                            ObtenerFechaExif(ARutaJpg);
       TBlobField(cdsFotos.FieldByName('Miniatura')).LoadFromStream(Stream);
       cdsFotos.Post;
     finally
@@ -472,6 +469,72 @@ begin
     end;
   finally
     Stream.Free;
+  end;
+end;
+
+function TfrmMtoClientes.ObtenerFechaExif(const RutaArchivo: string): TDateTime;
+var
+  ImgData: TImgData;
+  DebugMsg: string;
+begin
+  Result := 0;
+
+  if not FileExists(RutaArchivo) then
+  begin
+    //ShowMessage('Archivo no existe: ' + RutaArchivo);
+    Exit;
+  end;
+
+  ImgData := TImgData.Create;
+  try
+    try
+      DebugMsg := 'Procesando archivo...';
+
+      if ImgData.ProcessFile(RutaArchivo) then
+      begin
+        DebugMsg := DebugMsg + #13#10 + 'Archivo procesado OK';
+
+        if ImgData.HasEXIF then
+        begin
+          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
+
+          with ImgData.ExifObj do
+          begin
+            // Debug: Mostrar todos los intentos
+            DebugMsg := DebugMsg + #13#10 + 'DateTimeOriginal: ' + DateTimeToStr(DateTimeOriginal);
+            DebugMsg := DebugMsg + #13#10 + 'DateTimeDigitized: ' + DateTimeToStr(DateTimeDigitized);
+            DebugMsg := DebugMsg + #13#10 + 'DateTimeModified: ' + DateTimeToStr(DateTimeModified);
+            //DebugMsg := DebugMsg + #13#10 + 'DateTime (string): ' + DateTime;
+
+            // Intentar TagValue
+            DebugMsg := DebugMsg + #13#10 + 'TagValue[DateTimeOriginal]: ' + VarToStr(TagValue['DateTimeOriginal']);
+
+            Result := DateTimeOriginal;
+            if Result = 0 then
+              Result := DateTimeDigitized;
+            if Result = 0 then
+              Result := DateTimeModified;
+
+            DebugMsg := DebugMsg + #13#10 + 'Resultado final: ' + DateTimeToStr(Result);
+          end;
+        end
+        else
+          DebugMsg := DebugMsg + #13#10 + 'NO tiene EXIF';
+      end
+      else
+        DebugMsg := DebugMsg + #13#10 + 'Error al procesar archivo';
+
+      //ShowMessage(DebugMsg);
+
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error: ' + E.Message);
+        Result := 0;
+      end;
+    end;
+  finally
+    ImgData.Free;
   end;
 end;
 
@@ -1537,11 +1600,9 @@ var
   Proporcion: Double;
 begin
   Result := TBitmap.Create;
-
   try
     // 1. Leer orientación EXIF
     Orientacion := ObtenerOrientacionEXIF(ARutaImagen);
-
     // 2. Cargar con GDI+ (mucho más rápido que TJPEGImage)
     GPBitmap := TGPBitmap.Create(ARutaImagen);
     try
@@ -1551,7 +1612,6 @@ begin
         6: GPBitmap.RotateFlip(Rotate90FlipNone);
         8: GPBitmap.RotateFlip(Rotate270FlipNone);
       end;
-
       // 4. Calcular tamaño del thumbnail
       if GPBitmap.GetWidth > GPBitmap.GetHeight then
       begin
@@ -1565,15 +1625,12 @@ begin
         NuevoAlto := ASize;
         NuevoAncho := Round(GPBitmap.GetWidth * Proporcion);
       end;
-
       if (NuevoAncho < 1) then NuevoAncho := 1;
       if (NuevoAlto < 1) then NuevoAlto := 1;
-
       // 5. Crear thumbnail
       Result.Width := NuevoAncho;
       Result.Height := NuevoAlto;
       Result.PixelFormat := pf24bit;
-
       // 6. Dibujar con GDI+ (ALTA CALIDAD)
       GPGraphics := TGPGraphics.Create(Result.Canvas.Handle);
       try
@@ -1583,11 +1640,9 @@ begin
       finally
         GPGraphics.Free;
       end;
-
     finally
       GPBitmap.Free;
     end;
-
   except
     on E: Exception do
     begin
