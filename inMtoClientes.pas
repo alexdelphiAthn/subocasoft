@@ -31,7 +31,7 @@ uses
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   inMtoPrincipal, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  system.ioutils;
+  system.ioutils, system.StrUtils;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -476,6 +476,9 @@ function TfrmMtoClientes.ObtenerFechaExif(const RutaArchivo: string): TDateTime;
 var
   ImgData: TImgData;
   DebugMsg: string;
+  sNombreFich:string;
+  Partes: TArray<string>;
+  Dia, Mes, Anio:Word;
 begin
   Result := 0;
   if not FileExists(RutaArchivo) then
@@ -483,49 +486,64 @@ begin
     //ShowMessage('Archivo no existe: ' + RutaArchivo);
     Exit;
   end;
-  ImgData := TImgData.Create;
-  try
+  sNombreFich := ExtractFileName(RutaArchivo);
+  if StartsText('FE', sNombreFich) then
+  begin
+    Partes := sNombreFich.Split(['_']);
+    if Length(Partes) >= 4 then
+    begin
+      Dia := StrToInt(Partes[1]);
+      Mes := StrToInt(Partes[2]);
+      Anio := StrToInt(Partes[3]);
+    end;
+    Result := EncodeDate(Anio, Mes, Dia);
+  end
+  else
+  begin
+    ImgData := TImgData.Create;
     try
-//      DebugMsg := 'Procesando archivo...';
-      if ImgData.ProcessFile(RutaArchivo) then
-      begin
-//        DebugMsg := DebugMsg + #13#10 + 'Archivo procesado OK';
-        if ImgData.HasEXIF then
+      try
+  //      DebugMsg := 'Procesando archivo...';
+        if ImgData.ProcessFile(RutaArchivo) then
         begin
-//          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
-          with ImgData.ExifObj do
+  //        DebugMsg := DebugMsg + #13#10 + 'Archivo procesado OK';
+          if ImgData.HasEXIF then
           begin
-            // Debug: Mostrar todos los intentos
-//            DebugMsg := DebugMsg + #13#10 + 'DateTimeOriginal: ' + DateTimeToStr(DateTimeOriginal);
-//            DebugMsg := DebugMsg + #13#10 + 'DateTimeDigitized: ' + DateTimeToStr(DateTimeDigitized);
-//            DebugMsg := DebugMsg + #13#10 + 'DateTimeModified: ' + DateTimeToStr(DateTimeModified);
-            //DebugMsg := DebugMsg + #13#10 + 'DateTime (string): ' + DateTime;
-            // Intentar TagValue
-//            DebugMsg := DebugMsg + #13#10 + 'TagValue[DateTimeOriginal]: ' + VarToStr(TagValue['DateTimeOriginal']);
-            Result := DateTimeOriginal;
-            if Result = 0 then
-              Result := DateTimeDigitized;
-            if Result = 0 then
-              Result := DateTimeModified;
-            if Result = 0 then
-              Result := TFile.GetCreationTime(RutaArchivo);
-//            DebugMsg := DebugMsg + #13#10 + 'Resultado final: ' + DateTimeToStr(Result);
-          end;
+  //          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
+            with ImgData.ExifObj do
+            begin
+              // Debug: Mostrar todos los intentos
+  //            DebugMsg := DebugMsg + #13#10 + 'DateTimeOriginal: ' + DateTimeToStr(DateTimeOriginal);
+  //            DebugMsg := DebugMsg + #13#10 + 'DateTimeDigitized: ' + DateTimeToStr(DateTimeDigitized);
+  //            DebugMsg := DebugMsg + #13#10 + 'DateTimeModified: ' + DateTimeToStr(DateTimeModified);
+              //DebugMsg := DebugMsg + #13#10 + 'DateTime (string): ' + DateTime;
+              // Intentar TagValue
+  //            DebugMsg := DebugMsg + #13#10 + 'TagValue[DateTimeOriginal]: ' + VarToStr(TagValue['DateTimeOriginal']);
+              Result := DateTimeOriginal;
+              if Result = 0 then
+                Result := DateTimeDigitized;
+              if Result = 0 then
+                Result := DateTimeModified;
+              if Result = 0 then
+                Result := TFile.GetCreationTime(RutaArchivo);
+  //            DebugMsg := DebugMsg + #13#10 + 'Resultado final: ' + DateTimeToStr(Result);
+            end;
+          end
+          else
+            Result := TFile.GetCreationTime(RutaArchivo);
         end
         else
           Result := TFile.GetCreationTime(RutaArchivo);
-      end
-      else
-        Result := TFile.GetCreationTime(RutaArchivo);
-      //ShowMessage(DebugMsg);
-    except
-      on E: Exception do
-      begin
-        Result := TFile.GetCreationTime(RutaArchivo);
+        //ShowMessage(DebugMsg);
+      except
+        on E: Exception do
+        begin
+          Result := TFile.GetCreationTime(RutaArchivo);
+        end;
       end;
+    finally
+      ImgData.Free;
     end;
-  finally
-    ImgData.Free;
   end;
 end;
 

@@ -3,7 +3,7 @@
         <ProjectGuid>{A011166C-D86F-4142-8B7A-D4017C2D8C25}</ProjectGuid>
         <MainSource>Facturacion.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
