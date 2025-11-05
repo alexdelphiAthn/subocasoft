@@ -143,7 +143,7 @@ begin
       begin
         if ImgData.HasEXIF then
         begin
-          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
+//          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
           with ImgData.ExifObj do
           begin
             // Debug: Mostrar todos los intentos
@@ -645,25 +645,19 @@ var
   PuntoClick: TPoint;
   PuntoEnImagenActual: TPoint;
   PuntoEnOriginal: TPoint;
-
   // Configuración de cuadrícula
   NumColumnas, NumFilas: Integer;
   AnchoZonaOriginal, AltoZonaOriginal: Double;
   ColumnaClick, FilaClick: Integer;
-
   // Coordenadas de la zona seleccionada en imagen original
   CentroZonaX, CentroZonaY: Double;
-
   // Zoom
   ZoomNecesarioX, ZoomNecesarioY, NuevoZoom: Double;
   NuevaPosScroll: TPoint;
   FactorFit: Double;
-
 begin
   if FOriginalBitmap.Empty then Exit;
-
   FactorFit := CalcularFactorFit;
-
   // Si ya hay zoom (más que fit + 10%), volver a fit
   if FZoomFactor > (FactorFit * 1.1) then
   begin
@@ -671,78 +665,59 @@ begin
     AplicarZoom;
     Exit;
   end;
-
   // Dividir en cuadrícula 4x4 (máximo 16 zonas)
   NumColumnas := 4;
   NumFilas := 4;
-
   // Obtener posición del click en pantalla
   GetCursorPos(PuntoClick);
-
   // Convertir a coordenadas del ScrollBox
   PuntoClick := ScrollBox1.ScreenToClient(PuntoClick);
-
   // Validar que el click está dentro del área del ScrollBox
   if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
      (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then
     Exit;
-
   // Coordenadas absolutas en la imagen escalada actual
   PuntoEnImagenActual.X := PuntoClick.X + ScrollBox1.HorzScrollBar.Position;
   PuntoEnImagenActual.Y := PuntoClick.Y + ScrollBox1.VertScrollBar.Position;
-
   // Convertir a coordenadas de la imagen ORIGINAL
   PuntoEnOriginal.X := Round(PuntoEnImagenActual.X / FZoomFactor);
   PuntoEnOriginal.Y := Round(PuntoEnImagenActual.Y / FZoomFactor);
-
   // Validar que está dentro de la imagen original
   if (PuntoEnOriginal.X < 0) or (PuntoEnOriginal.X >= FOriginalBitmap.Width) or
      (PuntoEnOriginal.Y < 0) or (PuntoEnOriginal.Y >= FOriginalBitmap.Height) then
     Exit;
-
   // Tamaño de cada zona en la imagen ORIGINAL
   AnchoZonaOriginal := FOriginalBitmap.Width / NumColumnas;
   AltoZonaOriginal := FOriginalBitmap.Height / NumFilas;
-
   // Determinar en qué columna y fila se hizo click
   ColumnaClick := Trunc(PuntoEnOriginal.X / AnchoZonaOriginal);
   FilaClick := Trunc(PuntoEnOriginal.Y / AltoZonaOriginal);
-
   // Asegurar que no se salga del rango
   if ColumnaClick >= NumColumnas then ColumnaClick := NumColumnas - 1;
   if FilaClick >= NumFilas then FilaClick := NumFilas - 1;
   if ColumnaClick < 0 then ColumnaClick := 0;
   if FilaClick < 0 then FilaClick := 0;
-
   // Calcular el centro de la zona en coordenadas originales
   CentroZonaX := (ColumnaClick * AnchoZonaOriginal) + (AnchoZonaOriginal / 2);
   CentroZonaY := (FilaClick * AltoZonaOriginal) + (AltoZonaOriginal / 2);
-
   // Calcular zoom necesario para que esta zona llene la pantalla
   ZoomNecesarioX := ScrollBox1.ClientWidth / AnchoZonaOriginal;
   ZoomNecesarioY := ScrollBox1.ClientHeight / AltoZonaOriginal;
-
   // Usar el menor para que toda la zona sea visible
   NuevoZoom := Min(ZoomNecesarioX, ZoomNecesarioY);
-
   // Limitar zoom máximo
   if NuevoZoom > 5.0 then NuevoZoom := 5.0;
-
   // Aplicar el nuevo zoom
   FZoomFactor := NuevoZoom;
   AplicarZoom;
-
   // Calcular scroll para centrar la zona
   NuevaPosScroll.X := Round((CentroZonaX * FZoomFactor) - (ScrollBox1.ClientWidth / 2.0));
   NuevaPosScroll.Y := Round((CentroZonaY * FZoomFactor) - (ScrollBox1.ClientHeight / 2.0));
-
   // Aplicar límites
   NuevaPosScroll.X := Max(0, Min(NuevaPosScroll.X, Image1.Width - ScrollBox1.ClientWidth));
   NuevaPosScroll.Y := Max(0, Min(NuevaPosScroll.Y, Image1.Height - ScrollBox1.ClientHeight));
-
   if NuevaPosScroll.X < 0 then NuevaPosScroll.X := 0;
   if NuevaPosScroll.Y < 0 then NuevaPosScroll.Y := 0;
-
   // Aplicar scroll
   ScrollBox1.HorzScrollBar.Position := NuevaPosScroll.X;
   ScrollBox1.VertScrollBar.Position := NuevaPosScroll.Y;

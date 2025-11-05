@@ -478,59 +478,50 @@ var
   DebugMsg: string;
 begin
   Result := 0;
-
   if not FileExists(RutaArchivo) then
   begin
     //ShowMessage('Archivo no existe: ' + RutaArchivo);
     Exit;
   end;
-
   ImgData := TImgData.Create;
   try
     try
-      DebugMsg := 'Procesando archivo...';
-
+//      DebugMsg := 'Procesando archivo...';
       if ImgData.ProcessFile(RutaArchivo) then
       begin
-        DebugMsg := DebugMsg + #13#10 + 'Archivo procesado OK';
-
+//        DebugMsg := DebugMsg + #13#10 + 'Archivo procesado OK';
         if ImgData.HasEXIF then
         begin
-          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
-
+//          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
           with ImgData.ExifObj do
           begin
             // Debug: Mostrar todos los intentos
-            DebugMsg := DebugMsg + #13#10 + 'DateTimeOriginal: ' + DateTimeToStr(DateTimeOriginal);
-            DebugMsg := DebugMsg + #13#10 + 'DateTimeDigitized: ' + DateTimeToStr(DateTimeDigitized);
-            DebugMsg := DebugMsg + #13#10 + 'DateTimeModified: ' + DateTimeToStr(DateTimeModified);
+//            DebugMsg := DebugMsg + #13#10 + 'DateTimeOriginal: ' + DateTimeToStr(DateTimeOriginal);
+//            DebugMsg := DebugMsg + #13#10 + 'DateTimeDigitized: ' + DateTimeToStr(DateTimeDigitized);
+//            DebugMsg := DebugMsg + #13#10 + 'DateTimeModified: ' + DateTimeToStr(DateTimeModified);
             //DebugMsg := DebugMsg + #13#10 + 'DateTime (string): ' + DateTime;
-
             // Intentar TagValue
-            DebugMsg := DebugMsg + #13#10 + 'TagValue[DateTimeOriginal]: ' + VarToStr(TagValue['DateTimeOriginal']);
-
+//            DebugMsg := DebugMsg + #13#10 + 'TagValue[DateTimeOriginal]: ' + VarToStr(TagValue['DateTimeOriginal']);
             Result := DateTimeOriginal;
             if Result = 0 then
               Result := DateTimeDigitized;
             if Result = 0 then
               Result := DateTimeModified;
-
-            DebugMsg := DebugMsg + #13#10 + 'Resultado final: ' + DateTimeToStr(Result);
+            if Result = 0 then
+              Result := TFile.GetCreationTime(RutaArchivo);
+//            DebugMsg := DebugMsg + #13#10 + 'Resultado final: ' + DateTimeToStr(Result);
           end;
         end
         else
-          DebugMsg := DebugMsg + #13#10 + 'NO tiene EXIF';
+          Result := TFile.GetCreationTime(RutaArchivo);
       end
       else
-        DebugMsg := DebugMsg + #13#10 + 'Error al procesar archivo';
-
+        Result := TFile.GetCreationTime(RutaArchivo);
       //ShowMessage(DebugMsg);
-
     except
       on E: Exception do
       begin
-        ShowMessage('Error: ' + E.Message);
-        Result := 0;
+        Result := TFile.GetCreationTime(RutaArchivo);
       end;
     end;
   finally
@@ -1300,8 +1291,7 @@ begin
   if ((dmmClientes.unqryHistoria.State = dsInsert)
    or (dmmClientes.unqryHistoria.State = dsEdit))  then
     dmmClientes.unqryHistoria.Post;
-  for I := 0 to
-                       tvHistoriasClientes.Controller.SelectedRecordCount - 1 do
+  for I := 0 to tvHistoriasClientes.Controller.SelectedRecordCount - 1 do
   begin
     ColumnIndex := cxgrdbclmncxgrdtvtv1ID.Index;
     RecordIndex :=
@@ -1512,7 +1502,8 @@ begin
         //LiberarClientDataSetFotos;
         cdsFotos := nil;
         // Si estamos en la pestaña de fotos, recargar
-        CargaFotos;
+        if pcDetalleClientes.ActivePage = tsFotos then
+          CargaFotos;
       end;
     end;
 end;

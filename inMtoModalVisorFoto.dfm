@@ -2,8 +2,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   Left = 0
   Top = 0
   Caption = 'Visor de Imagen'
-  ClientHeight = 578
-  ClientWidth = 829
+  ClientHeight = 577
+  ClientWidth = 825
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +19,8 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 41
-    Width = 829
-    Height = 397
+    Width = 825
+    Height = 396
     Align = alClient
     Color = clGray
     ParentColor = False
@@ -39,26 +39,26 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
   end
   object pnlCarrusel: TPanel
     Left = 0
-    Top = 438
-    Width = 829
+    Top = 437
+    Width = 825
     Height = 140
     Align = alBottom
     TabOrder = 1
     object ScrollBoxMiniaturas: TScrollBox
       Left = 1
       Top = 1
-      Width = 831
+      Width = 827
       Height = 138
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 0
-      ExplicitWidth = 827
+      ExplicitWidth = 823
     end
   end
   object pnlZoom: TPanel
     Left = 0
     Top = 0
-    Width = 829
+    Width = 825
     Height = 41
     Align = alTop
     TabOrder = 2
