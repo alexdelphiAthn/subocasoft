@@ -667,7 +667,9 @@ begin
           begin
             //FechaCreacion := TFile.GetCreationTime(RutaPaciente + SR.Name);
             // Guardar con formato que permite ordenar: fecha + nombre
-            Lista.Add(SR.Name);
+            FechaCreacion := ObtenerFechaExif(RutaPaciente + SR.Name);
+            Lista.Add(FormatDateTime('yyyymmddhhnnss', FechaCreacion) + '|' +
+                                     SR.Name);
           end;
         until FindNext(SR) <> 0;
         FindClose(SR);
@@ -676,10 +678,9 @@ begin
   // Agregar al grid
       for i := 0 to Lista.Count - 1 do
       begin
-        NombreArchivo := Lista[i];
+        NombreArchivo := Copy(Lista[i], Pos('|', Lista[i]) + 1, MaxInt);
         RutaCompleta := RutaThumbnail + ObtenerNombreThumbnail(NombreArchivo);
-        //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +
-                                                      // ' - ' + RutaCompleta));
+        //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +                                               // ' - ' + RutaCompleta));
         try
           //var aStopWatch := TStopWatch.StartNew;
           //ShowMessage('Cargando miniatura: ' + RutaCompleta);
