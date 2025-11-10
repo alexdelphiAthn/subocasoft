@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9E18F355-927A-45CD-85EB-7142EB36158D}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Facturacion.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\OdaVeriFactu\OdaVeriFactu\Reimpresion_Ticket\ReImprimir.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Facturacion">
+        <MSBuild Projects="Facturacion.dproj"/>
+    </Target>
+    <Target Name="Facturacion:Clean">
+        <MSBuild Projects="Facturacion.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Facturacion:Make">
+        <MSBuild Projects="Facturacion.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ReImprimir">
+        <MSBuild Projects="..\..\OdaVeriFactu\OdaVeriFactu\Reimpresion_Ticket\ReImprimir.dproj"/>
+    </Target>
+    <Target Name="ReImprimir:Clean">
+        <MSBuild Projects="..\..\OdaVeriFactu\OdaVeriFactu\Reimpresion_Ticket\ReImprimir.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ReImprimir:Make">
+        <MSBuild Projects="..\..\OdaVeriFactu\OdaVeriFactu\Reimpresion_Ticket\ReImprimir.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Facturacion;ReImprimir"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Facturacion:Clean;ReImprimir:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Facturacion:Make;ReImprimir:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
