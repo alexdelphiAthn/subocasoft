@@ -234,6 +234,7 @@ type
     lblProgreso: TcxLabel;
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
+    cdsFotosIndex: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure cxgrdbclmncxgrdtvtv1DESCRIPCION_HISTORIAPropertiesButtonClick(
@@ -351,7 +352,8 @@ begin
   tvHistoriasClientes.DataController.DataSource := dmmClientes.dsHistoria;
   tvFacturacion.DataController.DataSource := dmmClientes.dsFacturas;
   tvLineasFacturacion.DataController.DataSource := dmmClientes.dsLinFac;
-  // cdsFotos ya existe como componente del formulario, no lo ponemos a nil
+  if not cdsFotos.Active then
+    cdsFotos.CreateDataSet;
   inherited;
 end;
 
@@ -598,36 +600,24 @@ begin
 end;
 
 procedure TfrmMtoClientes.CargaFotos;
-var
-  sRuta: string;
 begin
   if pcDetalleClientes.ActivePage = tsFotos then
   begin
     try
-    // CRÍTICO: Limpiar la ruta anterior del paciente
-    FRutaPaciente := '';
-    // SIEMPRE vaciar para evitar datos antiguos (NO liberar, cdsFotos es componente del formulario)
-    VaciarClientDataSetFotos;
-    // Asegurar que existe y está activo
-    if not cdsFotos.Active then
-      CrearClientDataSetFotos;
-    // Esto actualizará FRutaPaciente con el cliente actual
-    sRuta := ObtenerRutaPaciente;
-    if sRuta <> '' then
-    begin
-      SincronizarThumbnails;
-      CargarMiniaturas;
-    end;
+      FRutaPaciente := '';
+      VaciarClientDataSetFotos;  // ✅ Una sola línea
+      if ObtenerRutaPaciente <> '' then
+      begin
+        SincronizarThumbnails;
+        CargarMiniaturas;
+      end;
     except
       on E: Exception do
-          begin
-            ShowMessage('Error ' +  E.Message);
-          end;
+        ShowMessage('Error ' + E.Message);
     end;
-    // Si ObtenerRutaPaciente devuelve '', el dataset queda vacío
   end
   else
-    VaciarClientDataSetFotos;
+    LiberarClientDataSetFotos;
 end;
 
 procedure TfrmMtoClientes.CargarMiniaturas;
@@ -772,57 +762,33 @@ end;
 
 procedure TfrmMtoClientes.CrearClientDataSetFotos;
 begin
-  // cdsFotos ya existe como componente del formulario
-  // Solo necesitamos crear el dataset si no está activo
-  if cdsFotos.Active then
-    cdsFotos.Close;
-  // Configurar los campos
-  with cdsFotos.FieldDefs do
-  begin
-    Clear;
-    Add('Index', ftInteger);
-    Add('RutaFoto', ftString, 500);
-    Add('NombreArchivo', ftString, 255);
-    Add('Fecha', ftDate);
-    Add('Miniatura', ftBlob);
-  end;
-  // Crear el dataset en memoria
-  cdsFotos.CreateDataSet;
-//  cdsFotos.AddIndex('idxFecha', 'Fecha', [ixDescending], '', '', 0);
-//  cdsFotos.IndexName := 'idxFecha';
-  // Ya está conectado a dsFotos desde el DFM
+  // Ya no hace falta - los campos están en el .dfm
+  if not cdsFotos.Active then
+    cdsFotos.CreateDataSet;
 end;
 
 procedure TfrmMtoClientes.VaciarClientDataSetFotos;
 begin
-  if cdsFotos <> nil then
-  begin
-    // *** CLAVE: Desconectar DataSource para forzar actualización visual ***
-    if dsFotos <> nil then
+  cdsFotos.DisableControls;
+  try
+    // Desconectar para forzar refresh visual
+    if Assigned(dsFotos) then
       dsFotos.DataSet := nil;
-    // Cerrar y recrear vacío
-    if cdsFotos.Active then
-      cdsFotos.Close;
-    cdsFotos.CreateDataSet;
-    // Reconectar DataSource
-    if dsFotos <> nil then
+    // Vaciar registros
+    cdsFotos.EmptyDataSet;  // ✅ Más eficiente que Close/CreateDataSet
+    // Reconectar
+    if Assigned(dsFotos) then
       dsFotos.DataSet := cdsFotos;
+  finally
+    cdsFotos.EnableControls;
   end;
 end;
 
 procedure TfrmMtoClientes.LiberarClientDataSetFotos;
 begin
-  if cdsFotos <> nil then
-  begin
-    // Desconectar del DataSource
-    if dsFotos <> nil then
-      dsFotos.DataSet := nil;
-    // Cerrar si está activo
-    if cdsFotos.Active then
-      cdsFotos.Close;
-    // Liberar
-    FreeAndNil(cdsFotos);
-  end;
+  // ✅ Solo cerrar, NO liberar
+  if (cdsFotos <> nil) and cdsFotos.Active then
+    cdsFotos.Close;
 end;
 
 procedure TfrmMtoClientes.CrearTodasMiniaturas;
@@ -1339,7 +1305,7 @@ var
 //  ListaMiniaturas: TStringList;
 //  Marca: TBookmark;
 begin
-  if (cdsFotos = nil) or (cdsFotos.IsEmpty) then
+    if (cdsFotos = nil) or (cdsFotos.IsEmpty) then
   begin
     ShowMessage('No hay fotos para mostrar');
     Exit;
@@ -1509,18 +1475,17 @@ end;
 procedure TfrmMtoClientes.dsTablaGDataChange(Sender: TObject; Field: TField);
 begin
   inherited;
-  if Assigned(dsTablaG) then
-    if Assigned(dsTablaG.Dataset) then
+  if Assigned(dsTablaG) and Assigned(dsTablaG.Dataset) then
+  begin
+    if (dsTablaG.DataSet.State = dsBrowse) then
     begin
-      if (dsTablaG.DataSet.State = dsBrowse) then
-      begin
-        // Vaciar el dataset de fotos (NO liberar, es componente del formulario)
-        VaciarClientDataSetFotos;
-        // Si estamos en la pestaña de fotos, recargar
-        if pcDetalleClientes.ActivePage = tsFotos then
-          CargaFotos;
-      end;
+      // ✅ CORRECTO: Solo cerrar el dataset
+      LiberarClientDataSetFotos;
+      // Si estamos en la pestaña de fotos, recargar
+      if pcDetalleClientes.ActivePage = tsFotos then
+        CargaFotos;
     end;
+  end;
 end;
 
 procedure TfrmMtoClientes.dxbbEtiquetasClick(Sender: TObject);
@@ -1563,8 +1528,7 @@ procedure TfrmMtoClientes.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
   inherited;
-  // cdsFotos es componente del formulario, se liberará automáticamente
-  VaciarClientDataSetFotos;
+  LiberarClientDataSetFotos;
   FreeAndNil(dmmClientes);
 end;
 
