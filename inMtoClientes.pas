@@ -605,7 +605,11 @@ begin
   begin
     try
       FRutaPaciente := '';
-      VaciarClientDataSetFotos;  // ✅ Una sola línea
+      // ✅ Asegurar que está activo antes de vaciarlo
+      if not cdsFotos.Active then
+        cdsFotos.CreateDataSet
+      else
+        VaciarClientDataSetFotos;
       if ObtenerRutaPaciente <> '' then
       begin
         SincronizarThumbnails;
@@ -617,7 +621,11 @@ begin
     end;
   end
   else
-    LiberarClientDataSetFotos;
+  begin
+    // Solo cerrar si está activo
+    if cdsFotos.Active then
+      cdsFotos.Close;
+  end;
 end;
 
 procedure TfrmMtoClientes.CargarMiniaturas;
@@ -769,14 +777,17 @@ end;
 
 procedure TfrmMtoClientes.VaciarClientDataSetFotos;
 begin
+  // ✅ PROTECCIÓN: Verificar que está activo antes de usarlo
+  if not cdsFotos.Active then
+  begin
+    cdsFotos.CreateDataSet;
+    Exit;
+  end;
   cdsFotos.DisableControls;
   try
-    // Desconectar para forzar refresh visual
     if Assigned(dsFotos) then
       dsFotos.DataSet := nil;
-    // Vaciar registros
-    cdsFotos.EmptyDataSet;  // ✅ Más eficiente que Close/CreateDataSet
-    // Reconectar
+    cdsFotos.EmptyDataSet;
     if Assigned(dsFotos) then
       dsFotos.DataSet := cdsFotos;
   finally
