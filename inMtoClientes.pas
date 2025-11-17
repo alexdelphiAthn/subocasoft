@@ -31,7 +31,7 @@ uses
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   inMtoPrincipal, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  system.ioutils, system.StrUtils;
+  system.ioutils, system.StrUtils, inLibImageUtils;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -475,78 +475,8 @@ begin
 end;
 
 function TfrmMtoClientes.ObtenerFechaExif(const RutaArchivo: string): TDateTime;
-var
-  ImgData: TImgData;
-  DebugMsg: string;
-  sNombreFich:string;
-  Partes: TArray<string>;
-  Dia, Mes, Anio:Word;
 begin
-  Result := 0;
-  if not FileExists(RutaArchivo) then
-  begin
-    //ShowMessage('Archivo no existe: ' + RutaArchivo);
-    Exit;
-  end;
-  sNombreFich := ExtractFileName(RutaArchivo);
-  if StartsText('FE', sNombreFich) then
-  begin
-    Partes := sNombreFich.Split(['_']);
-    if Length(Partes) >= 4 then
-    begin
-      Dia := StrToInt(Partes[1]);
-      Mes := StrToInt(Partes[2]);
-      Anio := StrToInt(Partes[3]);
-    end;
-    Result := EncodeDate(Anio, Mes, Dia);
-  end
-  else
-  begin
-    ImgData := TImgData.Create;
-    try
-      try
-  //      DebugMsg := 'Procesando archivo...';
-        if ImgData.ProcessFile(RutaArchivo) then
-        begin
-  //        DebugMsg := DebugMsg + #13#10 + 'Archivo procesado OK';
-          if ImgData.HasEXIF then
-          begin
-  //          DebugMsg := DebugMsg + #13#10 + 'Tiene EXIF';
-            with ImgData.ExifObj do
-            begin
-              // Debug: Mostrar todos los intentos
-  //            DebugMsg := DebugMsg + #13#10 + 'DateTimeOriginal: ' + DateTimeToStr(DateTimeOriginal);
-  //            DebugMsg := DebugMsg + #13#10 + 'DateTimeDigitized: ' + DateTimeToStr(DateTimeDigitized);
-  //            DebugMsg := DebugMsg + #13#10 + 'DateTimeModified: ' + DateTimeToStr(DateTimeModified);
-              //DebugMsg := DebugMsg + #13#10 + 'DateTime (string): ' + DateTime;
-              // Intentar TagValue
-  //            DebugMsg := DebugMsg + #13#10 + 'TagValue[DateTimeOriginal]: ' + VarToStr(TagValue['DateTimeOriginal']);
-              Result := DateTimeOriginal;
-              if Result = 0 then
-                Result := DateTimeDigitized;
-              if Result = 0 then
-                Result := DateTimeModified;
-              if Result = 0 then
-                Result := TFile.GetCreationTime(RutaArchivo);
-  //            DebugMsg := DebugMsg + #13#10 + 'Resultado final: ' + DateTimeToStr(Result);
-            end;
-          end
-          else
-            Result := TFile.GetCreationTime(RutaArchivo);
-        end
-        else
-          Result := TFile.GetCreationTime(RutaArchivo);
-        //ShowMessage(DebugMsg);
-      except
-        on E: Exception do
-        begin
-          Result := TFile.GetCreationTime(RutaArchivo);
-        end;
-      end;
-    finally
-      ImgData.Free;
-    end;
-  end;
+  Result := TImageUtils.ObtenerFechaExif(RutaArchivo);
 end;
 
 function TfrmMtoClientes.ObtenerThumbnail(const ARutaArchivo: string): TBitmap;
@@ -721,27 +651,13 @@ end;
 function TfrmMtoClientes.ObtenerNombreThumbnail(
                                             const ARutaArchivo: string): string;
 begin
-  // Convertir foto1.jpg a foto1_thumb.bmp
-  Result := ChangeFileExt(ExtractFileName(ARutaArchivo), '_thumb.bmp');
+  Result := TImageUtils.ObtenerNombreThumbnail(ARutaArchivo);
 end;
 
 function TfrmMtoClientes.NecesitaActualizacion(const ARutaArchivo,
                                                ARutaThumbnail: string): Boolean;
-var
-  FechaOriginal, FechaThumbnail: TDateTime;
 begin
-  // Si no existe el thumbnail, necesita crearse
-  if not FileExists(ARutaThumbnail) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    // Si el archivo original es más nuevo que el thumbnail, necesita actualizarse
-    FechaOriginal := FileDateToDateTime(FileAge(ARutaArchivo));
-    FechaThumbnail := FileDateToDateTime(FileAge(ARutaThumbnail));
-    Result := FechaOriginal > FechaThumbnail;
-  end;
+  Result := TImageUtils.NecesitaActualizacion(ARutaArchivo, ARutaThumbnail);
 end;
 
 procedure TfrmMtoClientes.MostrarFotoCompleta;
@@ -1544,97 +1460,14 @@ begin
 end;
 
 function TfrmMtoClientes.ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
-var
-  Image: TGPImage;
-  PropItem: PPropertyItem;
-  PropSize: UINT;
 begin
-  Result := 1; // Valor por defecto (sin rotación)
-  Image := TGPImage.Create(ARutaImagen);
-  try
-    // PropertyTagOrientation = $0112
-    PropSize := Image.GetPropertyItemSize($0112);
-    if PropSize > 0 then
-    begin
-      GetMem(PropItem, PropSize);
-      try
-        if Image.GetPropertyItem($0112, PropSize, PropItem) = Ok then
-        begin
-          if PropItem.type_ = PropertyTagTypeShort then
-            Result := PWord(PropItem.value)^;
-        end;
-      finally
-        FreeMem(PropItem);
-      end;
-    end;
-  finally
-    Image.Free;
-  end;
+  Result := TImageUtils.ObtenerOrientacionEXIF(ARutaImagen);
 end;
 
 function TfrmMtoClientes.CrearThumbnail(const ARutaImagen: string;
                                         ASize: Integer): TBitmap;
-var
-  GPBitmap: TGPBitmap;
-  GPGraphics: TGPGraphics;
-  Orientacion: Integer;
-  NuevoAncho, NuevoAlto: Integer;
-  Proporcion: Double;
 begin
-  Result := TBitmap.Create;
-  try
-    // 1. Leer orientación EXIF
-    Orientacion := ObtenerOrientacionEXIF(ARutaImagen);
-    // 2. Cargar con GDI+ (mucho más rápido que TJPEGImage)
-    GPBitmap := TGPBitmap.Create(ARutaImagen);
-    try
-      // 3. Aplicar rotación según EXIF
-      case Orientacion of
-        3: GPBitmap.RotateFlip(Rotate180FlipNone);
-        6: GPBitmap.RotateFlip(Rotate90FlipNone);
-        8: GPBitmap.RotateFlip(Rotate270FlipNone);
-      end;
-      // 4. Calcular tamaño del thumbnail
-      if GPBitmap.GetWidth > GPBitmap.GetHeight then
-      begin
-        Proporcion := ASize / GPBitmap.GetWidth;
-        NuevoAncho := ASize;
-        NuevoAlto := Round(GPBitmap.GetHeight * Proporcion);
-      end
-      else
-      begin
-        Proporcion := ASize / GPBitmap.GetHeight;
-        NuevoAlto := ASize;
-        NuevoAncho := Round(GPBitmap.GetWidth * Proporcion);
-      end;
-      if (NuevoAncho < 1) then NuevoAncho := 1;
-      if (NuevoAlto < 1) then NuevoAlto := 1;
-      // 5. Crear thumbnail
-      Result.Width := NuevoAncho;
-      Result.Height := NuevoAlto;
-      Result.PixelFormat := pf24bit;
-      // 6. Dibujar con GDI+ (ALTA CALIDAD)
-      GPGraphics := TGPGraphics.Create(Result.Canvas.Handle);
-      try
-        GPGraphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
-        GPGraphics.SetSmoothingMode(SmoothingModeHighQuality);
-        GPGraphics.DrawImage(GPBitmap, 0, 0, NuevoAncho, NuevoAlto);
-      finally
-        GPGraphics.Free;
-      end;
-    finally
-      GPBitmap.Free;
-    end;
-  except
-    on E: Exception do
-    begin
-      // En caso de error, devolver thumbnail vacío
-      Result.Width := ASize;
-      Result.Height := ASize;
-      Result.Canvas.Brush.Color := clWhite;
-      Result.Canvas.FillRect(Rect(0, 0, ASize, ASize));
-    end;
-  end;
+  Result := TImageUtils.CrearThumbnail(ARutaImagen, ASize);
 end;
 
 end.

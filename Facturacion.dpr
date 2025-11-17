@@ -58,7 +58,8 @@ uses
   inMtoModalSubsanacion in 'inMtoModalSubsanacion.pas' {frmModalSubsanacion},
   inMtoModalSubsanacionLineas in 'inMtoModalSubsanacionLineas.pas' {frmModalSubsanacionLineas},
   inMtoModalVisorFoto in 'inMtoModalVisorFoto.pas' {frmMtoVisorFoto},
-  uEncryptHelper in '..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas';
+  uEncryptHelper in '..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas',
+  inLibImageUtils in 'inLibImageUtils.pas';
 
 //inIni in 'inIni.pas';
 
