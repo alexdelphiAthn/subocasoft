@@ -149,4 +149,9 @@ object frmMtoVisorFoto: TfrmMtoVisorFoto
       OnClick = btnOpenFolderClick
     end
   end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 408
+    Top = 296
+  end
 end

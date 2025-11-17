@@ -43,6 +43,7 @@ type
     Rotar90dcha: TSpeedButton;
     btnAjustar: TSpeedButton;
     btnOpenFolder: TSpeedButton;
+    Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure btnZoomInClick(Sender: TObject);
     procedure btnZoomOutClick(Sender: TObject);
@@ -67,7 +68,16 @@ type
     procedure Rotar90dchaClick(Sender: TObject);
     procedure btnAjustarClick(Sender: TObject);
     procedure btnOpenFolderClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
+//    const WM_USER = $0400;
+    FTargetScrollX: Integer;
+    FTargetScrollY: Integer;
+    FScrollRetryCount: Integer;
+    //Timer1: TTimer;
+
+
+//    procedure WMScrollToPosition(var Msg: TMessage); message WM_USER + 100;
     function ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
     function ObtenerFechaExif(const RutaArchivo: string): TDateTime;
   private
@@ -474,30 +484,30 @@ begin
                                  ExtractFileName(FListaImagenes[FIndiceActual]);
 end;
 
-procedure TfrmMtoVisorFoto.AplicarZoom;
-var
-  NuevoAncho, NuevoAlto: Integer;
-  TempBitmap: TBitmap;
-begin
-  if FOriginalBitmap.Empty then Exit;
-  NuevoAncho := Round(FOriginalBitmap.Width * FZoomFactor);
-  NuevoAlto := Round(FOriginalBitmap.Height * FZoomFactor);
-  TempBitmap := TBitmap.Create;
-  try
-    TempBitmap.Width := NuevoAncho;
-    TempBitmap.Height := NuevoAlto;
-    TempBitmap.Canvas.StretchDraw(
-      Rect(0, 0, NuevoAncho, NuevoAlto),
-      FOriginalBitmap
-    );
-    Image1.Picture.Bitmap.Assign(TempBitmap);
-    Image1.Width := NuevoAncho;
-    Image1.Height := NuevoAlto;
-    ActualizarLabelZoom;
-  finally
-    TempBitmap.Free;
-  end;
-end;
+//procedure TfrmMtoVisorFoto.AplicarZoom;
+//var
+//  NuevoAncho, NuevoAlto: Integer;
+//  TempBitmap: TBitmap;
+//begin
+//  if FOriginalBitmap.Empty then Exit;
+//  NuevoAncho := Round(FOriginalBitmap.Width * FZoomFactor);
+//  NuevoAlto := Round(FOriginalBitmap.Height * FZoomFactor);
+//  TempBitmap := TBitmap.Create;
+//  try
+//    TempBitmap.Width := NuevoAncho;
+//    TempBitmap.Height := NuevoAlto;
+//    TempBitmap.Canvas.StretchDraw(
+//      Rect(0, 0, NuevoAncho, NuevoAlto),
+//      FOriginalBitmap
+//    );
+//    Image1.Picture.Bitmap.Assign(TempBitmap);
+//    Image1.Width := NuevoAncho;
+//    Image1.Height := NuevoAlto;
+//    ActualizarLabelZoom;
+//  finally
+//    TempBitmap.Free;
+//  end;
+//end;
 
 procedure TfrmMtoVisorFoto.ActualizarLabelZoom;
 begin
@@ -592,95 +602,154 @@ begin
   MostrarImagenPorIndice(FListaImagenes.Count - 1);
 end;
 
-//procedure TfrmMtoVisorFoto.dxImageSlider1Click(Sender: TObject);
-//begin
-//  if dxImageSlider1.ItemIndex >= 0 then
-//    MostrarImagenPorIndice(dxImageSlider1.ItemIndex);
-//end;
-
-// Y ahora usa esas coordenadas en el DblClick:
-
 procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
 var
   PuntoClick: TPoint;
   PuntoEnImagenActual: TPoint;
   PuntoEnOriginal: TPoint;
-  // Configuración de cuadrícula
   NumColumnas, NumFilas: Integer;
   AnchoZonaOriginal, AltoZonaOriginal: Double;
   ColumnaClick, FilaClick: Integer;
-  // Coordenadas de la zona seleccionada en imagen original
   CentroZonaX, CentroZonaY: Double;
-  // Zoom
   ZoomNecesarioX, ZoomNecesarioY, NuevoZoom: Double;
-  NuevaPosScroll: TPoint;
   FactorFit: Double;
 begin
   if FOriginalBitmap.Empty then Exit;
+
+  // CRÍTICO: Resetear el estado de arrastre inmediatamente
+  FIsDragging := False;
+  Image1.Cursor := crHandPoint;
+  Screen.Cursor := crDefault;
+  ReleaseCapture;
+
   FactorFit := CalcularFactorFit;
-  // Si ya hay zoom (más que fit + 10%), volver a fit
+
   if FZoomFactor > (FactorFit * 1.1) then
   begin
     FZoomFactor := FactorFit;
     AplicarZoom;
     Exit;
   end;
-  // Dividir en cuadrícula 4x4 (máximo 16 zonas)
-  NumColumnas := 4;
-  NumFilas := 4;
-  // Obtener posición del click en pantalla
+
+  NumColumnas := 16;
+  NumFilas := 16;
+
   GetCursorPos(PuntoClick);
-  // Convertir a coordenadas del ScrollBox
   PuntoClick := ScrollBox1.ScreenToClient(PuntoClick);
-  // Validar que el click está dentro del área del ScrollBox
+
   if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
      (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then
     Exit;
-  // Coordenadas absolutas en la imagen escalada actual
+
   PuntoEnImagenActual.X := PuntoClick.X + ScrollBox1.HorzScrollBar.Position;
   PuntoEnImagenActual.Y := PuntoClick.Y + ScrollBox1.VertScrollBar.Position;
-  // Convertir a coordenadas de la imagen ORIGINAL
+
   PuntoEnOriginal.X := Round(PuntoEnImagenActual.X / FZoomFactor);
   PuntoEnOriginal.Y := Round(PuntoEnImagenActual.Y / FZoomFactor);
-  // Validar que está dentro de la imagen original
+
   if (PuntoEnOriginal.X < 0) or (PuntoEnOriginal.X >= FOriginalBitmap.Width) or
      (PuntoEnOriginal.Y < 0) or (PuntoEnOriginal.Y >= FOriginalBitmap.Height) then
     Exit;
-  // Tamaño de cada zona en la imagen ORIGINAL
+
   AnchoZonaOriginal := FOriginalBitmap.Width / NumColumnas;
   AltoZonaOriginal := FOriginalBitmap.Height / NumFilas;
-  // Determinar en qué columna y fila se hizo click
+
   ColumnaClick := Trunc(PuntoEnOriginal.X / AnchoZonaOriginal);
   FilaClick := Trunc(PuntoEnOriginal.Y / AltoZonaOriginal);
-  // Asegurar que no se salga del rango
-  if ColumnaClick >= NumColumnas then ColumnaClick := NumColumnas - 1;
-  if FilaClick >= NumFilas then FilaClick := NumFilas - 1;
-  if ColumnaClick < 0 then ColumnaClick := 0;
-  if FilaClick < 0 then FilaClick := 0;
-  // Calcular el centro de la zona en coordenadas originales
+
+  ColumnaClick := Max(0, Min(ColumnaClick, NumColumnas - 1));
+  FilaClick := Max(0, Min(FilaClick, NumFilas - 1));
+
   CentroZonaX := (ColumnaClick * AnchoZonaOriginal) + (AnchoZonaOriginal / 2);
   CentroZonaY := (FilaClick * AltoZonaOriginal) + (AltoZonaOriginal / 2);
-  // Calcular zoom necesario para que esta zona llene la pantalla
+
   ZoomNecesarioX := ScrollBox1.ClientWidth / AnchoZonaOriginal;
   ZoomNecesarioY := ScrollBox1.ClientHeight / AltoZonaOriginal;
-  // Usar el menor para que toda la zona sea visible
   NuevoZoom := Min(ZoomNecesarioX, ZoomNecesarioY);
-  // Limitar zoom máximo
+
   if NuevoZoom > 5.0 then NuevoZoom := 5.0;
-  // Aplicar el nuevo zoom
-  FZoomFactor := NuevoZoom;
-  AplicarZoom;
-  // Calcular scroll para centrar la zona
-  NuevaPosScroll.X := Round((CentroZonaX * FZoomFactor) - (ScrollBox1.ClientWidth / 2.0));
-  NuevaPosScroll.Y := Round((CentroZonaY * FZoomFactor) - (ScrollBox1.ClientHeight / 2.0));
-  // Aplicar límites
-  NuevaPosScroll.X := Max(0, Min(NuevaPosScroll.X, Image1.Width - ScrollBox1.ClientWidth));
-  NuevaPosScroll.Y := Max(0, Min(NuevaPosScroll.Y, Image1.Height - ScrollBox1.ClientHeight));
-  if NuevaPosScroll.X < 0 then NuevaPosScroll.X := 0;
-  if NuevaPosScroll.Y < 0 then NuevaPosScroll.Y := 0;
-  // Aplicar scroll
-  ScrollBox1.HorzScrollBar.Position := NuevaPosScroll.X;
-  ScrollBox1.VertScrollBar.Position := NuevaPosScroll.Y;
+
+  FTargetScrollX := Round((CentroZonaX * NuevoZoom) - (ScrollBox1.ClientWidth / 2.0));
+  FTargetScrollY := Round((CentroZonaY * NuevoZoom) - (ScrollBox1.ClientHeight / 2.0));
+
+  LockWindowUpdate(ScrollBox1.Handle);
+  try
+    FZoomFactor := NuevoZoom;
+    AplicarZoom;
+
+    Application.ProcessMessages;
+
+    if ScrollBox1.HorzScrollBar.Range > ScrollBox1.ClientWidth then
+      FTargetScrollX := Max(0, Min(FTargetScrollX, ScrollBox1.HorzScrollBar.Range - ScrollBox1.ClientWidth))
+    else
+      FTargetScrollX := 0;
+
+    if ScrollBox1.VertScrollBar.Range > ScrollBox1.ClientHeight then
+      FTargetScrollY := Max(0, Min(FTargetScrollY, ScrollBox1.VertScrollBar.Range - ScrollBox1.ClientHeight))
+    else
+      FTargetScrollY := 0;
+
+    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
+    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
+
+    Sleep(20);
+
+  finally
+    LockWindowUpdate(0);
+
+    // Asegurar nuevamente que el cursor está correcto
+    FIsDragging := False;
+    Image1.Cursor := crHandPoint;
+    Screen.Cursor := crDefault;
+  end;
+
+  FScrollRetryCount := 0;
+  Timer1.Enabled := False;
+  Timer1.Interval := 100;
+  Timer1.Enabled := True;
+end;
+
+procedure TfrmMtoVisorFoto.Timer1Timer(Sender: TObject);
+begin
+  Timer1.Enabled := False;
+
+  // Asegurar que el estado es correcto
+  FIsDragging := False;
+  Image1.Cursor := crHandPoint;
+  Screen.Cursor := crDefault;
+
+  if (ScrollBox1.HorzScrollBar.Position <> FTargetScrollX) or
+     (ScrollBox1.VertScrollBar.Position <> FTargetScrollY) then
+  begin
+    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
+    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
+  end;
+end;
+
+// Y restaurar AplicarZoom a su versión original SIN Visible := False
+procedure TfrmMtoVisorFoto.AplicarZoom;
+var
+  NuevoAncho, NuevoAlto: Integer;
+  TempBitmap: TBitmap;
+begin
+  if FOriginalBitmap.Empty then Exit;
+  NuevoAncho := Round(FOriginalBitmap.Width * FZoomFactor);
+  NuevoAlto := Round(FOriginalBitmap.Height * FZoomFactor);
+  TempBitmap := TBitmap.Create;
+  try
+    TempBitmap.Width := NuevoAncho;
+    TempBitmap.Height := NuevoAlto;
+    TempBitmap.Canvas.StretchDraw(
+      Rect(0, 0, NuevoAncho, NuevoAlto),
+      FOriginalBitmap
+    );
+    Image1.Picture.Bitmap.Assign(TempBitmap);
+    Image1.Width := NuevoAncho;
+    Image1.Height := NuevoAlto;
+    ActualizarLabelZoom;
+  finally
+    TempBitmap.Free;
+  end;
 end;
 
 procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject;
