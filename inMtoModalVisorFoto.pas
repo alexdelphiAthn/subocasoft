@@ -1,4 +1,4 @@
-unit inMtoModalVisorFoto;
+Ôªøunit inMtoModalVisorFoto;
 
 interface
 
@@ -131,7 +131,7 @@ begin
 //  dxImageSlider1.Height := 120;
   pnlCarrusel.Height := 170;
   pnlCarrusel.Align := alBottom;
-  // Ocultar navegaciÛn por defecto
+  // Ocultar navegaci√≥n por defecto
   //pnlNavigation.Visible := False;
   //pnlCarrusel.Visible := False;
 end;
@@ -165,7 +165,7 @@ procedure TfrmMtoVisorFoto.MostrarImagenes(const AListaArchivos: TStringList;
   AIndiceInicial: Integer = 0);
 begin
   FListaImagenes.Assign(AListaArchivos);
-  //FListaMiniaturas.Clear; // Sin miniaturas, se generar·n
+  //FListaMiniaturas.Clear; // Sin miniaturas, se generar√°n
   FIndiceActual := AIndiceInicial;
   if FListaImagenes.Count > 0 then
   begin
@@ -196,7 +196,7 @@ begin
 //  end;
   ShowModal;
 //  FZoomFactor := CalcularFactorFit;
-//    // Si la imagen ya cabe sin escalar, el factor ser· 1.0 (no cambia nada)
+//    // Si la imagen ya cabe sin escalar, el factor ser√° 1.0 (no cambia nada)
 //  AplicarZoom;
 end;
 
@@ -209,12 +209,12 @@ begin
   Image1.Visible := True;
   Image1.BringToFront;
   try
-    // 1. Leer orientaciÛn EXIF
+    // 1. Leer orientaci√≥n EXIF
     Orientacion := ObtenerOrientacionEXIF(ARutaArchivo);
     // 2. Cargar con GDI+
     GPBitmap := TGPBitmap.Create(ARutaArchivo);
     try
-      // 3. Aplicar rotaciÛn seg˙n EXIF
+      // 3. Aplicar rotaci√≥n seg√∫n EXIF
       case Orientacion of
         3: GPBitmap.RotateFlip(Rotate180FlipNone);
         6: GPBitmap.RotateFlip(Rotate90FlipNone);
@@ -295,14 +295,14 @@ begin
   if not bClick then
   if Assigned(MiniaturaSeleccionada) then
   begin
-    // Cada miniatura ocupa 110 pÌxeles (100 de ancho + 10 de separaciÛn)
+    // Cada miniatura ocupa 110 p√≠xeles (100 de ancho + 10 de separaci√≥n)
     AnchoMiniatura := 140;
-    // Calcular cu·ntas miniaturas caben en el ·rea visible
+    // Calcular cu√°ntas miniaturas caben en el √°rea visible
     MiniaturasPorPantalla := ScrollBoxMiniaturas.ClientWidth div AnchoMiniatura;
-    // Calcular cu·ntas miniaturas deberÌan quedar a la izquierda para centrar la seleccionada
+    // Calcular cu√°ntas miniaturas deber√≠an quedar a la izquierda para centrar la seleccionada
     MiniaturasALaIzquierda := MiniaturasPorPantalla div 2;
-    // Calcular la posiciÛn de scroll:
-    // Ìndice actual menos las que van a la izquierda, multiplicado por el ancho
+    // Calcular la posici√≥n de scroll:
+    // √≠ndice actual menos las que van a la izquierda, multiplicado por el ancho
     PosicionDestino := (AIndice - MiniaturasALaIzquierda) * AnchoMiniatura;
     // Si es negativo, ir al inicio
     if PosicionDestino < 0 then
@@ -326,17 +326,17 @@ begin
       BitmapRotado.Width := FOriginalBitmap.Height;
       BitmapRotado.Height := FOriginalBitmap.Width;
       BitmapRotado.PixelFormat := FOriginalBitmap.PixelFormat;
-      // Configurar el modo de mapeo para rotaciÛn
+      // Configurar el modo de mapeo para rotaci√≥n
       SetGraphicsMode(BitmapRotado.Canvas.Handle, GM_ADVANCED);
-      // Crear la matriz de transformaciÛn para rotar 90∫ a la derecha
-      XForm.eM11 := 0;   // RotaciÛn 90∫ derecha
+      // Crear la matriz de transformaci√≥n para rotar 90¬∫ a la derecha
+      XForm.eM11 := 0;   // Rotaci√≥n 90¬∫ derecha
       XForm.eM12 := 1;
-      XForm.eM21 := -1;  // AQUÕ estaba el error, faltaba el signo menos
+      XForm.eM21 := -1;  // AQU√ç estaba el error, faltaba el signo menos
       XForm.eM22 := 0;
-      XForm.eDx := BitmapRotado.Width;  // TraslaciÛn en X
-      XForm.eDy := 0;    // TraslaciÛn en Y
+      XForm.eDx := BitmapRotado.Width;  // Traslaci√≥n en X
+      XForm.eDy := 0;    // Traslaci√≥n en Y
       SetWorldTransform(BitmapRotado.Canvas.Handle, XForm);
-      // Dibujar la imagen original con la transformaciÛn aplicada
+      // Dibujar la imagen original con la transformaci√≥n aplicada
       BitmapRotado.Canvas.Draw(0, 0, FOriginalBitmap);
       // Reemplazar el bitmap original
       FOriginalBitmap.Assign(BitmapRotado);
@@ -372,7 +372,7 @@ begin
   AnchoBox := ScrollBox1.ClientWidth;
   AltoBox   := ScrollBox1.ClientHeight;
 
-  // Evitamos divisiÛn por cero (por si la imagen est· vacÌa)
+  // Evitamos divisi√≥n por cero (por si la imagen est√° vac√≠a)
   if (FOriginalBitmap.Width = 0) or (FOriginalBitmap.Height = 0) then
     Exit(1.0);
 
@@ -448,10 +448,10 @@ begin
     Inc(X, 150);
     FClientDataSet.Next;
   end;
-  // A—ADIR ESTAS LÕNEAS:
-  // Forzar actualizaciÛn del ScrollBox
+  // A√ëADIR ESTAS L√çNEAS:
+  // Forzar actualizaci√≥n del ScrollBox
   ScrollBoxMiniaturas.HorzScrollBar.Range := X + 10;
-  // X es la ˙ltima posiciÛn + un margen
+  // X es la √∫ltima posici√≥n + un margen
   ScrollBoxMiniaturas.Invalidate;
   Application.ProcessMessages;
   // Resaltar la primera miniatura
@@ -483,31 +483,6 @@ begin
     Caption := 'Visor de Imagen - ' +
                                  ExtractFileName(FListaImagenes[FIndiceActual]);
 end;
-
-//procedure TfrmMtoVisorFoto.AplicarZoom;
-//var
-//  NuevoAncho, NuevoAlto: Integer;
-//  TempBitmap: TBitmap;
-//begin
-//  if FOriginalBitmap.Empty then Exit;
-//  NuevoAncho := Round(FOriginalBitmap.Width * FZoomFactor);
-//  NuevoAlto := Round(FOriginalBitmap.Height * FZoomFactor);
-//  TempBitmap := TBitmap.Create;
-//  try
-//    TempBitmap.Width := NuevoAncho;
-//    TempBitmap.Height := NuevoAlto;
-//    TempBitmap.Canvas.StretchDraw(
-//      Rect(0, 0, NuevoAncho, NuevoAlto),
-//      FOriginalBitmap
-//    );
-//    Image1.Picture.Bitmap.Assign(TempBitmap);
-//    Image1.Width := NuevoAncho;
-//    Image1.Height := NuevoAlto;
-//    ActualizarLabelZoom;
-//  finally
-//    TempBitmap.Free;
-//  end;
-//end;
 
 procedure TfrmMtoVisorFoto.ActualizarLabelZoom;
 begin
@@ -577,12 +552,12 @@ begin
     end
     else
     begin
-      ShowMessage('No se encontrÛ la carpeta: ' + RutaCarpeta);
+      ShowMessage('No se encontr√≥ la carpeta: ' + RutaCarpeta);
     end;
   end
   else
   begin
-    ShowMessage('No hay ning˙n archivo seleccionado');
+    ShowMessage('No hay ning√∫n archivo seleccionado');
   end;
 end;
 
@@ -616,18 +591,27 @@ var
 begin
   if FOriginalBitmap.Empty then Exit;
 
-  // CRÕTICO: Resetear el estado de arrastre inmediatamente
+  // CR√çTICO: Resetear el estado de arrastre inmediatamente
   FIsDragging := False;
-  Image1.Cursor := crHandPoint;
-  Screen.Cursor := crDefault;
-  ReleaseCapture;
 
   FactorFit := CalcularFactorFit;
 
+  // Si ya hay zoom, volver a fit
   if FZoomFactor > (FactorFit * 1.1) then
   begin
     FZoomFactor := FactorFit;
-    AplicarZoom;
+
+    LockWindowUpdate(ScrollBox1.Handle);
+    try
+      AplicarZoom;
+      Application.ProcessMessages;
+    finally
+      LockWindowUpdate(0);
+      // Resetear cursor despu√©s de volver a ajustar
+      FIsDragging := False;
+      Image1.Cursor := crHandPoint;
+      Screen.Cursor := crDefault;
+    end;
     Exit;
   end;
 
@@ -648,7 +632,8 @@ begin
   PuntoEnOriginal.Y := Round(PuntoEnImagenActual.Y / FZoomFactor);
 
   if (PuntoEnOriginal.X < 0) or (PuntoEnOriginal.X >= FOriginalBitmap.Width) or
-     (PuntoEnOriginal.Y < 0) or (PuntoEnOriginal.Y >= FOriginalBitmap.Height) then
+     (PuntoEnOriginal.Y < 0) or
+     (PuntoEnOriginal.Y >= FOriginalBitmap.Height) then
     Exit;
 
   AnchoZonaOriginal := FOriginalBitmap.Width / NumColumnas;
@@ -667,10 +652,21 @@ begin
   ZoomNecesarioY := ScrollBox1.ClientHeight / AltoZonaOriginal;
   NuevoZoom := Min(ZoomNecesarioX, ZoomNecesarioY);
 
-  if NuevoZoom > 5.0 then NuevoZoom := 5.0;
+  // Reducir el zoom para ver mejor
+  NuevoZoom := NuevoZoom * 0.70;  // 70% del calculado
 
-  FTargetScrollX := Round((CentroZonaX * NuevoZoom) - (ScrollBox1.ClientWidth / 2.0));
-  FTargetScrollY := Round((CentroZonaY * NuevoZoom) - (ScrollBox1.ClientHeight / 2.0));
+  // IMPORTANTE: Limitar el zoom m√°ximo a 2.5 (250%) en lugar de 5.0
+  if NuevoZoom > 2.5 then
+    NuevoZoom := 2.5;
+
+  // Tambi√©n asegurar un zoom m√≠nimo razonable
+  if NuevoZoom < FactorFit then
+    NuevoZoom := FactorFit;
+
+  FTargetScrollX := Round((CentroZonaX * NuevoZoom) -
+                          (ScrollBox1.ClientWidth / 2.0));
+  FTargetScrollY := Round((CentroZonaY * NuevoZoom) -
+                           (ScrollBox1.ClientHeight / 2.0));
 
   LockWindowUpdate(ScrollBox1.Handle);
   try
@@ -680,12 +676,16 @@ begin
     Application.ProcessMessages;
 
     if ScrollBox1.HorzScrollBar.Range > ScrollBox1.ClientWidth then
-      FTargetScrollX := Max(0, Min(FTargetScrollX, ScrollBox1.HorzScrollBar.Range - ScrollBox1.ClientWidth))
+      FTargetScrollX := Max(0, Min(FTargetScrollX,
+                            ScrollBox1.HorzScrollBar.Range -
+                            ScrollBox1.ClientWidth))
     else
       FTargetScrollX := 0;
 
     if ScrollBox1.VertScrollBar.Range > ScrollBox1.ClientHeight then
-      FTargetScrollY := Max(0, Min(FTargetScrollY, ScrollBox1.VertScrollBar.Range - ScrollBox1.ClientHeight))
+      FTargetScrollY := Max(0, Min(FTargetScrollY,
+                                   ScrollBox1.VertScrollBar.Range -
+                                   ScrollBox1.ClientHeight))
     else
       FTargetScrollY := 0;
 
@@ -696,8 +696,7 @@ begin
 
   finally
     LockWindowUpdate(0);
-
-    // Asegurar nuevamente que el cursor est· correcto
+    // Asegurar que el cursor est√° correcto
     FIsDragging := False;
     Image1.Cursor := crHandPoint;
     Screen.Cursor := crDefault;
@@ -712,12 +711,10 @@ end;
 procedure TfrmMtoVisorFoto.Timer1Timer(Sender: TObject);
 begin
   Timer1.Enabled := False;
-
   // Asegurar que el estado es correcto
   FIsDragging := False;
   Image1.Cursor := crHandPoint;
   Screen.Cursor := crDefault;
-
   if (ScrollBox1.HorzScrollBar.Position <> FTargetScrollX) or
      (ScrollBox1.VertScrollBar.Position <> FTargetScrollY) then
   begin
@@ -726,7 +723,7 @@ begin
   end;
 end;
 
-// Y restaurar AplicarZoom a su versiÛn original SIN Visible := False
+// Y restaurar AplicarZoom a su versi√≥n original SIN Visible := False
 procedure TfrmMtoVisorFoto.AplicarZoom;
 var
   NuevoAncho, NuevoAlto: Integer;
@@ -737,8 +734,12 @@ begin
   NuevoAlto := Round(FOriginalBitmap.Height * FZoomFactor);
   TempBitmap := TBitmap.Create;
   try
+    TempBitmap.PixelFormat := pf24bit;
     TempBitmap.Width := NuevoAncho;
     TempBitmap.Height := NuevoAlto;
+    // Activar interpolaci√≥n para mejor calidad
+    SetStretchBltMode(TempBitmap.Canvas.Handle, HALFTONE);
+    SetBrushOrgEx(TempBitmap.Canvas.Handle, 0, 0, nil);
     TempBitmap.Canvas.StretchDraw(
       Rect(0, 0, NuevoAncho, NuevoAlto),
       FOriginalBitmap
@@ -757,7 +758,7 @@ procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject;
                                            Shift: TShiftState;
                                            X, Y: Integer);
 begin
-  // Guardar posiciÛn del mouse
+  // Guardar posici√≥n del mouse
 //  FLastMouseX := X;
 //  FLastMouseY := Y;
   if Button = mbLeft then
@@ -805,7 +806,7 @@ begin
     VK_LEFT: btnAnteriorClick(nil);         // Flecha izquierda
     VK_RIGHT: btnSiguienteClick(nil);       // Flecha derecha
     VK_HOME: MostrarImagenPorIndice(0);     // Inicio - primera imagen
-    VK_END: MostrarImagenPorIndice(FListaImagenes.Count - 1); // Fin - ˙ltima imagen
+    VK_END: MostrarImagenPorIndice(FListaImagenes.Count - 1); // Fin - √∫ltima imagen
   end;
 end;
 
