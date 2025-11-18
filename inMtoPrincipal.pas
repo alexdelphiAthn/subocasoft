@@ -135,8 +135,6 @@ uses //inLibUser,
 {$R WindowsXP.res}
 {$ENDIF}
 
-
-
 procedure TfrmOpenApp.sbAppCreatePanelClass(Sender: TCustomStatusBar;
   var PanelClass: TStatusPanelClass);
 begin
