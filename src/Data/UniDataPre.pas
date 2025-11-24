@@ -440,8 +440,8 @@ end;
 
 procedure TdmPre.zqryFacAfterInsert(DataSet: TDataSet);
 begin
-  unqryFac.FieldByName('NRO_FACTURA').ASSTRING := '0';
-  unqryFac.FieldByName('SERIE_FACTURA').AsString :=
+  unqryFac.FieldByName('NRO_PRESUPUESTO').ASSTRING := '0';
+  unqryFac.FieldByName('SERIE_PRESUPUESTO').AsString :=
     unqrySeries.FieldByName('SERIE_CONTADOR').AsString;
   unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString := '0';
   unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
@@ -466,7 +466,7 @@ begin
       Abort
     else
     begin
-      if unqryFac.FieldByName('NRO_FACTURA').AsString = '0' then
+      if unqryFac.FieldByName('NRO_PRESUPUESTO').AsString = '0' then
         NuevoNumeroDocumento;
       if unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString = '0' then
         NuevoCliente;
