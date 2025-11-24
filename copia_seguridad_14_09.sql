@@ -67,10 +67,10 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `FNC_GET_NEXT_LINEA_PRESUPUESTO`(pnum
 BEGIN
  DECLARE ppresul varchar(3);
  DECLARE pnextnum varchar(3);
- SET pnextnum = (select lpad((max(LINEA_LINEA)+10),3,'0' ) 
-                   from suboc_presupuestos_lineas 
-                  where NRO_FACTURA_LINEA = pnumfac 
-                    AND SERIE_FACTURA_LINEA = pserie);
+ SET pnextnum = (select lpad((max(LINEA_LINEA)+10),3,'0' )
+                   from suboc_presupuestos_lineas
+                  where NRO_PRESUPUESTO_LINEA = pnumfac
+                    AND SERIE_PRESUPUESTO_LINEA = pserie);
  IF (pnextnum IS NULL) THEN
    SET ppresul = '010';
  ELSE
@@ -184,9 +184,9 @@ BEGIN
 	IF (CENTIMOS > 0) THEN
 	BEGIN
 		IF (CENTIMOS = 1) THEN
-			SET  AUX = 'CÉNTIMO ';
+			SET  AUX = 'Cï¿½NTIMO ';
 		ELSE
-			SET AUX = 'CÉNTIMOS ';
+			SET AUX = 'Cï¿½NTIMOS ';
 		END IF;	
 		IF (CENTIMOS > 0) THEN
 			SET CENTIMO_AUX = GET_NUMERO_MENOR_MIL(CENTIMOS);
@@ -348,16 +348,16 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS PRC_CALCULAR_PRESUPUESTO $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PRC_CALCULAR_PRESUPUESTO`(IN `pidseriefactura` varchar(200),
-	IN `pidnumfactura` varchar(200))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PRC_CALCULAR_PRESUPUESTO`(IN `pidseriepresupuesto` varchar(200),
+	IN `pidnumpresupuesto` varchar(200))
 BEGIN
   DECLARE suma_total decimal(18,6);
   START TRANSACTION;
-  SET suma_total = (SELECT SUM(SUM_TOTAL_LINEA) FROM suboc_presupuestos_lineas WHERE NRO_FACTURA_LINEA=pidnumfactura AND SERIE_FACTURA_LINEA = pidseriefactura);
-  UPDATE suboc_presupuestos 
-	    SET TOTAL_LIQUIDO_FACTURA = suma_total
-		WHERE NRO_FACTURA = pidnumfactura
-		  AND SERIE_FACTURA = pidseriefactura;			
+  SET suma_total = (SELECT SUM(SUM_TOTAL_LINEA) FROM suboc_presupuestos_lineas WHERE NRO_PRESUPUESTO_LINEA=pidnumpresupuesto AND SERIE_PRESUPUESTO_LINEA = pidseriepresupuesto);
+  UPDATE suboc_presupuestos
+	    SET TOTAL_LIQUIDO_PRESUPUESTO = suma_total
+		WHERE NRO_PRESUPUESTO = pidnumpresupuesto
+		  AND SERIE_PRESUPUESTO = pidseriepresupuesto;
 	COMMIT;
 END $$
 DELIMITER ;
@@ -840,26 +840,26 @@ BEGIN
 												  `APELLIDOS`)
 						      SELECT   pidnumfactura,
 												   pidseriefactura,
-												  `CODIGO_CLIENTE_FACTURA`,
-												  `RAZONSOCIAL_CLIENTE_FACTURA`,
-												  `NIF_CLIENTE_FACTURA`,
-												  `MOVIL_CLIENTE_FACTURA`,
-												  `EMAIL_CLIENTE_FACTURA`,
-												  `DIRECCION1_CLIENTE_FACTURA`,
-												  `DIRECCION2_CLIENTE_FACTURA`,
-												  `POBLACION_CLIENTE_FACTURA`,
-												  `PROVINCIA_CLIENTE_FACTURA`,
-												  `CPOSTAL_CLIENTE_FACTURA`,
-												  `PAIS_CLIENTE_FACTURA`,
-                          `TIPOID_INT_CLIENTE_FACTURA`,
+												  `CODIGO_CLIENTE_PRESUPUESTO`,
+												  `RAZONSOCIAL_CLIENTE_PRESUPUESTO`,
+												  `NIF_CLIENTE_PRESUPUESTO`,
+												  `MOVIL_CLIENTE_PRESUPUESTO`,
+												  `EMAIL_CLIENTE_PRESUPUESTO`,
+												  `DIRECCION1_CLIENTE_PRESUPUESTO`,
+												  `DIRECCION2_CLIENTE_PRESUPUESTO`,
+												  `POBLACION_CLIENTE_PRESUPUESTO`,
+												  `PROVINCIA_CLIENTE_PRESUPUESTO`,
+												  `CPOSTAL_CLIENTE_PRESUPUESTO`,
+												  `PAIS_CLIENTE_PRESUPUESTO`,
+                          `TIPOID_INT_CLIENTE_PRESUPUESTO`,
 												  @pfecha,
-												  `TOTAL_LIQUIDO_FACTURA`,
-												  `FORMA_PAGO_FACTURA`,
+												  `TOTAL_LIQUIDO_PRESUPUESTO`,
+												  `FORMA_PAGO_PRESUPUESTO`,
 													`NOMBRE`,
 												  `APELLIDOS`
-										FROM   suboc_presupuestos 
-										WHERE `NRO_FACTURA` = pidnumpresupuesto 
-										AND     `SERIE_FACTURA` = pidseriepresupuesto;	
+										FROM   suboc_presupuestos
+										WHERE `NRO_PRESUPUESTO` = pidnumpresupuesto
+										AND     `SERIE_PRESUPUESTO` = pidseriepresupuesto;	
 										
 							INSERT INTO  suboc_facturas_lineas (`SERIE_FACTURA_LINEA`,
 													`NRO_FACTURA_LINEA`,
@@ -878,8 +878,8 @@ BEGIN
 													`CANTIDAD_LINEA`,
 													`SUM_TOTAL_LINEA`
 										  FROM suboc_presupuestos_lineas
-										 WHERE `SERIE_FACTURA_LINEA` = pidseriepresupuesto  
-											 AND `NRO_FACTURA_LINEA` = pidnumpresupuesto;
+										 WHERE `SERIE_PRESUPUESTO_LINEA` = pidseriepresupuesto
+											 AND `NRO_PRESUPUESTO_LINEA` = pidnumpresupuesto;
 END $$
 DELIMITER ;
 
@@ -1387,7 +1387,7 @@ BEGIN
     SET vTotalIVA = 0;
     SET vTotalFactura = 0;
     
-    /* Construir JSON básico */
+    /* Construir JSON bï¿½sico */
     SET pJsonResult = JSON_OBJECT(
         'invoice', JSON_OBJECT(
             'id', JSON_OBJECT(
@@ -1396,7 +1396,7 @@ BEGIN
             ),
             'type', 'F1',
             'description', JSON_OBJECT(
-                'text', 'Factura de servicios odontológicos',
+                'text', 'Factura de servicios odontolï¿½gicos',
                 'operationDate', DATE_FORMAT(CURRENT_DATE, '%Y-%m-%d')
             ),
             'recipient', JSON_OBJECT(
@@ -1430,7 +1430,7 @@ DROP PROCEDURE IF EXISTS PRC_RESUMEN_ERRORES_VERIFACTU $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PRC_RESUMEN_ERRORES_VERIFACTU`()
 BEGIN
     SELECT 
-        'ERRORES DE VERIFACTU POR CÓDIGO' as TITULO,
+        'ERRORES DE VERIFACTU POR Cï¿½DIGO' as TITULO,
         '' as SEPARADOR;
     
     SELECT 
@@ -1532,7 +1532,7 @@ CREATE TABLE `suboc_clientes` (
   `PROVINCIA_CLIENTE` varchar(200) DEFAULT NULL,
   `CPOSTAL_CLIENTE` varchar(15) DEFAULT NULL,
   `PAIS_CLIENTE` varchar(150) DEFAULT NULL,
-  `TIPOID_INT_CLIENTE` varchar(20) DEFAULT NULL COMMENT '''ID'' O ''PASAPORTE'' PARA EL TIPO DE IDENTIFICACIÓN INTERNACIONAL',
+  `TIPOID_INT_CLIENTE` varchar(20) DEFAULT NULL COMMENT '''ID'' O ''PASAPORTE'' PARA EL TIPO DE IDENTIFICACIï¿½N INTERNACIONAL',
   `OBSERVACIONES_CLIENTE` text DEFAULT NULL,
   `REFERENCIA_CLIENTE` varchar(100) DEFAULT NULL,
   `TELEFONO_CLIENTE` varchar(40) DEFAULT NULL,
@@ -1551,10 +1551,10 @@ CREATE TABLE `suboc_clientes` (
 -- 
 
 INSERT INTO suboc_clientes(CODIGO_CLIENTE, RAZONSOCIAL_CLIENTE, NIF_CLIENTE, MOVIL_CLIENTE, EMAIL_CLIENTE, DIRECCION1_CLIENTE, DIRECCION2_CLIENTE, POBLACION_CLIENTE, PROVINCIA_CLIENTE, CPOSTAL_CLIENTE, PAIS_CLIENTE, TIPOID_INT_CLIENTE, OBSERVACIONES_CLIENTE, REFERENCIA_CLIENTE, TELEFONO_CLIENTE, PROFESION_CLIENTE, FECHA_NACIMIENTO, NOMBRE, APELLIDOS, IBAN) VALUES
- (1,'FABIAN BASABE RODRÍGUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID',NULL,NULL,NULL,NULL,NULL,'FABIAN','BASABE RODRÍGUEZ',NULL),
- (2,'ERIC FRANCO GONZÁLEZ','45684134Q','656669955','kun0@hotmail.com','calle hospicio, 2','','JOHANESBURGO','SUDÁFRICA','','ZA','ID',NULL,NULL,NULL,NULL,NULL,'ERIC','FRANCO GONZÁLEZ',NULL),
- (6,'ALEJANDRO LAÓRDéN HIDALGO','45684134Q','','','CALLE CASCAJAL, 7','','VILLARALBO','ZAMORA','49159','ES','',NULL,NULL,NULL,NULL,NULL,'ALEJANDRO','LAÓRDEN HIDALGO',NULL),
- (18,' VIRGEN DEL ROCÍO, SL','B41833617','','','RONDA CAPUCHINOS, 2, PORT 1-5C','','SEVILLA','SEVILLA','41003','ES','',NULL,NULL,NULL,NULL,NULL,'','',NULL);
+ (1,'FABIAN BASABE RODRï¿½GUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID',NULL,NULL,NULL,NULL,NULL,'FABIAN','BASABE RODRï¿½GUEZ',NULL),
+ (2,'ERIC FRANCO GONZï¿½LEZ','45684134Q','656669955','kun0@hotmail.com','calle hospicio, 2','','JOHANESBURGO','SUDï¿½FRICA','','ZA','ID',NULL,NULL,NULL,NULL,NULL,'ERIC','FRANCO GONZï¿½LEZ',NULL),
+ (6,'ALEJANDRO LAï¿½RDï¿½N HIDALGO','45684134Q','','','CALLE CASCAJAL, 7','','VILLARALBO','ZAMORA','49159','ES','',NULL,NULL,NULL,NULL,NULL,'ALEJANDRO','LAï¿½RDEN HIDALGO',NULL),
+ (18,' VIRGEN DEL ROCï¿½O, SL','B41833617','','','RONDA CAPUCHINOS, 2, PORT 1-5C','','SEVILLA','SEVILLA','41003','ES','',NULL,NULL,NULL,NULL,NULL,'','',NULL);
 
 -- 
 -- Table structure for table suboc_consolidacion
@@ -1565,19 +1565,19 @@ CREATE TABLE `suboc_consolidacion` (
   `ID_CONSOLIDACION` int(11) NOT NULL,
   `SERIE_FACTURA` varchar(8) NOT NULL,
   `NRO_FACTURA` int(8) NOT NULL,
-  `REQUEST_ID` varchar(100) DEFAULT NULL COMMENT 'ID único de la petición',
+  `REQUEST_ID` varchar(100) DEFAULT NULL COMMENT 'ID ï¿½nico de la peticiï¿½n',
   `QUEUE_ID` int(11) DEFAULT NULL COMMENT 'ID de cola del sistema',
   `ISSUER_IRS_ID` varchar(50) DEFAULT NULL COMMENT 'NIF del emisor',
-  `ISSUED_TIME` datetime DEFAULT NULL COMMENT 'Fecha y hora de emisión',
-  `CHAIN_NUMBER` varchar(100) DEFAULT NULL COMMENT 'Número de cadena del sistema',
+  `ISSUED_TIME` datetime DEFAULT NULL COMMENT 'Fecha y hora de emisiï¿½n',
+  `CHAIN_NUMBER` varchar(100) DEFAULT NULL COMMENT 'Nï¿½mero de cadena del sistema',
   `CHAIN_HASH` varchar(256) DEFAULT NULL COMMENT 'Hash de la cadena blockchain',
-  `VERIFACTU_URL` text DEFAULT NULL COMMENT 'URL de verificación en AEAT',
-  `QRCODE_BASE64` longtext DEFAULT NULL COMMENT 'Código QR en base64',
-  `QRCODE_PNG` blob DEFAULT NULL COMMENT 'Código QR en PNG',
+  `VERIFACTU_URL` text DEFAULT NULL COMMENT 'URL de verificaciï¿½n en AEAT',
+  `QRCODE_BASE64` longtext DEFAULT NULL COMMENT 'Cï¿½digo QR en base64',
+  `QRCODE_PNG` blob DEFAULT NULL COMMENT 'Cï¿½digo QR en PNG',
   `FECHA_PROCESAMIENTO` datetime DEFAULT current_timestamp() COMMENT 'Fecha de procesamiento',
   `ESTADO` varchar(20) DEFAULT 'PROCESADO' COMMENT 'Estado del procesamiento',
   `RESPUESTA_COMPLETA` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'JSON completo de respuesta del webservice' CHECK (json_valid(`RESPUESTA_COMPLETA`)),
-  `PETICION_COMPLETA` longtext DEFAULT NULL COMMENT 'JSON completo de petición del webservice',
+  `PETICION_COMPLETA` longtext DEFAULT NULL COMMENT 'JSON completo de peticiï¿½n del webservice',
   PRIMARY KEY (`ID_CONSOLIDACION`) USING BTREE,
   UNIQUE KEY `UK_FACTURA` (`SERIE_FACTURA`,`NRO_FACTURA`) USING BTREE,
   KEY `IDX_REQUEST_ID` (`REQUEST_ID`) USING BTREE,
@@ -1589,12 +1589,12 @@ CREATE TABLE `suboc_consolidacion` (
 -- 
 
 INSERT INTO suboc_consolidacion(ID_CONSOLIDACION, SERIE_FACTURA, NRO_FACTURA, REQUEST_ID, QUEUE_ID, ISSUER_IRS_ID, ISSUED_TIME, CHAIN_NUMBER, CHAIN_HASH, VERIFACTU_URL, QRCODE_BASE64, QRCODE_PNG, FECHA_PROCESAMIENTO, ESTADO, RESPUESTA_COMPLETA, PETICION_COMPLETA) VALUES
- (66,'PRU',1,'768e17c2-0c58-4c8a-9f87-3e8ce98cbb5c',6560,'A39200019','2025-09-13 00:00:00','LAO-PRU/1','95506C9FF2D1DADB11B6985EA107DAFD11880C3D946DFF29A166217C314AD335','https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F1&fecha=13-09-2025&importe=50.00','data:image/png;base64,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',NULL,'2025-09-13 18:11:52','PROCESADO','{\"qrcode\":\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAADUCAYAAADk3g0YAAAAAklEQVR4AewaftIAAApgSURBVO3BQY7gRpIAQXei\\/v9l3z7GKQGCWS1pNszsD9ZaVzysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1zysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rfvhI5W+quEllqphU3qiYVKaKL1SmihOVk4oTlS8qTlSmiknlb6r44mGtdc3DWuuah7XWNT9cVnGTyhcqb6hMFScqk8pU8YbKVHGiclJxonJSMalMFW+oTBVvVNykctPDWuuah7XWNQ9rrWt++GUqb1S8oXJSMalMFScqU8VJxaRyUvFFxRsqN6lMFX+TyhsVv+lhrXXNw1rrmoe11jU\\/\\/I+pmFSmii9UpoqTihOVqWJS+U0V\\/ySVqeK\\/7GGtdc3DWuuah7XWNT\\/8j1GZKk5UpoqpYlKZVE4q3lB5Q2WqOKk4UTmpOFH5\\/+xhrXXNw1rrmoe11jU\\/\\/LKKfxOVE5U3KiaVLyreUPlCZaqYVCaVqeKk4jdV\\/Js8rLWueVhrXfOw1rrmh8tU\\/kkVk8pUMalMFZPKVDGpTBWTylTxhspU8YbKVPFFxaQyVUwqU8WkMlWcqPybPay1rnlYa13zsNa65oePKv7NKv5JFV9UvKEyVfymikllqphU3qj4L3lYa13zsNa65mGtdY39wQcqU8WkclPFv4nKScWJyk0V\\/ySVqeILlZsqftPDWuuah7XWNQ9rrWt++GUVk8pUMalMFZPKScWJyknFpPJGxaTyRcWk8m+iMlW8oTJVTBUnKm+onFR88bDWuuZhrXXNw1rrmh8uUzmpmFSmiknlDZWpYqr4N6l4o2JSOVE5qZhUpoqTihOVN1TeqJhUpopJZaq46WGtdc3DWuuah7XWNT\\/8soqTipOKE5UTlZOKSeWkYlJ5o+JE5QuVm1Smikllqnij4m+q+E0Pa61rHtZa1zysta754aOKSeUmlTcqJpWp4o2KSWWqmFROVKaKk4oTlaniDZWpYlI5qZhUpooTlaliUpkqJpWpYlKZKiaVqeKLh7XWNQ9rrWse1lrX2B\\/8RSpTxRcqU8VNKlPFpDJV3KQyVZyovFExqUwVb6hMFZPKVHGiclIxqXxR8cXDWuuah7XWNQ9rrWvsDz5QmSomlaniDZWp4kRlqphUpop\\/E5WTii9UpopJ5Z9UcaLyRcWkMlV88bDWuuZhrXXNw1rrGvuDX6RyUvGGylTxhspJxYnKVPGGyknFpPJGxaQyVUwqU8Wk8kXFicpU8YbKGxW\\/6WGtdc3DWuuah7XWNT98pDJVnFScqLyhclJxU8UbKlPFicpUMalMFZPKVHFScVIxqUwVk8qJylRxojJVTBVvqEwVNz2sta55WGtd87DWusb+4B+kclIxqUwVJypTxRsqJxVvqEwVX6hMFZPKScWJyhsVJypvVLyh8kXFFw9rrWse1lrXPKy1rvnhI5WTikllqjhRmSreqDhRmSq+UHlDZaqYVKaKE5WpYlJ5o2JSmSq+qDhRmSpOKiaVk4qbHtZa1zysta55WGtd88NHFV+oTBVTxaRyU8Wk8kXFpDJVvFFxUjGpTCp\\/k8pU8YbKVDGpTBWTylRxojJVfPGw1rrmYa11zcNa6xr7g1+kMlVMKjdVnKicVEwqU8WJylQxqfymikllqphUpoo3VKaKE5XfVDGpvFHxxcNa65qHtdY1D2uta374SGWq+KLiDZVJZao4qXhDZaqYKiaVqWJSmSreUJlU3qg4UTmpmFS+qHhDZVI5qZhUbnpYa13zsNa65mGtdc0PH1VMKlPFFypTxUnFpDJVnKi8oTJV3KQyVZxUvKEyVUwVb1RMKlPFpHKiMlWcVEwqk8pUcdPDWuuah7XWNQ9rrWt++EhlqphUpoo3Kt5QmSpOVN6oOFG5qeINlS9UbqqYVN6oeEPlpOI3Pay1rnlYa13zsNa6xv7gH6RyU8UbKlPFicpJxaQyVUwqN1VMKlPFb1L5N6mYVE4qvnhYa13zsNa65mGtdY39wV+kMlVMKlPFpPKbKiaVqWJS+ZsqJpWTii9Upor\\/JSpTxRcPa61rHtZa1zysta754TKVqeILlaniJpW\\/qeJEZao4qThRmSq+UPmi4g2VNypOVKaKmx7WWtc8rLWueVhrXWN\\/8ItU3qg4UTmpmFROKiaVNypOVKaKm1ROKiaVqWJSOal4Q+WLiknli4rf9LDWuuZhrXXNw1rrmh8uUzmpmFROVN5QOal4o+JE5aTiDZWpYlKZKiaVSWWqmFSmiknlRGWqmCq+UJkqJpWTiknlpOKLh7XWNQ9rrWse1lrX2B98oHJSMamcVPx\\/onJScaIyVUwqJxWTylTxhspJxRsqU8WJylRxojJVfPGw1rrmYa11zcNa65ofPqo4UZkq3lCZKiaVqWJSmSpOVE4qJpWpYlI5qfgnqUwVk8oXFScqU8VUMalMFScqf9PDWuuah7XWNQ9rrWt++EjlJpWpYlKZKiaVE5U3Kr6omFQmlZOKSWWqeKPiRGWqmFTeUJkq3lC5qeI3Pay1rnlYa13zsNa65oePKk5UvlC5qWJSOVGZKk5UpoqTihOVqeJEZap4o+KNihOVSeVE5aaKv+lhrXXNw1rrmoe11jX2Bx+oTBWTyknFTSpvVJyonFScqEwVk8pUMamcVJyonFRMKr+p4kTlpGJSmSreUJkqvnhYa13zsNa65mGtdY39wT9IZaqYVKaKSeWk4g2Vv6liUpkqTlROKiaVqeINlaniROWLikllqjhROam46WGtdc3DWuuah7XWNT9cpnJTxRsVJypTxUnFicpU8YbKVPFGxRcqU8V\\/mcpUcaIyVXzxsNa65mGtdc3DWusa+4MPVKaKE5WTikllqjhRmSreULmp4kTlN1WcqEwVJyonFW+o3FQxqZxU3PSw1rrmYa11zcNa6xr7g\\/8wlaniRGWqmFSmikllqjhRmSomlaniDZWp4g2VLypOVN6oeEPljYpJZar44mGtdc3DWuuah7XWNT98pPI3VUwVb1R8UXGicpPKVHGiMlWcVJyoTBWTyknFpPKGylRxUjGp\\/E0Pa61rHtZa1zysta754bKKm1ROVKaKm1SmiknlN1XcpHJTxW+qeEPlROU3Pay1rnlYa13zsNa65odfpvJGxU0qb1S8UTGpfKHymypuUpkqvlC5qWJSmSpuelhrXfOw1rrmYa11zQ\\/\\/Y1ROKiaVSWWqmFTeqDipmFSmiknln6TyRcUbKv8lD2utax7WWtc8rLWu+eF\\/TMUbFZPKpDJVTConKlPFScVNKicVk8pJxaRyojJVnKhMFW+oTCpTxW96WGtd87DWuuZhrXXND7+s4jdV3FQxqUwqX6icVEwqU8UbKlPFpDJVTCo3qdykMlVMKn\\/Tw1rrmoe11jUPa61rfrhM5W9SOal4Q2WqOFGZKk5UpopJZao4UZkqpopJ5aaKk4ovVE4qJpUTlanipoe11jUPa61rHtZa19gfrLWueFhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtf8H6hZn7Wz3kJXAAAAAElFTkSuQmCC\",\"chainInfo\":{\"issuerIrsId\":\"A39200019\",\"issuedTime\":\"2025-09-13T00:00:00.000Z\",\"number\":\"LAO-PRU\\/1\",\"hash\":\"95506C9FF2D1DADB11B6985EA107DAFD11880C3D946DFF29A166217C314AD335\"},\"verifactuUrl\":\"https:\\/\\/prewww2.aeat.es\\/wlpl\\/TIKE-CONT\\/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F1&fecha=13-09-2025&importe=50.00\",\"queueId\":6560,\"requestId\":\"768e17c2-0c58-4c8a-9f87-3e8ce98cbb5c\"}','{\r\n    \"invoice\": {\r\n        \"recipient\": {\r\n            \"irsId\": \"B41833617\",\r\n            \"name\": \" VIRGEN DEL ROCÍO, SL\",\r\n            \"country\": \"ES\"\r\n        },\r\n        \"id\": {\r\n            \"number\": \"PRU\\/1\",\r\n            \"issuedTime\": \"2025-09-13\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"EMPASTE COMPUESTO\",\r\n            \"operationDate\": \"2025-09-13\"\r\n        },\r\n        \"type\": \"F1\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 50,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 50,\r\n        \"amount\": 0\r\n    }\r\n}');
+ (66,'PRU',1,'768e17c2-0c58-4c8a-9f87-3e8ce98cbb5c',6560,'A39200019','2025-09-13 00:00:00','LAO-PRU/1','95506C9FF2D1DADB11B6985EA107DAFD11880C3D946DFF29A166217C314AD335','https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F1&fecha=13-09-2025&importe=50.00','data:image/png;base64,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',NULL,'2025-09-13 18:11:52','PROCESADO','{\"qrcode\":\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAADUCAYAAADk3g0YAAAAAklEQVR4AewaftIAAApgSURBVO3BQY7gRpIAQXei\\/v9l3z7GKQGCWS1pNszsD9ZaVzysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1zysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rfvhI5W+quEllqphU3qiYVKaKL1SmihOVk4oTlS8qTlSmiknlb6r44mGtdc3DWuuah7XWNT9cVnGTyhcqb6hMFScqk8pU8YbKVHGiclJxonJSMalMFW+oTBVvVNykctPDWuuah7XWNQ9rrWt++GUqb1S8oXJSMalMFScqU8VJxaRyUvFFxRsqN6lMFX+TyhsVv+lhrXXNw1rrmoe11jU\\/\\/I+pmFSmii9UpoqTihOVqWJS+U0V\\/ySVqeK\\/7GGtdc3DWuuah7XWNT\\/8j1GZKk5UpoqpYlKZVE4q3lB5Q2WqOKk4UTmpOFH5\\/+xhrXXNw1rrmoe11jU\\/\\/LKKfxOVE5U3KiaVLyreUPlCZaqYVCaVqeKk4jdV\\/Js8rLWueVhrXfOw1rrmh8tU\\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\\/\\/Y1ROKiaVSWWqmFTeqDipmFSmiknln6TyRcUbKv8lD2utax7WWtc8rLWu+eF\\/TMUbFZPKpDJVTConKlPFScVNKicVk8pJxaRyojJVnKhMFW+oTCpTxW96WGtd87DWuuZhrXXND7+s4jdV3FQxqUwqX6icVEwqU8UbKlPFpDJVTCo3qdykMlVMKn\\/Tw1rrmoe11jUPa61rfrhM5W9SOal4Q2WqOFGZKk5UpopJZao4UZkqpopJ5aaKk4ovVE4qJpUTlanipoe11jUPa61rHtZa19gfrLWueFhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtf8H6hZn7Wz3kJXAAAAAElFTkSuQmCC\",\"chainInfo\":{\"issuerIrsId\":\"A39200019\",\"issuedTime\":\"2025-09-13T00:00:00.000Z\",\"number\":\"LAO-PRU\\/1\",\"hash\":\"95506C9FF2D1DADB11B6985EA107DAFD11880C3D946DFF29A166217C314AD335\"},\"verifactuUrl\":\"https:\\/\\/prewww2.aeat.es\\/wlpl\\/TIKE-CONT\\/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F1&fecha=13-09-2025&importe=50.00\",\"queueId\":6560,\"requestId\":\"768e17c2-0c58-4c8a-9f87-3e8ce98cbb5c\"}','{\r\n    \"invoice\": {\r\n        \"recipient\": {\r\n            \"irsId\": \"B41833617\",\r\n            \"name\": \" VIRGEN DEL ROCï¿½O, SL\",\r\n            \"country\": \"ES\"\r\n        },\r\n        \"id\": {\r\n            \"number\": \"PRU\\/1\",\r\n            \"issuedTime\": \"2025-09-13\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"EMPASTE COMPUESTO\",\r\n            \"operationDate\": \"2025-09-13\"\r\n        },\r\n        \"type\": \"F1\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 50,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 50,\r\n        \"amount\": 0\r\n    }\r\n}');
 INSERT INTO suboc_consolidacion(ID_CONSOLIDACION, SERIE_FACTURA, NRO_FACTURA, REQUEST_ID, QUEUE_ID, ISSUER_IRS_ID, ISSUED_TIME, CHAIN_NUMBER, CHAIN_HASH, VERIFACTU_URL, QRCODE_BASE64, QRCODE_PNG, FECHA_PROCESAMIENTO, ESTADO, RESPUESTA_COMPLETA, PETICION_COMPLETA) VALUES
  (67,'FSRT',1,'a7320ce4-b805-461e-86dd-602c438aed52',6561,'A39200019','2025-09-13 00:00:00','LAO-FSRT/1','E4CAEB77BC8059D2A4088CCF52C24DADD8E506DB81C05D87ED4E6F334E763E1F','https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-FSRT%2F1&fecha=13-09-2025&importe=50.00','data:image/png;base64,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',NULL,'2025-09-13 20:17:31','PROCESADO','{\"qrcode\":\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAADUCAYAAADk3g0YAAAAAklEQVR4AewaftIAAApQSURBVO3BQY4cy5LAQDJR978yR0tfBZCo6NbTfDezP1hrXfGw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWu+fAlld9UMalMFW+onFRMKlPFicpU8Q2VqWJSOamYVKaKSeUbFScqU8Wk8psqvvGw1rrmYa11zcNa65oPl1XcpPKGylRxUjGpTCpTxRsVJypTxUnFScUbFb9JZap4o+ImlZse1lrXPKy1rnlYa13z4YepvFHxRsWkMqn8TSpTxVRxovJGxTdU\\/iUqb1T8pIe11jUPa61rHtZa13z4x6mcVHxD5Q2VN1SmijcqTlROKqaKN1S+oTJV\\/Mse1lrXPKy1rnlYa13z4R9XcaJyUvGGylRxk8obKlPFf4nK\\/5KHtdY1D2utax7WWtd8+GEVf1PFpHKTylRxonJS8YbKpDJVTCo\\/qeI3VfyXPKy1rnlYa13zsNa65sNlKr9JZaqYVKaKSWWqOKmYVE5UpopJ5URlqjipmFSmikllqphUpoo3VKaKSWWqOFH5L3tYa13zsNa65mGtdY39wT9M5RsVb6hMFd9QmSreULmpYlI5qfiGylTxL3tYa13zsNa65mGtdc2HL6lMFZPKScWk8kbFN1ROKm5SOVG5qWJS+UbFpDJVTCpTxRsqU8WJylQxqZxUfONhrXXNw1rrmoe11jUffljFpHJS8Q2VNypOVE5UbqqYVKaKSWWqOKk4Ubmp4hsVJyonKr\\/pYa11zcNa65qHtdY1H75U8Q2VqWJSmSpOKk5UJpWp4qRiUjmpOFGZVKaK\\/7KKSeWkYqqYVKaKk4oTld\\/0sNa65mGtdc3DWuuaD19SOal4Q2WqmFROKr6hcqIyVdxUMalMFW+oTBWTyknFpPJGxaRyk8o3Km56WGtd87DWuuZhrXXNh19WcaIyqXxDZar4hsqJyknFicpUMalMFScVk8pUMamcVJyonFRMKlPFpDJVTBUnKlPFpDJVfONhrXXNw1rrmoe11jX2B19QmSomlaniRGWqeENlqjhR+Zsq3lB5o+JE5Y2KSWWqeENlqnhDZar4mx7WWtc8rLWueVhrXfPhSxVvqLyhclIxVUwqJxWTyjcqJpUTlW9UTConKicVk8pNKlPFpDJVTConKlPFpDJV3PSw1rrmYa11zcNa6xr7gx+kclLxhspUcZPKGxU3qUwVJyonFZPKVHGi8o2KE5Wp4g2Vmyq+8bDWuuZhrXXNw1rrmg8\\/rGJSeUPlN1V8Q2Wq+E0Vk8pUMancVPGTVKaKSeVvelhrXfOw1rrmYa11zYcfpvKGylTxhspUcaJyUnGiMlVMKlPFGypTxVRxU8UbKpPKGxXfUDmpOFG56WGtdc3DWuuah7XWNR++pHJSMamcVEwqU8UbKlPFScWkMlWcqJyonFRMKicqU8VUMal8Q2WqmFRuUpkqTlQmlZOKmx7WWtc8rLWueVhrXfPhsopJ5UTlpOJEZar4hspUMamcVLyhMqlMFZPKGypTxYnKScWk8kbFpPKbKn7Sw1rrmoe11jUPa61r7A++oPJGxaTyN1VMKicVk8pUMalMFZPKT6qYVKaKE5U3Kt5QualiUpkqJpWp4hsPa61rHtZa1zysta75cFnFpDKpnFS8oXJSMamcVEwqk8pUcVLxRsUbKlPFScU3KiaVSWWqmFROKt5QmVT+poe11jUPa61rHtZa13y4TGWqmFTeUJkqTireUDmp+IbKVPGGylTxhspNKlPFT1KZKt6omFR+0sNa65qHtdY1D2utaz58qWJSOamYVE4q3lA5qXhD5Y2KE5U3Km6qOFF5Q2WqmFSmiknlpOInVdz0sNa65mGtdc3DWusa+4O\\/SOUnVUwqJxUnKm9UnKjcVDGpTBU\\/SeW\\/pGJSOan4xsNa65qHtdY1D2utaz58SWWqmFSmiqniGyonKv8lKlPFicpJxaRyojJVfEPlpGJSOak4UZkqJpVJZar4SQ9rrWse1lrXPKy1rvnwpYpJZao4UflGxaRyUjGpTCpTxUnFpPKTKiaVb6hMFZPKVHFS8Q2Vk4qTiknlNz2sta55WGtd87DWuubDl1ROVN6oeENlqphUTipuqphUpoo3Kr5RMalMFZPKGxUnKm9UTCqTyn\\/Zw1rrmoe11jUPa61rPvywikllqjhRmSqmijdUTireUJkq\\/iUqN6lMFZPKGxWTyknFpDKpTBU3Pay1rnlYa13zsNa6xv7gIpWp4g2VqWJSmSomlZOKb6icVEwqJxUnKlPFico3KiaVk4pvqPxNFTc9rLWueVhrXfOw1rrG\\/uALKm9UvKEyVbyhclPFpDJVTCpTxaQyVUwqb1RMKlPFN1TeqDhRmSpOVKaKSeWk4ic9rLWueVhrXfOw1rrG\\/uAXqUwV31CZKiaVqWJSmSomlZsqJpWp4kRlqphUpopvqJxUvKEyVfx\\/8rDWuuZhrXXNw1rrmg9fUjmpeEPlpGKqOKk4qXijYlJ5Q2WqOFG5SeWk4qTiRGWq+IbKVDGpvFHxkx7WWtc8rLWueVhrXWN\\/cJHKScWJylTxhsobFZPKGxUnKicVk8pJxaTyRsWJyk+qOFF5o2JSOamYVKaKbzysta55WGtd87DWuubDZRVvqEwVk8pUcZPKScWkcqIyVUwq31A5qZhUJpWp4l9SMam8ofKTHtZa1zysta55WGtdY39wkco3Kk5UTiomlTcqfpPKVPGGylQxqUwVb6icVEwqU8WkMlW8ofJGxaRyUvGNh7XWNQ9rrWse1lrXfPiSylRxovKGylRxonJScaLyjYpJZao4UflNKlPFVDGpnFScVEwqN1VMKicVNz2sta55WGtd87DWusb+4B+mclJxovKTKk5Upoo3VE4qJpWTim+onFRMKlPFGypTxd\\/0sNa65mGtdc3DWuuaD19S+U0VJxWTylRxUnGiMlWcqHxDZar4L1GZKk5U3lCZKr6hclLxjYe11jUPa61rHtZa13y4rOImlTdUpoqTiknlpGJSmSqmihOVk4r\\/soqfVPGGyt\\/0sNa65mGtdc3DWuuaDz9M5Y2KNyomlROVqWKqmFQmlaliUjmpOFG5SeWk4kRlqjhRmSqmikllUvlGxaTymx7WWtc8rLWueVhrXfPhH6cyVbyhMlVMFW9UTCqTylQxqUwVN6lMKlPFVHGicqIyVUwVk8pJxYnKScVPelhrXfOw1rrmYa11zYf\\/cRWTyknFpPJGxTdUpopJ5Y2KE5Wp4qRiUplUpoqTin\\/Jw1rrmoe11jUPa61rPvywip9UMalMFScqJxVvVJyoTBUnKicqU8VNFScVk8pNKt+oOFGZKr7xsNa65mGtdc3DWuuaD5ep\\/CaVqWJSuUllqjhRmSpOKiaVqeJEZao4UZkqJpWTit9UMal8o+Kmh7XWNQ9rrWse1lrX2B+sta54WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1zysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1\\/wfKKds\\/evcPd8AAAAASUVORK5CYII=\",\"chainInfo\":{\"issuerIrsId\":\"A39200019\",\"issuedTime\":\"2025-09-13T00:00:00.000Z\",\"number\":\"LAO-FSRT\\/1\",\"hash\":\"E4CAEB77BC8059D2A4088CCF52C24DADD8E506DB81C05D87ED4E6F334E763E1F\"},\"verifactuUrl\":\"https:\\/\\/prewww2.aeat.es\\/wlpl\\/TIKE-CONT\\/ValidarQR?nif=A39200019&numserie=LAO-FSRT%2F1&fecha=13-09-2025&importe=50.00\",\"queueId\":6561,\"requestId\":\"a7320ce4-b805-461e-86dd-602c438aed52\"}','{\r\n    \"invoice\": {\r\n        \"id\": {\r\n            \"number\": \"FSRT\\/1\",\r\n            \"issuedTime\": \"2025-09-13\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"EMPASTE COMPUESTO\",\r\n            \"operationDate\": \"2025-09-13\"\r\n        },\r\n        \"type\": \"F2\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 50,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 50,\r\n        \"amount\": 0\r\n    }\r\n}');
 INSERT INTO suboc_consolidacion(ID_CONSOLIDACION, SERIE_FACTURA, NRO_FACTURA, REQUEST_ID, QUEUE_ID, ISSUER_IRS_ID, ISSUED_TIME, CHAIN_NUMBER, CHAIN_HASH, VERIFACTU_URL, QRCODE_BASE64, QRCODE_PNG, FECHA_PROCESAMIENTO, ESTADO, RESPUESTA_COMPLETA, PETICION_COMPLETA) VALUES
- (68,'PRU',2,NULL,NULL,NULL,NULL,NULL,NULL,'https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F2&fecha=14-09-2025&importe=50.00',NULL,NULL,NULL,'PENDIENTE',NULL,'{\r\n    \"invoice\": {\r\n        \"recipient\": {\r\n            \"irsId\": \"45684134Q\",\r\n            \"name\": \"ALEJANDRO LAÓRDEN HIDALGO\",\r\n            \"country\": \"ES\"\r\n        },\r\n        \"id\": {\r\n            \"number\": \"PRU\\/2\",\r\n            \"issuedTime\": \"2025-09-14\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"PIÑOS FUERA\",\r\n            \"operationDate\": \"2025-09-14\"\r\n        },\r\n        \"type\": \"F1\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 50,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 50,\r\n        \"amount\": 0\r\n    }\r\n}'),
- (69,'PRU',3,'92e217b7-abcb-4af8-9895-8d25154db377',6563,'A39200019','2025-09-14 00:00:00','LAO-PRU/3','7C3F7ABB7C9E4FAF11BB9625E396EDC9FFE35B899C3846F0DFC59578766BAFA4','https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F3&fecha=14-09-2025&importe=75.00','data:image/png;base64,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TipuqphUTiomlZse1lrXPKy1rnlYa13zw0cVJypTxaRyojJVTConKm9UTConKlPFpHJS8U9SOVH5ouJEZaqYKiaVqeJE5W96WGtd87DWuuZhrXXND/+wipOKSWWqmFROKt6o+KJiUplUTiomlanijYoTlaliUnlDZap4Q+Wmit/0sNa65mGtdc3DWuuaHz5SOamYVP5NVKaKSeUNlanipOJEZao4UZkqTlSmijcqTlQmlROVmyr+poe11jUPa61rHtZa19gf/EUqU8WkMlW8ofJGxaTyRsWJylQxqUwVk8pJxYnKScWk8psqTlROKiaVqeINlanii4e11jUPa61rHtZa19gf/INUpopJZaqYVKaKSWWqOFE5qZhUpooTlaliUpkqTlROKiaVqeINlaniROWLikllqjhROam46WGtdc3DWuuah7XWNT9cpnJTxRsqU8WkMlWcVLyhclIxqUwVb1R8oTJV/JepTBUnKlPFFw9rrWse1lrXPKy1rvnhI5Wp4kTlDZWpYqqYVE4q3lCZKk4qJpU3VG6qmComlS9Upoqp4kTlROVEZaqYVE4qbnpYa13zsNa65mGtdY39wX+YyhcVk8pU8YbKVHGiMlW8oTJVvKHyRcWJyhsVb6i8UTGpTBVfPKy1rnlYa13zsNa65oePVP6miqniRGWq+ELlb1KZKk5UpoqTihOVqWJSOamYVN5QmSpOKiaVv+lhrXXNw1rrmoe11jU/XFZxk8qJylQxVXyhMlWcqNxUcZPKTRW/qeINlROV3/Sw1rrmYa11zcNa65offpnKGxX/pIovKiaVqeJE5TdV3KQyVXyhclPFpDJV3PSw1rrmYa11zcNa65of/seoTBVvqEwVk8obFScVk8pUMan8k1S+qHhD5b/kYa11zcNa65qHtdY1P/yPqThRmSreqJhUTlSmipOKm1ROKiaVk4pJ5URlqjhRmSreUJlUporf9LDWuuZhrXXNw1rrmh9+WcVvqvibVL5QOamYVKaKN1Smiknlb1K5SWWqmFT+poe11jUPa61rHtZa1/xwmcrfpHJScVPFpDJVnKhMFZPKVHGiMlVMFZPKScWkclJxUvGFyknFpHKiMlXc9LDWuuZhrXXNw1rrGvuDtdYVD2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65r/A/mrk9YrPvMxAAAAAElFTkSuQmCC',0x89504E470D0A1A0A0000000D49484452000000D4000000D40806000000E4DE0D1800000002494441547801EC1A7ED200000A6649444154EDC1418EE04692004177A2FEFF65DF3EC6290182592D6936CCEC0FD65A573CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9A87B5D6350F6BAD6B1ED65AD73CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9A87B5D6350F6BAD6B7EF848E56FAAB84965AA9854DEA89854A68A2F54A68A1395938A13952F2A4E54A68A49E56FAAF8E261AD75CDC35AEB9A87B5D6353F5C567193CA172A6FA84C15272A37A94C15272A2715272A271593CA54F186CA54F146C54D2A373DACB5AE79586B5DF3B0D6BAE6875FA6F246C51B2A53C51B15272A53C5172A53C517156FA8DCA43255FC4D2A6F54FCA687B5D6350F6BAD6B1ED65AD7FCF0FF4CC5172A6F549CA84C1593CA6FAAF827A94C15FF650F6BAD6B1ED65AD73CACB5AEF9E1FF3995A962AA98544E54A68A3754DE50992A4E2A4E544E2A4E54FE3F7B586B5DF3B0D6BAE661AD75CD0FBFACE29F5431A99CA8BC5131A97C51F186CA172A53C5A432A94C152715BFA9E2DFE461AD75CDC35AEB9A87B5D6353F5CA6F26FA232554C2A53C5A432554C2A53C5A43255BCA13255BCA132557C5131A94C1593CA5431A94C15272AFF660F6BAD6B1ED65AD73CACB5AEF9E1A38A7F1395A9E237559C547C51F186CA54F19B2A2695A9625279A3E2BFE461AD75CDC35AEB9A87B5D635F6071FA84C1593CA4D15272A53C56F5239A93851B9A9E29FA432557CA17253C56F7A586B5DF3B0D6BAE661AD75CD0FBFAC6252992A2695A9E244E50D95A9E244E58D8A49E58B8A49E5DF4465AA784365AA982A4E54DE5039A9F8E261AD75CDC35AEB9A87B5D635F607BF4865AA7843E58B8A1395A9E244E5A4625239A9F84265AA98544E2A2695A9E20B95DF5431A94C1593CA5471D3C35AEB9A87B5D6350F6BAD6B7EF86515272A2715272A272A53C55431A99C544C2A6F549CA87CA17293CA5431A94C156F54FC4D15BFE961AD75CDC35AEB9A87B5D635F6071FA89C547CA1F246C5A4F245C5A432554C2A6F544C2A53C589CA54F186CA5431A94C15272A53C589CA5431A94C1593CA5431A94C1593CA54F1C5C35AEB9A87B5D6350F6BAD6B7EF8A862523951992A2695A9E244E5A4E244E58D8A4965AAF8A26252992AA68A49E58D8A4965AAB84965AA784365AA98544E547ED3C35AEB9A87B5D6350F6BAD6BEC0F7E91CA5471A2725271A232554C2A53C5A47252F185CA5431A99C547CA132554C2AFFA48A13952F2A2695A9E28B87B5D6350F6BAD6B1ED65AD7D81FFC2295938A3754A68A3754A68A3754A68A37544E2A2695372A2695A96252992A26952F2A4E54A68A3754DEA8F84D0F6BAD6B1ED65AD73CACB5AEF9E12395A962AA98544E54DE5039A93851992A6E52992A4E54A68A4965AA9854A68A938A938A4965AA98544E54A68A1395A962AA784365AAB8E961AD75CDC35AEB9A87B5D635F6071FA8FCA68A4965AA3851992A4E54A68A4965AA784365AAF84265AA98544E2A4E54DEA8385179A3E20D952F2ABE78586B5DF3B0D6BAE661AD75CD0FBFACE20B95A9E24465AA3851992A269513952F54A68A4965AA3851992A2695372A2695A9E28B8A1395A9E2A4625239A9B8E961AD75CDC35AEB9A87B5D6353F7C54F186CA49C55431A9BCA1725231A9BC5171A23255BC51715231A94C2A7F93CA54F186CA5431A94C1593CA5471A232557CF1B0D6BAE661AD75CDC35AEB1AFB837F90CA4D1593CA1B1593CA5471A232554C2ABFA96252992A2695A9E20D95A9E244E537554C2A6F547CF1B0D6BAE661AD75CDC35AEB9A1F3E52992A2695372ADE5039A99854A68A2F54A68A4965AA9854A68A37542695372A4E544E2A26952F2ADE5099544E2A26959B1ED65AD73CACB5AE79586B5DF3C3471593CA4D2A53C51B2A53C589CA89CADFA432559C54BCA132554C156F544C2A53C5A472A232559C544C2A93CA5471D3C35AEB9A87B5D6350F6BAD6B7EF84865AA9854A68A49E5A4E28B8A13952F2A26959B2ADE50F942E5A68A49E58D8A37544E2A7ED3C35AEB9A87B5D6350F6BAD6BEC0FFE412AFFA48A37544E2A2695A96252B9A96252992A7E93CABF49C5A47252F1C5C35AEB9A87B5D6350F6BAD6BEC0FFE2295A96252992ADE50F9A26252992A2695BFA9625239A9F84265AAF85FA232557CF1B0D6BAE661AD75CDC35AEB9A1F2E53992ABE5079A3E24465AA9854A68A9B2A4E54A68A938A1395A9E20B952F2ADE5079A3E24465AAB8E961AD75CDC35AEB9A87B5D635F6071FA8DC54F186CA5431A9FCA68A1395A9E22695938A4965AA9854A68A2F54BEA89854BEA8F84D0F6BAD6B1ED65AD73CACB5AEB13FF8452A53C5A4F246C589CA1B15272A53C5A47252F186CA5431A94C1593CA49C5A432554C2A53C5A43255DCA432554C2A271593CA49C5170F6BAD6B1ED65AD73CACB5AEF9E12395938A49E5A4E244E5A4E2446552F9A2E20B95372A2695A962529954A68A4965AA38A998544E2A6EAA98544E2A26959B1ED65AD73CACB5AE79586B5DF3C34715272A53C5A472A232554C2A272A6F544C2A272A53C5A47252F14F523951F9A2E24465AA982A2695A9E244E56F7A586B5DF3B0D6BAE661AD75CD0FFFB08A938A4965AA98544E2ADEA8F8A2625299544E2A2695A9E28D8A1395A96252794365AA7843E5A68ADFF4B0D6BAE661AD75CDC35AEB9A1F3E5239A99854FE4D54A68A49E50D95A9E2A4E24465AA3851992A4E54A68A372A4E54269513959B2AFEA687B5D6350F6BAD6B1ED65AD7D81FFC452A53C5A43255BCA1F246C5A4F246C589CA5431A94C1593CA49C589CA49C5A4F29B2A4E544E2A2695A9E20D95A9E28B87B5D6350F6BAD6B1ED65AD7D81FFC8354A68A4965AA9854A68A4965AA385139A99854A68A1395A96252992A4E544E2A2695A9E20D95A9E244E58B8A4965AA385139A9B8E961AD75CDC35AEB9A87B5D6353F5CA67253C51B2A53C5A432559C54BCA1725231A94C156F547CA13255FC97A94C15272A53C5170F6BAD6B1ED65AD73CACB5AEF9E12395A9E244E50D95A962AA98544E2ADE50992A4E2A269537546EAA982A26952F54A68AA9E244E544E54465AA98544E2A6E7A586B5DF3B0D6BAE661AD758DFDC17F98CA171593CA54F186CA5471A23255BCA13255BCA1F245C589CA1B156FA8BC5131A94C155F3CACB5AE79586B5DF3B0D6BAE6878F54FEA68AA9E24465AAF842E56F52992A4E54A68A938A1395A9625239A99854DE50992A4E2A2695BFE961AD75CDC35AEB9A87B5D6353F5C567193CA89CA5431557CA132559CA8DC547193CA4D15BFA9E20D951395DFF4B0D6BAE661AD75CDC35AEB9A1F7E99CA1B15FFA48A2F2A2695A9E244E53755DCA432557CA17253C5A43255DCF4B0D6BAE661AD75CDC35AEB9A1FFEC7A84C156FA84C1593CA1B15271593CA5431A9FC9354BEA87843E5BFE461AD75CDC35AEB9A87B5D6353FFC8FA93851992ADEA898544E54A68A938A9B544E2A2695938A49E54465AA3851992ADE509954A68ADFF4B0D6BAE661AD75CDC35AEB9A1F7E59C56FAAF89B54BE5039A99854A68A3754A68A49E56F52B94965AA9854FEA687B5D6350F6BAD6B1ED65AD7FC7099CADFA472527153C5A432559CA84C1593CA5471A232554C1593CA49C5A472527152F185CA49C5A472A23255DCF4B0D6BAE661AD75CDC35AEB1AFB83B5D6150F6BAD6B1ED65AD73CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9A87B5D6350F6BAD6B1ED65AD73CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9AFF03F9AB93D62B3EF3310000000049454E44AE426082,'2025-09-14 11:32:24','PROCESADO','{\"qrcode\":\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAADUCAYAAADk3g0YAAAAAklEQVR4AewaftIAAApmSURBVO3BQY7gRpIAQXei\\/v9l3z7GKQGCWS1pNszsD9ZaVzysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1zysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rfvhI5W+quEllqphU3qiYVKaKL1SmihOVk4oTlS8qTlSmiknlb6r44mGtdc3DWuuah7XWNT9cVnGTyhcqb6hMFScqN6lMFScqJxUnKicVk8pU8YbKVPFGxU0qNz2sta55WGtd87DWuuaHX6byRsUbKlPFGxUnKlPFFypTxRcVb6jcpDJV\\/E0qb1T8poe11jUPa61rHtZa1\\/zw\\/0zFFypvVJyoTBWTym+q+CepTBX\\/ZQ9rrWse1lrXPKy1rvnh\\/zmVqWKqmFROVKaKN1TeUJkqTipOVE4qTlT+P3tYa13zsNa65mGtdc0Pv6zin1QxqZyovFExqXxR8YbKFypTxaQyqUwVJxW\\/qeLf5GGtdc3DWuuah7XWNT9cpvJvojJVTCpTxaQyVUwqU8WkMlW8oTJVvKEyVXxRMalMFZPKVDGpTBUnKv9mD2utax7WWtc8rLWu+eGjin8TlaniN1WcVHxR8YbKVPGbKiaVqWJSeaPiv+RhrXXNw1rrmoe11jX2Bx+oTBWTyk0VJypTxW9SOak4Ubmp4p+kMlV8oXJTxW96WGtd87DWuuZhrXXND7+sYlKZKiaVqeJE5Q2VqeJE5Y2KSeWLiknl30RlqnhDZaqYKk5U3lA5qfjiYa11zcNa65qHtdY19ge\\/SGWqeEPli4oTlaniROWkYlI5qfhCZaqYVE4qJpWp4guV31QxqUwVk8pUcdPDWuuah7XWNQ9rrWt++GUVJyonFScqJypTxVQxqZxUTCpvVJyofKFyk8pUMalMFW9U\\/E0Vv+lhrXXNw1rrmoe11jX2Bx+onFR8ofJGxaTyRcWkMlVMKm9UTCpTxYnKVPGGylQxqUwVJypTxYnKVDGpTBWTylQxqUwVk8pU8cXDWuuah7XWNQ9rrWt++KhiUjlRmSomlaniROWk4kTljYpJZar4omJSmSqmiknljYpJZaq4SWWqeENlqphUTlR+08Na65qHtdY1D2uta+wPfpHKVHGiclJxojJVTCpTxaRyUvGFylQxqZxUfKEyVUwq\\/6SKE5UvKiaVqeKLh7XWNQ9rrWse1lrX2B\\/8IpWTijdUpoo3VKaKN1SmijdUTiomlTcqJpWpYlKZKiaVLypOVKaKN1TeqPhND2utax7WWtc8rLWu+eEjlaliqphUTlTeUDmpOFGZKm5SmSpOVKaKSWWqmFSmipOKk4pJZaqYVE5UpooTlaliqnhDZaq46WGtdc3DWuuah7XWNfYHH6j8popJZao4UZkqTlSmikllqnhDZar4QmWqmFROKk5U3qg4UXmj4g2VLyq+eFhrXfOw1rrmYa11zQ+\\/rOILlaniRGWqOFGZKiaVE5UvVKaKSWWqOFGZKiaVNyomlanii4oTlanipGJSOam46WGtdc3DWuuah7XWNT98VPGGyknFVDGpvKFyUjGpvFFxojJVvFFxUjGpTCp\\/k8pU8YbKVDGpTBWTylRxojJVfPGw1rrmYa11zcNa6xr7g3+Qyk0Vk8obFZPKVHGiMlVMKr+pYlKZKiaVqeINlaniROU3VUwqb1R88bDWuuZhrXXNw1rrmh8+UpkqJpU3Kt5QOamYVKaKL1SmikllqphUpoo3VCaVNypOVE4qJpUvKt5QmVROKiaVmx7WWtc8rLWueVhrXfPDRxWTyk0qU8UbKlPFicqJyt+kMlWcVLyhMlVMFW9UTCpTxaRyojJVnFRMKpPKVHHTw1rrmoe11jUPa61rfvhIZaqYVKaKSeWk4ouKE5UvKiaVmyreUPlC5aaKSeWNijdUTip+08Na65qHtdY1D2uta+wP\\/kEq\\/6SKN1ROKiaVqWJSualiUpkqfpPKv0nFpHJS8cXDWuuah7XWNQ9rrWvsD\\/4ilaliUpkq3lD5omJSmSomlb+pYlI5qfhCZar4X6IyVXzxsNa65mGtdc3DWuuaHy5TmSq+UHmj4kRlqphUpoqbKk5UpoqTihOVqeILlS8q3lB5o+JEZaq46WGtdc3DWuuah7XWNfYHH6jcVPGGylQxqfymihOVqeImlZOKSWWqmFSmii9UvqiYVL6o+E0Pa61rHtZa1zysta6xP\\/hFKlPFpPJGxYnKGxUnKlPFpHJS8YbKVDGpTBWTyknFpDJVTCpTxaQyVdykMlVMKicVk8pJxRcPa61rHtZa1zysta754SOVk4pJ5aTiROWk4kRlUvmi4guVNyomlaliUplUpopJZao4qZhUTipuqphUTiomlZse1lrXPKy1rnlYa13zw0cVJypTxaRyojJVTConKm9UTConKlPFpHJS8U9SOVH5ouJEZaqYKiaVqeJE5W96WGtd87DWuuZhrXXND\\/+wipOKSWWqmFROKt6o+KJiUplUTiomlanijYoTlaliUnlDZap4Q+Wmit\\/0sNa65mGtdc3DWuuaHz5SOamYVP5NVKaKSeUNlanipOJEZao4UZkqTlSmijcqTlQmlROVmyr+poe11jUPa61rHtZa19gf\\/EUqU8WkMlW8ofJGxaTyRsWJylQxqUwVk8pJxYnKScWk8psqTlROKiaVqeINlanii4e11jUPa61rHtZa19gf\\/INUpopJZaqYVKaKSWWqOFE5qZhUpooTlaliUpkqTlROKiaVqeINlaniROWLikllqjhROam46WGtdc3DWuuah7XWNT9cpnJTxRsqU8WkMlWcVLyhclIxqUwVb1R8oTJV\\/JepTBUnKlPFFw9rrWse1lrXPKy1rvnhI5Wp4kTlDZWpYqqYVE4q3lCZKk4qJpU3VG6qmComlS9Upoqp4kTlROVEZaqYVE4qbnpYa13zsNa65mGtdY39wX+YyhcVk8pU8YbKVHGiMlW8oTJVvKHyRcWJyhsVb6i8UTGpTBVfPKy1rnlYa13zsNa65oePVP6miqniRGWq+ELlb1KZKk5UpoqTihOVqWJSOamYVN5QmSpOKiaVv+lhrXXNw1rrmoe11jU\\/XFZxk8qJylQxVXyhMlWcqNxUcZPKTRW\\/qeINlROV3\\/Sw1rrmYa11zcNa65offpnKGxX\\/pIovKiaVqeJE5TdV3KQyVXyhclPFpDJV3PSw1rrmYa11zcNa65of\\/seoTBVvqEwVk8obFScVk8pUMan8k1S+qHhD5b\\/kYa11zcNa65qHtdY1P\\/yPqThRmSreqJhUTlSmipOKm1ROKiaVk4pJ5URlqjhRmSreUJlUporf9LDWuuZhrXXNw1rrmh9+WcVvqvibVL5QOamYVKaKN1Smiknlb1K5SWWqmFT+poe11jUPa61rHtZa1\\/xwmcrfpHJScVPFpDJVnKhMFZPKVHGiMlVMFZPKScWkclJxUvGFyknFpHKiMlXc9LDWuuZhrXXNw1rrGvuDtdYVD2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65r\\/A\\/mrk9YrPvMxAAAAAElFTkSuQmCC\",\"chainInfo\":{\"issuerIrsId\":\"A39200019\",\"issuedTime\":\"2025-09-14T00:00:00.000Z\",\"number\":\"LAO-PRU\\/3\",\"hash\":\"7C3F7ABB7C9E4FAF11BB9625E396EDC9FFE35B899C3846F0DFC59578766BAFA4\"},\"verifactuUrl\":\"https:\\/\\/prewww2.aeat.es\\/wlpl\\/TIKE-CONT\\/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F3&fecha=14-09-2025&importe=75.00\",\"queueId\":6563,\"requestId\":\"92e217b7-abcb-4af8-9895-8d25154db377\"}','{\r\n    \"invoice\": {\r\n        \"recipient\": {\r\n            \"irsId\": \"11701762Y\",\r\n            \"name\": \"FABIAN BASABE RODRÍGUEZ\",\r\n            \"country\": \"ES\"\r\n        },\r\n        \"id\": {\r\n            \"number\": \"PRU\\/3\",\r\n            \"issuedTime\": \"2025-09-14\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"LIMPIEZA BUCAL\",\r\n            \"operationDate\": \"2025-09-14\"\r\n        },\r\n        \"type\": \"F1\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 75,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 75,\r\n        \"amount\": 0\r\n    }\r\n}');
+ (68,'PRU',2,NULL,NULL,NULL,NULL,NULL,NULL,'https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F2&fecha=14-09-2025&importe=50.00',NULL,NULL,NULL,'PENDIENTE',NULL,'{\r\n    \"invoice\": {\r\n        \"recipient\": {\r\n            \"irsId\": \"45684134Q\",\r\n            \"name\": \"ALEJANDRO LAï¿½RDEN HIDALGO\",\r\n            \"country\": \"ES\"\r\n        },\r\n        \"id\": {\r\n            \"number\": \"PRU\\/2\",\r\n            \"issuedTime\": \"2025-09-14\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"PIï¿½OS FUERA\",\r\n            \"operationDate\": \"2025-09-14\"\r\n        },\r\n        \"type\": \"F1\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 50,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 50,\r\n        \"amount\": 0\r\n    }\r\n}'),
+ (69,'PRU',3,'92e217b7-abcb-4af8-9895-8d25154db377',6563,'A39200019','2025-09-14 00:00:00','LAO-PRU/3','7C3F7ABB7C9E4FAF11BB9625E396EDC9FFE35B899C3846F0DFC59578766BAFA4','https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F3&fecha=14-09-2025&importe=75.00','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAADUCAYAAADk3g0YAAAAAklEQVR4AewaftIAAApmSURBVO3BQY7gRpIAQXei/v9l3z7GKQGCWS1pNszsD9ZaVzysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1zysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rfvhI5W+quEllqphU3qiYVKaKL1SmihOVk4oTlS8qTlSmiknlb6r44mGtdc3DWuuah7XWNT9cVnGTyhcqb6hMFScqN6lMFScqJxUnKicVk8pU8YbKVPFGxU0qNz2sta55WGtd87DWuuaHX6byRsUbKlPFGxUnKlPFFypTxRcVb6jcpDJV/E0qb1T8poe11jUPa61rHtZa1/zw/0zFFypvVJyoTBWTym+q+CepTBX/ZQ9rrWse1lrXPKy1rvnh/zmVqWKqmFROVKaKN1TeUJkqTipOVE4qTlT+P3tYa13zsNa65mGtdc0Pv6zin1QxqZyovFExqXxR8YbKFypTxaQyqUwVJxW/qeLf5GGtdc3DWuuah7XWNT9cpvJvojJVTCpTxaQyVUwqU8WkMlW8oTJVvKEyVXxRMalMFZPKVDGpTBUnKv9mD2utax7WWtc8rLWu+eGjin8TlaniN1WcVHxR8YbKVPGbKiaVqWJSeaPiv+RhrXXNw1rrmoe11jX2Bx+oTBWTyk0VJypTxW9SOak4Ubmp4p+kMlV8oXJTxW96WGtd87DWuuZhrXXND7+sYlKZKiaVqeJE5Q2VqeJE5Y2KSeWLiknl30RlqnhDZaqYKk5U3lA5qfjiYa11zcNa65qHtdY19ge/SGWqeEPli4oTlaniROWkYlI5qfhCZaqYVE4qJpWp4guV31QxqUwVk8pUcdPDWuuah7XWNQ9rrWt++GUVJyonFScqJypTxVQxqZxUTCpvVJyofKFyk8pUMalMFW9U/E0Vv+lhrXXNw1rrmoe11jX2Bx+onFR8ofJGxaTyRcWkMlVMKm9UTCpTxYnKVPGGylQxqUwVJypTxYnKVDGpTBWTylQxqUwVk8pU8cXDWuuah7XWNQ9rrWt++KhiUjlRmSomlaniROWk4kTljYpJZar4omJSmSqmiknljYpJZaq4SWWqeENlqphUTlR+08Na65qHtdY1D2uta+wPfpHKVHGiclJxojJVTCpTxaRyUvGFylQxqZxUfKEyVUwq/6SKE5UvKiaVqeKLh7XWNQ9rrWse1lrX2B/8IpWTijdUpoo3VKaKN1SmijdUTiomlTcqJpWpYlKZKiaVLypOVKaKN1TeqPhND2utax7WWtc8rLWu+eEjlaliqphUTlTeUDmpOFGZKm5SmSpOVKaKSWWqmFSmipOKk4pJZaqYVE5UpooTlaliqnhDZaq46WGtdc3DWuuah7XWNfYHH6j8popJZao4UZkqTlSmikllqnhDZar4QmWqmFROKk5U3qg4UXmj4g2VLyq+eFhrXfOw1rrmYa11zQ+/rOILlaniRGWqOFGZKiaVE5UvVKaKSWWqOFGZKiaVNyomlanii4oTlanipGJSOam46WGtdc3DWuuah7XWNT98VPGGyknFVDGpvKFyUjGpvFFxojJVvFFxUjGpTCp/k8pU8YbKVDGpTBWTylRxojJVfPGw1rrmYa11zcNa6xr7g3+Qyk0Vk8obFZPKVHGiMlVMKr+pYlKZKiaVqeINlaniROU3VUwqb1R88bDWuuZhrXXNw1rrmh8+UpkqJpU3Kt5QOamYVKaKL1SmikllqphUpoo3VCaVNypOVE4qJpUvKt5QmVROKiaVmx7WWtc8rLWueVhrXfPDRxWTyk0qU8UbKlPFicqJyt+kMlWcVLyhMlVMFW9UTCpTxaRyojJVnFRMKpPKVHHTw1rrmoe11jUPa61rfvhIZaqYVKaKSeWk4ouKE5UvKiaVmyreUPlC5aaKSeWNijdUTip+08Na65qHtdY1D2uta+wP/kEq/6SKN1ROKiaVqWJSualiUpkqfpPKv0nFpHJS8cXDWuuah7XWNQ9rrWvsD/4ilaliUpkq3lD5omJSmSomlb+pYlI5qfhCZar4X6IyVXzxsNa65mGtdc3DWuuaHy5TmSq+UHmj4kRlqphUpoqbKk5UpoqTihOVqeILlS8q3lB5o+JEZaq46WGtdc3DWuuah7XWNfYHH6jcVPGGylQxqfymihOVqeImlZOKSWWqmFSmii9UvqiYVL6o+E0Pa61rHtZa1zysta6xP/hFKlPFpPJGxYnKGxUnKlPFpHJS8YbKVDGpTBWTyknFpDJVTCpTxaQyVdykMlVMKicVk8pJxRcPa61rHtZa1zysta754SOVk4pJ5aTiROWk4kRlUvmi4guVNyomlaliUplUpopJZao4qZhUTipuqphUTiomlZse1lrXPKy1rnlYa13zw0cVJypTxaRyojJVTConKm9UTConKlPFpHJS8U9SOVH5ouJEZaqYKiaVqeJE5W96WGtd87DWuuZhrXXND/+wipOKSWWqmFROKt6o+KJiUplUTiomlanijYoTlaliUnlDZap4Q+Wmit/0sNa65mGtdc3DWuuaHz5SOamYVP5NVKaKSeUNlanipOJEZao4UZkqTlSmijcqTlQmlROVmyr+poe11jUPa61rHtZa19gf/EUqU8WkMlW8ofJGxaTyRsWJylQxqUwVk8pJxYnKScWk8psqTlROKiaVqeINlanii4e11jUPa61rHtZa19gf/INUpopJZaqYVKaKSWWqOFE5qZhUpooTlaliUpkqTlROKiaVqeINlaniROWLikllqjhROam46WGtdc3DWuuah7XWNT9cpnJTxRsqU8WkMlWcVLyhclIxqUwVb1R8oTJV/JepTBUnKlPFFw9rrWse1lrXPKy1rvnhI5Wp4kTlDZWpYqqYVE4q3lCZKk4qJpU3VG6qmComlS9Upoqp4kTlROVEZaqYVE4qbnpYa13zsNa65mGtdY39wX+YyhcVk8pU8YbKVHGiMlW8oTJVvKHyRcWJyhsVb6i8UTGpTBVfPKy1rnlYa13zsNa65oePVP6miqniRGWq+ELlb1KZKk5UpoqTihOVqWJSOamYVN5QmSpOKiaVv+lhrXXNw1rrmoe11jU/XFZxk8qJylQxVXyhMlWcqNxUcZPKTRW/qeINlROV3/Sw1rrmYa11zcNa65offpnKGxX/pIovKiaVqeJE5TdV3KQyVXyhclPFpDJV3PSw1rrmYa11zcNa65of/seoTBVvqEwVk8obFScVk8pUMan8k1S+qHhD5b/kYa11zcNa65qHtdY1P/yPqThRmSreqJhUTlSmipOKm1ROKiaVk4pJ5URlqjhRmSreUJlUporf9LDWuuZhrXXNw1rrmh9+WcVvqvibVL5QOamYVKaKN1Smiknlb1K5SWWqmFT+poe11jUPa61rHtZa1/xwmcrfpHJScVPFpDJVnKhMFZPKVHGiMlVMFZPKScWkclJxUvGFyknFpHKiMlXc9LDWuuZhrXXNw1rrGvuDtdYVD2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65r/A/mrk9YrPvMxAAAAAElFTkSuQmCC',0x89504E470D0A1A0A0000000D49484452000000D4000000D40806000000E4DE0D1800000002494441547801EC1A7ED200000A6649444154EDC1418EE04692004177A2FEFF65DF3EC6290182592D6936CCEC0FD65A573CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9A87B5D6350F6BAD6B1ED65AD73CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9A87B5D6350F6BAD6B7EF848E56FAAB84965AA9854DEA89854A68A2F54A68A1395938A13952F2A4E54A68A49E56FAAF8E261AD75CDC35AEB9A87B5D6353F5C567193CA172A6FA84C15272A37A94C15272A2715272A271593CA54F186CA54F146C54D2A373DACB5AE79586B5DF3B0D6BAE6875FA6F246C51B2A53C51B15272A53C5172A53C517156FA8DCA43255FC4D2A6F54FCA687B5D6350F6BAD6B1ED65AD7FCF0FF4CC5172A6F549CA84C1593CA6FAAF827A94C15FF650F6BAD6B1ED65AD73CACB5AEF9E1FF3995A962AA98544E54A68A3754DE50992A4E2A4E544E2A4E54FE3F7B586B5DF3B0D6BAE661AD75CD0FBFACE29F5431A99CA8BC5131A97C51F186CA172A53C5A432A94C152715BFA9E2DFE461AD75CDC35AEB9A87B5D6353F5CA6F26FA232554C2A53C5A432554C2A53C5A43255BCA13255BCA132557C5131A94C1593CA5431A94C15272AFF660F6BAD6B1ED65AD73CACB5AEF9E1A38A7F1395A9E237559C547C51F186CA54F19B2A2695A9625279A3E2BFE461AD75CDC35AEB9A87B5D635F6071FA84C1593CA4D15272A53C56F5239A93851B9A9E29FA432557CA17253C56F7A586B5DF3B0D6BAE661AD75CD0FBFAC6252992A2695A9E244E50D95A9E244E58D8A49E58B8A49E5DF4465AA784365AA982A4E54DE5039A9F8E261AD75CDC35AEB9A87B5D635F607BF4865AA7843E58B8A1395A9E244E5A4625239A9F84265AA98544E2A2695A9E20B95DF5431A94C1593CA5471D3C35AEB9A87B5D6350F6BAD6B7EF86515272A2715272A272A53C55431A99C544C2A6F549CA87CA17293CA5431A94C156F54FC4D15BFE961AD75CDC35AEB9A87B5D635F6071FA89C547CA1F246C5A4F245C5A432554C2A6F544C2A53C589CA54F186CA5431A94C15272A53C589CA5431A94C1593CA5431A94C1593CA54F1C5C35AEB9A87B5D6350F6BAD6B7EF8A862523951992A2695A9E244E5A4E244E58D8A4965AAF8A26252992AA68A49E58D8A4965AAB84965AA784365AA98544E547ED3C35AEB9A87B5D6350F6BAD6BEC0F7E91CA5471A2725271A232554C2A53C5A47252F185CA5431A99C547CA132554C2AFFA48A13952F2A2695A9E28B87B5D6350F6BAD6B1ED65AD7D81FFC2295938A3754A68A3754A68A3754A68A37544E2A2695372A2695A96252992A26952F2A4E54A68A3754DEA8F84D0F6BAD6B1ED65AD73CACB5AEF9E12395A962AA98544E54DE5039A93851992A6E52992A4E54A68A4965AA9854A68A938A938A4965AA98544E54A68A1395A962AA784365AAB8E961AD75CDC35AEB9A87B5D635F6071FA8FCA68A4965AA3851992A4E54A68A4965AA784365AAF84265AA98544E2A4E54DEA8385179A3E20D952F2ABE78586B5DF3B0D6BAE661AD75CD0FBFACE20B95A9E24465AA3851992A269513952F54A68A4965AA3851992A2695372A2695A9E28B8A1395A9E2A4625239A9B8E961AD75CDC35AEB9A87B5D6353F7C54F186CA49C55431A9BCA1725231A9BC5171A23255BC51715231A94C2A7F93CA54F186CA5431A94C1593CA5471A232557CF1B0D6BAE661AD75CDC35AEB1AFB837F90CA4D1593CA1B1593CA5471A232554C2ABFA96252992A2695A9E20D95A9E244E537554C2A6F547CF1B0D6BAE661AD75CDC35AEB9A1F3E52992A2695372ADE5039A99854A68A2F54A68A4965AA9854A68A37542695372A4E544E2A26952F2ADE5099544E2A26959B1ED65AD73CACB5AE79586B5DF3C3471593CA4D2A53C51B2A53C589CA89CADFA432559C54BCA132554C156F544C2A53C5A472A232559C544C2A93CA5471D3C35AEB9A87B5D6350F6BAD6B7EF84865AA9854A68A49E5A4E28B8A13952F2A26959B2ADE50F942E5A68A49E58D8A37544E2A7ED3C35AEB9A87B5D6350F6BAD6BEC0FFE412AFFA48A37544E2A2695A96252B9A96252992A7E93CABF49C5A47252F1C5C35AEB9A87B5D6350F6BAD6BEC0FFE2295A96252992ADE50F9A26252992A2695BFA9625239A9F84265AAF85FA232557CF1B0D6BAE661AD75CDC35AEB9A1F2E53992ABE5079A3E24465AA9854A68A9B2A4E54A68A938A1395A9E20B952F2ADE5079A3E24465AAB8E961AD75CDC35AEB9A87B5D635F6071FA8DC54F186CA5431A9FCA68A1395A9E22695938A4965AA9854A68A2F54BEA89854BEA8F84D0F6BAD6B1ED65AD73CACB5AEB13FF8452A53C5A4F246C589CA1B15272A53C5A47252F186CA5431A94C1593CA49C5A432554C2A53C5A43255DCA432554C2A271593CA49C5170F6BAD6B1ED65AD73CACB5AEF9E12395938A49E5A4E244E5A4E2446552F9A2E20B95372A2695A962529954A68A4965AA38A998544E2A6EAA98544E2A26959B1ED65AD73CACB5AE79586B5DF3C34715272A53C5A472A232554C2A272A6F544C2A272A53C5A47252F14F523951F9A2E24465AA982A2695A9E244E56F7A586B5DF3B0D6BAE661AD75CD0FFFB08A938A4965AA98544E2ADEA8F8A2625299544E2A2695A9E28D8A1395A96252794365AA7843E5A68ADFF4B0D6BAE661AD75CDC35AEB9A1F3E5239A99854FE4D54A68A49E50D95A9E2A4E24465AA3851992A4E54A68A372A4E54269513959B2AFEA687B5D6350F6BAD6B1ED65AD7D81FFC452A53C5A43255BCA1F246C5A4F246C589CA5431A94C1593CA49C589CA49C5A4F29B2A4E544E2A2695A9E20D95A9E28B87B5D6350F6BAD6B1ED65AD7D81FFC8354A68A4965AA9854A68A4965AA385139A99854A68A1395A96252992A4E544E2A2695A9E20D95A9E244E58B8A4965AA385139A9B8E961AD75CDC35AEB9A87B5D6353F5CA67253C51B2A53C5A432559C54BCA1725231A94C156F547CA13255FC97A94C15272A53C5170F6BAD6B1ED65AD73CACB5AEF9E12395A9E244E50D95A962AA98544E2ADE50992A4E2A269537546EAA982A26952F54A68AA9E244E544E54465AA98544E2A6E7A586B5DF3B0D6BAE661AD758DFDC17F98CA171593CA54F186CA5471A23255BCA13255BCA1F245C589CA1B156FA8BC5131A94C155F3CACB5AE79586B5DF3B0D6BAE6878F54FEA68AA9E24465AAF842E56F52992A4E54A68A938A1395A9625239A99854DE50992A4E2A2695BFE961AD75CDC35AEB9A87B5D6353F5C567193CA89CA5431557CA132559CA8DC547193CA4D15BFA9E20D951395DFF4B0D6BAE661AD75CDC35AEB9A1F7E99CA1B15FFA48A2F2A2695A9E244E53755DCA432557CA17253C5A43255DCF4B0D6BAE661AD75CDC35AEB9A1FFEC7A84C156FA84C1593CA1B15271593CA5431A9FC9354BEA87843E5BFE461AD75CDC35AEB9A87B5D6353FFC8FA93851992ADEA898544E54A68A938A9B544E2A2695938A49E54465AA3851992ADE509954A68ADFF4B0D6BAE661AD75CDC35AEB9A1F7E59C56FAAF89B54BE5039A99854A68A3754A68A49E56F52B94965AA9854FEA687B5D6350F6BAD6B1ED65AD7FC7099CADFA472527153C5A432559CA84C1593CA5471A232554C1593CA49C5A472527152F185CA49C5A472A23255DCF4B0D6BAE661AD75CDC35AEB1AFB83B5D6150F6BAD6B1ED65AD73CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9A87B5D6350F6BAD6B1ED65AD73CACB5AE79586B5DF3B0D6BAE661AD75CDC35AEB9AFF03F9AB93D62B3EF3310000000049454E44AE426082,'2025-09-14 11:32:24','PROCESADO','{\"qrcode\":\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAANQAAADUCAYAAADk3g0YAAAAAklEQVR4AewaftIAAApmSURBVO3BQY7gRpIAQXei\\/v9l3z7GKQGCWS1pNszsD9ZaVzysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rHtZa1zysta55WGtd87DWuuZhrXXNw1rrmoe11jUPa61rfvhI5W+quEllqphU3qiYVKaKL1SmihOVk4oTlS8qTlSmiknlb6r44mGtdc3DWuuah7XWNT9cVnGTyhcqb6hMFScqN6lMFScqJxUnKicVk8pU8YbKVPFGxU0qNz2sta55WGtd87DWuuaHX6byRsUbKlPFGxUnKlPFFypTxRcVb6jcpDJV\\/E0qb1T8poe11jUPa61rHtZa1\\/zw\\/0zFFypvVJyoTBWTym+q+CepTBX\\/ZQ9rrWse1lrXPKy1rvnh\\/zmVqWKqmFROVKaKN1TeUJkqTipOVE4qTlT+P3tYa13zsNa65mGtdc0Pv6zin1QxqZyovFExqXxR8YbKFypTxaQyqUwVJxW\\/qeLf5GGtdc3DWuuah7XWNT9cpvJvojJVTCpTxaQyVUwqU8WkMlW8oTJVvKEyVXxRMalMFZPKVDGpTBUnKv9mD2utax7WWtc8rLWu+eGjin8TlaniN1WcVHxR8YbKVPGbKiaVqWJSeaPiv+RhrXXNw1rrmoe11jX2Bx+oTBWTyk0VJypTxW9SOak4Ubmp4p+kMlV8oXJTxW96WGtd87DWuuZhrXXND7+sYlKZKiaVqeJE5Q2VqeJE5Y2KSeWLiknl30RlqnhDZaqYKk5U3lA5qfjiYa11zcNa65qHtdY19ge\\/SGWqeEPli4oTlaniROWkYlI5qfhCZaqYVE4qJpWp4guV31QxqUwVk8pUcdPDWuuah7XWNQ9rrWt++GUVJyonFScqJypTxVQxqZxUTCpvVJyofKFyk8pUMalMFW9U\\/E0Vv+lhrXXNw1rrmoe11jX2Bx+onFR8ofJGxaTyRcWkMlVMKm9UTCpTxYnKVPGGylQxqUwVJypTxYnKVDGpTBWTylQxqUwVk8pU8cXDWuuah7XWNQ9rrWt++KhiUjlRmSomlaniROWk4kTljYpJZar4omJSmSqmiknljYpJZaq4SWWqeENlqphUTlR+08Na65qHtdY1D2uta+wPfpHKVHGiclJxojJVTCpTxaRyUvGFylQxqZxUfKEyVUwq\\/6SKE5UvKiaVqeKLh7XWNQ9rrWse1lrX2B\\/8IpWTijdUpoo3VKaKN1SmijdUTiomlTcqJpWpYlKZKiaVLypOVKaKN1TeqPhND2utax7WWtc8rLWu+eEjlaliqphUTlTeUDmpOFGZKm5SmSpOVKaKSWWqmFSmipOKk4pJZaqYVE5UpooTlaliqnhDZaq46WGtdc3DWuuah7XWNfYHH6j8popJZao4UZkqTlSmikllqnhDZar4QmWqmFROKk5U3qg4UXmj4g2VLyq+eFhrXfOw1rrmYa11zQ+\\/rOILlaniRGWqOFGZKiaVE5UvVKaKSWWqOFGZKiaVNyomlanii4oTlanipGJSOam46WGtdc3DWuuah7XWNT98VPGGyknFVDGpvKFyUjGpvFFxojJVvFFxUjGpTCp\\/k8pU8YbKVDGpTBWTylRxojJVfPGw1rrmYa11zcNa6xr7g3+Qyk0Vk8obFZPKVHGiMlVMKr+pYlKZKiaVqeINlaniROU3VUwqb1R88bDWuuZhrXXNw1rrmh8+UpkqJpU3Kt5QOamYVKaKL1SmikllqphUpoo3VCaVNypOVE4qJpUvKt5QmVROKiaVmx7WWtc8rLWueVhrXfPDRxWTyk0qU8UbKlPFicqJyt+kMlWcVLyhMlVMFW9UTCpTxaRyojJVnFRMKpPKVHHTw1rrmoe11jUPa61rfvhIZaqYVKaKSeWk4ouKE5UvKiaVmyreUPlC5aaKSeWNijdUTip+08Na65qHtdY1D2uta+wP\\/kEq\\/6SKN1ROKiaVqWJSualiUpkqfpPKv0nFpHJS8cXDWuuah7XWNQ9rrWvsD\\/4ilaliUpkq3lD5omJSmSomlb+pYlI5qfhCZar4X6IyVXzxsNa65mGtdc3DWuuaHy5TmSq+UHmj4kRlqphUpoqbKk5UpoqTihOVqeILlS8q3lB5o+JEZaq46WGtdc3DWuuah7XWNfYHH6jcVPGGylQxqfymihOVqeImlZOKSWWqmFSmii9UvqiYVL6o+E0Pa61rHtZa1zysta6xP\\/hFKlPFpPJGxYnKGxUnKlPFpHJS8YbKVDGpTBWTyknFpDJVTCpTxaQyVdykMlVMKicVk8pJxRcPa61rHtZa1zysta754SOVk4pJ5aTiROWk4kRlUvmi4guVNyomlaliUplUpopJZao4qZhUTipuqphUTiomlZse1lrXPKy1rnlYa13zw0cVJypTxaRyojJVTConKm9UTConKlPFpHJS8U9SOVH5ouJEZaqYKiaVqeJE5W96WGtd87DWuuZhrXXND\\/+wipOKSWWqmFROKt6o+KJiUplUTiomlanijYoTlaliUnlDZap4Q+Wmit\\/0sNa65mGtdc3DWuuaHz5SOamYVP5NVKaKSeUNlanipOJEZao4UZkqTlSmijcqTlQmlROVmyr+poe11jUPa61rHtZa19gf\\/EUqU8WkMlW8ofJGxaTyRsWJylQxqUwVk8pJxYnKScWk8psqTlROKiaVqeINlanii4e11jUPa61rHtZa19gf\\/INUpopJZaqYVKaKSWWqOFE5qZhUpooTlaliUpkqTlROKiaVqeINlaniROWLikllqjhROam46WGtdc3DWuuah7XWNT9cpnJTxRsqU8WkMlWcVLyhclIxqUwVb1R8oTJV\\/JepTBUnKlPFFw9rrWse1lrXPKy1rvnhI5Wp4kTlDZWpYqqYVE4q3lCZKk4qJpU3VG6qmComlS9Upoqp4kTlROVEZaqYVE4qbnpYa13zsNa65mGtdY39wX+YyhcVk8pU8YbKVHGiMlW8oTJVvKHyRcWJyhsVb6i8UTGpTBVfPKy1rnlYa13zsNa65oePVP6miqniRGWq+ELlb1KZKk5UpoqTihOVqWJSOamYVN5QmSpOKiaVv+lhrXXNw1rrmoe11jU\\/XFZxk8qJylQxVXyhMlWcqNxUcZPKTRW\\/qeINlROV3\\/Sw1rrmYa11zcNa65offpnKGxX\\/pIovKiaVqeJE5TdV3KQyVXyhclPFpDJV3PSw1rrmYa11zcNa65of\\/seoTBVvqEwVk8obFScVk8pUMan8k1S+qHhD5b\\/kYa11zcNa65qHtdY1P\\/yPqThRmSreqJhUTlSmipOKm1ROKiaVk4pJ5URlqjhRmSreUJlUporf9LDWuuZhrXXNw1rrmh9+WcVvqvibVL5QOamYVKaKN1Smiknlb1K5SWWqmFT+poe11jUPa61rHtZa1\\/xwmcrfpHJScVPFpDJVnKhMFZPKVHGiMlVMFZPKScWkclJxUvGFyknFpHKiMlXc9LDWuuZhrXXNw1rrGvuDtdYVD2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65qHtdY1D2utax7WWtc8rLWueVhrXfOw1rrmYa11zcNa65r\\/A\\/mrk9YrPvMxAAAAAElFTkSuQmCC\",\"chainInfo\":{\"issuerIrsId\":\"A39200019\",\"issuedTime\":\"2025-09-14T00:00:00.000Z\",\"number\":\"LAO-PRU\\/3\",\"hash\":\"7C3F7ABB7C9E4FAF11BB9625E396EDC9FFE35B899C3846F0DFC59578766BAFA4\"},\"verifactuUrl\":\"https:\\/\\/prewww2.aeat.es\\/wlpl\\/TIKE-CONT\\/ValidarQR?nif=A39200019&numserie=LAO-PRU%2F3&fecha=14-09-2025&importe=75.00\",\"queueId\":6563,\"requestId\":\"92e217b7-abcb-4af8-9895-8d25154db377\"}','{\r\n    \"invoice\": {\r\n        \"recipient\": {\r\n            \"irsId\": \"11701762Y\",\r\n            \"name\": \"FABIAN BASABE RODRï¿½GUEZ\",\r\n            \"country\": \"ES\"\r\n        },\r\n        \"id\": {\r\n            \"number\": \"PRU\\/3\",\r\n            \"issuedTime\": \"2025-09-14\"\r\n        },\r\n        \"description\": {\r\n            \"text\": \"LIMPIEZA BUCAL\",\r\n            \"operationDate\": \"2025-09-14\"\r\n        },\r\n        \"type\": \"F1\",\r\n        \"vatLines\": [\r\n            {\r\n                \"vatOperation\": \"E1\",\r\n                \"base\": 75,\r\n                \"rate\": 0,\r\n                \"amount\": 0,\r\n                \"vatKey\": \"01\"\r\n            }\r\n        ],\r\n        \"total\": 75,\r\n        \"amount\": 0\r\n    }\r\n}');
 
 -- 
 -- Table structure for table suboc_contadores
@@ -1665,10 +1665,10 @@ CREATE TABLE `suboc_cuestionario_respuestas` (
 
 DROP TABLE IF EXISTS suboc_dibujos_presupuestos;
 CREATE TABLE `suboc_dibujos_presupuestos` (
-  `NRO_FACTURA` int(8) NOT NULL,
-  `SERIE_FACTURA` varchar(8) NOT NULL,
-  `DIBUJO_FACTURA` longblob DEFAULT NULL,
-  PRIMARY KEY (`NRO_FACTURA`,`SERIE_FACTURA`) USING BTREE
+  `NRO_PRESUPUESTO` int(8) NOT NULL,
+  `SERIE_PRESUPUESTO` varchar(8) NOT NULL,
+  `DIBUJO_PRESUPUESTO` longblob DEFAULT NULL,
+  PRIMARY KEY (`NRO_PRESUPUESTO`,`SERIE_PRESUPUESTO`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci ROW_FORMAT=DYNAMIC;
 
 -- 
@@ -1712,14 +1712,14 @@ CREATE TABLE `suboc_facturas` (
   `PROVINCIA_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
   `CPOSTAL_CLIENTE_FACTURA` varchar(15) DEFAULT NULL,
   `PAIS_CLIENTE_FACTURA` varchar(150) DEFAULT NULL,
-  `TIPOID_INT_CLIENTE_FACTURA` varchar(20) DEFAULT NULL COMMENT '''ID'' O ''PASAPORTE'' PARA EL TIPO DE IDENTIFICACIÓN INTERNACIONAL',
+  `TIPOID_INT_CLIENTE_FACTURA` varchar(20) DEFAULT NULL COMMENT '''ID'' O ''PASAPORTE'' PARA EL TIPO DE IDENTIFICACIï¿½N INTERNACIONAL',
   `FECHA_FACTURA` date DEFAULT NULL,
   `TOTAL_LIQUIDO_FACTURA` decimal(18,6) DEFAULT NULL COMMENT 'Total Factura',
   `FORMA_PAGO_FACTURA` varchar(200) DEFAULT NULL COMMENT 'Codigo Forma de Pago',
   `COMENTARIOS_FACTURA` text DEFAULT NULL,
   `NOMBRE` varchar(100) DEFAULT NULL,
   `APELLIDOS` varchar(100) DEFAULT NULL,
-  `CONSOLIDACION_FACTURA` varchar(1) DEFAULT 'N' COMMENT '''S'' O ''N'' PARA SABER SI ESTÁ CONSOLIDADA LA FACTURA',
+  `CONSOLIDACION_FACTURA` varchar(1) DEFAULT 'N' COMMENT '''S'' O ''N'' PARA SABER SI ESTï¿½ CONSOLIDADA LA FACTURA',
   `FECHA_ULT_CONSO_FACTURA` datetime DEFAULT NULL COMMENT 'FECHA DE CONSOLIDACION',
   `FASE_CONSOLIDACION_FACTURA` varchar(100) DEFAULT NULL COMMENT 'ONLINE, OFFLINE, VERIF1, VERIF2, ERROR_BORRADOR, ERROR_GRAVE',
   `ESSIMPL_FACTURA` varchar(1) DEFAULT 'N' COMMENT '''S'' O ''N'' PARA SABER SI ES FACTURA SIMPLIFICADA O NO',
@@ -1732,9 +1732,9 @@ CREATE TABLE `suboc_facturas` (
 
 INSERT INTO suboc_facturas(NRO_FACTURA, SERIE_FACTURA, CODIGO_CLIENTE_FACTURA, RAZONSOCIAL_CLIENTE_FACTURA, NIF_CLIENTE_FACTURA, MOVIL_CLIENTE_FACTURA, EMAIL_CLIENTE_FACTURA, DIRECCION1_CLIENTE_FACTURA, DIRECCION2_CLIENTE_FACTURA, POBLACION_CLIENTE_FACTURA, PROVINCIA_CLIENTE_FACTURA, CPOSTAL_CLIENTE_FACTURA, PAIS_CLIENTE_FACTURA, TIPOID_INT_CLIENTE_FACTURA, FECHA_FACTURA, TOTAL_LIQUIDO_FACTURA, FORMA_PAGO_FACTURA, COMENTARIOS_FACTURA, NOMBRE, APELLIDOS, CONSOLIDACION_FACTURA, FECHA_ULT_CONSO_FACTURA, FASE_CONSOLIDACION_FACTURA, ESSIMPL_FACTURA) VALUES
  (1,'FSRT','0','PACIENTE NUEVO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'ES',NULL,'2025-09-13',50.000000,'TARJETA',NULL,NULL,NULL,'S','2025-09-14 11:34:51','CANCELADA','S'),
- (1,'PRU','18',' VIRGEN DEL ROCÍO, SL','B41833617','','','RONDA CAPUCHINOS, 2, PORT 1-5C','','SEVILLA','SEVILLA','41003','ES','','2025-09-13',50.000000,'TARJETA',NULL,'','','S','2025-09-13 18:16:23','VERIFICADA','N'),
- (2,'PRU','6','ALEJANDRO LAÓRDEN HIDALGO','45684134Q','','','CALLE CASCAJAL, 7','','VILLARALBO','ZAMORA','49159','ES','','2025-09-14',50.000000,'TARJETA',NULL,'ALEJANDRO','LAÓRDEN HIDALGO','S','2025-09-14 07:20:53','OFFLINE','N'),
- (3,'PRU','1','FABIAN BASABE RODRÍGUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID','2025-09-14',75.000000,'TARJETA',NULL,'FABIAN','BASABE RODRÍGUEZ','S','2025-09-14 11:32:24','ONLINE','N');
+ (1,'PRU','18',' VIRGEN DEL ROCï¿½O, SL','B41833617','','','RONDA CAPUCHINOS, 2, PORT 1-5C','','SEVILLA','SEVILLA','41003','ES','','2025-09-13',50.000000,'TARJETA',NULL,'','','S','2025-09-13 18:16:23','VERIFICADA','N'),
+ (2,'PRU','6','ALEJANDRO LAï¿½RDEN HIDALGO','45684134Q','','','CALLE CASCAJAL, 7','','VILLARALBO','ZAMORA','49159','ES','','2025-09-14',50.000000,'TARJETA',NULL,'ALEJANDRO','LAï¿½RDEN HIDALGO','S','2025-09-14 07:20:53','OFFLINE','N'),
+ (3,'PRU','1','FABIAN BASABE RODRï¿½GUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID','2025-09-14',75.000000,'TARJETA',NULL,'FABIAN','BASABE RODRï¿½GUEZ','S','2025-09-14 11:32:24','ONLINE','N');
 
 -- 
 -- Table structure for table suboc_facturas_lineas
@@ -1762,7 +1762,7 @@ CREATE TABLE `suboc_facturas_lineas` (
 INSERT INTO suboc_facturas_lineas(SERIE_FACTURA_LINEA, NRO_FACTURA_LINEA, LINEA_LINEA, CODIGO_ARTICULO_LINEA, DESCRIPCION_ARTICULO_LINEA, ZONA, PRECIOVENTA_ARTICULO_LINEA, CANTIDAD_LINEA, SUM_TOTAL_LINEA, ODONTOLOGO) VALUES
  ('FSRT',1,'010','1','EMPASTE COMPUESTO',NULL,50.000000,1.000000,50.000000,NULL),
  ('PRU',1,'010','1','EMPASTE COMPUESTO','27',50.000000,1.000000,50.000000,'1'),
- ('PRU',2,'010','1','PIÑOS FUERA',NULL,50.000000,1.000000,50.000000,NULL),
+ ('PRU',2,'010','1','PIï¿½OS FUERA',NULL,50.000000,1.000000,50.000000,NULL),
  ('PRU',3,'010','1','LIMPIEZA BUCAL',NULL,75.000000,1.000000,75.000000,'1');
 
 -- 
@@ -1833,7 +1833,7 @@ INSERT INTO suboc_historia(ID, CODIGO_ARTICULO, DESCRIPCION_ARTICULO, CODIGO_CLI
  (8939,'VERIFACTU','CONTROL DENTAL RUTINARIO',2,59.000000,'2025-08-06','TODAS',NULL,24,'010','1','Z25',NULL),
  (8940,'1','EMPASTE COMPUESTO',4,50.000000,'2025-08-01','22',NULL,4,'010','1','FS25',NULL),
  (8941,'1','PUENTE ENTRE MUELAS',0,135.000000,'2025-08-11','12,13',NULL,5,'010','','FS25',NULL),
- (8942,'FERULA','FÉRULA DENTAL',1,190.000000,'2025-08-11','TODAS',NULL,25,'010','1','Z25',NULL),
+ (8942,'FERULA','Fï¿½RULA DENTAL',1,190.000000,'2025-08-11','TODAS',NULL,25,'010','1','Z25',NULL),
  (8943,'001','LIMPIEZA DENTAL',2,200.000000,'2025-08-11','TODAS',NULL,26,'010','1','Z25',NULL),
  (8944,'002','DESVITALIZACION',2,70.000000,'2025-08-11','12',NULL,27,'010','1','Z25',NULL),
  (8945,'1','EMPASTE COMPUESTO',1,450.000000,'2025-08-14','14',NULL,28,'010','1','Z25',NULL),
@@ -1842,36 +1842,36 @@ INSERT INTO suboc_historia(ID, CODIGO_ARTICULO, DESCRIPCION_ARTICULO, CODIGO_CLI
  (8948,'002','MUELAS TORCIDAS',1,400.000000,'2025-08-15','14,15',NULL,30,'010','1','Z25',NULL),
  (8949,'003','HALITOSIS HORROROSA',2,150.000000,'2025-08-15','TODAS',NULL,31,'010','1','Z25',NULL),
  (8950,'1','CHAPERON BOCA',1,100.000000,'2025-08-16','13',NULL,32,'010','','Z25',NULL),
- (8951,'001','TENAZITAS PARA TUS PIÑOS',2,200.000000,'2025-08-16','12',NULL,33,'010','1','Z25',NULL),
- (8952,'1','TORNILLOS EN LA MANDÍBULA',2,150.000000,'2025-08-16','ROBOCOP',NULL,34,'010','1','Z25',NULL),
+ (8951,'001','TENAZITAS PARA TUS PIï¿½OS',2,200.000000,'2025-08-16','12',NULL,33,'010','1','Z25',NULL),
+ (8952,'1','TORNILLOS EN LA MANDï¿½BULA',2,150.000000,'2025-08-16','ROBOCOP',NULL,34,'010','1','Z25',NULL),
  (8953,'1','EMPASTE CON POCA PASTA',1,50.000000,'2025-08-17','22',NULL,35,'010','1','Z25',NULL),
- (8954,'1','CHAPERÓN RICO RICO',2,250.000000,'2025-08-17','22',NULL,36,'010','1','Z25',NULL),
+ (8954,'1','CHAPERï¿½N RICO RICO',2,250.000000,'2025-08-17','22',NULL,36,'010','1','Z25',NULL),
  (8955,'1','CHAPA Y PINTURA',6,250.000000,'2025-08-19','',NULL,37,'010','1','Z25',NULL),
  (8956,'001','PROCA A SACO',6,500.000000,'2025-08-19','11',NULL,38,'010','1','Z25',NULL),
  (8957,'1','LE HUELE EL SOBRE',6,100.000000,'2025-08-19','',NULL,39,'010','1','Z25',NULL),
  (8958,'1','DESVITALIZACION COMPLETA',6,50.000000,'2025-08-19','',NULL,40,'010','1','Z25',NULL),
  (8959,'1','DIENTES NUEVOS TOTALMENTE',6,5000.000000,'2025-08-19','',NULL,41,'010','1','Z25',NULL),
  (8960,'001','REGALO AMIGA',6,0.000000,'2025-08-19','1',NULL,42,'010','1','Z25',NULL),
- (8961,'1','MATERIAL BÉLICO',6,2000.000000,'2025-09-01','',NULL,43,'010','1','Z25',NULL),
+ (8961,'1','MATERIAL Bï¿½LICO',6,2000.000000,'2025-09-01','',NULL,43,'010','1','Z25',NULL),
  (8962,'1','TANQUES BLINDADOS',6,100.000000,'2025-08-21','11',NULL,44,'010','1','Z25',NULL),
  (8963,'1','PATO APARATO ',6,800.000000,'2025-09-01','11',NULL,45,'010','1','Z25',NULL),
- (8964,'001','ENCÍAS SANGRANTES',6,500.000000,'2024-08-20','1',NULL,1,'010','1','PRUE',NULL),
- (8965,'001','DIENTES CAÍDOS',6,200.000000,'2023-07-01','1',NULL,2,'010','1','PRUE',NULL),
- (8966,'1','DESVITALIZACIÓN FUNERARIA',6,150.000000,'2024-07-02','',NULL,3,'010','1','PRUE',NULL),
+ (8964,'001','ENCï¿½AS SANGRANTES',6,500.000000,'2024-08-20','1',NULL,1,'010','1','PRUE',NULL),
+ (8965,'001','DIENTES CAï¿½DOS',6,200.000000,'2023-07-01','1',NULL,2,'010','1','PRUE',NULL),
+ (8966,'1','DESVITALIZACIï¿½N FUNERARIA',6,150.000000,'2024-07-02','',NULL,3,'010','1','PRUE',NULL),
  (8967,'1','EMPASTE COMPUESTO Y SIN NOVIA',16,50.000000,'2025-08-21','44',NULL,46,'010','1','Z25',NULL),
- (8968,'1','EMPASTE COMPUESTO TOTALMENTE DE ARGUMENTOS NO SÓLIDOS',6,50.000000,'2025-08-21','',NULL,47,'010','1','Z25',NULL),
+ (8968,'1','EMPASTE COMPUESTO TOTALMENTE DE ARGUMENTOS NO Sï¿½LIDOS',6,50.000000,'2025-08-21','',NULL,47,'010','1','Z25',NULL),
  (8969,'1','MUELAS FUERA',17,50.000000,'2025-08-23','11',NULL,48,'010','1','Z25',NULL),
- (8970,'1','PIÑOS A LA BASURA',6,200.000000,'2025-08-23','',NULL,49,'010','1','Z25',NULL),
+ (8970,'1','PIï¿½OS A LA BASURA',6,200.000000,'2025-08-23','',NULL,49,'010','1','Z25',NULL),
  (8971,'001','EMPASTE COMPUESTO Y SIN NOVIA',18,200.000000,'2025-08-24','11',NULL,50,'010','1','Z25',NULL),
  (8972,'001','PRUEBA CABECERAS',6,150.000000,'2025-08-28','1',NULL,53,'010','1','Z25',NULL),
  (8973,'PRUEBA','PRUEBA CABECERAS',6,100.000000,'2025-08-28','',NULL,54,'010','','Z25',NULL),
  (8974,'1','EMPASTE COMPUESTO',2,150.000000,'2025-08-28','',NULL,55,'010','1','Z25',NULL),
- (8975,'001','PIÑOS NUEVOS',18,240.000000,'2025-08-28','23,12',NULL,4,'010','1','PRUE',NULL),
- (8976,'001','DESVITALIZACIÓN COMPLETA',18,240.000000,'2025-08-28','TODOS',NULL,4,'020','1','PRUE',NULL),
+ (8975,'001','PIï¿½OS NUEVOS',18,240.000000,'2025-08-28','23,12',NULL,4,'010','1','PRUE',NULL),
+ (8976,'001','DESVITALIZACIï¿½N COMPLETA',18,240.000000,'2025-08-28','TODOS',NULL,4,'020','1','PRUE',NULL),
  (8977,'001','CARIES REBELDE SIN CAUSA',18,50.000000,'2025-08-29','1',NULL,5,'010','1','PRUE',NULL),
  (8978,'1','EMPASTE COMPUESTO',18,67.000000,'2025-08-29','11',NULL,6,'010','1','PRUE',NULL),
  (8979,'1','EMPASTE COMPUESTO',18,50.000000,'2025-08-29','13',NULL,6,'020','','PRUE',NULL),
- (8980,'001','PIÑOS DEMACRADOS',18,60.000000,'2025-08-29','12,13',NULL,7,'010','1','PRUE',NULL),
+ (8980,'001','PIï¿½OS DEMACRADOS',18,60.000000,'2025-08-29','12,13',NULL,7,'010','1','PRUE',NULL),
  (8981,'1','EMPASTE COMPUESTO',18,50.000000,'2025-08-29','11',NULL,7,'020','1','PRUE',NULL),
  (8982,'1','EMPASTE COMPUESTO',18,50.000000,'2025-08-29','',NULL,8,'010','','PRUE',NULL),
  (8983,'1','EMPASTE COMPUESTO',18,50.000000,'2025-08-29','',NULL,8,'020','','PRUE',NULL),
@@ -1883,7 +1883,7 @@ INSERT INTO suboc_historia(ID, CODIGO_ARTICULO, DESCRIPCION_ARTICULO, CODIGO_CLI
  (8989,'1','EMPASTE COMPUESTO',18,50.000000,'2025-09-13','27',NULL,1,'010','1','PRU',NULL),
  (8990,'','',18,0.000000,'2025-09-13','',NULL,1,'020','','PRU',NULL),
  (8991,'1','EMPASTE COMPUESTO',0,50.000000,'2025-09-13','',NULL,1,'010','','FSRT',NULL),
- (8992,'1','PIÑOS FUERA',6,50.000000,'2025-09-14','',NULL,2,'010','','PRU',NULL),
+ (8992,'1','PIï¿½OS FUERA',6,50.000000,'2025-09-14','',NULL,2,'010','','PRU',NULL),
  (8993,'1','LIMPIEZA BUCAL',1,75.000000,'2025-09-14','',NULL,3,'010','1','PRU',NULL);
 
 -- 
@@ -1925,71 +1925,71 @@ CREATE TABLE `suboc_paises` (
 -- 
 
 INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_PAIS, NOMBRE_ENG_PAIS, ESMIEMBRO_UE_PAIS, ORDEN_PAIS) VALUES
- ('004','AFG','AF','Afganistán','Afghanistan','N',999),
+ ('004','AFG','AF','Afganistï¿½n','Afghanistan','N',999),
  ('008','ALB','AL','Albania','Albania','N',999),
- ('010','ATA','AQ','Antártida','Antartic','N',999),
+ ('010','ATA','AQ','Antï¿½rtida','Antartic','N',999),
  ('012','DZA','DZ','Argelia','Algeria','N',999),
  ('020','AND','AD','Andorra','Andorra','N',999),
  ('024','AGO','AO','Angola','Angola','N',999),
  ('028','ATG','AG','Antigua y Barbuda','Antigua and Barbuda','N',999),
- ('031','AZE','AZ','Azerbaiyán','Azerbaijan','N',999),
+ ('031','AZE','AZ','Azerbaiyï¿½n','Azerbaijan','N',999),
  ('032','ARG','AR','Argentina','Argentina','N',999),
  ('036','AUS','AU','Australia','Australia','N',999),
  ('040','AUT','AT','Austria','Austria','S',999),
  ('044','BHS','BS','Bahamas','Bahamas','N',999),
- ('048','BHR','BH','Baréin','Bahrain','N',999),
- ('050','BGD','BD','Bangladés','Bangladesh','N',999),
+ ('048','BHR','BH','Barï¿½in','Bahrain','N',999),
+ ('050','BGD','BD','Bangladï¿½s','Bangladesh','N',999),
  ('051','ARM','AM','Armenia','Armenia','N',999),
  ('052','BRB','BB','Barbados','Barbados','N',999),
- ('056','BEL','BE','Bélgica','Belgium','S',999),
+ ('056','BEL','BE','Bï¿½lgica','Belgium','S',999),
  ('060','BMU','BM','Bermudas','Bermuda','N',999),
- ('064','BTN','BT','Bután','Bhutan','N',999),
+ ('064','BTN','BT','Butï¿½n','Bhutan','N',999),
  ('068','BOL','BO','Bolivia','Bolivia','N',999),
  ('070','BIH','BA','Bosnia y Herzegovina','Bosnia and Herzegovina','N',999),
  ('072','BWA','BW','Botsuana','Botswana','N',999),
  ('074','BVT','BV','Isla Bouvet','Bouvet Island ','N',999),
  ('076','BRA','BR','Brasil','Brazil','N',999),
  ('084','BLZ','BZ','Belice','Belize','N',999),
- ('086','IOT','IO','Territorio Británico del Océano Índico','British Indian Ocean Territory','N',999),
- ('090','SLB','SB','Islas Salomón','Solomon Islands','N',999),
- ('092','VGB','VG','Islas Vírgenes (UK)','Virgin Islands','N',999),
- ('096','BRN','BN','Brunéi','Brunei','N',999),
+ ('086','IOT','IO','Territorio Britï¿½nico del Ocï¿½ano ï¿½ndico','British Indian Ocean Territory','N',999),
+ ('090','SLB','SB','Islas Salomï¿½n','Solomon Islands','N',999),
+ ('092','VGB','VG','Islas Vï¿½rgenes (UK)','Virgin Islands','N',999),
+ ('096','BRN','BN','Brunï¿½i','Brunei','N',999),
  ('100','BGR','BG','Bulgaria','Bulgaria','S',999),
  ('104','MMR','MM','Birmania','Myanmar','N',999),
  ('108','BDI','BI','Burundi','Burundi','N',999),
  ('112','BLR','BY','Bielorrusia','Belarus','N',999),
  ('116','KHM','KH','Camboya','Cambodia','N',999),
- ('120','CMR','CM','Camerún','Cameroon','N',999),
- ('124','CAN','CA','Canadá','Canada','N',999),
+ ('120','CMR','CM','Camerï¿½n','Cameroon','N',999),
+ ('124','CAN','CA','Canadï¿½','Canada','N',999),
  ('132','CPV','CV','Cabo Verde','Cape Verde','N',999),
- ('136','CYM','KY','Islas Caimán','Cayman Islands','N',999),
- ('140','CAF','CF','República Centroafricana','Central African Republic','N',999),
+ ('136','CYM','KY','Islas Caimï¿½n','Cayman Islands','N',999),
+ ('140','CAF','CF','Repï¿½blica Centroafricana','Central African Republic','N',999),
  ('144','LKA','LK','Sri Lanka','Sri Lanka','N',999),
  ('148','TCD','TD','Chad','Chad','N',999),
  ('152','CHL','CL','Chile','Chile','N',999),
  ('156','CHN','CN','China','China','N',999),
- ('158','TWN','TW','Taiwán','Taiwan','N',999),
+ ('158','TWN','TW','Taiwï¿½n','Taiwan','N',999),
  ('162','CXR','CX','Isla de Navidad','Christmas Island','N',999),
  ('166','CCK','CC','Islas Cocos','Cocos Islands','N',999),
  ('170','COL','CO','Colombia','Colombia','N',999),
  ('174','COM','KM','Comoras','Comoros','N',999),
  ('175','MYT','YT','Mayotte','Mayotte','N',999),
  ('178','COG','CG','Congo','Congo','N',999),
- ('180','COD','CD','República Democrática del Congo','Democratic Republic of the Congo','N',999),
+ ('180','COD','CD','Repï¿½blica Democrï¿½tica del Congo','Democratic Republic of the Congo','N',999),
  ('184','COK','CK','Islas Cook','Cook Islands','N',999),
  ('188','CRI','CR','Costa Rica','Costa Rica','N',999),
  ('191','HRV','HR','Croacia','Croatia','S',999),
  ('192','CUB','CU','Cuba','Cuba','N',999),
  ('196','CYP','CY','Chipre','Cyprus','S',999),
- ('203','CZE','CZ','República Checa','Czech Republic','S',999),
- ('204','BEN','BJ','Benín','Benin','N',999),
+ ('203','CZE','CZ','Repï¿½blica Checa','Czech Republic','S',999),
+ ('204','BEN','BJ','Benï¿½n','Benin','N',999),
  ('208','DNK','DK','Dinamarca','Denmark','S',999),
  ('212','DMA','DM','Dominica','Dominica','N',999),
- ('214','DOM','DO','República Dominicana','Dominican Republic','N',999),
+ ('214','DOM','DO','Repï¿½blica Dominicana','Dominican Republic','N',999),
  ('218','ECU','EC','Ecuador','Ecuador','N',999),
  ('222','SLV','SV','El Salvador','El Salvador','N',999),
  ('226','GNQ','GQ','Guinea Ecuatorial','Equatorial Guinea','N',999),
- ('231','ETH','ET','Etiopía','Ethiopia','N',999),
+ ('231','ETH','ET','Etiopï¿½a','Ethiopia','N',999),
  ('232','ERI','ER','Eritrea','Eritrea','N',999),
  ('233','EST','EE','Estonia','Estonia','S',999),
  ('234','FRO','FO','Islas Feroe','Faroe Islands','N',999),
@@ -1997,12 +1997,12 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('239','SGS','GS','Georgia del Sur y las Islas Sandwich del Sur','South Georgia and the South Sandwich Islands','N',999),
  ('242','FJI','FJ','Fiyi','Fiji','N',999),
  ('246','FIN','FI','Finlandia','Finland','S',999),
- ('248','ALA','AX','Islas Åland','Åland Islands','N',999),
+ ('248','ALA','AX','Islas ï¿½land','ï¿½land Islands','N',999),
  ('250','FRA','FR','Francia','France','S',3),
  ('254','GUF','GF','Guayana Francesa','French Guiana','N',999),
- ('260','ATF','TF','Territorios Australes y Antárticos Franceses','French Southern and Antarctic Lands','N',999),
+ ('260','ATF','TF','Territorios Australes y Antï¿½rticos Franceses','French Southern and Antarctic Lands','N',999),
  ('262','DJI','DJ','Yibuti','Djibouti','N',999),
- ('266','GAB','GA','Gabón','Gabon','N',999),
+ ('266','GAB','GA','Gabï¿½n','Gabon','N',999),
  ('268','GEO','GE','Georgia','Georgia','N',999),
  ('270','GMB','GM','Gambia','Gambia','N',999),
  ('276','DEU','DE','Alemania','Germany','S',999),
@@ -2017,33 +2017,33 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('320','GTM','GT','Guatemala','Guatemala','N',999),
  ('324','GIN','GN','Guinea','Guinea','N',999),
  ('328','GUY','GY','Guyana','Guiana','N',999),
- ('332','HTI','HT','Haití','Haiti','N',999),
+ ('332','HTI','HT','Haitï¿½','Haiti','N',999),
  ('334','HMD','HM','Islas Heard y McDonald','Heard Island and McDonald Islands','N',999),
  ('336','VAT','VA','Ciudad del Vaticano','Vatican City','N',999),
  ('340','HND','HN','Honduras','Honduras','N',999),
  ('344','HKG','HK','Hong Kong','Hong Kong','N',999),
- ('348','HUN','HU','Hungría','Hungary','S',999),
+ ('348','HUN','HU','Hungrï¿½a','Hungary','S',999),
  ('352','ISL','IS','Islandia','Iceland','N',999),
  ('356','IND','IN','India','India','N',999),
  ('360','IDN','ID','Indonesia','Indonesia','N',999),
- ('364','IRN','IR','Irán','Iran','N',999),
+ ('364','IRN','IR','Irï¿½n','Iran','N',999),
  ('368','IRQ','IQ','Irak','Iraq','N',999),
  ('372','IRL','IE','Irlanda','Ireland','S',999),
  ('376','ISR','IL','Israel','Israel','N',999),
  ('380','ITA','IT','Italia','Italy','S',999),
  ('384','CIV','CI','Costa de Marfil','Ivory Coast','N',999),
  ('388','JAM','JM','Jamaica','Jamaica','N',999),
- ('392','JPN','JP','Japón','Japan','N',999),
- ('398','KAZ','KZ','Kazajistán','Kazakhstan','N',999),
+ ('392','JPN','JP','Japï¿½n','Japan','N',999),
+ ('398','KAZ','KZ','Kazajistï¿½n','Kazakhstan','N',999),
  ('400','JOR','JO','Jordania','Jordan','N',999),
  ('404','KEN','KE','Kenia','Kenya','N',999),
  ('408','PRK','KP','Corea del Norte','North Korea','N',999),
  ('410','KOR','KR','Corea del Sur','South Korea','N',999),
  ('412','XXK','XK','Kosovo','Kosovo','N',999),
  ('414','KWT','KW','Kuwait','Kuwait','N',999),
- ('417','KGZ','KG','Kirguistán','Kyrgyzstan','N',999),
+ ('417','KGZ','KG','Kirguistï¿½n','Kyrgyzstan','N',999),
  ('418','LAO','LA','Laos','Laos','N',999),
- ('422','LBN','LB','Líbano','Lebanon','N',999),
+ ('422','LBN','LB','Lï¿½bano','Lebanon','N',999),
  ('426','LSO','LS','Lesoto','Lesotho','N',999),
  ('428','LVA','LV','Letonia','Latvia','S',999),
  ('430','LBR','LR','Liberia','Liberia','N',999),
@@ -2056,30 +2056,30 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('454','MWI','MW','Malaui','Malawi','N',999),
  ('458','MYS','MY','Malasia','Malaysia','N',999),
  ('462','MDV','MV','Maldivas','Maldives','N',999),
- ('466','MLI','ML','Malí','Mali','N',999),
+ ('466','MLI','ML','Malï¿½','Mali','N',999),
  ('470','MLT','MT','Malta','Malta','S',999),
  ('474','MTK','MQ','Martinica','Martinique','N',999),
  ('478','MRT','MR','Mauritania','Mauritania','N',999),
  ('480','MUS','MU','Mauricio','Mauritius','N',999),
- ('484','MEX','MX','México','Mexico','N',999),
- ('492','MCO','MC','Mónaco','Monaco','N',999),
+ ('484','MEX','MX','Mï¿½xico','Mexico','N',999),
+ ('492','MCO','MC','Mï¿½naco','Monaco','N',999),
  ('496','MNG','MN','Mongolia','Mongolia','N',999),
  ('498','MDA','MD','Moldavia','Moldova','N',999),
  ('499','MNE','ME','Montenegro','Montenegro','N',999),
  ('504','MAR','MA','Marruecos','Morocco','N',999),
  ('508','MOZ','MZ','Mozambique','Mozambique','N',999),
- ('512','OMN','OM','Omán','Oman','N',999),
+ ('512','OMN','OM','Omï¿½n','Oman','N',999),
  ('516','NAM','NA','Namibia','Namibia','N',999),
  ('520','NRU','NR','Nauru','Nauru','N',999),
  ('524','NPL','NP','Nepal','Nepal','N',999),
- ('528','NLD','NL','Países Bajos','Netherlands','S',999),
- ('531','CUW','CW','Curaçao','Curaçao','N',999),
+ ('528','NLD','NL','Paï¿½ses Bajos','Netherlands','S',999),
+ ('531','CUW','CW','Curaï¿½ao','Curaï¿½ao','N',999),
  ('533','ABW','AW','Aruba','Aruba','N',999),
- ('535','BES','BQ','Caribe Neerlandés','Caribbean netherlands','N',999),
+ ('535','BES','BQ','Caribe Neerlandï¿½s','Caribbean netherlands','N',999),
  ('548','VUT','VU','Vanuatu','Vanuatu','N',999),
  ('554','NZL','NZ','Nueva Zelanda','New Zealand','N',999),
  ('558','NIC','NI','Nicaragua','Nicaragua','N',999),
- ('562','NER','NE','Níger','Niger','N',999),
+ ('562','NER','NE','Nï¿½ger','Niger','N',999),
  ('566','NGA','NG','Nigeria','Nigeria','N',999),
  ('574','NFK','NF','Isla Nor Folk','Norfolk Island','N',999),
  ('578','NOR','NO','Noruega','Norway','N',999),
@@ -2088,28 +2088,28 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('583','FSM','FM','Micronesia','Micronesia','N',999),
  ('584','MHL','MH','Islas Marshall','Marshall Islands','N',999),
  ('585','PLW','PW','Palaos','Palau','N',999),
- ('586','PAK','PK','Pakistán','Pakistan','N',999),
- ('591','PAN','PA','Panamá','Panama','N',999),
- ('598','PNG','PG','Papúa Nueva Guinea','Papua New Guinea','N',999),
+ ('586','PAK','PK','Pakistï¿½n','Pakistan','N',999),
+ ('591','PAN','PA','Panamï¿½','Panama','N',999),
+ ('598','PNG','PG','Papï¿½a Nueva Guinea','Papua New Guinea','N',999),
  ('600','PRY','PY','Paraguay','Paraguay','N',999),
- ('604','PER','PE','Perú','Peru','N',999),
+ ('604','PER','PE','Perï¿½','Peru','N',999),
  ('608','PHL','PH','Filipinas','Philippines','N',999),
  ('612','PCN','PN','Islas Pitcairn','Pitcairn Island','N',999),
  ('616','POL','PL','Polonia','Poland','S',999),
  ('620','PRT','PT','Portugal','Portugal','S',2),
- ('624','GNB','GW','Guinea-Bisáu','Guinea-Bissau','N',999),
+ ('624','GNB','GW','Guinea-Bisï¿½u','Guinea-Bissau','N',999),
  ('626','TLS','TL','Timor Oriental','East Timor','N',999),
  ('634','QAT','QA','Catar','Qatar','N',999),
  ('642','ROU','RO','Rumania','Romania','S',999),
  ('643','RUS','RU','Rusia','Russia','N',999),
  ('646','RWA','RW','Ruanda','Rwanda','N',999),
- ('659','KNA','KN','San Cristóbal y Nieves','Saint Kitts and Nevis','N',999),
+ ('659','KNA','KN','San Cristï¿½bal y Nieves','Saint Kitts and Nevis','N',999),
  ('660','AIA','AI','Anguila','Anguila','N',999),
- ('662','LCA','LC','Santa Lucía','Saint Lucia','N',999),
- ('663','MAF','MF','Isla de San Martín','Island of Saint Martin','N',999),
+ ('662','LCA','LC','Santa Lucï¿½a','Saint Lucia','N',999),
+ ('663','MAF','MF','Isla de San Martï¿½n','Island of Saint Martin','N',999),
  ('670','VCT','VC','San Vicente y las Granadinas','Saint Vincent and the Grenadines','N',999),
  ('674','SMR','SM','San Marino','San Marino','N',999),
- ('678','STP','ST','Santo Tomé y Príncipe','Sao Tome and Principe','N',999),
+ ('678','STP','ST','Santo Tomï¿½ y Prï¿½ncipe','Sao Tome and Principe','N',999),
  ('682','SAU','SA','Arabia Saudita','Saudi Arabia','N',999),
  ('686','SEN','SN','Senegal','Senegal','N',999),
  ('688','SRB','RS','Serbia','Serbia','N',999),
@@ -2120,26 +2120,26 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('704','VNM','VN','Vietnam','Vietnam','N',999),
  ('705','SVN','SI','Eslovenia','Slovenia','S',999),
  ('706','SOM','SO','Somalia','Somalia','N',999),
- ('710','ZAF','ZA','Sudáfrica','South Africa','N',999),
+ ('710','ZAF','ZA','Sudï¿½frica','South Africa','N',999),
  ('716','ZWE','ZW','Zimbabue','Zimbabwe','N',999),
- ('724','ESP','ES','España','Spain','S',1),
- ('728','SSD','SS','Sudán del Sur','South Sudan','N',999),
- ('729','SDN','SD','Sudán','Sudan','N',999),
+ ('724','ESP','ES','Espaï¿½a','Spain','S',1),
+ ('728','SSD','SS','Sudï¿½n del Sur','South Sudan','N',999),
+ ('729','SDN','SD','Sudï¿½n','Sudan','N',999),
  ('740','SUR','SR','Surinam','Suriname','N',999),
  ('748','SWZ','SZ','Suazilandia','Eswatini','N',999),
  ('752','SWE','SE','Suecia','Sweden','S',999),
  ('756','CHE','CH','Suiza','Switzerland','N',999),
  ('760','SYR','SY','Siria','Syria','N',999),
- ('762','TJK','TJ','Tayikistán','Tajikistan','N',999),
+ ('762','TJK','TJ','Tayikistï¿½n','Tajikistan','N',999),
  ('764','THA','TH','Tailandia','Thailand','N',999),
  ('768','TGO','TG','Togo','Togo','N',999),
  ('772','TKL','TK','Tokelau','Tokelau','N',999),
  ('776','TON','TO','Tonga','Tonga','N',999),
  ('780','TTO','TT','Trinidad y Tobago','Trinidad and Tobago','N',999),
- ('784','ARE','AE','Emiratos Árabes Unidos','United Arab Emirates','N',999),
- ('788','TUN','TN','Túnez','Tunisia','N',999),
- ('792','TUR','TR','Turquía','Turkey','N',999),
- ('795','TKM','TM','Turkmenistán','Turkmenistan','N',999),
+ ('784','ARE','AE','Emiratos ï¿½rabes Unidos','United Arab Emirates','N',999),
+ ('788','TUN','TN','Tï¿½nez','Tunisia','N',999),
+ ('792','TUR','TR','Turquï¿½a','Turkey','N',999),
+ ('795','TKM','TM','Turkmenistï¿½n','Turkmenistan','N',999),
  ('796','TCA','TC','Islas Turcas y Caicos','Turks and Caicos Islands','N',999),
  ('798','TUV','TV','Tuvalu','Tuvalu','N',999),
  ('800','UGA','UG','Uganda','Uganda','N',999),
@@ -2147,7 +2147,7 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('807','MKD','MK','Macedonia del Norte','North Macedonia','N',999),
  ('818','EGY','EG','Egipto','Egypt','N',999),
  ('826','GBR','GB','Reino Unido','United Kingdom','N',999),
- ('831','GGY','GG','Bailía de Guernsey','Bailiwick of Guernsey','N',999),
+ ('831','GGY','GG','Bailï¿½a de Guernsey','Bailiwick of Guernsey','N',999),
  ('832','JEY','JE','Jersey','Bailiwick of Jersey','N',999),
  ('833','IMN','IM','Isla de Man','Isle of Man','N',999),
  ('834','TZA','TZ','Tanzania','Tanzania','N',999),
@@ -2155,7 +2155,7 @@ INSERT INTO suboc_paises(COD_PAIS, COD_PAIS_ALPHA3, COD_PAIS_ALPHA2, NOMBRE_SPA_
  ('850','MNP','VI','Islas Marianas del Norte','Northern Mariana Islands','N',999),
  ('854','BFA','BF','Burkina Faso','Burkina Faso','N',999),
  ('858','URY','UY','Uruguay','Uruguay','N',999),
- ('860','UZB','UZ','Uzbekistán','Uzbekistan','N',999),
+ ('860','UZB','UZ','Uzbekistï¿½n','Uzbekistan','N',999),
  ('862','VEN','VE','Venezuela','Venezuela','N',999),
  ('876','WLF','WF','Wallis y Futuna','Wallis and Futuna','N',999),
  ('882','WSM','WS','Samoa','Samoa','N',999),
@@ -2209,39 +2209,39 @@ CREATE TABLE `suboc_preguntas` (
 
 DROP TABLE IF EXISTS suboc_presupuestos;
 CREATE TABLE `suboc_presupuestos` (
-  `NRO_FACTURA` int(8) NOT NULL,
-  `SERIE_FACTURA` varchar(8) NOT NULL,
-  `CODIGO_CLIENTE_FACTURA` varchar(10) DEFAULT NULL,
-  `RAZONSOCIAL_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
-  `NIF_CLIENTE_FACTURA` varchar(50) DEFAULT NULL,
-  `MOVIL_CLIENTE_FACTURA` varchar(40) DEFAULT NULL,
-  `EMAIL_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
-  `DIRECCION1_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
-  `DIRECCION2_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
-  `POBLACION_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
-  `PROVINCIA_CLIENTE_FACTURA` varchar(200) DEFAULT NULL,
-  `CPOSTAL_CLIENTE_FACTURA` varchar(15) DEFAULT NULL,
-  `PAIS_CLIENTE_FACTURA` varchar(150) DEFAULT NULL,
-  `TIPOID_INT_CLIENTE_FACTURA` varchar(20) DEFAULT NULL COMMENT '''ID'' O ''PASAPORTE'' PARA EL TIPO DE IDENTIFICACIÓN INTERNACIONAL',
-  `FECHA_FACTURA` date DEFAULT NULL,
-  `TOTAL_LIQUIDO_FACTURA` decimal(18,6) DEFAULT NULL COMMENT 'Total Factura',
-  `FORMA_PAGO_FACTURA` varchar(200) DEFAULT NULL COMMENT 'Codigo Forma de Pago',
-  `COMENTARIOS_FACTURA` text DEFAULT NULL,
+  `NRO_PRESUPUESTO` int(8) NOT NULL,
+  `SERIE_PRESUPUESTO` varchar(8) NOT NULL,
+  `CODIGO_CLIENTE_PRESUPUESTO` varchar(10) DEFAULT NULL,
+  `RAZONSOCIAL_CLIENTE_PRESUPUESTO` varchar(200) DEFAULT NULL,
+  `NIF_CLIENTE_PRESUPUESTO` varchar(50) DEFAULT NULL,
+  `MOVIL_CLIENTE_PRESUPUESTO` varchar(40) DEFAULT NULL,
+  `EMAIL_CLIENTE_PRESUPUESTO` varchar(200) DEFAULT NULL,
+  `DIRECCION1_CLIENTE_PRESUPUESTO` varchar(200) DEFAULT NULL,
+  `DIRECCION2_CLIENTE_PRESUPUESTO` varchar(200) DEFAULT NULL,
+  `POBLACION_CLIENTE_PRESUPUESTO` varchar(200) DEFAULT NULL,
+  `PROVINCIA_CLIENTE_PRESUPUESTO` varchar(200) DEFAULT NULL,
+  `CPOSTAL_CLIENTE_PRESUPUESTO` varchar(15) DEFAULT NULL,
+  `PAIS_CLIENTE_PRESUPUESTO` varchar(150) DEFAULT NULL,
+  `TIPOID_INT_CLIENTE_PRESUPUESTO` varchar(20) DEFAULT NULL COMMENT '''ID'' O ''PASAPORTE'' PARA EL TIPO DE IDENTIFICACIï¿½N INTERNACIONAL',
+  `FECHA_PRESUPUESTO` date DEFAULT NULL,
+  `TOTAL_LIQUIDO_PRESUPUESTO` decimal(18,6) DEFAULT NULL COMMENT 'Total Presupuesto',
+  `FORMA_PAGO_PRESUPUESTO` varchar(200) DEFAULT NULL COMMENT 'Codigo Forma de Pago',
+  `COMENTARIOS_PRESUPUESTO` text DEFAULT NULL,
   `NOMBRE` varchar(100) DEFAULT NULL,
   `APELLIDOS` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`SERIE_FACTURA`,`NRO_FACTURA`) USING BTREE
+  PRIMARY KEY (`SERIE_PRESUPUESTO`,`NRO_PRESUPUESTO`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci ROW_FORMAT=DYNAMIC;
 
 -- 
 -- Dumping data for table suboc_presupuestos
 -- 
 
-INSERT INTO suboc_presupuestos(NRO_FACTURA, SERIE_FACTURA, CODIGO_CLIENTE_FACTURA, RAZONSOCIAL_CLIENTE_FACTURA, NIF_CLIENTE_FACTURA, MOVIL_CLIENTE_FACTURA, EMAIL_CLIENTE_FACTURA, DIRECCION1_CLIENTE_FACTURA, DIRECCION2_CLIENTE_FACTURA, POBLACION_CLIENTE_FACTURA, PROVINCIA_CLIENTE_FACTURA, CPOSTAL_CLIENTE_FACTURA, PAIS_CLIENTE_FACTURA, TIPOID_INT_CLIENTE_FACTURA, FECHA_FACTURA, TOTAL_LIQUIDO_FACTURA, FORMA_PAGO_FACTURA, COMENTARIOS_FACTURA, NOMBRE, APELLIDOS) VALUES
- (1,'P25','1','FABIAN BASABE RODRÍGUEZ','11701762K','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','AR','ID','2025-07-25',39.000000,'CONTADO',NULL,'FABIAN','BASABE RODRÍGUEZ'),
- (2,'P25','2','ERIC FRANCO GONZÁLEZ','45684134Q','656669955','kun0@hotmail.com','calle hospicio, 2','','JOHANESBURGO','SUDÁFRICA','','ZA','ID','2025-08-07',800.000000,'TARJETA',NULL,'ERIC','FRANCO GONZÁLEZ'),
- (3,'P25','1','FABIAN BASABE RODRÍGUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID','2025-08-16',NULL,'TARJETA',NULL,'FABIAN','BASABE RODRÍGUEZ'),
- (4,'P25','1','FABIAN BASABE RODRÍGUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID','2025-08-16',100.000000,'TARJETA',NULL,'FABIAN','BASABE RODRÍGUEZ'),
- (5,'P25','2','ERIC FRANCO GONZÁLEZ','45684134Q','656669955','kun0@hotmail.com','calle hospicio, 2','','JOHANESBURGO','SUDÁFRICA','','ZA','ID','2025-09-13',50.000000,'TARJETA',NULL,'ERIC','FRANCO GONZÁLEZ');
+INSERT INTO suboc_presupuestos(NRO_PRESUPUESTO, SERIE_PRESUPUESTO, CODIGO_CLIENTE_PRESUPUESTO, RAZONSOCIAL_CLIENTE_PRESUPUESTO, NIF_CLIENTE_PRESUPUESTO, MOVIL_CLIENTE_PRESUPUESTO, EMAIL_CLIENTE_PRESUPUESTO, DIRECCION1_CLIENTE_PRESUPUESTO, DIRECCION2_CLIENTE_PRESUPUESTO, POBLACION_CLIENTE_PRESUPUESTO, PROVINCIA_CLIENTE_PRESUPUESTO, CPOSTAL_CLIENTE_PRESUPUESTO, PAIS_CLIENTE_PRESUPUESTO, TIPOID_INT_CLIENTE_PRESUPUESTO, FECHA_PRESUPUESTO, TOTAL_LIQUIDO_PRESUPUESTO, FORMA_PAGO_PRESUPUESTO, COMENTARIOS_PRESUPUESTO, NOMBRE, APELLIDOS) VALUES
+ (1,'P25','1','FABIAN BASABE RODRï¿½GUEZ','11701762K','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','AR','ID','2025-07-25',39.000000,'CONTADO',NULL,'FABIAN','BASABE RODRï¿½GUEZ'),
+ (2,'P25','2','ERIC FRANCO GONZï¿½LEZ','45684134Q','656669955','kun0@hotmail.com','calle hospicio, 2','','JOHANESBURGO','SUDï¿½FRICA','','ZA','ID','2025-08-07',800.000000,'TARJETA',NULL,'ERIC','FRANCO GONZï¿½LEZ'),
+ (3,'P25','1','FABIAN BASABE RODRï¿½GUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID','2025-08-16',NULL,'TARJETA',NULL,'FABIAN','BASABE RODRï¿½GUEZ'),
+ (4,'P25','1','FABIAN BASABE RODRï¿½GUEZ','11701762Y','665212120','','CALLE SAN PANCRACIO, 1','','SANTOVENIA','ZAMORA','49750','ES','ID','2025-08-16',100.000000,'TARJETA',NULL,'FABIAN','BASABE RODRï¿½GUEZ'),
+ (5,'P25','2','ERIC FRANCO GONZï¿½LEZ','45684134Q','656669955','kun0@hotmail.com','calle hospicio, 2','','JOHANESBURGO','SUDï¿½FRICA','','ZA','ID','2025-09-13',50.000000,'TARJETA',NULL,'ERIC','FRANCO GONZï¿½LEZ');
 
 -- 
 -- Table structure for table suboc_presupuestos_lineas
@@ -2249,8 +2249,8 @@ INSERT INTO suboc_presupuestos(NRO_FACTURA, SERIE_FACTURA, CODIGO_CLIENTE_FACTUR
 
 DROP TABLE IF EXISTS suboc_presupuestos_lineas;
 CREATE TABLE `suboc_presupuestos_lineas` (
-  `SERIE_FACTURA_LINEA` varchar(8) NOT NULL,
-  `NRO_FACTURA_LINEA` int(8) NOT NULL,
+  `SERIE_PRESUPUESTO_LINEA` varchar(8) NOT NULL,
+  `NRO_PRESUPUESTO_LINEA` int(8) NOT NULL,
   `LINEA_LINEA` varchar(3) NOT NULL,
   `CODIGO_ARTICULO_LINEA` varchar(20) DEFAULT NULL,
   `DESCRIPCION_ARTICULO_LINEA` varchar(100) DEFAULT NULL,
@@ -2259,15 +2259,15 @@ CREATE TABLE `suboc_presupuestos_lineas` (
   `CANTIDAD_LINEA` decimal(18,6) DEFAULT NULL,
   `SUM_TOTAL_LINEA` decimal(19,6) DEFAULT NULL,
   `ODONTOLOGO` varchar(8) DEFAULT NULL,
-  PRIMARY KEY (`SERIE_FACTURA_LINEA`,`NRO_FACTURA_LINEA`,`LINEA_LINEA`) USING BTREE
+  PRIMARY KEY (`SERIE_PRESUPUESTO_LINEA`,`NRO_PRESUPUESTO_LINEA`,`LINEA_LINEA`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci ROW_FORMAT=DYNAMIC;
 
 -- 
 -- Dumping data for table suboc_presupuestos_lineas
 -- 
 
-INSERT INTO suboc_presupuestos_lineas(SERIE_FACTURA_LINEA, NRO_FACTURA_LINEA, LINEA_LINEA, CODIGO_ARTICULO_LINEA, DESCRIPCION_ARTICULO_LINEA, ZONA, PRECIOVENTA_ARTICULO_LINEA, CANTIDAD_LINEA, SUM_TOTAL_LINEA, ODONTOLOGO) VALUES
- ('P25',1,'010','lrlrkrk','NI CHICHA NI LIMONÁ','11',39.000000,1.000000,39.000000,'1'),
+INSERT INTO suboc_presupuestos_lineas(SERIE_PRESUPUESTO_LINEA, NRO_PRESUPUESTO_LINEA, LINEA_LINEA, CODIGO_ARTICULO_LINEA, DESCRIPCION_ARTICULO_LINEA, ZONA, PRECIOVENTA_ARTICULO_LINEA, CANTIDAD_LINEA, SUM_TOTAL_LINEA, ODONTOLOGO) VALUES
+ ('P25',1,'010','lrlrkrk','NI CHICHA NI LIMONï¿½','11',39.000000,1.000000,39.000000,'1'),
  ('P25',2,'010','1','EMPASTE COMPUESTO','1-16',50.000000,16.000000,800.000000,'1'),
  ('P25',4,'010','55','tico','11',100.000000,1.000000,100.000000,'1'),
  ('P25',5,'010','1','EMPASTE COMPUESTO',NULL,50.000000,1.000000,50.000000,NULL);
@@ -2306,15 +2306,15 @@ CREATE TABLE `suboc_recibos` (
 -- 
 
 INSERT INTO suboc_recibos(NRO_FACTURA, SERIE_FACTURA, NRO_PLAZO_RECIBO, FORMA_PAGO_ORIGEN, FORMA_PAGO_DESCRIPCION_ORIGEN, EUROS_RECIBO, ESTADO_RECIBO, FECHA_EXPEDICION, FECHA_VENCIMIENTO, IBAN, FECHA_PAGO, LOCALIDAD_EXPEDICION, CODIGO_CLIENTE, RAZONSOCIAL_CLIENTE, DIRECCION1_CLIENTE, POBLACION_CLIENTE, PROVINCIA_CLIENTE, CPOSTAL_CLIENTE, IMPORTE_LETRA, TRATAMIENTOS) VALUES
- (1,'PRU',1,'2','TARJETA',50.000000,'Pagado','2025-09-13','2025-09-13',NULL,'2025-09-13','Zamora',18,' VIRGEN DEL ROCÍO, SL','RONDA CAPUCHINOS, 2, PORT 1-5C','SEVILLA','SEVILLA','41003','CINCUENTA ','\nEMPASTE COMPUESTO'),
- (6,'PRUE',1,'2','TARJETA',120.000000,'Pagado','2025-08-29','2025-08-29',NULL,'2025-08-29','Zamora',18,'VIRGEN DEL ROCÍO, SL','RONDA CAPUCHINOS, 2, PORT 1-5C','SEVILLA','SEVILLA','41003','CIENTO VEINTE ','\nEMPASTE COMPUESTO\nEMPASTE COMPUESTO'),
- (8,'PRUE',1,'2','TARJETA',100.000000,'Pagado','2025-08-29','2025-08-29',NULL,'2025-08-29','Zamora',18,' VIRGEN DEL ROCÍO, SL','RONDA CAPUCHINOS, 2, PORT 1-5C','SEVILLA','SEVILLA','41003','CIEN ','\nEMPASTE COMPUESTO\nEMPASTE COMPUESTO'),
- (8,'Z25',1,'1','CONTADO',150.000000,'Pagado','2025-07-20','2025-07-20',NULL,'2025-07-20','Zamora',1,'FABIAN BASABE RODRÍGUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CIENTO CINCUENTA ','\nEMPASTE COMPUESTO'),
- (9,'Z25',1,'1','CONTADO',50.000000,'Pagado','2025-07-22','2025-07-22',NULL,'2025-07-22','Zamora',1,'FABIAN BASABE RODRÍGUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CINCUENTA ','\nEMPASTE COMPUESTO'),
- (15,'Z25',1,'1','CONTADO',50.000000,'Devuelto','2025-07-27','2025-07-27',NULL,NULL,'Zamora',1,'FABIAN BASABE RODRÍGUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CINCUENTA ','\nEMPASTE COMPUESTO'),
+ (1,'PRU',1,'2','TARJETA',50.000000,'Pagado','2025-09-13','2025-09-13',NULL,'2025-09-13','Zamora',18,' VIRGEN DEL ROCï¿½O, SL','RONDA CAPUCHINOS, 2, PORT 1-5C','SEVILLA','SEVILLA','41003','CINCUENTA ','\nEMPASTE COMPUESTO'),
+ (6,'PRUE',1,'2','TARJETA',120.000000,'Pagado','2025-08-29','2025-08-29',NULL,'2025-08-29','Zamora',18,'VIRGEN DEL ROCï¿½O, SL','RONDA CAPUCHINOS, 2, PORT 1-5C','SEVILLA','SEVILLA','41003','CIENTO VEINTE ','\nEMPASTE COMPUESTO\nEMPASTE COMPUESTO'),
+ (8,'PRUE',1,'2','TARJETA',100.000000,'Pagado','2025-08-29','2025-08-29',NULL,'2025-08-29','Zamora',18,' VIRGEN DEL ROCï¿½O, SL','RONDA CAPUCHINOS, 2, PORT 1-5C','SEVILLA','SEVILLA','41003','CIEN ','\nEMPASTE COMPUESTO\nEMPASTE COMPUESTO'),
+ (8,'Z25',1,'1','CONTADO',150.000000,'Pagado','2025-07-20','2025-07-20',NULL,'2025-07-20','Zamora',1,'FABIAN BASABE RODRï¿½GUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CIENTO CINCUENTA ','\nEMPASTE COMPUESTO'),
+ (9,'Z25',1,'1','CONTADO',50.000000,'Pagado','2025-07-22','2025-07-22',NULL,'2025-07-22','Zamora',1,'FABIAN BASABE RODRï¿½GUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CINCUENTA ','\nEMPASTE COMPUESTO'),
+ (15,'Z25',1,'1','CONTADO',50.000000,'Devuelto','2025-07-27','2025-07-27',NULL,NULL,'Zamora',1,'FABIAN BASABE RODRï¿½GUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CINCUENTA ','\nEMPASTE COMPUESTO'),
  (15,'Z25',2,NULL,'A LA VISTA',50.000000,'Emitido','2025-07-30','2025-07-31',NULL,NULL,'Zamora',1,NULL,NULL,NULL,NULL,NULL,'CINCUENTA',NULL),
- (16,'Z25',1,'1','CONTADO',50.000000,'Pagado','2025-07-27','2025-07-27',NULL,'2025-07-27','Zamora',1,'FABIAN BASABE RODRÍGUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CINCUENTA ','\nEMPASTE COMPUESTO'),
- (55,'Z25',1,'2','TARJETA',150.000000,'Pagado','2025-08-28','2025-08-28',NULL,'2025-08-28','Zamora',2,'ERIC FRANCO GONZÁLEZ','calle hospicio, 2','JOHANESBURGO','SUDÁFRICA','','CIENTO CINCUENTA ','\nEMPASTE COMPUESTO');
+ (16,'Z25',1,'1','CONTADO',50.000000,'Pagado','2025-07-27','2025-07-27',NULL,'2025-07-27','Zamora',1,'FABIAN BASABE RODRï¿½GUEZ','CALLE SAN PANCRACIO, 1','SANTOVENIA','ZAMORA','49750','CINCUENTA ','\nEMPASTE COMPUESTO'),
+ (55,'Z25',1,'2','TARJETA',150.000000,'Pagado','2025-08-28','2025-08-28',NULL,'2025-08-28','Zamora',2,'ERIC FRANCO GONZï¿½LEZ','calle hospicio, 2','JOHANESBURGO','SUDï¿½FRICA','','CIENTO CINCUENTA ','\nEMPASTE COMPUESTO');
 
 -- 
 -- Table structure for table suboc_verifactu_log_eventos
@@ -2356,11 +2356,11 @@ CREATE TABLE `suboc_verifactu_queue` (
   `TIPO_OPERACION` enum('CONSOLIDAR','CONSULTAR_ESTADO') NOT NULL,
   `SERIE_FACTURA` varchar(8) NOT NULL,
   `NRO_FACTURA` int(8) NOT NULL,
-  `FECHA_PROGRAMADA` datetime NOT NULL COMMENT 'Fecha y hora para ejecutar la operación',
+  `FECHA_PROGRAMADA` datetime NOT NULL COMMENT 'Fecha y hora para ejecutar la operaciï¿½n',
   `FECHA_CREACION` datetime NOT NULL DEFAULT current_timestamp(),
   `ESTADO_COLA` enum('PENDIENTE','PROCESANDO','COMPLETADO','ERROR','CANCELADO') NOT NULL DEFAULT 'PENDIENTE',
-  `INTENTOS` int(3) NOT NULL DEFAULT 0 COMMENT 'Número de intentos de procesamiento',
-  `MAX_INTENTOS` int(3) NOT NULL DEFAULT 3 COMMENT 'Máximo número de intentos',
+  `INTENTOS` int(3) NOT NULL DEFAULT 0 COMMENT 'Nï¿½mero de intentos de procesamiento',
+  `MAX_INTENTOS` int(3) NOT NULL DEFAULT 3 COMMENT 'Mï¿½ximo nï¿½mero de intentos',
   `PRIORIDAD` int(3) NOT NULL DEFAULT 5 COMMENT '1=Alta, 5=Normal, 10=Baja',
   `ERROR_MESSAGE` text DEFAULT NULL,
   `FECHA_PROCESAMIENTO` datetime DEFAULT NULL COMMENT 'Fecha real de procesamiento',
@@ -2369,7 +2369,7 @@ CREATE TABLE `suboc_verifactu_queue` (
   `VERIFACTU_QUEUE_ID` int(11) DEFAULT NULL COMMENT 'QueueId devuelto por Verifactu',
   `VERIFACTU_REQUEST_ID` varchar(100) DEFAULT NULL COMMENT 'RequestId devuelto por Verifactu',
   `RESPUESTA_VERIFACTU` longtext DEFAULT NULL COMMENT 'Respuesta completa de Verifactu',
-  `CODIGO_ERROR_VERIFACTU` varchar(20) DEFAULT NULL COMMENT 'Código de error devuelto por Verifactu',
+  `CODIGO_ERROR_VERIFACTU` varchar(20) DEFAULT NULL COMMENT 'Cï¿½digo de error devuelto por Verifactu',
   PRIMARY KEY (`ID_QUEUE`) USING BTREE,
   KEY `IDX_FECHA_PROGRAMADA` (`FECHA_PROGRAMADA`) USING BTREE,
   KEY `IDX_ESTADO_COLA` (`ESTADO_COLA`) USING BTREE,
@@ -2447,7 +2447,7 @@ BEGIN
             1, /* Informaci?n */
             'AUTO_QUEUE',
             '1.0',
-            CONCAT('Operación completada con éxito - QueueId Verifactu: ', NEW.VERIFACTU_QUEUE_ID),
+            CONCAT('Operaciï¿½n completada con ï¿½xito - QueueId Verifactu: ', NEW.VERIFACTU_QUEUE_ID),
             JSON_OBJECT(
                 'id_cola', NEW.ID_QUEUE,
                 'tipo_operacion', NEW.TIPO_OPERACION,
@@ -2480,7 +2480,7 @@ BEGIN
             3, /* Error */
             'AUTO_QUEUE',
             '1.0',
-            CONCAT('Error Verifactu detectado - Código: ', NEW.CODIGO_ERROR_VERIFACTU),
+            CONCAT('Error Verifactu detectado - Cï¿½digo: ', NEW.CODIGO_ERROR_VERIFACTU),
             JSON_OBJECT(
                 'id_cola', NEW.ID_QUEUE,
                 'tipo_operacion', NEW.TIPO_OPERACION,

@@ -70,24 +70,24 @@ type
     cxlbl12: TcxLabel;
     cxgrdbclmnGrdDBTabPrinNRO_FACTURA: TcxGridDBColumn;
     cxgrdbclmnGrdDBTabPrinSERIE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinCODIGO_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinRAZONSOCIAL_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinNIF_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinMOVIL_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinEMAIL_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinDIRECCION1_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinDIRECCION2_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinPOBLACION_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinPROVINCIA_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinCPOSTAL_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinPAIS_CLIENTE_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinFECHA_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinTOTAL_LIQUIDO_FACTURA: TcxGridDBColumn;
-    cxgrdbclmnGrdDBTabPrinFORMA_PAGO_FACTURA: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinCODIGO_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinNIF_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinMOVIL_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinEMAIL_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinDIRECCION1_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinDIRECCION2_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinPOBLACION_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinPROVINCIA_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinCPOSTAL_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinPAIS_CLIENTE_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinFECHA_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinTOTAL_LIQUIDO_PRESUPUESTO: TcxGridDBColumn;
+    cxgrdbclmnGrdDBTabPrinFORMA_PAGO_PRESUPUESTO: TcxGridDBColumn;
     cxtbshtCabecera: TcxTabSheet;
     cxlbl1: TcxLabel;
     cxlbl3: TcxLabel;
-    cxdbdtdtFECHA_FACTURA: TcxDBDateEdit;
+    cxdbdtdtFECHA_PRESUPUESTO: TcxDBDateEdit;
     cxlbl8: TcxLabel;
     cbbSerieFactura: TcxDBLookupComboBox;
     cxtbshtDatosCliente: TcxTabSheet;
@@ -102,9 +102,9 @@ type
     cxgrdbclmntv1CANTIDAD_LINEA: TcxGridDBColumn;
     cxgrdbclmntv1ODONTOLOGO: TcxGridDBColumn;
     cxgrdbclmntv1SUM_TOTAL_LINEA: TcxGridDBColumn;
-    cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit;
+    cxdbtxtdtRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
     cxlbl7: TcxLabel;
-    cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA1: TcxDBTextEdit;
+    cxdbtxtdtRAZONSOCIAL_CLIENTE_PRESUPUESTO1: TcxDBTextEdit;
     btn1: TcxButton;
     cxgrdbclmnGrdDBTabPrinNOMBRE: TcxGridDBColumn;
     cxgrdbclmnGrdDBTabPrinAPELLIDOS: TcxGridDBColumn;
@@ -112,7 +112,7 @@ type
     cxlbl4: TcxLabel;
     cxlbl2: TcxLabel;
     cxdblbl1: TcxDBLabel;
-    cxdblblRAZONSOCIAL_CLIENTE_FACTURA: TcxDBLabel;
+    cxdblblRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxDBLabel;
     cxlbl5: TcxLabel;
     cxdblblCODIGO_CLIENTE: TcxDBLabel;
     cbbFORMAPAGO: TcxDBLookupComboBox;
@@ -163,25 +163,25 @@ type
     dlgColor1: TColorDialog;
     btnGuardar: TcxButton;
     cxgrpbx1: TcxGroupBox;
-    txtDIRECCION1_CLIENTE_FACTURA: TcxDBTextEdit;
-    txtCPOSTAL_CLIENTE_FACTURA: TcxDBTextEdit;
-    txtPOBLACION_CLIENTE_FACTURA: TcxDBTextEdit;
-    txtPROVINCIA_CLIENTE_FACTURA: TcxDBTextEdit;
-    txtDIRECCION2_CLIENTE_FACTURA: TcxDBTextEdit;
+    txtDIRECCION1_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
+    txtCPOSTAL_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
+    txtPOBLACION_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
+    txtPROVINCIA_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
+    txtDIRECCION2_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
     lblcxlbl6: TcxLabel;
     lblcxlbl13: TcxLabel;
-    txtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit;
+    txtRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
     lblcxlbl14: TcxLabel;
     lblcxlbl15: TcxLabel;
     txtNOMBRE: TcxDBTextEdit;
     lblcxlbl16: TcxLabel;
     txtAPELLIDOS: TcxDBTextEdit;
     lblcxlbl9: TcxLabel;
-    txtNIF_CLIENTE_FACTURA: TcxDBTextEdit;
+    txtNIF_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
     lblcxlbl104: TcxLabel;
     lblcxlbl11: TcxLabel;
-    txtEMAIL_CLIENTE_FACTURA: TcxDBTextEdit;
-    txtMOVIL_CLIENTE_FACTURA: TcxDBTextEdit;
+    txtEMAIL_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
+    txtMOVIL_CLIENTE_PRESUPUESTO: TcxDBTextEdit;
     img1: TcxImage;
     btnResetear: TcxButton;
     imgImagenNew: TJvgBitmapImage;
@@ -217,7 +217,7 @@ type
       Shift: TShiftState);
     procedure cbbSerieFacturaKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure cxdbdtdtFECHA_FACTURAKeyUp(Sender: TObject; var Key: Word;
+    procedure cxdbdtdtFECHA_PRESUPUESTOKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnCODIGO_CLIENTEPropertiesButtonClick(Sender: TObject;
       AButtonIndex: Integer);
@@ -422,11 +422,11 @@ end;
 procedure TfrmMtoPre.btn1Click(Sender: TObject);
 begin
   inherited;
-  if dmmPre.unqryFac.FieldByName('CODIGO_CLIENTE_FACTURA').AsString = '0' then
+  if dmmPre.unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString = '0' then
     dmmPre.NuevoCliente;
   dmmPre.CrearCliente;
   ShowMessage('Paciente:' +
-      '' + dmmPre.unqryFac.FieldByName('CODIGO_CLIENTE_FACTURA').AsString + '' +
+      '' + dmmPre.unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString + '' +
                                 'pasado correctamente a la tabla de pacientes');
 end;
 
@@ -476,9 +476,9 @@ begin
   inherited;
    form := TfrmPrintPreRec.Create(Application);
    try
-     form.edtNroFac.Text := dmmPre.unqryRecibos.findField('NRO_FACTURA')
+     form.edtNroFac.Text := dmmPre.unqryRecibos.findField('NRO_PRESUPUESTO')
                                                                       .AsString;
-     form.edtSerie.Text := dmmPre.unqryRecibos.findField('SERIE_FACTURA')
+     form.edtSerie.Text := dmmPre.unqryRecibos.findField('SERIE_PRESUPUESTO')
                                                                       .AsString;
      form.edtRecibo.Text := dmmPre.unqryRecibos.findField('NRO_PLAZO_RECIBO')
                                                                       .AsString;
@@ -516,39 +516,39 @@ begin
   begin
     with dmmPre do
     begin
-    sCodigo := unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
+    sCodigo := unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString;
     with unstrdprcGetDataCliente do
     begin
       ParamByName('pCODIGO_CLIENTE').AsString :=
-                   unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString;
+                   unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString;
       ExecProc;
       if Trim(ParamByName('pRAZONSOCIAL_CLIENTE').AsString) <> '' then
       begin
-        unqryFac.FindField('RAZONSOCIAL_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pRAZONSOCIAL_CLIENTE').AsString;
         unqryFac.FindField('NOMBRE').AsString :=
          ParamByName('pNOMBRE').AsString;
         unqryFac.FindField('APELLIDOS').AsString :=
          ParamByName('pAPELLIDOS').AsString;
-        unqryFac.FindField('NIF_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('NIF_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pNIF_CLIENTE').AsString;
-        unqryFac.FindField('MOVIL_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('MOVIL_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pMOVIL_CLIENTE').AsString;
-        unqryFac.FindField('EMAIL_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('EMAIL_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pEMAIL_CLIENTE').AsString;
-        unqryFac.FindField('DIRECCION1_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('DIRECCION1_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pDIRECCION1_CLIENTE').AsString;
-        unqryFac.FindField('DIRECCION2_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('DIRECCION2_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pDIRECCION2_CLIENTE').AsString;
-        unqryFac.FindField('POBLACION_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('POBLACION_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pPOBLACION_CLIENTE').AsString;
-        unqryFac.FindField('PROVINCIA_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('PROVINCIA_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pPROVINCIA_CLIENTE').AsString;
-        unqryFac.FindField('CPOSTAL_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('CPOSTAL_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pCPOSTAL_CLIENTE').AsString;
-        unqryFac.FindField('PAIS_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('PAIS_CLIENTE_PRESUPUESTO').AsString :=
          ParamByName('pPAIS_CLIENTE').AsString;
-        unqryFac.FindField('TIPOID_INT_CLIENTE_FACTURA').AsString :=
+        unqryFac.FindField('TIPOID_INT_CLIENTE_PRESUPUESTO').AsString :=
         ParamByName('pTIPOID_INT_CLIENTE').AsString;
       end;
     end;
@@ -586,9 +586,9 @@ begin
   inherited;
    form := TfrmGenPreFac.Create(Application);
    try
-     form.edtNumFacOrigen.Text := dsTablaG.DataSet.findField('NRO_FACTURA')
+     form.edtNumFacOrigen.Text := dsTablaG.DataSet.findField('NRO_PRESUPUESTO')
                                                                       .AsString;
-     form.edtSerieOrigen.Text := dsTablaG.DataSet.findField('SERIE_FACTURA')
+     form.edtSerieOrigen.Text := dsTablaG.DataSet.findField('SERIE_PRESUPUESTO')
                                                                       .AsString;
      form.ShowModal;
    finally
@@ -618,9 +618,9 @@ begin
                                                                             then
     dmmPre.unqryFac.Post;
   dmmPre.unstrdprcGetRecibos.ParamByName('pNRO_FACTURA')
-            .AsInteger := dmmPre.unqryFac.FieldByName('NRO_FACTURA').AsInteger;
+            .AsInteger := dmmPre.unqryFac.FieldByName('NRO_PRESUPUESTO').AsInteger;
   dmmPre.unstrdprcGetRecibos.ParamByName('pSERIE_FACTURA')
-            .AsString := dmmPre.unqryFac.FieldByName('SERIE_FACTURA').AsString;
+            .AsString := dmmPre.unqryFac.FieldByName('SERIE_PRESUPUESTO').AsString;
   dmmPre.unstrdprcGetRecibos.ExecProc;
   dmmPre.unqryRecibos.Refresh;
 end;
@@ -698,12 +698,12 @@ begin
       cbbSerieFactura.DroppedDown := True;
 end;
 
-procedure TfrmMtoPre.cxdbdtdtFECHA_FACTURAKeyUp(Sender: TObject; var Key: Word;
+procedure TfrmMtoPre.cxdbdtdtFECHA_PRESUPUESTOKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   inherited;
   if ((Key = VK_DOWN) and (Shift = [ssShift])) then
-      cxdbdtdtFECHA_FACTURA.DroppedDown := True;
+      cxdbdtdtFECHA_PRESUPUESTO.DroppedDown := True;
 end;
 
 procedure TfrmMtoPre.cxgrd5Enter(Sender: TObject);
@@ -789,8 +789,8 @@ begin
   inherited;
    form := TfrmPrintPre.Create(Application);
    try
-     form.edtNroFac.Text := dsTablaG.DataSet.findField('NRO_FACTURA').AsString;
-     form.edtSerie.Text := dsTablaG.DataSet.findField('SERIE_FACTURA').AsString;
+     form.edtNroFac.Text := dsTablaG.DataSet.findField('NRO_PRESUPUESTO').AsString;
+     form.edtSerie.Text := dsTablaG.DataSet.findField('SERIE_PRESUPUESTO').AsString;
      form.ShowModal;
    finally
      form.Free;
@@ -831,9 +831,9 @@ begin
   inherited;
   if (Shift <> [ssCtrl]) then
     if ((Key = VK_RETURN) and (dmmPre.dsLinFac.DataSet.RecordCount = 0) and
-         ((dsTablaG.DataSet.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA')
+         ((dsTablaG.DataSet.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO')
                                               .AsString <> 'PACIENTE NUEVO') OR
-           (dsTablaG.DataSet.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA')
+           (dsTablaG.DataSet.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO')
                                   .AsString <> 'PACIENTE NO ENCONTRADO'))) then
       tvLineasPre.DataController.Insert;
 end;
@@ -848,7 +848,7 @@ begin
     with dmmPre do
     begin
       begin
-        unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString :=
+        unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
           unqryFac.FieldByName('NOMBRE').AsString + ' ' +
                                      unqryFac.FieldByName('APELLIDOS').AsString;
       end;
@@ -866,7 +866,7 @@ begin
     with dmmPre do
     begin
       begin
-        unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString :=
+        unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
           unqryFac.FieldByName('NOMBRE').AsString + ' ' +
                                      unqryFac.FieldByName('APELLIDOS').AsString;
       end;
@@ -985,7 +985,7 @@ begin
     end;
 
     // Obtener el campo BLOB
-    BlobField := TBlobField(FDataSource.DataSet.FieldByName('DIBUJO_FACTURA'));
+    BlobField := TBlobField(FDataSource.DataSet.FieldByName('DIBUJO_PRESUPUESTO'));
     // Verificar que el campo tiene datos
     if BlobField.IsNull or (BlobField.BlobSize = 0) then
       Exit;  // Salir silenciosamente, mantener imagen por defecto
@@ -1974,7 +1974,7 @@ begin
 
       // Guardar la imagen en el campo BLOB
       try
-        TBlobField(FDataSource.DataSet.FieldByName('DIBUJO_FACTURA'))
+        TBlobField(FDataSource.DataSet.FieldByName('DIBUJO_PRESUPUESTO'))
                                                         .LoadFromStream(Stream);
         // Confirmar los cambios
         FDataSource.DataSet.Post;
@@ -2035,7 +2035,7 @@ begin
     end;
 
     // Obtener el campo BLOB
-    BlobField := TBlobField(FDataSource.DataSet.FieldByName('DIBUJO_FACTURA'));
+    BlobField := TBlobField(FDataSource.DataSet.FieldByName('DIBUJO_PRESUPUESTO'));
     // Verificar que el campo tiene datos
     if BlobField.IsNull or (BlobField.BlobSize = 0) then
     begin

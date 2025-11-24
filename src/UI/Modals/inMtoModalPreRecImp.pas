@@ -95,8 +95,8 @@ begin
     begin
                  SQL.Text := 'SELECT *  ' +
                              '       FROM SUBOC_RECIBOS ' +
-                             '        WHERE NRO_FACTURA = :numfac' +
-                             '          AND SERIE_FACTURA = :serie' +
+                             '        WHERE NRO_PRESUPUESTO = :numfac' +
+                             '          AND SERIE_PRESUPUESTO = :serie' +
                              '         AND NRO_PLAZO_RECIBO = :recibo';
                  Params.ParamByName('numfac').AsInteger := StrToInt(edtNroFac.text);
                  Params.ParamByName('serie').AsString := edtSerie.text;
@@ -125,8 +125,8 @@ begin
     begin
                  SQL.Text := 'SELECT *  ' +
                              '       FROM SUBOC_RECIBOS ' +
-                             '        WHERE NRO_FACTURA = :numfac' +
-                             '          AND SERIE_FACTURA = :serie' ;
+                             '        WHERE NRO_PRESUPUESTO = :numfac' +
+                             '          AND SERIE_PRESUPUESTO = :serie' ;
 
                  Params.ParamByName('numfac').AsInteger := StrToInt(edtNroFac.text);
                  Params.ParamByName('serie').AsString := edtSerie.text;

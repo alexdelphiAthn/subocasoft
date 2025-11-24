@@ -94476,13 +94476,13 @@ object frmPrintPre: TfrmPrintPre
           Frame.Typ = [ftTop]
           ParentFont = False
         end
-        object FacturasRAZONSOCIAL_CLIENTE_FACTURA: TfrxMemoView
+        object FacturasRAZONSOCIAL_CLIENTE_PRESUPUESTO: TfrxMemoView
           AllowVectorExport = True
           Left = 52.913420000000000000
           Top = 143.724490000000000000
           Width = 400.630180000000000000
           Height = 18.897650000000000000
-          DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
+          DataField = 'RAZONSOCIAL_CLIENTE_PRESUPUESTO'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -15
@@ -94490,16 +94490,16 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."RAZONSOCIAL_CLIENTE_FACTURA"]')
+            '[Facturas."RAZONSOCIAL_CLIENTE_PRESUPUESTO"]')
           ParentFont = False
         end
-        object FacturasFECHA_FACTURA: TfrxMemoView
+        object FacturasFECHA_PRESUPUESTO: TfrxMemoView
           AllowVectorExport = True
           Left = 596.283860000000000000
           Top = 140.842610000000000000
           Width = 120.944960000000000000
           Height = 18.897650000000000000
-          DataField = 'FECHA_FACTURA'
+          DataField = 'FECHA_PRESUPUESTO'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -15
@@ -94507,7 +94507,7 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."FECHA_FACTURA"]')
+            '[Facturas."FECHA_PRESUPUESTO"]')
           ParentFont = False
         end
         object FacturasSERIE_FACTURA: TfrxMemoView
@@ -94523,7 +94523,7 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."SERIE_FACTURA"]/[Facturas."NRO_FACTURA"]')
+            '[Facturas."SERIE_PRESUPUESTO"]/[Facturas."NRO_PRESUPUESTO"]')
           ParentFont = False
           Formats = <
             item
@@ -94533,13 +94533,13 @@ object frmPrintPre: TfrmPrintPre
               Kind = fkNumeric
             end>
         end
-        object FacturasDIRECCION1_CLIENTE_FACTURA: TfrxMemoView
+        object FacturasDIRECCION1_CLIENTE_PRESUPUESTO: TfrxMemoView
           AllowVectorExport = True
           Left = 52.913420000000000000
           Top = 163.622140000000000000
           Width = 400.630180000000000000
           Height = 18.897650000000000000
-          DataField = 'DIRECCION1_CLIENTE_FACTURA'
+          DataField = 'DIRECCION1_CLIENTE_PRESUPUESTO'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -15
@@ -94547,16 +94547,16 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."DIRECCION1_CLIENTE_FACTURA"]')
+            '[Facturas."DIRECCION1_CLIENTE_PRESUPUESTO"]')
           ParentFont = False
         end
-        object FacturasCPOSTAL_CLIENTE_FACTURA: TfrxMemoView
+        object FacturasCPOSTAL_CLIENTE_PRESUPUESTO: TfrxMemoView
           AllowVectorExport = True
           Left = 52.913420000000000000
           Top = 182.519790000000000000
           Width = 79.370130000000000000
           Height = 18.897650000000000000
-          DataField = 'CPOSTAL_CLIENTE_FACTURA'
+          DataField = 'CPOSTAL_CLIENTE_PRESUPUESTO'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -15
@@ -94564,16 +94564,16 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."CPOSTAL_CLIENTE_FACTURA"]')
+            '[Facturas."CPOSTAL_CLIENTE_PRESUPUESTO"]')
           ParentFont = False
         end
-        object FacturasPOBLACION_CLIENTE_FACTURA: TfrxMemoView
+        object FacturasPOBLACION_CLIENTE_PRESUPUESTO: TfrxMemoView
           AllowVectorExport = True
           Left = 140.606370000000000000
           Top = 182.519790000000000000
           Width = 313.700990000000000000
           Height = 18.897650000000000000
-          DataField = 'POBLACION_CLIENTE_FACTURA'
+          DataField = 'POBLACION_CLIENTE_PRESUPUESTO'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -15
@@ -94581,16 +94581,16 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."POBLACION_CLIENTE_FACTURA"]')
+            '[Facturas."POBLACION_CLIENTE_PRESUPUESTO"]')
           ParentFont = False
         end
-        object FacturasPROVINCIA_CLIENTE_FACTURA: TfrxMemoView
+        object FacturasPROVINCIA_CLIENTE_PRESUPUESTO: TfrxMemoView
           AllowVectorExport = True
           Left = 52.913420000000000000
           Top = 205.196970000000000000
           Width = 400.630180000000000000
           Height = 18.897650000000000000
-          DataField = 'PROVINCIA_CLIENTE_FACTURA'
+          DataField = 'PROVINCIA_CLIENTE_PRESUPUESTO'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -15
@@ -94598,7 +94598,7 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."PROVINCIA_CLIENTE_FACTURA"]')
+            '[Facturas."PROVINCIA_CLIENTE_PRESUPUESTO"]')
           ParentFont = False
         end
         object Memo18: TfrxMemoView
@@ -96496,7 +96496,7 @@ object frmPrintPre: TfrmPrintPre
           Top = 264.992270000000000000
           Width = 971.339210000000000000
           Height = 283.464750000000000000
-          DataField = 'DIBUJO_FACTURA'
+          DataField = 'DIBUJO_PRESUPUESTO'
           DataSet = dmPre.fxdsPrintFac
           DataSetName = 'Facturas'
           Frame.Typ = []
@@ -191662,7 +191662,7 @@ object frmPrintPre: TfrmPrintPre
           Fill.BackColor = 4637854
           HAlign = haRight
           Memo.UTF8W = (
-            '[Facturas."TOTAL_LIQUIDO_FACTURA"]')
+            '[Facturas."TOTAL_LIQUIDO_PRESUPUESTO"]')
           ParentFont = False
         end
         object Memo16: TfrxMemoView
@@ -191697,17 +191697,17 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."FORMA_PAGO_FACTURA"]')
+            '[Facturas."FORMA_PAGO_PRESUPUESTO"]')
           ParentFont = False
         end
-        object FacturasCOMENTARIOS_FACTURA: TfrxMemoView
+        object FacturasCOMENTARIOS_PRESUPUESTO: TfrxMemoView
           IndexTag = 1
           AllowVectorExport = True
           Left = 56.692950000000000000
           Top = 109.606370000000000000
           Width = 306.141930000000000000
           Height = 86.929190000000000000
-          DataField = 'COMENTARIOS_FACTURA'
+          DataField = 'COMENTARIOS_PRESUPUESTO'
           DataSet = dmFac.fxdsPrintFac
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
@@ -191717,7 +191717,7 @@ object frmPrintPre: TfrmPrintPre
           Font.Style = []
           Frame.Typ = []
           Memo.UTF8W = (
-            '[Facturas."COMENTARIOS_FACTURA"]')
+            '[Facturas."COMENTARIOS_PRESUPUESTO"]')
           ParentFont = False
           WordBreak = True
         end

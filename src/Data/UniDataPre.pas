@@ -92,8 +92,8 @@ begin
           ( dsLinFac.Dataset.State = dsEdit )
          ) then
   begin
-    sNumFac := unqryFac.FindField('NRO_FACTURA').AsString;
-    sSerie := unqryFac.FindField('SERIE_FACTURA').AsString;
+    sNumFac := unqryFac.FindField('NRO_PRESUPUESTO').AsString;
+    sSerie := unqryFac.FindField('SERIE_PRESUPUESTO').AsString;
 
     if ( dsLinFac.Dataset.FindField('LINEA_LINEA').AsString = '' ) then
     begin
@@ -131,33 +131,33 @@ procedure TdmPre.CopiarClienteaFactura;
 begin
   if ((unqryFac.State <> dsEdit) or (dmmPre.unqryFac.State <> dsInsert)) then
           dmmPre.unqryFac.Edit;
-  unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('CODIGO_CLIENTE').AsString;
-  unqryFac.FindField('RAZONSOCIAL_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('RAZONSOCIAL_CLIENTE').AsString;
   unqryFac.FindField('NOMBRE').AsString :=
                           unqryCliDataFac.FindField('NOMBRE').AsString;
   unqryFac.FindField('APELLIDOS').AsString :=
                           unqryCliDataFac.FindField('APELLIDOS').AsString;
-  unqryFac.FindField('NIF_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('NIF_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('NIF_CLIENTE').AsString;
-  unqryFac.FindField('MOVIL_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('MOVIL_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('MOVIL_CLIENTE').AsString;
-  unqryFac.FindField('EMAIL_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('EMAIL_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('EMAIL_CLIENTE').AsString;
-  unqryFac.FindField('DIRECCION1_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('DIRECCION1_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('DIRECCION1_CLIENTE').AsString;
-  unqryFac.FindField('DIRECCION2_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('DIRECCION2_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('DIRECCION2_CLIENTE').AsString;
-  unqryFac.FindField('POBLACION_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('POBLACION_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('POBLACION_CLIENTE').AsString;
-  unqryFac.FindField('PROVINCIA_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('PROVINCIA_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('PROVINCIA_CLIENTE').AsString;
-  unqryFac.FindField('CPOSTAL_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('CPOSTAL_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('CPOSTAL_CLIENTE').AsString;
-  unqryFac.FindField('PAIS_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('PAIS_CLIENTE_PRESUPUESTO').AsString :=
                           unqryCliDataFac.FindField('PAIS_CLIENTE').AsString;
-    unqryFac.FindField('TIPOID_INT_CLIENTE_FACTURA').AsString :=
+    unqryFac.FindField('TIPOID_INT_CLIENTE_PRESUPUESTO').AsString :=
                        unqryCliDataFac.FindField('TIPOID_INT_CLIENTE').AsString;
 
 end;
@@ -174,7 +174,7 @@ procedure TdmPre.CopiarPaisaCliente;
 begin
   if ((unqryFac.State <> dsEdit) or (unqryFac.State <> dsInsert)) then
           unqryFac.Edit;
-  unqryFac.FindField('PAIS_CLIENTE_FACTURA').AsString :=
+  unqryFac.FindField('PAIS_CLIENTE_PRESUPUESTO').AsString :=
                           unqryPaises.FindField('COD_PAIS_ALPHA2').AsString;
 end;
 
@@ -184,18 +184,18 @@ begin
     begin
       ParamByName('pNOMBRE').AsString :=       unqryFac.FieldByName('NOMBRE').AsString;
       ParamByName('pAPELLIDOS').AsString :=  unqryFac.FieldByName('APELLIDOS').AsString;
-      ParamByName('pCODIGO_CLIENTE').AsString :=       unqryFac.FieldByName('CODIGO_CLIENTE_FACTURA').AsString;
-      ParamByName('pRAZONSOCIAL_CLIENTE').AsString :=  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString;
-      ParamByName('pNIF_CLIENTE').AsString :=          unqryFac.FieldByName('NIF_CLIENTE_FACTURA').AsString;
-      ParamByName('pMOVIL_CLIENTE').AsString :=        unqryFac.FieldByName('MOVIL_CLIENTE_FACTURA').AsString;
-      ParamByName('pEMAIL_CLIENTE').AsString :=        unqryFac.FieldByName('EMAIL_CLIENTE_FACTURA').AsString;
-      ParamByName('pDIRECCION1_CLIENTE').AsString :=   unqryFac.FieldByName('DIRECCION1_CLIENTE_FACTURA').AsString;
-      ParamByName('pDIRECCION2_CLIENTE').AsString :=   unqryFac.FieldByName('DIRECCION2_CLIENTE_FACTURA').AsString;
-      ParamByName('pPOBLACION_CLIENTE').AsString :=    unqryFac.FieldByName('POBLACION_CLIENTE_FACTURA').AsString;
-      ParamByName('pPROVINCIA_CLIENTE').AsString :=    unqryFac.FieldByName('PROVINCIA_CLIENTE_FACTURA').AsString;
-      ParamByName('pCPOSTAL_CLIENTE').AsString :=      unqryFac.FieldByName('CPOSTAL_CLIENTE_FACTURA').AsString;
-      ParamByName('pPAIS_CLIENTE').AsString :=         unqryFac.FieldByName('PAIS_CLIENTE_FACTURA').AsString;
-      ParamByName('pTIPOID_INT_CLIENTE').AsString :=   unqryFac.FieldByName('TIPOID_INT_CLIENTE_FACTURA').AsString;
+      ParamByName('pCODIGO_CLIENTE').AsString :=       unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pRAZONSOCIAL_CLIENTE').AsString :=  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pNIF_CLIENTE').AsString :=          unqryFac.FieldByName('NIF_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pMOVIL_CLIENTE').AsString :=        unqryFac.FieldByName('MOVIL_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pEMAIL_CLIENTE').AsString :=        unqryFac.FieldByName('EMAIL_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pDIRECCION1_CLIENTE').AsString :=   unqryFac.FieldByName('DIRECCION1_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pDIRECCION2_CLIENTE').AsString :=   unqryFac.FieldByName('DIRECCION2_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pPOBLACION_CLIENTE').AsString :=    unqryFac.FieldByName('POBLACION_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pPROVINCIA_CLIENTE').AsString :=    unqryFac.FieldByName('PROVINCIA_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pCPOSTAL_CLIENTE').AsString :=      unqryFac.FieldByName('CPOSTAL_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pPAIS_CLIENTE').AsString :=         unqryFac.FieldByName('PAIS_CLIENTE_PRESUPUESTO').AsString;
+      ParamByName('pTIPOID_INT_CLIENTE').AsString :=   unqryFac.FieldByName('TIPOID_INT_CLIENTE_PRESUPUESTO').AsString;
     end;
     unstrdprcCrearCliente.ExecProc;
 end;
@@ -296,7 +296,7 @@ end;
 
 procedure TdmPre.NuevoCliente;
 begin
-  if unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString = '0' then
+  if unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString = '0' then
   begin
     bEsNuevoCliente := True;
     with unstrdprcGetContador do
@@ -306,7 +306,7 @@ begin
       Params.CreateParam(ftInteger, 'pcont', ptOutput);
       ParamByName('ptipodoc').AsString :=  'CL';
       ExecProc;
-      unqryFac.FindField('CODIGO_CLIENTE_FACTURA').AsString := ParamByName('pcont').AsString;
+      unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString := ParamByName('pcont').AsString;
     end;
   end;
 end;
@@ -342,8 +342,8 @@ end;
 //begin
 //  unqryHistoria.Refresh;
 //  if unqryHistoria.Locate('NRO_FACTURA;SERIE_FACTURA;LINEA_LINEA',
-//                         VarArrayOf([dsLinFac.Dataset.FieldByName('NRO_FACTURA_LINEA').AsString,
-//                                     dsLinFac.Dataset.FieldByName('SERIE_FACTURA_LINEA').AsString,
+//                         VarArrayOf([dsLinFac.Dataset.FieldByName('NRO_PRESUPUESTO_LINEA').AsString,
+//                                     dsLinFac.Dataset.FieldByName('SERIE_PRESUPUESTO_LINEA').AsString,
 //                                     dsLinFac.Dataset.FieldByName('LINEA_LINEA').AsString]), []) then
 //  begin
 //    unqryHistoria.Edit;
@@ -351,7 +351,7 @@ end;
 //  else
 //  begin
 //    unqryHistoria.Insert;
-//    unqryHistoria.FieldByName('FECHA').AsDatetime :=  unqryFac.FieldByName('FECHA_FACTURA').AsDateTime;
+//    unqryHistoria.FieldByName('FECHA').AsDatetime :=  unqryFac.FieldByName('FECHA_PRESUPUESTO').AsDateTime;
 //  end;
 ////  unqryHistoria.FieldByName('NRO_FACTURA').AsString :=     zqryFac.FieldByName('NRO_FACTURA').AsString;
 ////  unqryHistoria.FieldByName('SERIE_FACTURA').AsString :=   zqryFac.FieldByName('SERIE_FACTURA').AsString;
@@ -361,7 +361,7 @@ end;
 //  unqryHistoria.FieldByName('ZONA').AsString :=     dsLinFac.Dataset.FieldByName('ZONA').AsString;
 //  unqryHistoria.FieldByName('ODONTOLOGO').AsString := dsLinFac.Dataset.FieldByName('ODONTOLOGO').AsString;
 //  unqryHistoria.FieldByName('PRECIOVENTA_ARTICULO').AsCurrency :=  dsLinFac.Dataset.FieldByName('SUM_TOTAL_LINEA').AsCurrency;
-//  unqryHistoria.FieldByName('CODIGO_CLIENTE').AsString  :=  unqryFac.FieldByName('CODIGO_CLIENTE_FACTURA').AsString;
+//  unqryHistoria.FieldByName('CODIGO_CLIENTE').AsString  :=  unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString;
 //  unqryHistoria.Post;
 //
 //end;
@@ -375,10 +375,10 @@ procedure TdmPre.zqryFacAfterInsert(DataSet: TDataSet);
 begin
   unqryFac.FieldByName('NRO_FACTURA').ASSTRING := '0';
   unqryFac.FieldByName('SERIE_FACTURA').AsString := unqrySeries.FieldByName('SERIE_CONTADOR').AsString;
-  unqryFac.FieldByName('CODIGO_CLIENTE_FACTURA').AsString := '0';
-  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString:= 'PACIENTE NUEVO';
-  unqryFac.FieldByName('FECHA_FACTURA').AsDateTime := Trunc(Now);
-  unqryFac.FieldByName('FORMA_PAGO_FACTURA').AsString := FormaPagoDefault;
+  unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString := '0';
+  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString:= 'PACIENTE NUEVO';
+  unqryFac.FieldByName('FECHA_PRESUPUESTO').AsDateTime := Trunc(Now);
+  unqryFac.FieldByName('FORMA_PAGO_PRESUPUESTO').AsString := FormaPagoDefault;
 end;
 
 procedure TdmPre.zqryFacBeforeDelete(DataSet: TDataSet);
@@ -389,8 +389,8 @@ begin
   with qryBorrarLineas do
   begin
     Connection := frmOpenApp.FdmConn.conUni;
-    SQL.Text := 'DELETE FROM suboc_presupuestos_lineas WHERE SERIE_FACTURA_LINEA = :serie ' +
-                ' AND NRO_FACTURA_LINEA = :nrofactura';
+    SQL.Text := 'DELETE FROM suboc_presupuestos_lineas WHERE SERIE_PRESUPUESTO_LINEA = :serie ' +
+                ' AND NRO_PRESUPUESTO_LINEA = :nrofactura';
     //Connection.StartTransaction;
     Params.Clear;
     Params.CreateParam(ftString, 'serie', ptInput);
@@ -407,14 +407,14 @@ procedure TdmPre.zqryFacBeforePost(DataSet: TDataSet);
 begin
   if ((unqryFac.State = dsEdit) or (unqryFac.State = dsInsert)) then
   begin
-    if (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString = 'PACIENTE NUEVO') OR
-        (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString = 'PACIENTE NO ENCONTRADO') then
+    if (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString = 'PACIENTE NUEVO') OR
+        (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString = 'PACIENTE NO ENCONTRADO') then
       Abort
     else
     begin
       if unqryFac.FieldByName('NRO_FACTURA').AsString='0' then
       NuevaFactura;
-      if unqryFac.FieldByName('CODIGO_CLIENTE_FACTURA').AsString = '0' then
+      if unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString = '0' then
       NuevoCliente;
     end;
   end;

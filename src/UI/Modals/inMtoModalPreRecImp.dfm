@@ -218,8 +218,8 @@ object frmPrintPreRec: TfrmPrintPreRec
           HAlign = haCenter
           Memo.UTF8W = (
             
-              '[<Facturas."SERIE_FACTURA"> + '#39' \ '#39'  + Format('#39'%.6d'#39',[<Facturas.' +
-              '"NRO_FACTURA">]) + '#39' \ '#39' + IntToStr(<Facturas."NRO_PLAZO_RECIBO"' +
+              '[<Facturas."SERIE_PRESUPUESTO"> + '#39' \ '#39'  + Format('#39'%.6d'#39',[<Facturas.' +
+              '"NRO_PRESUPUESTO">]) + '#39' \ '#39' + IntToStr(<Facturas."NRO_PLAZO_RECIBO"' +
               '>)]')
           ParentFont = False
         end
@@ -2728,8 +2728,8 @@ object frmPrintPreRec: TfrmPrintPreRec
           HAlign = haCenter
           Memo.UTF8W = (
             
-              '[<Facturas."SERIE_FACTURA"> + '#39' \ '#39'  + Format('#39'%.6d'#39',[<Facturas.' +
-              '"NRO_FACTURA">]) + '#39' \ '#39' + IntToStr(<Facturas."NRO_PLAZO_RECIBO"' +
+              '[<Facturas."SERIE_PRESUPUESTO"> + '#39' \ '#39'  + Format('#39'%.6d'#39',[<Facturas.' +
+              '"NRO_PRESUPUESTO">]) + '#39' \ '#39' + IntToStr(<Facturas."NRO_PLAZO_RECIBO"' +
               '>)]')
           ParentFont = False
         end

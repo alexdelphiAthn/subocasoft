@@ -127,8 +127,8 @@ end;
 procedure TfrmGenPreFac.FormCreate(Sender: TObject);
 begin
   cmbSerieFactura.Properties.ListSource := dmmPre.dsSeriesFac;
-//  edtNumFacOrigen.Text := dmmFac.unqryFac.findField('NRO_FACTURA').AsString;
-//  edtSerieOrigen.Text := dmmFac.unqryFac.findField('SERIE_FACTURA').AsString;
+//  edtNumFacOrigen.Text := dmmFac.unqryFac.findField('NRO_PRESUPUESTO').AsString;
+//  edtSerieOrigen.Text := dmmFac.unqryFac.findField('SERIE_PRESUPUESTO').AsString;
   cmbSerieFactura.Text :=
                cmbSerieFactura.Properties.ListSource.DataSet.Fields[0].AsString;
   dtFecha.Date := Trunc(Now);

@@ -235,19 +235,19 @@ inherited frmMtoPre: TfrmMtoPre
           Preview.RightIndent = 4
           object cxgrdbclmnGrdDBTabPrinNRO_FACTURA: TcxGridDBColumn
             Caption = 'Nro Presupuesto'
-            DataBinding.FieldName = 'NRO_FACTURA'
+            DataBinding.FieldName = 'NRO_PRESUPUESTO'
             MinWidth = 16
             Width = 161
           end
           object cxgrdbclmnGrdDBTabPrinSERIE_FACTURA: TcxGridDBColumn
             Caption = 'Serie'
-            DataBinding.FieldName = 'SERIE_FACTURA'
+            DataBinding.FieldName = 'SERIE_PRESUPUESTO'
             MinWidth = 16
             Width = 76
           end
-          object cxgrdbclmnGrdDBTabPrinFECHA_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinFECHA_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Fecha'
-            DataBinding.FieldName = 'FECHA_FACTURA'
+            DataBinding.FieldName = 'FECHA_PRESUPUESTO'
             PropertiesClassName = 'TcxDateEditProperties'
             MinWidth = 16
             Width = 141
@@ -264,82 +264,82 @@ inherited frmMtoPre: TfrmMtoPre
             MinWidth = 16
             Width = 146
           end
-          object cxgrdbclmnGrdDBTabPrinCODIGO_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinCODIGO_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'C'#243'digo Paciente'
-            DataBinding.FieldName = 'CODIGO_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'CODIGO_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 174
           end
-          object cxgrdbclmnGrdDBTabPrinRAZONSOCIAL_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Raz'#243'n Social'
-            DataBinding.FieldName = 'RAZONSOCIAL_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'RAZONSOCIAL_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 231
           end
-          object cxgrdbclmnGrdDBTabPrinTOTAL_LIQUIDO_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinTOTAL_LIQUIDO_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Total Importe'
-            DataBinding.FieldName = 'TOTAL_LIQUIDO_FACTURA'
+            DataBinding.FieldName = 'TOTAL_LIQUIDO_PRESUPUESTO'
             PropertiesClassName = 'TcxCurrencyEditProperties'
             MinWidth = 16
             Width = 118
           end
-          object cxgrdbclmnGrdDBTabPrinNIF_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinNIF_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Nif'
-            DataBinding.FieldName = 'NIF_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'NIF_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 127
           end
-          object cxgrdbclmnGrdDBTabPrinMOVIL_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinMOVIL_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'M'#243'vil'
-            DataBinding.FieldName = 'MOVIL_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'MOVIL_CLIENTE_PRESUPUESTO'
             PropertiesClassName = 'TcxTextEditProperties'
             MinWidth = 16
             Width = 161
           end
-          object cxgrdbclmnGrdDBTabPrinEMAIL_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinEMAIL_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Email'
-            DataBinding.FieldName = 'EMAIL_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'EMAIL_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 196
           end
-          object cxgrdbclmnGrdDBTabPrinDIRECCION1_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinDIRECCION1_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Direcci'#243'n 1'
-            DataBinding.FieldName = 'DIRECCION1_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'DIRECCION1_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 266
           end
-          object cxgrdbclmnGrdDBTabPrinDIRECCION2_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinDIRECCION2_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Direcci'#243'n 2'
-            DataBinding.FieldName = 'DIRECCION2_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'DIRECCION2_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 145
           end
-          object cxgrdbclmnGrdDBTabPrinPOBLACION_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinPOBLACION_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Poblaci'#243'n'
-            DataBinding.FieldName = 'POBLACION_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'POBLACION_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 251
           end
-          object cxgrdbclmnGrdDBTabPrinPROVINCIA_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinPROVINCIA_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Provincia'
-            DataBinding.FieldName = 'PROVINCIA_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'PROVINCIA_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 138
           end
-          object cxgrdbclmnGrdDBTabPrinCPOSTAL_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinCPOSTAL_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'C'#243'digo Postal'
-            DataBinding.FieldName = 'CPOSTAL_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'CPOSTAL_CLIENTE_PRESUPUESTO'
             MinWidth = 16
           end
-          object cxgrdbclmnGrdDBTabPrinPAIS_CLIENTE_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinPAIS_CLIENTE_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Pais'
-            DataBinding.FieldName = 'PAIS_CLIENTE_FACTURA'
+            DataBinding.FieldName = 'PAIS_CLIENTE_PRESUPUESTO'
             MinWidth = 16
             Width = 110
           end
-          object cxgrdbclmnGrdDBTabPrinFORMA_PAGO_FACTURA: TcxGridDBColumn
+          object cxgrdbclmnGrdDBTabPrinFORMA_PAGO_PRESUPUESTO: TcxGridDBColumn
             Caption = 'Forma Pago'
-            DataBinding.FieldName = 'FORMA_PAGO_FACTURA'
+            DataBinding.FieldName = 'FORMA_PAGO_PRESUPUESTO'
             MinWidth = 16
             Width = 214
           end
@@ -664,7 +664,7 @@ inherited frmMtoPre: TfrmMtoPre
             object cxDBCurrencyEdit3: TcxDBCurrencyEdit
               Left = 198
               Top = 47
-              DataBinding.DataField = 'TOTAL_LIQUIDO_FACTURA'
+              DataBinding.DataField = 'TOTAL_LIQUIDO_PRESUPUESTO'
               DataBinding.DataSource = dsTablaG
               Properties.ReadOnly = True
               TabOrder = 0
@@ -673,7 +673,7 @@ inherited frmMtoPre: TfrmMtoPre
             object cbbFORMAPAGO: TcxDBLookupComboBox
               Left = 86
               Top = 123
-              DataBinding.DataField = 'FORMA_PAGO_FACTURA'
+              DataBinding.DataField = 'FORMA_PAGO_PRESUPUESTO'
               DataBinding.DataSource = dsTablaG
               Properties.KeyFieldNames = 'DESCRIPCION_FORMAPAGO'
               Properties.ListColumns = <
@@ -720,7 +720,7 @@ inherited frmMtoPre: TfrmMtoPre
               Margins.Top = 2
               Margins.Right = 2
               Margins.Bottom = 2
-              DataBinding.DataField = 'COMENTARIOS_FACTURA'
+              DataBinding.DataField = 'COMENTARIOS_PRESUPUESTO'
               DataBinding.DataSource = dsTablaG
               TabOrder = 1
               Height = 119
@@ -95772,14 +95772,14 @@ inherited frmMtoPre: TfrmMtoPre
                 Top = 148
                 Caption = 'Fecha'
               end
-              object cxdbdtdtFECHA_FACTURA: TcxDBDateEdit
+              object cxdbdtdtFECHA_PRESUPUESTO: TcxDBDateEdit
                 Left = 26
                 Top = 175
-                DataBinding.DataField = 'FECHA_FACTURA'
+                DataBinding.DataField = 'FECHA_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Properties.DateButtons = [btnClear, btnToday]
                 TabOrder = 8
-                OnKeyUp = cxdbdtdtFECHA_FACTURAKeyUp
+                OnKeyUp = cxdbdtdtFECHA_PRESUPUESTOKeyUp
                 Width = 146
               end
               object cxlbl8: TcxLabel
@@ -95790,7 +95790,7 @@ inherited frmMtoPre: TfrmMtoPre
               object cbbSerieFactura: TcxDBLookupComboBox
                 Left = 26
                 Top = 108
-                DataBinding.DataField = 'SERIE_FACTURA'
+                DataBinding.DataField = 'SERIE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Properties.KeyFieldNames = 'SERIE_CONTADOR'
                 Properties.ListColumns = <
@@ -95810,7 +95810,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Margins.Top = 2
                 Margins.Right = 2
                 Margins.Bottom = 2
-                DataBinding.DataField = 'NRO_FACTURA'
+                DataBinding.DataField = 'NRO_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Properties.Buttons = <
                   item
@@ -95828,7 +95828,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Margins.Top = 2
                 Margins.Right = 2
                 Margins.Bottom = 2
-                DataBinding.DataField = 'CODIGO_CLIENTE_FACTURA'
+                DataBinding.DataField = 'CODIGO_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Properties.Buttons = <
                   item
@@ -95857,19 +95857,19 @@ inherited frmMtoPre: TfrmMtoPre
                 Margins.Top = 2
                 Margins.Right = 2
                 Margins.Bottom = 2
-                DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
+                DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Height = 24
                 Width = 298
               end
-              object cxdblblRAZONSOCIAL_CLIENTE_FACTURA: TcxDBLabel
+              object cxdblblRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxDBLabel
                 Left = 248
                 Top = 176
                 Margins.Left = 2
                 Margins.Top = 2
                 Margins.Right = 2
                 Margins.Bottom = 2
-                DataBinding.DataField = 'MOVIL_CLIENTE_FACTURA'
+                DataBinding.DataField = 'MOVIL_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Height = 26
                 Width = 204
@@ -95961,10 +95961,10 @@ inherited frmMtoPre: TfrmMtoPre
               Caption = 'Datos Paciente - Cabecera Presupuesto'
               ImageIndex = 1
               ExplicitWidth = 954
-              object cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit
+              object cxdbtxtdtRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                 Left = 390
                 Top = 17
-                DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
+                DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 TabOrder = 1
                 Visible = False
@@ -95976,10 +95976,10 @@ inherited frmMtoPre: TfrmMtoPre
                 Caption = 'Nombre y apellidos'
                 Visible = False
               end
-              object cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA1: TcxDBTextEdit
+              object cxdbtxtdtRAZONSOCIAL_CLIENTE_PRESUPUESTO1: TcxDBTextEdit
                 Left = 493
                 Top = 17
-                DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
+                DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 TabOrder = 2
                 Visible = False
@@ -96007,7 +96007,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Margins.Top = 2
                 Margins.Right = 2
                 Margins.Bottom = 2
-                DataBinding.DataField = 'CODIGO_CLIENTE_FACTURA'
+                DataBinding.DataField = 'CODIGO_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 ParentFont = False
                 Style.Font.Charset = ANSI_CHARSET
@@ -96026,42 +96026,42 @@ inherited frmMtoPre: TfrmMtoPre
                 TabOrder = 5
                 Height = 211
                 Width = 451
-                object txtDIRECCION1_CLIENTE_FACTURA: TcxDBTextEdit
+                object txtDIRECCION1_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                   Left = 18
                   Top = 56
-                  DataBinding.DataField = 'DIRECCION1_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'DIRECCION1_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   TabOrder = 0
                   Width = 423
                 end
-                object txtCPOSTAL_CLIENTE_FACTURA: TcxDBTextEdit
+                object txtCPOSTAL_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                   Left = 18
                   Top = 109
-                  DataBinding.DataField = 'CPOSTAL_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'CPOSTAL_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   TabOrder = 3
                   Width = 60
                 end
-                object txtPOBLACION_CLIENTE_FACTURA: TcxDBTextEdit
+                object txtPOBLACION_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                   Left = 84
                   Top = 109
-                  DataBinding.DataField = 'POBLACION_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'POBLACION_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   TabOrder = 2
                   Width = 357
                 end
-                object txtPROVINCIA_CLIENTE_FACTURA: TcxDBTextEdit
+                object txtPROVINCIA_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                   Left = 98
                   Top = 142
-                  DataBinding.DataField = 'PROVINCIA_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'PROVINCIA_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   TabOrder = 4
                   Width = 343
                 end
-                object txtDIRECCION2_CLIENTE_FACTURA: TcxDBTextEdit
+                object txtDIRECCION2_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                   Left = 18
                   Top = 82
-                  DataBinding.DataField = 'DIRECCION2_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'DIRECCION2_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   TabOrder = 1
                   Width = 423
@@ -96076,10 +96076,10 @@ inherited frmMtoPre: TfrmMtoPre
                   Top = 180
                   Caption = 'Pa'#237's'
                 end
-                object txtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit
+                object txtRAZONSOCIAL_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                   Left = 120
                   Top = 23
-                  DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   TabOrder = 7
                   Width = 321
@@ -96104,7 +96104,7 @@ inherited frmMtoPre: TfrmMtoPre
                   Margins.Top = 2
                   Margins.Right = 2
                   Margins.Bottom = 2
-                  DataBinding.DataField = 'PAIS_CLIENTE_FACTURA'
+                  DataBinding.DataField = 'PAIS_CLIENTE_PRESUPUESTO'
                   DataBinding.DataSource = dsTablaG
                   Properties.Buttons = <
                     item
@@ -96149,10 +96149,10 @@ inherited frmMtoPre: TfrmMtoPre
                 Top = 154
                 Caption = 'NIF'
               end
-              object txtNIF_CLIENTE_FACTURA: TcxDBTextEdit
+              object txtNIF_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                 Left = 460
                 Top = 176
-                DataBinding.DataField = 'NIF_CLIENTE_FACTURA'
+                DataBinding.DataField = 'NIF_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 TabOrder = 11
                 Width = 205
@@ -96167,18 +96167,18 @@ inherited frmMtoPre: TfrmMtoPre
                 Top = 244
                 Caption = 'Email'
               end
-              object txtEMAIL_CLIENTE_FACTURA: TcxDBTextEdit
+              object txtEMAIL_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                 Left = 517
                 Top = 244
-                DataBinding.DataField = 'EMAIL_CLIENTE_FACTURA'
+                DataBinding.DataField = 'EMAIL_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 TabOrder = 14
                 Width = 335
               end
-              object txtMOVIL_CLIENTE_FACTURA: TcxDBTextEdit
+              object txtMOVIL_CLIENTE_PRESUPUESTO: TcxDBTextEdit
                 Left = 517
                 Top = 209
-                DataBinding.DataField = 'MOVIL_CLIENTE_FACTURA'
+                DataBinding.DataField = 'MOVIL_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 TabOrder = 15
                 Width = 160
@@ -96187,7 +96187,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 700
                 Top = 155
                 Caption = 'Tipo de Id Internacional'
-                DataBinding.DataField = 'TIPOID_INT_CLIENTE_FACTURA'
+                DataBinding.DataField = 'TIPOID_INT_CLIENTE_PRESUPUESTO'
                 DataBinding.DataSource = dsTablaG
                 Properties.Items = <
                   item

@@ -95,10 +95,10 @@ begin
                  SQL.Text := '      SELECT * ' +
                                     'from SUBOC_PRESUPUESTOS P '+
                              ' LEFT JOIN SUBOC_DIBUJOS_PRESUPUESTOS D '+
-                             '       ON P.NRO_FACTURA = D.NRO_FACTURA   '+
-                             '      AND P.SERIE_FACTURA = D.SERIE_FACTURA '+
-                             '        WHERE P.NRO_FACTURA = :numfac' +
-                             '          AND P.SERIE_FACTURA = :serie';
+                             '       ON P.NRO_PRESUPUESTO = D.NRO_PRESUPUESTO   '+
+                             '      AND P.SERIE_PRESUPUESTO = D.SERIE_PRESUPUESTO '+
+                             '        WHERE P.NRO_PRESUPUESTO = :numfac' +
+                             '          AND P.SERIE_PRESUPUESTO = :serie';
                  //Params.AddParam('numfac');
                  Params.ParamByName('numfac').DataType := ftString;
                  Params.ParamByName('numfac').Value := edtNroFac.text;
@@ -135,11 +135,11 @@ begin
       SQL.Text := 'SELECT *  ' +
                '     FROM SUBOC_PRESUPUESTOS f' +
                 ' LEFT JOIN SUBOC_DIBUJOS_PRESUPUESTOS D '+
-                '       ON P.NRO_FACTURA = D.NRO_FACTURA   '+
-                '      AND P.SERIE_FACTURA = D.SERIE_FACTURA '+
-                '    WHERE FECHA_FACTURA >= :fecha_ini ' +
-                '      AND FECHA_FACTURA <= :fecha_fin '+
-                ' order by NRO_FACTURA';
+                '       ON P.NRO_PRESUPUESTO = D.NRO_PRESUPUESTO   '+
+                '      AND P.SERIE_PRESUPUESTO = D.SERIE_PRESUPUESTO '+
+                '    WHERE FECHA_PRESUPUESTO >= :fecha_ini ' +
+                '      AND FECHA_PRESUPUESTO <= :fecha_fin '+
+                ' order by NRO_PRESUPUESTO';
       //Params.AddParam('fecha_ini');
       Params.ParamByName('fecha_ini').DataType := ftDate;
       Params.ParamByName('fecha_ini').Value := dedDesde.Date;
@@ -155,8 +155,8 @@ begin
                  SQL.Text := '     SELECT *  ' +
                              '       FROM SUBOC_PRESUPUESTOS_LINEAS L ' +
                              ' INNER JOIN SUBOC_PRESUPUESTOS F ' +
-                             '         ON F.NRO_FACTURA = L.NRO_FACTURA_LINEA ' +
-                             '        AND F.SERIE_FACTURA = L.SERIE_FACTURA_LINEA ' +
+                             '         ON F.NRO_PRESUPUESTO = L.NRO_FACTURA_LINEA ' +
+                             '        AND F.SERIE_PRESUPUESTO = L.SERIE_FACTURA_LINEA ' +
                              '      WHERE F.fecha_FACTURA >= :fecha_ini ' +
                              '        AND F.fecha_FACTURA <= :fecha_fin ' +
                              '   order by L.NRO_FACTURA_LINEA, L.SERIE_FACTURA_LINEA, L.linea_LINEA';
