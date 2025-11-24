@@ -10,7 +10,6 @@ uses
   UniDataConn in 'src\Core\UniDataConn.pas' {dmConn: TDataModule},
   inLibDir in 'src\Lib\Core\inLibDir.pas',
   inLibWin in 'src\Lib\Core\inLibWin.pas',
-  inLibDate in 'src\Lib\Core\inLibDate.pas',
   inLibDevExp in 'src\Lib\Core\inLibDevExp.pas',
   inLibData in 'src\Lib\Core\inLibData.pas',
   inMtoClientes in 'src\UI\Maintenance\inMtoClientes.pas' {frmMtoClientes},
@@ -59,7 +58,8 @@ uses
   inMtoModalSubsanacionLineas in 'src\UI\Modals\inMtoModalSubsanacionLineas.pas' {frmModalSubsanacionLineas},
   inMtoModalVisorFoto in 'src\UI\Modals\inMtoModalVisorFoto.pas' {frmMtoVisorFoto},
   uEncryptHelper in '..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas',
-  inLibImageUtils in 'src\Lib\Core\inLibImageUtils.pas';
+  inLibImageUtils in 'src\Lib\Core\inLibImageUtils.pas',
+  DelphiZXIngQRCode in 'src\Helpers\DelphiZXIngQRCode.pas';
 
 //inIni in 'inIni.pas';
 

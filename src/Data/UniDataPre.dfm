@@ -27,53 +27,143 @@ object dmPre: TdmPre
     Description = 'Presupuestos'
     UserName = 'Facturas'
     CloseDataSource = False
-    FieldAliases.Strings = (
-      'NRO_FACTURA=NRO_FACTURA'
-      'SERIE_FACTURA=SERIE_FACTURA'
-      'CODIGO_CLIENTE_FACTURA=CODIGO_CLIENTE_FACTURA'
-      'RAZONSOCIAL_CLIENTE_FACTURA=RAZONSOCIAL_CLIENTE_FACTURA'
-      'NIF_CLIENTE_FACTURA=NIF_CLIENTE_FACTURA'
-      'MOVIL_CLIENTE_FACTURA=MOVIL_CLIENTE_FACTURA'
-      'EMAIL_CLIENTE_FACTURA=EMAIL_CLIENTE_FACTURA'
-      'DIRECCION1_CLIENTE_FACTURA=DIRECCION1_CLIENTE_FACTURA'
-      'DIRECCION2_CLIENTE_FACTURA=DIRECCION2_CLIENTE_FACTURA'
-      'POBLACION_CLIENTE_FACTURA=POBLACION_CLIENTE_FACTURA'
-      'PROVINCIA_CLIENTE_FACTURA=PROVINCIA_CLIENTE_FACTURA'
-      'CPOSTAL_CLIENTE_FACTURA=CPOSTAL_CLIENTE_FACTURA'
-      'PAIS_CLIENTE_FACTURA=PAIS_CLIENTE_FACTURA'
-      'FECHA_FACTURA=FECHA_FACTURA'
-      'TOTAL_LIQUIDO_FACTURA=TOTAL_LIQUIDO_FACTURA'
-      'FORMA_PAGO_FACTURA=FORMA_PAGO_FACTURA'
-      'COMENTARIOS_FACTURA=COMENTARIOS_FACTURA'
-      'NOMBRE=NOMBRE'
-      'APELLIDOS=APELLIDOS'
-      'DIBUJO_FACTURA=DIBUJO_FACTURA')
     DataSource = dsFacPrint
     BCDToCurrency = False
     DataSetOptions = []
     Left = 208
     Top = 24
+    FieldDefs = <
+      item
+        FieldName = 'NRO_FACTURA'
+        FieldAlias = 'NRO_FACTURA'
+      end
+      item
+        FieldName = 'SERIE_FACTURA'
+        FieldAlias = 'SERIE_FACTURA'
+      end
+      item
+        FieldName = 'CODIGO_CLIENTE_FACTURA'
+        FieldAlias = 'CODIGO_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'RAZONSOCIAL_CLIENTE_FACTURA'
+        FieldAlias = 'RAZONSOCIAL_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'NIF_CLIENTE_FACTURA'
+        FieldAlias = 'NIF_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'MOVIL_CLIENTE_FACTURA'
+        FieldAlias = 'MOVIL_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'EMAIL_CLIENTE_FACTURA'
+        FieldAlias = 'EMAIL_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'DIRECCION1_CLIENTE_FACTURA'
+        FieldAlias = 'DIRECCION1_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'DIRECCION2_CLIENTE_FACTURA'
+        FieldAlias = 'DIRECCION2_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'POBLACION_CLIENTE_FACTURA'
+        FieldAlias = 'POBLACION_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'PROVINCIA_CLIENTE_FACTURA'
+        FieldAlias = 'PROVINCIA_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'CPOSTAL_CLIENTE_FACTURA'
+        FieldAlias = 'CPOSTAL_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'PAIS_CLIENTE_FACTURA'
+        FieldAlias = 'PAIS_CLIENTE_FACTURA'
+      end
+      item
+        FieldName = 'FECHA_FACTURA'
+        FieldAlias = 'FECHA_FACTURA'
+      end
+      item
+        FieldName = 'TOTAL_LIQUIDO_FACTURA'
+        FieldAlias = 'TOTAL_LIQUIDO_FACTURA'
+      end
+      item
+        FieldName = 'FORMA_PAGO_FACTURA'
+        FieldAlias = 'FORMA_PAGO_FACTURA'
+      end
+      item
+        FieldName = 'COMENTARIOS_FACTURA'
+        FieldAlias = 'COMENTARIOS_FACTURA'
+      end
+      item
+        FieldName = 'NOMBRE'
+        FieldAlias = 'NOMBRE'
+      end
+      item
+        FieldName = 'APELLIDOS'
+        FieldAlias = 'APELLIDOS'
+      end
+      item
+        FieldName = 'DIBUJO_FACTURA'
+        FieldAlias = 'DIBUJO_FACTURA'
+      end>
   end
   object fxdstPrintLinFac: TfrxDBDataset
     Description = 'Lineas Presupuestos'
     UserName = 'Lineas Facturas'
     CloseDataSource = False
-    FieldAliases.Strings = (
-      'SERIE_FACTURA_LINEA=SERIE_FACTURA_LINEA'
-      'NRO_FACTURA_LINEA=NRO_FACTURA_LINEA'
-      'LINEA_LINEA=LINEA_LINEA'
-      'CODIGO_ARTICULO_LINEA=CODIGO_ARTICULO_LINEA'
-      'DESCRIPCION_ARTICULO_LINEA=DESCRIPCION_ARTICULO_LINEA'
-      'ZONA=ZONA'
-      'PRECIOVENTA_ARTICULO_LINEA=PRECIOVENTA_ARTICULO_LINEA'
-      'CANTIDAD_LINEA=CANTIDAD_LINEA'
-      'SUM_TOTAL_LINEA=SUM_TOTAL_LINEA'
-      'ODONTOLOGO=ODONTOLOGO')
     DataSource = dsLinFacPrint
     BCDToCurrency = False
     DataSetOptions = []
     Left = 288
     Top = 24
+    FieldDefs = <
+      item
+        FieldName = 'SERIE_FACTURA_LINEA'
+        FieldAlias = 'SERIE_FACTURA_LINEA'
+      end
+      item
+        FieldName = 'NRO_FACTURA_LINEA'
+        FieldAlias = 'NRO_FACTURA_LINEA'
+      end
+      item
+        FieldName = 'LINEA_LINEA'
+        FieldAlias = 'LINEA_LINEA'
+      end
+      item
+        FieldName = 'CODIGO_ARTICULO_LINEA'
+        FieldAlias = 'CODIGO_ARTICULO_LINEA'
+      end
+      item
+        FieldName = 'DESCRIPCION_ARTICULO_LINEA'
+        FieldAlias = 'DESCRIPCION_ARTICULO_LINEA'
+      end
+      item
+        FieldName = 'ZONA'
+        FieldAlias = 'ZONA'
+      end
+      item
+        FieldName = 'PRECIOVENTA_ARTICULO_LINEA'
+        FieldAlias = 'PRECIOVENTA_ARTICULO_LINEA'
+      end
+      item
+        FieldName = 'CANTIDAD_LINEA'
+        FieldAlias = 'CANTIDAD_LINEA'
+      end
+      item
+        FieldName = 'SUM_TOTAL_LINEA'
+        FieldAlias = 'SUM_TOTAL_LINEA'
+      end
+      item
+        FieldName = 'ODONTOLOGO'
+        FieldAlias = 'ODONTOLOGO'
+      end>
   end
   object unqryFac: TUniQuery
     SQLInsert.Strings = (
@@ -869,32 +959,92 @@ object dmPre: TdmPre
     Description = 'Recibos'
     UserName = 'Facturas'
     CloseDataSource = False
-    FieldAliases.Strings = (
-      'NRO_FACTURA=NRO_FACTURA'
-      'SERIE_FACTURA=SERIE_FACTURA'
-      'NRO_PLAZO_RECIBO=NRO_PLAZO_RECIBO'
-      'FORMA_PAGO_ORIGEN=FORMA_PAGO_ORIGEN'
-      'FORMA_PAGO_DESCRIPCION_ORIGEN=FORMA_PAGO_DESCRIPCION_ORIGEN'
-      'EUROS_RECIBO=EUROS_RECIBO'
-      'ESTADO_RECIBO=ESTADO_RECIBO'
-      'FECHA_EXPEDICION=FECHA_EXPEDICION'
-      'FECHA_VENCIMIENTO=FECHA_VENCIMIENTO'
-      'IBAN=IBAN'
-      'FECHA_PAGO=FECHA_PAGO'
-      'LOCALIDAD_EXPEDICION=LOCALIDAD_EXPEDICION'
-      'CODIGO_CLIENTE=CODIGO_CLIENTE'
-      'RAZONSOCIAL_CLIENTE=RAZONSOCIAL_CLIENTE'
-      'DIRECCION1_CLIENTE=DIRECCION1_CLIENTE'
-      'POBLACION_CLIENTE=POBLACION_CLIENTE'
-      'PROVINCIA_CLIENTE=PROVINCIA_CLIENTE'
-      'CPOSTAL_CLIENTE=CPOSTAL_CLIENTE'
-      'IMPORTE_LETRA=IMPORTE_LETRA'
-      'TRATAMIENTOS=TRATAMIENTOS')
     DataSource = dsRecibosPrint
     BCDToCurrency = False
     DataSetOptions = []
     Left = 368
     Top = 24
+    FieldDefs = <
+      item
+        FieldName = 'NRO_FACTURA'
+        FieldAlias = 'NRO_FACTURA'
+      end
+      item
+        FieldName = 'SERIE_FACTURA'
+        FieldAlias = 'SERIE_FACTURA'
+      end
+      item
+        FieldName = 'NRO_PLAZO_RECIBO'
+        FieldAlias = 'NRO_PLAZO_RECIBO'
+      end
+      item
+        FieldName = 'FORMA_PAGO_ORIGEN'
+        FieldAlias = 'FORMA_PAGO_ORIGEN'
+      end
+      item
+        FieldName = 'FORMA_PAGO_DESCRIPCION_ORIGEN'
+        FieldAlias = 'FORMA_PAGO_DESCRIPCION_ORIGEN'
+      end
+      item
+        FieldName = 'EUROS_RECIBO'
+        FieldAlias = 'EUROS_RECIBO'
+      end
+      item
+        FieldName = 'ESTADO_RECIBO'
+        FieldAlias = 'ESTADO_RECIBO'
+      end
+      item
+        FieldName = 'FECHA_EXPEDICION'
+        FieldAlias = 'FECHA_EXPEDICION'
+      end
+      item
+        FieldName = 'FECHA_VENCIMIENTO'
+        FieldAlias = 'FECHA_VENCIMIENTO'
+      end
+      item
+        FieldName = 'IBAN'
+        FieldAlias = 'IBAN'
+      end
+      item
+        FieldName = 'FECHA_PAGO'
+        FieldAlias = 'FECHA_PAGO'
+      end
+      item
+        FieldName = 'LOCALIDAD_EXPEDICION'
+        FieldAlias = 'LOCALIDAD_EXPEDICION'
+      end
+      item
+        FieldName = 'CODIGO_CLIENTE'
+        FieldAlias = 'CODIGO_CLIENTE'
+      end
+      item
+        FieldName = 'RAZONSOCIAL_CLIENTE'
+        FieldAlias = 'RAZONSOCIAL_CLIENTE'
+      end
+      item
+        FieldName = 'DIRECCION1_CLIENTE'
+        FieldAlias = 'DIRECCION1_CLIENTE'
+      end
+      item
+        FieldName = 'POBLACION_CLIENTE'
+        FieldAlias = 'POBLACION_CLIENTE'
+      end
+      item
+        FieldName = 'PROVINCIA_CLIENTE'
+        FieldAlias = 'PROVINCIA_CLIENTE'
+      end
+      item
+        FieldName = 'CPOSTAL_CLIENTE'
+        FieldAlias = 'CPOSTAL_CLIENTE'
+      end
+      item
+        FieldName = 'IMPORTE_LETRA'
+        FieldAlias = 'IMPORTE_LETRA'
+      end
+      item
+        FieldName = 'TRATAMIENTOS'
+        FieldAlias = 'TRATAMIENTOS'
+      end>
   end
   object unqryRecibosPrint: TUniQuery
     Connection = dmConn.conUni

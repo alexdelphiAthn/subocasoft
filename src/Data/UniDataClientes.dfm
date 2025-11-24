@@ -1,5 +1,4 @@
 object DMClientes: TDMClientes
-  OldCreateOrder = True
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   Height = 322
@@ -86,7 +85,6 @@ object DMClientes: TDMClientes
       'select * from suboc_clientes'
       ''
       'order by convert(CODIGO_CLIENTE, int) DESC')
-    Active = True
     AfterInsert = unqryClientesAfterInsert
     BeforePost = unqryClientesBeforePost
     Left = 40
@@ -171,7 +169,6 @@ object DMClientes: TDMClientes
     MasterSource = frmMtoClientes.dsTablaG
     MasterFields = 'CODIGO_CLIENTE'
     DetailFields = 'CODIGO_CLIENTE_FACTURA'
-    Active = True
     Left = 120
     Top = 88
     ParamData = <
@@ -254,7 +251,6 @@ object DMClientes: TDMClientes
     MasterSource = frmMtoClientes.dsTablaG
     MasterFields = 'CODIGO_CLIENTE'
     DetailFields = 'CODIGO_CLIENTE_FACTURA'
-    Active = True
     Left = 192
     Top = 88
     ParamData = <
@@ -630,30 +626,89 @@ object DMClientes: TDMClientes
     Description = 'Clientes'
     UserName = 'Clientes'
     CloseDataSource = False
-    FieldAliases.Strings = (
-      '-CODIGO_CLIENTE=CODIGO_CLIENTE'
-      'RAZONSOCIAL_CLIENTE=RAZONSOCIAL_CLIENTE'
-      'NIF_CLIENTE=NIF_CLIENTE'
-      'MOVIL_CLIENTE=MOVIL_CLIENTE'
-      'EMAIL_CLIENTE=EMAIL_CLIENTE'
-      'DIRECCION1_CLIENTE=DIRECCION1_CLIENTE'
-      'DIRECCION2_CLIENTE=DIRECCION2_CLIENTE'
-      'POBLACION_CLIENTE=POBLACION_CLIENTE'
-      'PROVINCIA_CLIENTE=PROVINCIA_CLIENTE'
-      'CPOSTAL_CLIENTE=CPOSTAL_CLIENTE'
-      'PAIS_CLIENTE=PAIS_CLIENTE'
-      'OBSERVACIONES_CLIENTE=OBSERVACIONES_CLIENTE'
-      'REFERENCIA_CLIENTE=REFERENCIA_CLIENTE'
-      'TELEFONO_CLIENTE=TELEFONO_CLIENTE'
-      'PROFESION_CLIENTE=PROFESION_CLIENTE'
-      'FECHA_NACIMIENTO=FECHA_NACIMIENTO'
-      'NOMBRE=NOMBRE'
-      'APELLIDOS=APELLIDOS'
-      'IBAN=IBAN')
     DataSource = dsEtiquetas
     BCDToCurrency = False
+    DataSetOptions = []
     Left = 632
     Top = 8
+    FieldDefs = <
+      item
+        Active = False
+        FieldName = 'CODIGO_CLIENTE'
+        FieldAlias = 'CODIGO_CLIENTE'
+      end
+      item
+        FieldName = 'RAZONSOCIAL_CLIENTE'
+        FieldAlias = 'RAZONSOCIAL_CLIENTE'
+      end
+      item
+        FieldName = 'NIF_CLIENTE'
+        FieldAlias = 'NIF_CLIENTE'
+      end
+      item
+        FieldName = 'MOVIL_CLIENTE'
+        FieldAlias = 'MOVIL_CLIENTE'
+      end
+      item
+        FieldName = 'EMAIL_CLIENTE'
+        FieldAlias = 'EMAIL_CLIENTE'
+      end
+      item
+        FieldName = 'DIRECCION1_CLIENTE'
+        FieldAlias = 'DIRECCION1_CLIENTE'
+      end
+      item
+        FieldName = 'DIRECCION2_CLIENTE'
+        FieldAlias = 'DIRECCION2_CLIENTE'
+      end
+      item
+        FieldName = 'POBLACION_CLIENTE'
+        FieldAlias = 'POBLACION_CLIENTE'
+      end
+      item
+        FieldName = 'PROVINCIA_CLIENTE'
+        FieldAlias = 'PROVINCIA_CLIENTE'
+      end
+      item
+        FieldName = 'CPOSTAL_CLIENTE'
+        FieldAlias = 'CPOSTAL_CLIENTE'
+      end
+      item
+        FieldName = 'PAIS_CLIENTE'
+        FieldAlias = 'PAIS_CLIENTE'
+      end
+      item
+        FieldName = 'OBSERVACIONES_CLIENTE'
+        FieldAlias = 'OBSERVACIONES_CLIENTE'
+      end
+      item
+        FieldName = 'REFERENCIA_CLIENTE'
+        FieldAlias = 'REFERENCIA_CLIENTE'
+      end
+      item
+        FieldName = 'TELEFONO_CLIENTE'
+        FieldAlias = 'TELEFONO_CLIENTE'
+      end
+      item
+        FieldName = 'PROFESION_CLIENTE'
+        FieldAlias = 'PROFESION_CLIENTE'
+      end
+      item
+        FieldName = 'FECHA_NACIMIENTO'
+        FieldAlias = 'FECHA_NACIMIENTO'
+      end
+      item
+        FieldName = 'NOMBRE'
+        FieldAlias = 'NOMBRE'
+      end
+      item
+        FieldName = 'APELLIDOS'
+        FieldAlias = 'APELLIDOS'
+      end
+      item
+        FieldName = 'IBAN'
+        FieldAlias = 'IBAN'
+      end>
   end
   object unqryCliPrint: TUniQuery
     Connection = dmConn.conUni
@@ -967,39 +1022,124 @@ object DMClientes: TDMClientes
     Description = 'Clientes'
     UserName = 'Clientes'
     CloseDataSource = False
-    FieldAliases.Strings = (
-      'CODIGO_CLIENTE=CODIGO_CLIENTE'
-      'RAZONSOCIAL_CLIENTE=RAZONSOCIAL_CLIENTE'
-      'NIF_CLIENTE=NIF_CLIENTE'
-      'MOVIL_CLIENTE=MOVIL_CLIENTE'
-      'EMAIL_CLIENTE=EMAIL_CLIENTE'
-      'DIRECCION1_CLIENTE=DIRECCION1_CLIENTE'
-      'DIRECCION2_CLIENTE=DIRECCION2_CLIENTE'
-      'POBLACION_CLIENTE=POBLACION_CLIENTE'
-      'PROVINCIA_CLIENTE=PROVINCIA_CLIENTE'
-      'CPOSTAL_CLIENTE=CPOSTAL_CLIENTE'
-      'PAIS_CLIENTE=PAIS_CLIENTE'
-      'OBSERVACIONES_CLIENTE=OBSERVACIONES_CLIENTE'
-      'REFERENCIA_CLIENTE=REFERENCIA_CLIENTE'
-      'TELEFONO_CLIENTE=TELEFONO_CLIENTE'
-      'PROFESION_CLIENTE=PROFESION_CLIENTE'
-      'FECHA_NACIMIENTO=FECHA_NACIMIENTO'
-      'NOMBRE=NOMBRE'
-      'APELLIDOS=APELLIDOS'
-      'IBAN=IBAN'
-      'CODIGO_CUESTIONARIO=CODIGO_CUESTIONARIO'
-      'FECHA_CUESTIONARIO=FECHA_CUESTIONARIO'
-      'CODIGO_CLIENTE_1=CODIGO_CLIENTE_1'
-      'NOMBRE_1=NOMBRE_1'
-      'APELLIDOS_1=APELLIDOS_1'
-      'CODIGO_CUESTIONARIO_1=CODIGO_CUESTIONARIO_1'
-      'CODIGO_PREGUNTA=CODIGO_PREGUNTA'
-      'PREGUNTA=PREGUNTA'
-      'RESPUESTA=RESPUESTA')
     DataSource = dsCliPrintCues
     BCDToCurrency = False
+    DataSetOptions = []
     Left = 976
     Top = 24
+    FieldDefs = <
+      item
+        FieldName = 'CODIGO_CLIENTE'
+        FieldAlias = 'CODIGO_CLIENTE'
+      end
+      item
+        FieldName = 'RAZONSOCIAL_CLIENTE'
+        FieldAlias = 'RAZONSOCIAL_CLIENTE'
+      end
+      item
+        FieldName = 'NIF_CLIENTE'
+        FieldAlias = 'NIF_CLIENTE'
+      end
+      item
+        FieldName = 'MOVIL_CLIENTE'
+        FieldAlias = 'MOVIL_CLIENTE'
+      end
+      item
+        FieldName = 'EMAIL_CLIENTE'
+        FieldAlias = 'EMAIL_CLIENTE'
+      end
+      item
+        FieldName = 'DIRECCION1_CLIENTE'
+        FieldAlias = 'DIRECCION1_CLIENTE'
+      end
+      item
+        FieldName = 'DIRECCION2_CLIENTE'
+        FieldAlias = 'DIRECCION2_CLIENTE'
+      end
+      item
+        FieldName = 'POBLACION_CLIENTE'
+        FieldAlias = 'POBLACION_CLIENTE'
+      end
+      item
+        FieldName = 'PROVINCIA_CLIENTE'
+        FieldAlias = 'PROVINCIA_CLIENTE'
+      end
+      item
+        FieldName = 'CPOSTAL_CLIENTE'
+        FieldAlias = 'CPOSTAL_CLIENTE'
+      end
+      item
+        FieldName = 'PAIS_CLIENTE'
+        FieldAlias = 'PAIS_CLIENTE'
+      end
+      item
+        FieldName = 'OBSERVACIONES_CLIENTE'
+        FieldAlias = 'OBSERVACIONES_CLIENTE'
+      end
+      item
+        FieldName = 'REFERENCIA_CLIENTE'
+        FieldAlias = 'REFERENCIA_CLIENTE'
+      end
+      item
+        FieldName = 'TELEFONO_CLIENTE'
+        FieldAlias = 'TELEFONO_CLIENTE'
+      end
+      item
+        FieldName = 'PROFESION_CLIENTE'
+        FieldAlias = 'PROFESION_CLIENTE'
+      end
+      item
+        FieldName = 'FECHA_NACIMIENTO'
+        FieldAlias = 'FECHA_NACIMIENTO'
+      end
+      item
+        FieldName = 'NOMBRE'
+        FieldAlias = 'NOMBRE'
+      end
+      item
+        FieldName = 'APELLIDOS'
+        FieldAlias = 'APELLIDOS'
+      end
+      item
+        FieldName = 'IBAN'
+        FieldAlias = 'IBAN'
+      end
+      item
+        FieldName = 'CODIGO_CUESTIONARIO'
+        FieldAlias = 'CODIGO_CUESTIONARIO'
+      end
+      item
+        FieldName = 'FECHA_CUESTIONARIO'
+        FieldAlias = 'FECHA_CUESTIONARIO'
+      end
+      item
+        FieldName = 'CODIGO_CLIENTE_1'
+        FieldAlias = 'CODIGO_CLIENTE_1'
+      end
+      item
+        FieldName = 'NOMBRE_1'
+        FieldAlias = 'NOMBRE_1'
+      end
+      item
+        FieldName = 'APELLIDOS_1'
+        FieldAlias = 'APELLIDOS_1'
+      end
+      item
+        FieldName = 'CODIGO_CUESTIONARIO_1'
+        FieldAlias = 'CODIGO_CUESTIONARIO_1'
+      end
+      item
+        FieldName = 'CODIGO_PREGUNTA'
+        FieldAlias = 'CODIGO_PREGUNTA'
+      end
+      item
+        FieldName = 'PREGUNTA'
+        FieldAlias = 'PREGUNTA'
+      end
+      item
+        FieldName = 'RESPUESTA'
+        FieldAlias = 'RESPUESTA'
+      end>
   end
   object unqryCliPrintCues: TUniQuery
     Connection = dmConn.conUni
@@ -1064,7 +1204,6 @@ object DMClientes: TDMClientes
     MasterFields = 'PAIS_CLIENTE'
     DetailFields = 'COD_PAIS_ALPHA2'
     ReadOnly = True
-    Active = True
     AfterInsert = unqryHistoriaAfterInsert
     Left = 840
     Top = 240
@@ -1119,7 +1258,6 @@ object DMClientes: TDMClientes
       'select * from suboc_paises'
       '')
     ReadOnly = True
-    Active = True
     AfterInsert = unqryHistoriaAfterInsert
     Left = 936
     Top = 240

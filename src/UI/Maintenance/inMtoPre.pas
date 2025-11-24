@@ -198,7 +198,7 @@ type
     btnLinea: TcxButton;
 
     procedure FormCreate(Sender: TObject);
-    procedure btnRectificarClick(Sender: TObject);
+//    procedure btnRectificarClick(Sender: TObject);
     procedure btnImprimirClick(Sender: TObject);
     procedure sbGrabarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -315,7 +315,7 @@ var
 implementation
 
 uses
-  inLibWin, inMtoGenSearch,  inMtoModalPreRec, inMtoModalPreImp,
+  inLibWin, inMtoGenSearch,   inMtoModalPreImp,
   inMtoModalPreRecImp,
   inMtoPrincipal, inMtoModalPresuFac;
 
@@ -652,18 +652,18 @@ begin
     DrawMode := dmRectangle;
 end;
 
-procedure TfrmMtoPre.btnRectificarClick(Sender: TObject);
-  var
-    form:TfrmGenPreRec;
-begin
-  inherited;
-   form := TfrmGenPreRec.Create(Application);
-   try
-          form.ShowModal;
-   finally
-          form.Free;
-   end;
-end;
+//procedure TfrmMtoPre.btnRectificarClick(Sender: TObject);
+//  var
+//    form:TfrmGenPreRec;
+//begin
+//  inherited;
+//   form := TfrmGenPreRec.Create(Application);
+//   try
+//          form.ShowModal;
+//   finally
+//          form.Free;
+//   end;
+//end;
 
 procedure TfrmMtoPre.CambiarEstadoRecibo(sEstado: string);
 begin

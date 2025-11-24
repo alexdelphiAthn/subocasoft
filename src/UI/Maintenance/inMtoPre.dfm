@@ -1,15 +1,15 @@
 inherited frmMtoPre: TfrmMtoPre
   Top = 0
   Caption = 'Presupuestos'
-  ClientHeight = 775
-  ClientWidth = 1167
+  ClientHeight = 774
+  ClientWidth = 1163
   Font.Height = -15
-  ExplicitWidth = 1185
-  ExplicitHeight = 822
+  ExplicitWidth = 1179
+  ExplicitHeight = 813
   TextHeight = 17
   inherited pButtonPage: TPanel
-    Width = 968
-    Height = 775
+    Width = 964
+    Height = 774
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -18,9 +18,9 @@ inherited frmMtoPre: TfrmMtoPre
     ExplicitHeight = 783
   end
   inherited pButtonRightBar: TPanel
-    Left = 968
+    Left = 964
     Width = 199
-    Height = 775
+    Height = 774
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -195,8 +195,8 @@ inherited frmMtoPre: TfrmMtoPre
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 968
-    Height = 775
+    Width = 964
+    Height = 774
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -212,12 +212,12 @@ inherited frmMtoPre: TfrmMtoPre
       Margins.Right = 4
       Margins.Bottom = 4
       ExplicitTop = 33
-      ExplicitWidth = 966
-      ExplicitHeight = 747
+      ExplicitWidth = 960
+      ExplicitHeight = 738
       inherited cxGrdPrincipal: TcxGrid
         Top = 34
-        Width = 966
-        Height = 713
+        Width = 960
+        Height = 704
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -346,13 +346,13 @@ inherited frmMtoPre: TfrmMtoPre
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 966
+        Width = 960
         Height = 34
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 972
+        ExplicitWidth = 964
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -391,7 +391,7 @@ inherited frmMtoPre: TfrmMtoPre
           Top = 4
           ExplicitLeft = 8
           ExplicitTop = 4
-          ExplicitWidth = 109
+          ExplicitWidth = 125
           ExplicitHeight = 23
         end
         inherited cxdbnvgtr1: TcxDBNavigator
@@ -411,13 +411,13 @@ inherited frmMtoPre: TfrmMtoPre
       Margins.Bottom = 4
       Font.Height = -12
       ExplicitTop = 33
-      ExplicitWidth = 966
-      ExplicitHeight = 747
+      ExplicitWidth = 960
+      ExplicitHeight = 738
       object pnl1: TPanel
         Left = 0
         Top = 323
-        Width = 966
-        Height = 424
+        Width = 960
+        Height = 415
         Align = alClient
         TabOrder = 1
         ExplicitWidth = 962
@@ -425,7 +425,7 @@ inherited frmMtoPre: TfrmMtoPre
         object cxspl1: TcxSplitter
           Left = 1
           Top = 1
-          Width = 964
+          Width = 958
           Height = 8
           HotZoneClassName = 'TcxMediaPlayer9Style'
           AlignSplitter = salTop
@@ -438,8 +438,8 @@ inherited frmMtoPre: TfrmMtoPre
         object cxpgcntrlFacturacx: TcxPageControl
           Left = 1
           Top = 9
-          Width = 964
-          Height = 414
+          Width = 958
+          Height = 405
           Align = alClient
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
@@ -452,9 +452,9 @@ inherited frmMtoPre: TfrmMtoPre
           Properties.CustomButtons.Buttons = <>
           ExplicitWidth = 960
           ExplicitHeight = 413
-          ClientRectBottom = 410
+          ClientRectBottom = 401
           ClientRectLeft = 4
-          ClientRectRight = 960
+          ClientRectRight = 954
           ClientRectTop = 30
           object tsLineasFactura: TcxTabSheet
             Caption = 'Lineas de Presupuesto'
@@ -474,16 +474,11 @@ inherited frmMtoPre: TfrmMtoPre
               object tvLineasPre: TcxGridDBTableView
                 OnKeyDown = tvLineasPreKeyDown
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 OnEditing = tvLineasPreEditing
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = dmPre.dsLinFac
                 DataController.Options = [dcoCaseInsensitive, dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoGroupsAlwaysExpanded, dcoInsertOnNewItemRowFocusing]
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 FixedDataRows.SeparatorColor = clBlack
                 NewItemRow.Visible = True
                 OptionsBehavior.FocusFirstCellOnNewRecord = True
@@ -564,15 +559,10 @@ inherited frmMtoPre: TfrmMtoPre
                 end
               end
               object tv2: TcxGridDBBandedTableView
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DetailKeyFieldNames = 'AppointmentId'
                 DataController.KeyFieldNames = 'PerId'
                 DataController.MasterKeyFieldNames = 'AppointmentId'
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsView.GroupByBox = False
                 Bands = <
                   item
@@ -651,15 +641,19 @@ inherited frmMtoPre: TfrmMtoPre
           object ts5: TcxTabSheet
             Caption = 'Totales'
             ImageIndex = 2
+            ExplicitWidth = 956
+            ExplicitHeight = 380
             object cxlbl17: TcxLabel
               Left = 70
               Top = 50
               Caption = 'Total a pagar'
+              TabOrder = 1
             end
             object cxlbl18: TcxLabel
               Left = 30
               Top = 94
               Caption = 'Forma de Pago'
+              TabOrder = 4
             end
             object cxDBCurrencyEdit3: TcxDBCurrencyEdit
               Left = 198
@@ -712,6 +706,7 @@ inherited frmMtoPre: TfrmMtoPre
               Left = 13
               Top = 16
               Caption = 'Comentarios'
+              TabOrder = 0
             end
             object cxdbm1: TcxDBMemo
               Left = 65
@@ -759,14 +754,9 @@ inherited frmMtoPre: TfrmMtoPre
                 TabOrder = 0
                 object tvRecibos: TcxGridDBTableView
                   Navigator.Buttons.ConfirmDelete = True
-                  Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
-                  ScrollbarAnnotations.CustomAnnotations = <>
                   DataController.DataModeController.SmartRefresh = True
                   DataController.DataSource = dmPre.dsRecibos
-                  DataController.Summary.DefaultGroupSummaryItems = <>
-                  DataController.Summary.FooterSummaryItems = <>
-                  DataController.Summary.SummaryGroups = <>
                   FixedDataRows.SeparatorColor = clBlack
                   OptionsBehavior.GoToNextCellOnEnter = True
                   OptionsCustomize.ColumnGrouping = False
@@ -869,15 +859,10 @@ inherited frmMtoPre: TfrmMtoPre
                   end
                 end
                 object cxgrdbndtblvw2: TcxGridDBBandedTableView
-                  Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
-                  ScrollbarAnnotations.CustomAnnotations = <>
                   DataController.DetailKeyFieldNames = 'AppointmentId'
                   DataController.KeyFieldNames = 'PerId'
                   DataController.MasterKeyFieldNames = 'AppointmentId'
-                  DataController.Summary.DefaultGroupSummaryItems = <>
-                  DataController.Summary.FooterSummaryItems = <>
-                  DataController.Summary.SummaryGroups = <>
                   OptionsView.GroupByBox = False
                   Bands = <
                     item
@@ -95726,7 +95711,7 @@ inherited frmMtoPre: TfrmMtoPre
       object pnl2: TPanel
         Left = 0
         Top = 0
-        Width = 960
+        Width = 956
         Height = 323
         Align = alTop
         TabOrder = 0
@@ -95734,7 +95719,7 @@ inherited frmMtoPre: TfrmMtoPre
         object pnl3: TPanel
           Left = 1
           Top = 1
-          Width = 964
+          Width = 958
           Height = 321
           Align = alClient
           TabOrder = 0
@@ -95742,7 +95727,7 @@ inherited frmMtoPre: TfrmMtoPre
           object cxpgcntrl1: TcxPageControl
             Left = 1
             Top = 1
-            Width = 962
+            Width = 956
             Height = 319
             Align = alClient
             Font.Charset = ANSI_CHARSET
@@ -95757,20 +95742,23 @@ inherited frmMtoPre: TfrmMtoPre
             ExplicitWidth = 958
             ClientRectBottom = 315
             ClientRectLeft = 4
-            ClientRectRight = 958
+            ClientRectRight = 952
             ClientRectTop = 30
             object cxtbshtCabecera: TcxTabSheet
               Caption = 'Cabecera Presupuesto'
               ImageIndex = 0
+              ExplicitWidth = 954
               object cxlbl1: TcxLabel
                 Left = 26
                 Top = 13
                 Caption = 'Nro Presupuesto'
+                TabOrder = 2
               end
               object cxlbl3: TcxLabel
                 Left = 26
                 Top = 148
                 Caption = 'Fecha'
+                TabOrder = 3
               end
               object cxdbdtdtFECHA_FACTURA: TcxDBDateEdit
                 Left = 26
@@ -95786,6 +95774,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 26
                 Top = 81
                 Caption = 'SeriePresupuesto'
+                TabOrder = 5
               end
               object cbbSerieFactura: TcxDBLookupComboBox
                 Left = 26
@@ -95844,11 +95833,13 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 248
                 Top = 14
                 Caption = 'C'#243'digo Paciente'
+                TabOrder = 6
               end
               object cxlbl2: TcxLabel
                 Left = 248
                 Top = 77
                 Caption = 'Raz'#243'n Social'
+                TabOrder = 7
               end
               object cxdblbl1: TcxDBLabel
                 Left = 248
@@ -95859,6 +95850,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Margins.Bottom = 2
                 DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
                 DataBinding.DataSource = dsTablaG
+                TabOrder = 9
                 Height = 24
                 Width = 298
               end
@@ -95871,6 +95863,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Margins.Bottom = 2
                 DataBinding.DataField = 'MOVIL_CLIENTE_FACTURA'
                 DataBinding.DataSource = dsTablaG
+                TabOrder = 10
                 Height = 26
                 Width = 204
               end
@@ -95878,6 +95871,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 248
                 Top = 149
                 Caption = 'Tel'#233'fono M'#243'vil'
+                TabOrder = 11
               end
               object img1: TcxImage
                 Left = 610
@@ -95974,6 +95968,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 289
                 Top = 13
                 Caption = 'Nombre y apellidos'
+                TabOrder = 3
                 Visible = False
               end
               object cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA1: TcxDBTextEdit
@@ -96016,6 +96011,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Style.Font.Name = 'Lucida Sans'
                 Style.Font.Style = []
                 Style.IsFontAssigned = True
+                TabOrder = 4
                 Height = 28
                 Width = 99
               end
@@ -96070,11 +96066,13 @@ inherited frmMtoPre: TfrmMtoPre
                   Left = 11
                   Top = 142
                   Caption = 'Provincia'
+                  TabOrder = 5
                 end
                 object lblcxlbl13: TcxLabel
                   Left = 53
                   Top = 180
                   Caption = 'Pa'#237's'
+                  TabOrder = 6
                 end
                 object txtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit
                   Left = 120
@@ -96088,12 +96086,14 @@ inherited frmMtoPre: TfrmMtoPre
                   Left = 3
                   Top = 27
                   Caption = 'Raz'#243'n Social'
+                  TabOrder = 8
                 end
                 object lblDBNOMBRE_SPA_PAIS: TcxDBLabel
                   Left = 158
                   Top = 175
                   DataBinding.DataField = 'NOMBRE_SPA_PAIS'
                   DataBinding.DataSource = dmPre.dsPaises
+                  TabOrder = 9
                   Height = 28
                   Width = 283
                 end
@@ -96120,6 +96120,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 457
                 Top = 53
                 Caption = 'Nombre'
+                TabOrder = 6
               end
               object txtNOMBRE: TcxDBTextEdit
                 Left = 460
@@ -96134,6 +96135,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 457
                 Top = 103
                 Caption = 'Apellidos'
+                TabOrder = 8
               end
               object txtAPELLIDOS: TcxDBTextEdit
                 Left = 460
@@ -96148,6 +96150,7 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 457
                 Top = 154
                 Caption = 'NIF'
+                TabOrder = 10
               end
               object txtNIF_CLIENTE_FACTURA: TcxDBTextEdit
                 Left = 460
@@ -96161,11 +96164,13 @@ inherited frmMtoPre: TfrmMtoPre
                 Left = 458
                 Top = 213
                 Caption = 'M'#243'vil'
+                TabOrder = 12
               end
               object lblcxlbl11: TcxLabel
                 Left = 461
                 Top = 244
                 Caption = 'Email'
+                TabOrder = 13
               end
               object txtEMAIL_CLIENTE_FACTURA: TcxDBTextEdit
                 Left = 517

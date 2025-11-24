@@ -108,137 +108,137 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="inMtoGen.pas">
+        <DCCReference Include="src\UI\Core\inMtoGen.pas">
             <Form>frmMtoGen</Form>
         </DCCReference>
-        <DCCReference Include="inLibtb.pas"/>
-        <DCCReference Include="inMtoPrincipal.pas">
+        <DCCReference Include="src\Lib\Core\inLibtb.pas"/>
+        <DCCReference Include="src\UI\Core\inMtoPrincipal.pas">
             <Form>frmOpenApp</Form>
         </DCCReference>
-        <DCCReference Include="UniDataConn.pas">
+        <DCCReference Include="src\Core\UniDataConn.pas">
             <Form>dmConn</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="inLibDir.pas"/>
-        <DCCReference Include="inLibWin.pas"/>
-        <DCCReference Include="inLibDate.pas"/>
-        <DCCReference Include="inLibDevExp.pas"/>
-        <DCCReference Include="inLibData.pas"/>
-        <DCCReference Include="inMtoClientes.pas">
+        <DCCReference Include="src\Lib\Core\inLibDir.pas"/>
+        <DCCReference Include="src\Lib\Core\inLibWin.pas"/>
+        <DCCReference Include="src\Lib\Core\inLibDevExp.pas"/>
+        <DCCReference Include="src\Lib\Core\inLibData.pas"/>
+        <DCCReference Include="src\UI\Maintenance\inMtoClientes.pas">
             <Form>frmMtoClientes</Form>
         </DCCReference>
-        <DCCReference Include="inMtoGenSearch.pas">
+        <DCCReference Include="src\UI\Core\inMtoGenSearch.pas">
             <Form>frmMtoSearch</Form>
         </DCCReference>
-        <DCCReference Include="inMtoFac.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoFac.pas">
             <Form>frmMtoFac</Form>
         </DCCReference>
-        <DCCReference Include="UniDataFac.pas">
+        <DCCReference Include="src\Data\UniDataFac.pas">
             <Form>dmFac</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="inMtoContadores.pas">
+        <DCCReference Include="src\UI\Support\inMtoContadores.pas">
             <Form>frmMtoContadores</Form>
         </DCCReference>
-        <DCCReference Include="inMtoArticulos.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoArticulos.pas">
             <Form>frmMtoArticulos</Form>
         </DCCReference>
-        <DCCReference Include="UniDataArticulos.pas">
+        <DCCReference Include="src\Data\UniDataArticulos.pas">
             <Form>DMArticulos</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="UniDataClientes.pas">
+        <DCCReference Include="src\Data\UniDataClientes.pas">
             <Form>DMClientes</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="inMtoModalHistoriaCli.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalHistoriaCli.pas">
             <Form>frmClientesHistoria</Form>
         </DCCReference>
-        <DCCReference Include="inMtoHistoriaClientes.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoHistoriaClientes.pas">
             <Form>frmMtoHistoriaClientes</Form>
         </DCCReference>
-        <DCCReference Include="UniDataHistoriaClientes.pas">
+        <DCCReference Include="src\Data\UniDataHistoriaClientes.pas">
             <Form>DMHistoriaClientes</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="inMtoFacturasHistoria.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoFacturasHistoria.pas">
             <Form>frmFacturasHistoria</Form>
         </DCCReference>
-        <DCCReference Include="inMtoOdontologos.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoOdontologos.pas">
             <Form>frmMtoOdontologos</Form>
         </DCCReference>
-        <DCCReference Include="inMtoFormasdePago.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoFormasdePago.pas">
             <Form>frmMtoFormasdePago</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalFacImp.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalFacImp.pas">
             <Form>frmPrintFac</Form>
         </DCCReference>
-        <DCCReference Include="inMtoPre.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoPre.pas">
             <Form>frmMtoPre</Form>
         </DCCReference>
-        <DCCReference Include="UniDataPre.pas">
+        <DCCReference Include="src\Data\UniDataPre.pas">
             <Form>dmPre</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="inMtoModalFacRec.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalFacRec.pas">
             <Form>frmGenFacRec</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalPreImp.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalPreImp.pas">
             <Form>frmPrintPre</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalPreRecImp.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalPreRecImp.pas">
             <Form>frmPrintPreRec</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalFacRecImp.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalFacRecImp.pas">
             <Form>frmPrintFacRec</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalPresuFac.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalPresuFac.pas">
             <Form>frmGenPreFac</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalCliEti.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalCliEti.pas">
             <Form>frmPrintCliEti</Form>
         </DCCReference>
-        <DCCReference Include="inMtoPreguntas.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoPreguntas.pas">
             <Form>frmMtoPreguntas</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalHisFac.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalHisFac.pas">
             <Form>frmModalHisFac</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalCliCues.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalCliCues.pas">
             <Form>frmPrintCliCues</Form>
         </DCCReference>
-        <DCCReference Include="inLibLog.pas"/>
-        <DCCReference Include="inLibDocumentoValidator.pas"/>
-        <DCCReference Include="inMtoParametros.pas">
+        <DCCReference Include="src\Lib\Core\inLibLog.pas"/>
+        <DCCReference Include="src\Lib\Validators\inLibDocumentoValidator.pas"/>
+        <DCCReference Include="src\UI\Support\inMtoParametros.pas">
             <Form>frmMtoParametros</Form>
         </DCCReference>
-        <DCCReference Include="inMtoPaises.pas">
+        <DCCReference Include="src\UI\Maintenance\inMtoPaises.pas">
             <Form>frmMtoPaises</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalNotaLegal.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalNotaLegal.pas">
             <Form>frmNotaLegal</Form>
         </DCCReference>
-        <DCCReference Include="inLibLogVeriFactu.pas"/>
-        <DCCReference Include="inMtoRegVer.pas"/>
-        <DCCReference Include="inMtoGenerarQR.pas">
+        <DCCReference Include="src\Lib\VeriFactu\inLibLogVeriFactu.pas"/>
+        <DCCReference Include="src\UI\Support\inMtoRegVer.pas"/>
+        <DCCReference Include="src\UI\Support\inMtoGenerarQR.pas">
             <Form>frmMtoGenerarQR</Form>
         </DCCReference>
-        <DCCReference Include="inLibVarGlob.pas"/>
-        <DCCReference Include="inLibJSON.pas"/>
-        <DCCReference Include="inLibVerifactuClient.pas"/>
-        <DCCReference Include="inLibJSONState.pas"/>
-        <DCCReference Include="inLibVerifactuBuilder.pas"/>
-        <DCCReference Include="inMtoModalSubsanacion.pas">
+        <DCCReference Include="src\Lib\Core\inLibVarGlob.pas"/>
+        <DCCReference Include="src\Lib\Core\inLibJSON.pas"/>
+        <DCCReference Include="src\Lib\VeriFactu\inLibVerifactuClient.pas"/>
+        <DCCReference Include="src\Lib\Core\inLibJSONState.pas"/>
+        <DCCReference Include="src\Lib\VeriFactu\inLibVerifactuBuilder.pas"/>
+        <DCCReference Include="src\UI\Modals\inMtoModalSubsanacion.pas">
             <Form>frmModalSubsanacion</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalSubsanacionLineas.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalSubsanacionLineas.pas">
             <Form>frmModalSubsanacionLineas</Form>
         </DCCReference>
-        <DCCReference Include="inMtoModalVisorFoto.pas">
+        <DCCReference Include="src\UI\Modals\inMtoModalVisorFoto.pas">
             <Form>frmMtoVisorFoto</Form>
         </DCCReference>
         <DCCReference Include="..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas"/>
-        <DCCReference Include="inLibImageUtils.pas"/>
+        <DCCReference Include="src\Lib\Core\inLibImageUtils.pas"/>
+        <DCCReference Include="src\Helpers\DelphiZXIngQRCode.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -268,11 +268,17 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
-            <Deployment Version="5">
+            <Deployment Version="4">
                 <DeployFile LocalName="..\Facturacion\Win32\Debug\Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Facturacion.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Facturacion.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployFile LocalName="Win32\Debug\Facturacion.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Facturacion.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Release\Facturacion.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Facturacion.exe</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -291,6 +297,16 @@
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="AndroidClasses">
+                    <Platform Name="Android">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
+                    </Platform>
+                    <Platform Name="Android64">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>64</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="AndroidFileProvider">
                     <Platform Name="Android">
                         <RemoteDir>res\xml</RemoteDir>
@@ -298,6 +314,12 @@
                     </Platform>
                     <Platform Name="Android64">
                         <RemoteDir>res\xml</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidGDBServer">
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
@@ -931,9 +953,6 @@
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="Win64x">
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
