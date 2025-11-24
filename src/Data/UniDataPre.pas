@@ -3,12 +3,13 @@ unit UniDataPre;
 interface
 
 uses
-  SysUtils, Classes,  DB,
+  SysUtils, Classes, DB,
    inMtoPrincipal, DBClient, Provider, frxClass, frxDBSet,
-   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni;
+   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni,
+   UniDataDocRecibos;
 
 type
-  TdmPre = class(TDataModule)
+  TdmPre = class(TdmDocConRecibos)
     dsLinFac: TDataSource;
     dsFacPrint: TDataSource;
     dsLinFacPrint: TDataSource;
@@ -58,18 +59,76 @@ type
     procedure zqryLinFacAfterDelete(DataSet: TDataSet);
     procedure unqryFacAfterPost(DataSet: TDataSet);
 
-public
-    bEsNuevoCliente:Boolean;
-    procedure NuevaFactura;
-    procedure NuevoCliente;
-    procedure CrearCliente;
-    procedure CopiarPaisaCliente;
-//    procedure ActualizarHistoria;
-    procedure CalcularLinea;
-    procedure CopiarClienteaFactura;
-    procedure CopiarArticuloaLineaFactura;
-    procedure CopiarOdontologoaLineaFactura;
-    function FormaPagoDefault:String;
+  protected
+    // Implementación de métodos abstractos de TdmDocBase
+    function GetDatasetDocumento: TDataSet; override;
+    function GetDatasetLineas: TDataSet; override;
+    function GetDatasetClientes: TUniQuery; override;
+    function GetDatasetArticulos: TUniQuery; override;
+    function GetDatasetOdontologos: TUniQuery; override;
+    function GetDatasetPaises: TUniQuery; override;
+    function GetStoredProcCrearCliente: TUniStoredProc; override;
+    function GetStoredProcGetContador: TUniStoredProc; override;
+    function GetStoredProcGetContadorDoc: TUniStoredProc; override;
+    function GetStoredProcCalcularDoc: TUniStoredProc; override;
+
+    // Nombres de campos - Presupuestos
+    function GetNombreCampoNroDoc: string; override;
+    function GetNombreCampoSerieDoc: string; override;
+    function GetNombreCampoCodigoCliente: string; override;
+    function GetNombreCampoRazonSocialCliente: string; override;
+    function GetNombreCampoNombre: string; override;
+    function GetNombreCampoApellidos: string; override;
+    function GetNombreCampoNIFCliente: string; override;
+    function GetNombreCampoMovilCliente: string; override;
+    function GetNombreCampoEmailCliente: string; override;
+    function GetNombreCampoDireccion1Cliente: string; override;
+    function GetNombreCampoDireccion2Cliente: string; override;
+    function GetNombreCampoPoblacionCliente: string; override;
+    function GetNombreCampoProvinciaCliente: string; override;
+    function GetNombreCampoCPostalCliente: string; override;
+    function GetNombreCampoPaisCliente: string; override;
+    function GetNombreCampoTipoIdIntCliente: string; override;
+    function GetNombreCampoFechaDoc: string; override;
+    function GetNombreCampoFormaPago: string; override;
+
+    // Nombres de campos de líneas
+    function GetNombreCampoSerieLinea: string; override;
+    function GetNombreCampoNroLinea: string; override;
+    function GetNombreCampoLineaLinea: string; override;
+    function GetNombreCampoCodigoArticuloLinea: string; override;
+    function GetNombreCampoDescripcionArticuloLinea: string; override;
+    function GetNombreCampoPrecioVentaArticuloLinea: string; override;
+    function GetNombreCampoCantidadLinea: string; override;
+    function GetNombreCampoTotalLinea: string; override;
+    function GetNombreCampoOdontologoLinea: string; override;
+
+    function GetNombreTablaLineas: string; override;
+    function GetTipoDocumento: string; override;
+    function GetNombreFuncionNextLinea: string; override;
+
+    // Implementación de métodos abstractos de TdmDocConRecibos
+    function GetDatasetRecibos: TUniQuery; override;
+    function GetStoredProcGetRecibos: TUniStoredProc; override;
+
+  public
+    bEsNuevoCliente: Boolean;
+    // Nota: Los siguientes métodos ahora se heredan de TdmDocBase:
+    // - CopiarClienteaDocumento (antes: CopiarClienteaFactura)
+    // - CrearCliente
+    // - NuevoCliente
+    // - CopiarPaisaCliente
+    // - CalcularLinea
+    // - CopiarArticuloaLinea (antes: CopiarArticuloaLineaFactura)
+    // - CopiarOdontologoaLinea (antes: CopiarOdontologoaLineaFactura)
+    // - NuevoNumeroDocumento (antes: NuevaFactura)
+    // - FormaPagoDefault
+    // - BorrarLineasDocumento
+    // - RecalcularTotalesDocumento
+
+    // Y de TdmDocConRecibos:
+    // - GenerarRecibos
+    // - CambiarEstadoRecibo
   end;
 
 var
@@ -82,123 +141,225 @@ uses
 
 {$R *.dfm}
 
-{ TdmPedFab }
+{ TdmPre }
 
-procedure TdmPre.CalcularLinea;
-var
-  sNumFac, sSerie : String;
+{ Implementación de métodos abstractos }
+
+function TdmPre.GetDatasetDocumento: TDataSet;
 begin
-  if     (( dsLinFac.Dataset.State = dsInsert ) or
-          ( dsLinFac.Dataset.State = dsEdit )
-         ) then
-  begin
-    sNumFac := unqryFac.FindField('NRO_PRESUPUESTO').AsString;
-    sSerie := unqryFac.FindField('SERIE_PRESUPUESTO').AsString;
-
-    if ( dsLinFac.Dataset.FindField('LINEA_LINEA').AsString = '' ) then
-    begin
-      unqryGetLinea.SQL.Text := 'SELECT FNC_GET_NEXT_LINEA_PRESUPUESTO(' + QuotedStr(sNumFac) + ',' +
-                                                                     QuotedStr(sSerie)  +')';
-      unqryGetLinea.Open;
-      dsLinFac.Dataset.FindField('LINEA_LINEA').AsString := unqryGetLinea.Fields[0].AsString;
-      unqryGetLinea.Close;
-    end;
-    if dsLinFac.Dataset.FindField('CANTIDAD_LINEA').AsCurrency = 0 then
-      dsLinFac.Dataset.FindField('CANTIDAD_LINEA').AsCurrency := 1;
-    dsLinFac.Dataset.FindField('SUM_TOTAL_LINEA').AsCurrency :=
-                                            dsLinFac.Dataset.FindField('CANTIDAD_LINEA').AsCurrency *
-                                            dsLinFac.Dataset.FindField('PRECIOVENTA_ARTICULO_LINEA').AsCurrency;
-    //ActualizarHistoria;
-  end;
+  Result := unqryFac;
 end;
 
-procedure TdmPre.CopiarArticuloaLineaFactura;
+function TdmPre.GetDatasetLineas: TDataSet;
 begin
-   with dsLinFac.Dataset do
-   begin
-      Edit;
-      FindField('CODIGO_ARTICULO_LINEA').AsString :=
-                          unqryArtDataLinFac.FindField('CODIGO_ARTICULO').AsString;
-      FindField('DESCRIPCION_ARTICULO_LINEA').AsString :=
-                          unqryArtDataLinFac.FindField('DESCRIPCION_ARTICULO').AsString;
-      FindField('PRECIOVENTA_ARTICULO_LINEA').AsString :=
-                          unqryArtDataLinFac.FindField('PRECIOVENTA_ARTICULO').AsString;
-      Post;
-   end;
+  Result := dsLinFac.DataSet;
 end;
 
-procedure TdmPre.CopiarClienteaFactura;
+function TdmPre.GetDatasetClientes: TUniQuery;
 begin
-  if ((unqryFac.State <> dsEdit) or (dmmPre.unqryFac.State <> dsInsert)) then
-          dmmPre.unqryFac.Edit;
-  unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('CODIGO_CLIENTE').AsString;
-  unqryFac.FindField('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('RAZONSOCIAL_CLIENTE').AsString;
-  unqryFac.FindField('NOMBRE').AsString :=
-                          unqryCliDataFac.FindField('NOMBRE').AsString;
-  unqryFac.FindField('APELLIDOS').AsString :=
-                          unqryCliDataFac.FindField('APELLIDOS').AsString;
-  unqryFac.FindField('NIF_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('NIF_CLIENTE').AsString;
-  unqryFac.FindField('MOVIL_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('MOVIL_CLIENTE').AsString;
-  unqryFac.FindField('EMAIL_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('EMAIL_CLIENTE').AsString;
-  unqryFac.FindField('DIRECCION1_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('DIRECCION1_CLIENTE').AsString;
-  unqryFac.FindField('DIRECCION2_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('DIRECCION2_CLIENTE').AsString;
-  unqryFac.FindField('POBLACION_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('POBLACION_CLIENTE').AsString;
-  unqryFac.FindField('PROVINCIA_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('PROVINCIA_CLIENTE').AsString;
-  unqryFac.FindField('CPOSTAL_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('CPOSTAL_CLIENTE').AsString;
-  unqryFac.FindField('PAIS_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryCliDataFac.FindField('PAIS_CLIENTE').AsString;
-    unqryFac.FindField('TIPOID_INT_CLIENTE_PRESUPUESTO').AsString :=
-                       unqryCliDataFac.FindField('TIPOID_INT_CLIENTE').AsString;
-
+  Result := unqryCliDataFac;
 end;
 
-procedure TdmPre.CopiarOdontologoaLineaFactura;
+function TdmPre.GetDatasetArticulos: TUniQuery;
 begin
-  if ((dsLinFac.Dataset.State <> dsEdit) or (dsLinFac.Dataset.State <> dsInsert)) then
-      dsLinFac.Dataset.Edit;
-    dsLinFac.Dataset.FindField('ODONTOLOGO').AsString :=
-                                    unqryDocDataFac.FindField('ODONTOLOGO').AsString;
+  Result := unqryArtDataLinFac;
 end;
 
-procedure TdmPre.CopiarPaisaCliente;
+function TdmPre.GetDatasetOdontologos: TUniQuery;
 begin
-  if ((unqryFac.State <> dsEdit) or (unqryFac.State <> dsInsert)) then
-          unqryFac.Edit;
-  unqryFac.FindField('PAIS_CLIENTE_PRESUPUESTO').AsString :=
-                          unqryPaises.FindField('COD_PAIS_ALPHA2').AsString;
+  Result := unqryDocDataFac;
 end;
 
-procedure TdmPre.CrearCliente;
+function TdmPre.GetDatasetPaises: TUniQuery;
 begin
-    with unstrdprcCrearCliente do
-    begin
-      ParamByName('pNOMBRE').AsString :=       unqryFac.FieldByName('NOMBRE').AsString;
-      ParamByName('pAPELLIDOS').AsString :=  unqryFac.FieldByName('APELLIDOS').AsString;
-      ParamByName('pCODIGO_CLIENTE').AsString :=       unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pRAZONSOCIAL_CLIENTE').AsString :=  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pNIF_CLIENTE').AsString :=          unqryFac.FieldByName('NIF_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pMOVIL_CLIENTE').AsString :=        unqryFac.FieldByName('MOVIL_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pEMAIL_CLIENTE').AsString :=        unqryFac.FieldByName('EMAIL_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pDIRECCION1_CLIENTE').AsString :=   unqryFac.FieldByName('DIRECCION1_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pDIRECCION2_CLIENTE').AsString :=   unqryFac.FieldByName('DIRECCION2_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pPOBLACION_CLIENTE').AsString :=    unqryFac.FieldByName('POBLACION_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pPROVINCIA_CLIENTE').AsString :=    unqryFac.FieldByName('PROVINCIA_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pCPOSTAL_CLIENTE').AsString :=      unqryFac.FieldByName('CPOSTAL_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pPAIS_CLIENTE').AsString :=         unqryFac.FieldByName('PAIS_CLIENTE_PRESUPUESTO').AsString;
-      ParamByName('pTIPOID_INT_CLIENTE').AsString :=   unqryFac.FieldByName('TIPOID_INT_CLIENTE_PRESUPUESTO').AsString;
-    end;
-    unstrdprcCrearCliente.ExecProc;
+  Result := unqryPaises;
 end;
+
+function TdmPre.GetStoredProcCrearCliente: TUniStoredProc;
+begin
+  Result := unstrdprcCrearCliente;
+end;
+
+function TdmPre.GetStoredProcGetContador: TUniStoredProc;
+begin
+  Result := unstrdprcGetContador;
+end;
+
+function TdmPre.GetStoredProcGetContadorDoc: TUniStoredProc;
+begin
+  Result := unstrdprcGetContadorFactura;
+end;
+
+function TdmPre.GetStoredProcCalcularDoc: TUniStoredProc;
+begin
+  Result := unstrdprcCalcularFactura;
+end;
+
+function TdmPre.GetDatasetRecibos: TUniQuery;
+begin
+  Result := unqryRecibos;
+end;
+
+function TdmPre.GetStoredProcGetRecibos: TUniStoredProc;
+begin
+  Result := unstrdprcGetRecibos;
+end;
+
+{ Nombres de campos de documento }
+
+function TdmPre.GetNombreCampoNroDoc: string;
+begin
+  Result := 'NRO_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoSerieDoc: string;
+begin
+  Result := 'SERIE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoCodigoCliente: string;
+begin
+  Result := 'CODIGO_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoRazonSocialCliente: string;
+begin
+  Result := 'RAZONSOCIAL_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoNombre: string;
+begin
+  Result := 'NOMBRE';
+end;
+
+function TdmPre.GetNombreCampoApellidos: string;
+begin
+  Result := 'APELLIDOS';
+end;
+
+function TdmPre.GetNombreCampoNIFCliente: string;
+begin
+  Result := 'NIF_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoMovilCliente: string;
+begin
+  Result := 'MOVIL_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoEmailCliente: string;
+begin
+  Result := 'EMAIL_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoDireccion1Cliente: string;
+begin
+  Result := 'DIRECCION1_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoDireccion2Cliente: string;
+begin
+  Result := 'DIRECCION2_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoPoblacionCliente: string;
+begin
+  Result := 'POBLACION_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoProvinciaCliente: string;
+begin
+  Result := 'PROVINCIA_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoCPostalCliente: string;
+begin
+  Result := 'CPOSTAL_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoPaisCliente: string;
+begin
+  Result := 'PAIS_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoTipoIdIntCliente: string;
+begin
+  Result := 'TIPOID_INT_CLIENTE_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoFechaDoc: string;
+begin
+  Result := 'FECHA_PRESUPUESTO';
+end;
+
+function TdmPre.GetNombreCampoFormaPago: string;
+begin
+  Result := 'FORMA_PAGO_PRESUPUESTO';
+end;
+
+{ Nombres de campos de líneas }
+
+function TdmPre.GetNombreCampoSerieLinea: string;
+begin
+  Result := 'SERIE_PRESUPUESTO_LINEA';
+end;
+
+function TdmPre.GetNombreCampoNroLinea: string;
+begin
+  Result := 'NRO_PRESUPUESTO_LINEA';
+end;
+
+function TdmPre.GetNombreCampoLineaLinea: string;
+begin
+  Result := 'LINEA_LINEA';
+end;
+
+function TdmPre.GetNombreCampoCodigoArticuloLinea: string;
+begin
+  Result := 'CODIGO_ARTICULO_LINEA';
+end;
+
+function TdmPre.GetNombreCampoDescripcionArticuloLinea: string;
+begin
+  Result := 'DESCRIPCION_ARTICULO_LINEA';
+end;
+
+function TdmPre.GetNombreCampoPrecioVentaArticuloLinea: string;
+begin
+  Result := 'PRECIOVENTA_ARTICULO_LINEA';
+end;
+
+function TdmPre.GetNombreCampoCantidadLinea: string;
+begin
+  Result := 'CANTIDAD_LINEA';
+end;
+
+function TdmPre.GetNombreCampoTotalLinea: string;
+begin
+  Result := 'SUM_TOTAL_LINEA';
+end;
+
+function TdmPre.GetNombreCampoOdontologoLinea: string;
+begin
+  Result := 'ODONTOLOGO';
+end;
+
+function TdmPre.GetNombreTablaLineas: string;
+begin
+  Result := 'suboc_presupuestos_lineas';
+end;
+
+function TdmPre.GetTipoDocumento: string;
+begin
+  Result := 'PR';
+end;
+
+function TdmPre.GetNombreFuncionNextLinea: string;
+begin
+  Result := 'FNC_GET_NEXT_LINEA_PRESUPUESTO';
+end;
+
+{ Event handlers }
 
 procedure TdmPre.DataModuleCreate(Sender: TObject);
 begin
@@ -217,8 +378,6 @@ begin
     unqryDibujos.Connection := FDmConn.conUni;
     unqrySeriesFac.Connection := FDmConn.conUni;
     unqryPaisesCli.Connection := FdmConn.conUni;
-    //unstrdprcCrearFacturaAbono.Connection := FDmConn.conUni;
-    //unstrdprcDuplicarFactura.Connection := FDmConn.conUni;
     unstrdprcCrearCliente.Connection := FDmConn.conUni;
     unstrdprcGetContadorFactura.Connection := FDmConn.conUni;
     unstrdprcGetContador.Connection := FDmConn.conUni;
@@ -253,64 +412,6 @@ begin
   unqryPaisesCli.Close;
 end;
 
-function TdmPre.FormaPagoDefault: String;
-var
-  qryFormaPagoFactura : TUniQuery;
-  sFormaPago: string;
-begin
-  qryFormaPagoFactura := TUniQuery.Create(nil);
-  with qryFormaPagoFactura do
-  begin
-    Connection := frmOpenApp.FdmConn.conUni;
-    SQL.Text := 'SELECT DESCRIPCION_FORMAPAGO FROM suboc_formapago WHERE DEFAULT_FACTURA = '+ QuotedStr('S') ;
-    Open;
-    sFormaPago := Fields[0].AsString;
-    Close;
-    FreeAndNil(qryFormaPagoFactura);
-  end;
-  Result := sFormaPago;
-  //
-end;
-
-procedure TdmPre.NuevaFactura;
-begin
-  if unqryFac.FindField('NRO_FACTURA').AsString = '0' then
-  begin
-    with unstrdprcGetContadorFactura do
-    begin
-      //Connection.StartTransaction;
-      Params.Clear;
-      Params.CreateParam(ftString, 'pserie', ptInput);
-      Params.CreateParam(ftString, 'ptipodoc', ptInput);
-      Params.CreateParam(ftString, 'pcont', ptOutput);
-      ParamByName('pserie').AsString :=  unqryFac.FindField('SERIE_FACTURA').AsString;
-      ParamByName('ptipodoc').AsString :=  'PR';
-      ExecProc;
-      if not ((unqryfac.State = dsInsert) or (unqryFac.State = dsEdit)) then
-        unqryFac.Edit;
-      unqryFac.FindField('NRO_FACTURA').AsString := ParamByName('pcont').AsString;
-      //Connection.Commit;
-    end;
-  end;
-end;
-
-procedure TdmPre.NuevoCliente;
-begin
-  if unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString = '0' then
-  begin
-    bEsNuevoCliente := True;
-    with unstrdprcGetContador do
-    begin
-      Params.Clear;
-      Params.CreateParam(ftString, 'ptipodoc', ptInput);
-      Params.CreateParam(ftInteger, 'pcont', ptOutput);
-      ParamByName('ptipodoc').AsString :=  'CL';
-      ExecProc;
-      unqryFac.FindField('CODIGO_CLIENTE_PRESUPUESTO').AsString := ParamByName('pcont').AsString;
-    end;
-  end;
-end;
-
 procedure TdmPre.unqryFacAfterPost(DataSet: TDataSet);
 begin
   bEsNuevoCliente := False;
@@ -318,8 +419,8 @@ end;
 
 procedure TdmPre.zqryLinFacBeforeInsert(DataSet: TDataSet);
 begin
-    if ((unqryFac.State = dsInsert) or (unqryFac.State = dsEdit)) then
-      unqryfac.Post;
+  if ((unqryFac.State = dsInsert) or (unqryFac.State = dsEdit)) then
+    unqryfac.Post;
 end;
 
 procedure TdmPre.zqryLinFacBeforePost(DataSet: TDataSet);
@@ -329,42 +430,8 @@ end;
 
 procedure TdmPre.zqryLinFacAfterPost(DataSet: TDataSet);
 begin
-  unstrdprcCalcularFactura.ParamByName('pidseriefactura').AsString :=
-                                 unqryFac.FieldByName('SERIE_FACTURA').AsString;
-  unstrdprcCalcularFactura.ParamByName('pidnumfactura').AsString :=
-                                 unqryFac.FieldByName('NRO_FACTURA').AsString;
-  unstrdprcCalcularFactura.ExecProc;
-  unqryFac.Refresh;
-  //zspCrearArticulo.ExecProc;
+  RecalcularTotalesDocumento;
 end;
-
-//procedure TdmPre.ActualizarHistoria;
-//begin
-//  unqryHistoria.Refresh;
-//  if unqryHistoria.Locate('NRO_FACTURA;SERIE_FACTURA;LINEA_LINEA',
-//                         VarArrayOf([dsLinFac.Dataset.FieldByName('NRO_PRESUPUESTO_LINEA').AsString,
-//                                     dsLinFac.Dataset.FieldByName('SERIE_PRESUPUESTO_LINEA').AsString,
-//                                     dsLinFac.Dataset.FieldByName('LINEA_LINEA').AsString]), []) then
-//  begin
-//    unqryHistoria.Edit;
-//  end
-//  else
-//  begin
-//    unqryHistoria.Insert;
-//    unqryHistoria.FieldByName('FECHA').AsDatetime :=  unqryFac.FieldByName('FECHA_PRESUPUESTO').AsDateTime;
-//  end;
-////  unqryHistoria.FieldByName('NRO_FACTURA').AsString :=     zqryFac.FieldByName('NRO_FACTURA').AsString;
-////  unqryHistoria.FieldByName('SERIE_FACTURA').AsString :=   zqryFac.FieldByName('SERIE_FACTURA').AsString;
-//  unqryHistoria.FieldByName('LINEA_LINEA').AsString :=     dsLinFac.Dataset.FieldByName('LINEA_LINEA').AsString;
-//  unqryHistoria.FieldByName('CODIGO_ARTICULO').AsString := dsLinFac.Dataset.FieldByName('CODIGO_ARTICULO_LINEA').AsString;
-//  unqryHistoria.FieldByName('DESCRIPCION_ARTICULO').AsString := dsLinFac.Dataset.FieldByName('DESCRIPCION_ARTICULO_LINEA').AsString;
-//  unqryHistoria.FieldByName('ZONA').AsString :=     dsLinFac.Dataset.FieldByName('ZONA').AsString;
-//  unqryHistoria.FieldByName('ODONTOLOGO').AsString := dsLinFac.Dataset.FieldByName('ODONTOLOGO').AsString;
-//  unqryHistoria.FieldByName('PRECIOVENTA_ARTICULO').AsCurrency :=  dsLinFac.Dataset.FieldByName('SUM_TOTAL_LINEA').AsCurrency;
-//  unqryHistoria.FieldByName('CODIGO_CLIENTE').AsString  :=  unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString;
-//  unqryHistoria.Post;
-//
-//end;
 
 procedure TdmPre.zqryFacAfterDelete(DataSet: TDataSet);
 begin
@@ -374,61 +441,42 @@ end;
 procedure TdmPre.zqryFacAfterInsert(DataSet: TDataSet);
 begin
   unqryFac.FieldByName('NRO_FACTURA').ASSTRING := '0';
-  unqryFac.FieldByName('SERIE_FACTURA').AsString := unqrySeries.FieldByName('SERIE_CONTADOR').AsString;
+  unqryFac.FieldByName('SERIE_FACTURA').AsString :=
+    unqrySeries.FieldByName('SERIE_CONTADOR').AsString;
   unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString := '0';
-  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString:= 'PACIENTE NUEVO';
+  unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString :=
+    'PACIENTE NUEVO';
   unqryFac.FieldByName('FECHA_PRESUPUESTO').AsDateTime := Trunc(Now);
   unqryFac.FieldByName('FORMA_PAGO_PRESUPUESTO').AsString := FormaPagoDefault;
 end;
 
 procedure TdmPre.zqryFacBeforeDelete(DataSet: TDataSet);
-var
-  qryBorrarLineas : TUniQuery;
 begin
-  qryBorrarLineas := TUniQuery.Create(nil);
-  with qryBorrarLineas do
-  begin
-    Connection := frmOpenApp.FdmConn.conUni;
-    SQL.Text := 'DELETE FROM suboc_presupuestos_lineas WHERE SERIE_PRESUPUESTO_LINEA = :serie ' +
-                ' AND NRO_PRESUPUESTO_LINEA = :nrofactura';
-    //Connection.StartTransaction;
-    Params.Clear;
-    Params.CreateParam(ftString, 'serie', ptInput);
-    Params.CreateParam(ftString, 'nrofactura', ptInput);
-    Params.ParamByName('serie').AsString := unqryFac.FieldByName('SERIE_FACTURA').AsString;
-    Params.ParamByName('nrofactura').AsString := unqryFac.FieldByName('NRO_FACTURA').AsString;
-    ExecSQL;
-    //Connection.Commit;
-    Free;
-  end;
+  BorrarLineasDocumento;
 end;
 
 procedure TdmPre.zqryFacBeforePost(DataSet: TDataSet);
 begin
   if ((unqryFac.State = dsEdit) or (unqryFac.State = dsInsert)) then
   begin
-    if (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString = 'PACIENTE NUEVO') OR
-        (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString = 'PACIENTE NO ENCONTRADO') then
+    if (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString =
+                                                           'PACIENTE NUEVO') OR
+       (unqryFac.FieldByName('RAZONSOCIAL_CLIENTE_PRESUPUESTO').AsString =
+                                                  'PACIENTE NO ENCONTRADO') then
       Abort
     else
     begin
-      if unqryFac.FieldByName('NRO_FACTURA').AsString='0' then
-      NuevaFactura;
+      if unqryFac.FieldByName('NRO_FACTURA').AsString = '0' then
+        NuevoNumeroDocumento;
       if unqryFac.FieldByName('CODIGO_CLIENTE_PRESUPUESTO').AsString = '0' then
-      NuevoCliente;
+        NuevoCliente;
     end;
   end;
-
 end;
 
 procedure TdmPre.zqryLinFacAfterDelete(DataSet: TDataSet);
 begin
-  unstrdprcCalcularFactura.ParamByName('pidseriefactura').AsString :=
-                                 unqryFac.FieldByName('SERIE_FACTURA').AsString;
-  unstrdprcCalcularFactura.ParamByName('pidnumfactura').AsString :=
-                                 unqryFac.FieldByName('NRO_FACTURA').AsString;
-  unstrdprcCalcularFactura.ExecProc;
-  unqryFac.Refresh;
+  RecalcularTotalesDocumento;
 end;
 
 end.
