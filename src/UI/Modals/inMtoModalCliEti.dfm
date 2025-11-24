@@ -74,6 +74,7 @@ object frmPrintCliEti: TfrmPrintCliEti
     Left = 8
     Top = -2
     Caption = 'C'#243'digo Cliente'
+    TabOrder = 1
   end
   object cxRadioGroup1: TcxRadioGroup
     Left = 8
@@ -88,6 +89,7 @@ object frmPrintCliEti: TfrmPrintCliEti
       Top = 37
       Caption = 'Dejar espacios en blanco antes de imprimir'
       Properties.WordWrap = True
+      TabOrder = 0
       Width = 159
     end
     object speDejarBlancos: TcxSpinEdit
@@ -98,7 +100,7 @@ object frmPrintCliEti: TfrmPrintCliEti
     end
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]

@@ -1,26 +1,26 @@
 inherited frmMtoFac: TfrmMtoFac
   Caption = 'Borrador de Venta'
-  ClientHeight = 602
-  ClientWidth = 1226
+  ClientHeight = 601
+  ClientWidth = 1222
   Font.Height = -15
   ExplicitWidth = 1238
   ExplicitHeight = 640
   TextHeight = 17
   inherited pButtonPage: TPanel
-    Width = 1036
-    Height = 602
+    Width = 1032
+    Height = 601
     ExplicitWidth = 1030
     ExplicitHeight = 593
   end
   inherited pButtonRightBar: TPanel
-    Left = 1036
+    Left = 1032
     Width = 190
-    Height = 602
+    Height = 601
     Font.Height = -15
     ParentFont = False
-    ExplicitLeft = 1030
+    ExplicitLeft = 1040
     ExplicitWidth = 190
-    ExplicitHeight = 593
+    ExplicitHeight = 602
     object btnRectificar: TSpeedButton [0]
       Left = 3
       Top = 250
@@ -117,15 +117,17 @@ inherited frmMtoFac: TfrmMtoFac
     object lblNroFacturaCab: TcxLabel
       Left = 29
       Top = 146
+      TabOrder = 3
     end
     object lblNroFacturaLin: TcxLabel
       Left = 29
       Top = 173
+      TabOrder = 4
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 1036
-    Height = 602
+    Width = 1032
+    Height = 601
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -290,7 +292,7 @@ inherited frmMtoFac: TfrmMtoFac
       end
       inherited pnTopGrid: TPanel
         Width = 1028
-        ExplicitWidth = 1028
+        ExplicitWidth = 1032
         inherited edtBusqGlobal: TcxTextEdit
           ExplicitHeight = 30
         end
@@ -349,6 +351,10 @@ inherited frmMtoFac: TfrmMtoFac
           object tsLineasFactura: TcxTabSheet
             Caption = 'Lineas'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd5: TcxGrid
               Left = 0
               Top = 0
@@ -359,17 +365,12 @@ inherited frmMtoFac: TfrmMtoFac
               object tvLineasFactura: TcxGridDBTableView
                 OnKeyDown = tvLineasFacturaKeyDown
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 OnCellClick = tvLineasFacturaCellClick
                 OnEditing = tvLineasFacturaEditing
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = dmFac.dsLinFac
                 DataController.Options = [dcoCaseInsensitive, dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding, dcoGroupsAlwaysExpanded, dcoInsertOnNewItemRowFocusing]
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 FixedDataRows.SeparatorColor = clBlack
                 NewItemRow.Visible = True
                 OptionsBehavior.FocusFirstCellOnNewRecord = True
@@ -498,11 +499,13 @@ inherited frmMtoFac: TfrmMtoFac
               Left = 70
               Top = 50
               Caption = 'Total a pagar'
+              TabOrder = 1
             end
             object cxlbl18: TcxLabel
               Left = 55
               Top = 94
               Caption = 'Forma de Pago'
+              TabOrder = 4
             end
             object cxDBCurrencyEdit3: TcxDBCurrencyEdit
               Left = 188
@@ -547,10 +550,15 @@ inherited frmMtoFac: TfrmMtoFac
           object ts8: TcxTabSheet
             Caption = 'Otros'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxlbl12: TcxLabel
               Left = 13
               Top = 16
               Caption = 'Comentarios'
+              TabOrder = 0
             end
             object cxdbm1: TcxDBMemo
               Left = 44
@@ -573,6 +581,10 @@ inherited frmMtoFac: TfrmMtoFac
             Margins.Bottom = 2
             Caption = 'Historia Dental'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -582,14 +594,9 @@ inherited frmMtoFac: TfrmMtoFac
               TabOrder = 0
               object tvHistoriaDental: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = dmFac.dsHistoria
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 FixedDataRows.SeparatorColor = clBlack
                 OptionsBehavior.GoToNextCellOnEnter = True
                 OptionsCustomize.ColumnGrouping = False
@@ -651,15 +658,10 @@ inherited frmMtoFac: TfrmMtoFac
                 end
               end
               object cxgrdbndtblvw1: TcxGridDBBandedTableView
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DetailKeyFieldNames = 'AppointmentId'
                 DataController.KeyFieldNames = 'PerId'
                 DataController.MasterKeyFieldNames = 'AppointmentId'
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsView.GroupByBox = False
                 Bands = <
                   item
@@ -742,6 +744,10 @@ inherited frmMtoFac: TfrmMtoFac
             Margins.Bottom = 2
             Caption = 'Recibos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnl4: TPanel
               Left = 0
               Top = 0
@@ -763,14 +769,9 @@ inherited frmMtoFac: TfrmMtoFac
                 TabOrder = 0
                 object tvLineasRecibos: TcxGridDBTableView
                   Navigator.Buttons.ConfirmDelete = True
-                  Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
-                  ScrollbarAnnotations.CustomAnnotations = <>
                   DataController.DataModeController.SmartRefresh = True
                   DataController.DataSource = dmFac.dsRecibos
-                  DataController.Summary.DefaultGroupSummaryItems = <>
-                  DataController.Summary.FooterSummaryItems = <>
-                  DataController.Summary.SummaryGroups = <>
                   FixedDataRows.SeparatorColor = clBlack
                   OptionsBehavior.GoToNextCellOnEnter = True
                   OptionsCustomize.ColumnGrouping = False
@@ -875,15 +876,10 @@ inherited frmMtoFac: TfrmMtoFac
                   end
                 end
                 object cxgrdbndtblvw2: TcxGridDBBandedTableView
-                  Navigator.Buttons.CustomButtons = <>
                   Navigator.Visible = True
-                  ScrollbarAnnotations.CustomAnnotations = <>
                   DataController.DetailKeyFieldNames = 'AppointmentId'
                   DataController.KeyFieldNames = 'PerId'
                   DataController.MasterKeyFieldNames = 'AppointmentId'
-                  DataController.Summary.DefaultGroupSummaryItems = <>
-                  DataController.Summary.FooterSummaryItems = <>
-                  DataController.Summary.SummaryGroups = <>
                   OptionsView.GroupByBox = False
                   Bands = <
                     item
@@ -1031,6 +1027,8 @@ inherited frmMtoFac: TfrmMtoFac
           object tsVeriFactu: TcxTabSheet
             Caption = 'VeriFactu'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
             ExplicitWidth = 1012
             ExplicitHeight = 229
             object scrlbx1: TScrollBox
@@ -1323,6 +1321,10 @@ inherited frmMtoFac: TfrmMtoFac
           object tsError: TcxTabSheet
             Caption = 'Eventos VeriFactu'
             ImageIndex = 6
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1332,14 +1334,9 @@ inherited frmMtoFac: TfrmMtoFac
               TabOrder = 0
               object tvEventosVeriFactu: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DataModeController.SmartRefresh = True
                 DataController.DataSource = dmFac.dsErrores
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 FixedDataRows.SeparatorColor = clBlack
                 OptionsBehavior.GoToNextCellOnEnter = True
                 OptionsCustomize.ColumnGrouping = False
@@ -1367,15 +1364,10 @@ inherited frmMtoFac: TfrmMtoFac
                 end
               end
               object cxgrdbndtblvw11: TcxGridDBBandedTableView
-                Navigator.Buttons.CustomButtons = <>
                 Navigator.Visible = True
-                ScrollbarAnnotations.CustomAnnotations = <>
                 DataController.DetailKeyFieldNames = 'AppointmentId'
                 DataController.KeyFieldNames = 'PerId'
                 DataController.MasterKeyFieldNames = 'AppointmentId'
-                DataController.Summary.DefaultGroupSummaryItems = <>
-                DataController.Summary.FooterSummaryItems = <>
-                DataController.Summary.SummaryGroups = <>
                 OptionsView.GroupByBox = False
                 Bands = <
                   item
@@ -1456,7 +1448,7 @@ inherited frmMtoFac: TfrmMtoFac
       object pnl2: TPanel
         Left = 0
         Top = 0
-        Width = 1028
+        Width = 1024
         Height = 280
         Align = alTop
         Font.Charset = ANSI_CHARSET
@@ -1494,11 +1486,13 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 8
                 Top = 14
                 Caption = 'Nro Documento'
+                TabOrder = 2
               end
               object lblcxlbl3: TcxLabel
                 Left = 8
                 Top = 106
                 Caption = 'Fecha'
+                TabOrder = 3
               end
               object dteFECHA_FACTURA: TcxDBDateEdit
                 Left = 71
@@ -1514,6 +1508,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 8
                 Top = 62
                 Caption = 'Serie Documento'
+                TabOrder = 5
               end
               object cbbSerieFactura: TcxDBLookupComboBox
                 Left = 160
@@ -1575,11 +1570,13 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 269
                 Top = 14
                 Caption = 'C'#243'digo Paciente'
+                TabOrder = 6
               end
               object lblRazonSocial: TcxLabel
                 Left = 269
                 Top = 51
                 Caption = 'Raz'#243'n Social'
+                TabOrder = 7
               end
               object lblDBRAZONSOCIAL_CLIENTE_FACTURA: TcxDBLabel
                 Left = 269
@@ -1590,6 +1587,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Margins.Bottom = 2
                 DataBinding.DataField = 'RAZONSOCIAL_CLIENTE_FACTURA'
                 DataBinding.DataSource = dsTablaG
+                TabOrder = 9
                 Height = 32
                 Width = 320
               end
@@ -1602,6 +1600,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Margins.Bottom = 2
                 DataBinding.DataField = 'MOVIL_CLIENTE_FACTURA'
                 DataBinding.DataSource = dsTablaG
+                TabOrder = 10
                 Height = 35
                 Width = 204
               end
@@ -1609,6 +1608,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 269
                 Top = 114
                 Caption = 'Tel'#233'fono M'#243'vil'
+                TabOrder = 11
               end
               object chkEsSimpl: TcxDBCheckBox
                 Left = 279
@@ -1648,6 +1648,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Style.Font.Name = 'Lucida Sans'
                 Style.Font.Style = []
                 Style.IsFontAssigned = True
+                TabOrder = 14
                 Height = 31
                 Width = 203
               end
@@ -1663,6 +1664,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Style.Font.Name = 'Lucida Sans'
                 Style.Font.Style = []
                 Style.IsFontAssigned = True
+                TabOrder = 15
                 Height = 26
                 Width = 203
               end
@@ -1721,11 +1723,13 @@ inherited frmMtoFac: TfrmMtoFac
                   Left = 7
                   Top = 142
                   Caption = 'Provincia'
+                  TabOrder = 5
                 end
                 object lblcxlbl13: TcxLabel
                   Left = 51
                   Top = 171
                   Caption = 'Pa'#237's'
+                  TabOrder = 6
                 end
                 object txtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit
                   Left = 120
@@ -1739,12 +1743,14 @@ inherited frmMtoFac: TfrmMtoFac
                   Left = 3
                   Top = 27
                   Caption = 'Raz'#243'n Social'
+                  TabOrder = 7
                 end
                 object lblDB1: TcxDBLabel
                   Left = 172
                   Top = 173
                   DataBinding.DataField = 'NOMBRE_SPA_PAIS'
                   DataBinding.DataSource = dmFac.dsPaises
+                  TabOrder = 8
                   Height = 28
                   Width = 269
                 end
@@ -1780,11 +1786,13 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 457
                 Top = 106
                 Caption = 'NIF'
+                TabOrder = 7
               end
               object lblcxlbl104: TcxLabel
                 Left = 458
                 Top = 165
                 Caption = 'M'#243'vil'
+                TabOrder = 8
               end
               object txtMOVIL_CLIENTE_FACTURA: TcxDBTextEdit
                 Left = 517
@@ -1798,6 +1806,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 460
                 Top = 198
                 Caption = 'Email'
+                TabOrder = 9
               end
               object txtEMAIL_CLIENTE_FACTURA: TcxDBTextEdit
                 Left = 516
@@ -1829,11 +1838,13 @@ inherited frmMtoFac: TfrmMtoFac
                 Left = 457
                 Top = 5
                 Caption = 'Nombre'
+                TabOrder = 10
               end
               object lblcxlbl16: TcxLabel
                 Left = 457
                 Top = 56
                 Caption = 'Apellidos'
+                TabOrder = 11
               end
               object lblDBCODIGO_CLIENTE_FACTURA: TcxDBLabel
                 Left = 243
@@ -1851,6 +1862,7 @@ inherited frmMtoFac: TfrmMtoFac
                 Style.Font.Name = 'Lucida Sans'
                 Style.Font.Style = []
                 Style.IsFontAssigned = True
+                TabOrder = 12
                 Height = 21
                 Width = 38
               end

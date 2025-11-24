@@ -22,6 +22,8 @@ object frmPrintCliCues: TfrmPrintCliCues
     Height = 282
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 260
+    ExplicitHeight = 281
     object btn4: TcxButton
       Left = 4
       Top = 4
@@ -58,6 +60,7 @@ object frmPrintCliCues: TfrmPrintCliCues
       Caption = 'Salir'
       TabOrder = 3
       OnClick = btn3Click
+      ExplicitTop = 239
     end
   end
   object edtCodCli: TcxTextEdit
@@ -71,9 +74,10 @@ object frmPrintCliCues: TfrmPrintCliCues
     Left = 8
     Top = 4
     Caption = 'C'#243'digo Cliente'
+    TabOrder = 1
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
