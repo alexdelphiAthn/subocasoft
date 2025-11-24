@@ -7,7 +7,7 @@ uses
   inMtoGen in 'src\UI\Core\inMtoGen.pas' {frmMtoGen},
   inLibtb in 'src\Lib\Core\inLibtb.pas',
   inMtoPrincipal in 'src\UI\Core\inMtoPrincipal.pas' {frmOpenApp},
-  UniDataConn in 'src\Data\UniDataConn.pas' {dmConn: TDataModule},
+  UniDataConn in 'src\Core\UniDataConn.pas' {dmConn: TDataModule},
   inLibDir in 'src\Lib\Core\inLibDir.pas',
   inLibWin in 'src\Lib\Core\inLibWin.pas',
   inLibDate in 'src\Lib\Core\inLibDate.pas',
