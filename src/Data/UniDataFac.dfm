@@ -487,7 +487,6 @@ object dmFac: TdmFac
       'select * from vu_suboc_historia'
       'where NRO_FACTURA = :NRO_FACTURA'
       'AND SERIE_FACTURA = :SERIE_FACTURA')
-    MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'NRO_FACTURA;SERIE_FACTURA'
     DetailFields = 'NRO_FACTURA;SERIE_FACTURA'
     Left = 472
@@ -596,7 +595,6 @@ object dmFac: TdmFac
       'where NRO_FACTURA_LINEA = :NRO_FACTURA'
       'AND SERIE_FACTURA_LINEA = :SERIE_FACTURA'
       'order by NRO_FACTURA_LINEA, SERIE_FACTURA_LINEA, LINEA_LINEA ASC')
-    MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'SERIE_FACTURA;NRO_FACTURA'
     DetailFields = 'SERIE_FACTURA_LINEA;NRO_FACTURA_LINEA'
     BeforeInsert = zqryLinFacBeforeInsert
@@ -1171,7 +1169,6 @@ object dmFac: TdmFac
     SQL.Strings = (
       'select * from suboc_recibos'
       '')
-    MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'NRO_FACTURA;SERIE_FACTURA'
     DetailFields = 'NRO_FACTURA;SERIE_FACTURA'
     Left = 632
@@ -1410,7 +1407,6 @@ object dmFac: TdmFac
       'WHERE NRO_FACTURA = :NRO_FACTURA'
       'AND SERIE_FACTURA = :SERIE_FACTURA'
       'ORDER BY ID_CONSOLIDACION DESC')
-    MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'SERIE_FACTURA;NRO_FACTURA'
     DetailFields = 'SERIE_FACTURA;NRO_FACTURA'
     ReadOnly = True
@@ -1482,7 +1478,6 @@ object dmFac: TdmFac
     SQL.Strings = (
       'select * from suboc_paises'
       '')
-    MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'PAIS_CLIENTE_FACTURA'
     DetailFields = 'COD_PAIS_ALPHA2'
     ReadOnly = True
@@ -1556,7 +1551,6 @@ object dmFac: TdmFac
       'select *'
       'FROM suboc_verifactu_log_eventos'
       'order by id_log desc')
-    MasterSource = frmMtoFac.dsTablaG
     MasterFields = 'NRO_FACTURA;SERIE_FACTURA'
     DetailFields = 'NRO_FACTURA_LOG;SERIE_FACTURA_LOG'
     ReadOnly = True

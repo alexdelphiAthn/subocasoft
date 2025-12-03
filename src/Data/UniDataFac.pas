@@ -88,10 +88,9 @@ private
                                    dtFech:TDateTime): Boolean;
     function ExisteFactura(const ASerie: string;
                                    ANumero: Integer): Boolean;
-public
+  public
     function fncObtenerQueueIdFactura(const sSerie: string;
-                                      const iNumero: Integer): Integer;
-
+                                      const sNumero: string): Integer;
   end;
 
 var
@@ -137,35 +136,34 @@ begin
 end;
 
 function TdmFac.fncObtenerQueueIdFactura(const sSerie: string;
-  const iNumero: Integer): Integer;
+  const sNumero: String): Integer;
 var
-  qryConsolidacion: TUniQuery;
+  qryCon: TUniQuery;
   iQueueId: Integer;
 begin
   iQueueId := 0;
-  qryConsolidacion := TUniQuery.Create(nil);
+  qryCon := TUniQuery.Create(nil);
   try
-    qryConsolidacion.Connection := frmOpenApp.FDmConn.conUni;
-    qryConsolidacion.SQL.Text :=
+    qryCon.Connection := frmOpenApp.FDmConn.conUni;
+    qryCon.SQL.Text :=
       'SELECT QUEUE_ID ' +
       'FROM suboc_consolidacion ' +
       'WHERE SERIE_FACTURA = :SERIE ' +
       '  AND NRO_FACTURA = :NUMERO ' +
       '  AND QUEUE_ID IS NOT NULL';
-    qryConsolidacion.ParamByName('SERIE').AsString := sSerie;
-    qryConsolidacion.ParamByName('NUMERO').AsInteger := iNumero;
-    qryConsolidacion.Open;
-    if not qryConsolidacion.IsEmpty then
-      iQueueId := qryConsolidacion.FieldByName('QUEUE_ID').AsInteger
+    qryCon.ParamByName('SERIE').AsString := sSerie;
+    qryCon.ParamByName('NUMERO').AsString := sNumero;
+    qryCon.Open;
+    if not qryCon.IsEmpty then
+      iQueueId := qryCon.FieldByName('QUEUE_ID').AsInteger
     else
      iQueueId := 0;
   finally
-    qryConsolidacion.Close;
-    FreeAndNil(qryConsolidacion);
+    qryCon.Close;
+    FreeAndNil(qryCon);
   end;
   Result := iQueueId;
 end;
-
 
 procedure TdmFac.CalcularLinea;
 var
@@ -191,7 +189,7 @@ begin
                                             dsLinFac.Dataset.FindField('CANTIDAD_LINEA').AsCurrency *
                                             dsLinFac.Dataset.FindField('PRECIOVENTA_ARTICULO_LINEA').AsCurrency;
     ActualizarHistoria;
-  end;
+  en*d;
 end;
 
 procedure TdmFac.CopiarArticuloaLineaFactura;
