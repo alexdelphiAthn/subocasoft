@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, Classes,  DB, Controls,  system.DateUtils,
    inMtoPrincipal, DBClient, Provider, frxClass, frxDBSet,
-   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni, frCoreClasses;
+   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni;
 
 type
   TdmFac = class(TDataModule)
@@ -90,7 +90,7 @@ private
                                    ANumero: Integer): Boolean;
   public
     function fncObtenerQueueIdFactura(const sSerie: string;
-                                      const sNumero: string): Integer;
+                                      const sNumero: integer): Integer;
   end;
 
 var
@@ -136,7 +136,7 @@ begin
 end;
 
 function TdmFac.fncObtenerQueueIdFactura(const sSerie: string;
-  const sNumero: String): Integer;
+  const sNumero: Integer): Integer;
 var
   qryCon: TUniQuery;
   iQueueId: Integer;
@@ -152,7 +152,7 @@ begin
       '  AND NRO_FACTURA = :NUMERO ' +
       '  AND QUEUE_ID IS NOT NULL';
     qryCon.ParamByName('SERIE').AsString := sSerie;
-    qryCon.ParamByName('NUMERO').AsString := sNumero;
+    qryCon.ParamByName('NUMERO').AsInteger := sNumero;
     qryCon.Open;
     if not qryCon.IsEmpty then
       iQueueId := qryCon.FieldByName('QUEUE_ID').AsInteger
@@ -189,7 +189,7 @@ begin
                                             dsLinFac.Dataset.FindField('CANTIDAD_LINEA').AsCurrency *
                                             dsLinFac.Dataset.FindField('PRECIOVENTA_ARTICULO_LINEA').AsCurrency;
     ActualizarHistoria;
-  en*d;
+  end;
 end;
 
 procedure TdmFac.CopiarArticuloaLineaFactura;
