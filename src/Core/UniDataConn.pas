@@ -4,11 +4,10 @@ interface
 
 uses
   SysUtils, Classes, DB, ADODB, DBAccess, Uni, Vcl.Forms, Vcl.Dialogs,
-  DASQLMonitor;
+  DASQLMonitor, MySQLUniProvider;
 
 type
   TdmConn = class(TDataModule)
-
     conUni: TUniConnection;
     procedure connBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
