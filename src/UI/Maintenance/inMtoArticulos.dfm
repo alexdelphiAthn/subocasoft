@@ -2,26 +2,25 @@ inherited frmMtoArticulos: TfrmMtoArticulos
   Left = 5
   Top = 4
   Caption = 'Tratamientos'
-  ClientHeight = 412
-  ClientWidth = 805
-  ExplicitWidth = 821
-  ExplicitHeight = 451
-  PixelsPerInch = 96
+  ClientHeight = 411
+  ClientWidth = 801
+  ExplicitWidth = 817
+  ExplicitHeight = 450
   TextHeight = 22
   inherited pButtonPage: TPanel
-    Width = 607
-    Height = 412
-    ExplicitWidth = 607
-    ExplicitHeight = 412
+    Width = 603
+    Height = 411
+    ExplicitWidth = 603
+    ExplicitHeight = 411
   end
   inherited pButtonRightBar: TPanel
-    Left = 607
-    Height = 412
-    ExplicitLeft = 607
-    ExplicitHeight = 412
+    Left = 603
+    Height = 411
+    ExplicitLeft = 603
+    ExplicitHeight = 411
     inherited pButtonGen: TPanel
       Top = 253
-      ExplicitTop = 253
+      ExplicitTop = 252
       inherited sbGrabar: TSpeedButton
         Top = 41
         ExplicitTop = 41
@@ -54,18 +53,18 @@ inherited frmMtoArticulos: TfrmMtoArticulos
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 607
-    Height = 412
-    ExplicitWidth = 607
-    ExplicitHeight = 412
+    Width = 603
+    Height = 411
+    ExplicitWidth = 603
+    ExplicitHeight = 411
     inherited tsLista: TTabSheet
       ExplicitWidth = 599
       ExplicitHeight = 372
       inherited cxGrdPrincipal: TcxGrid
         Width = 599
         Height = 329
-        ExplicitWidth = 599
-        ExplicitHeight = 329
+        ExplicitWidth = 595
+        ExplicitHeight = 328
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           OptionsData.Editing = True
           object cxgrdbclmnGrdDBTabPrinCODIGO_ARTICULO: TcxGridDBColumn
@@ -92,15 +91,13 @@ inherited frmMtoArticulos: TfrmMtoArticulos
       end
       inherited pnTopGrid: TPanel
         Width = 599
-        ExplicitWidth = 599
+        ExplicitWidth = 595
         inherited edtBusqGlobal: TcxTextEdit
           ExplicitHeight = 30
         end
       end
     end
     inherited tsFicha: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 36
       ExplicitWidth = 599
       ExplicitHeight = 372
       object pnl1: TPanel
@@ -110,6 +107,7 @@ inherited frmMtoArticulos: TfrmMtoArticulos
         Height = 145
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 603
         object cxdbtxtdt1: TcxDBTextEdit
           Left = 104
           Top = 33
@@ -123,11 +121,13 @@ inherited frmMtoArticulos: TfrmMtoArticulos
           Left = 49
           Top = 37
           Caption = 'C'#243'digo'
+          TabOrder = 2
         end
         object cxlbl1: TcxLabel
           Left = 46
           Top = 65
           Caption = 'Nombre'
+          TabOrder = 4
         end
         object cxdbtxtdt2: TcxDBTextEdit
           Left = 104
@@ -141,6 +141,7 @@ inherited frmMtoArticulos: TfrmMtoArticulos
           Left = 791
           Top = 93
           Caption = 'Modificado'
+          TabOrder = 6
         end
         object cxdbtxtdt15: TcxDBTextEdit
           Left = 856
@@ -163,6 +164,7 @@ inherited frmMtoArticulos: TfrmMtoArticulos
           Font.Style = []
           ParentFont = False
           TabOrder = 0
+          ExplicitWidth = 601
           object cxdbtxtdtCODIGO_ARTICULO: TcxDBTextEdit
             Left = 131
             Top = 30
@@ -176,11 +178,13 @@ inherited frmMtoArticulos: TfrmMtoArticulos
             Left = 49
             Top = 34
             Caption = 'C'#243'digo'
+            TabOrder = 2
           end
           object cxLabel2: TcxLabel
             Left = 46
             Top = 73
             Caption = 'Nombre'
+            TabOrder = 4
           end
           object cxDBTextEdit2: TcxDBTextEdit
             Left = 132
@@ -333,8 +337,8 @@ inherited frmMtoArticulos: TfrmMtoArticulos
       object pnl2: TPanel
         Left = 0
         Top = 145
-        Width = 599
-        Height = 227
+        Width = 595
+        Height = 226
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clBlack
@@ -343,6 +347,8 @@ inherited frmMtoArticulos: TfrmMtoArticulos
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 599
+        ExplicitHeight = 227
         object cxpgcntrl2: TcxPageControl
           Left = 1
           Top = 1
@@ -371,11 +377,13 @@ inherited frmMtoArticulos: TfrmMtoArticulos
               Left = 47
               Top = 28
               Caption = 'Familia'
+              TabOrder = 1
             end
             object cxlbl5: TcxLabel
               Left = 8
               Top = 75
               Caption = 'Precio Venta'
+              TabOrder = 3
             end
             object cxdbcrncydt1: TcxDBCurrencyEdit
               Left = 128

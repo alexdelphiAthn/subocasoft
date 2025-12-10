@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, cxGraphics, cxLookAndFeels, cxLookAndFeelPainters, Menus,
-  dxSkinsCore, dxSkinBlue, frxClass, frxDBSet, StdCtrls, cxButtons, DB,
-  DBClient, cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
+  dxSkinsCore, dxSkinBlue, frxClass, StdCtrls, cxButtons, DB,
+  cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
   dxSkinBlack, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee,
   dxSkinDarkRoom, dxSkinDarkSide, dxSkinDevExpressDarkStyle,
   dxSkinDevExpressStyle, dxSkinFoggy, dxSkinGlassOceans,
@@ -21,9 +21,9 @@ uses
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
-  ExtCtrls, cxRadioGroup, cxGroupBox, cxDBEdit, cxCheckBox, cxMaskEdit,
-  cxDropDownEdit, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
-  Vcl.ComCtrls, dxCore, cxDateUtils, cxCalendar;
+  ExtCtrls, cxRadioGroup, cxCheckBox, cxMaskEdit,
+  cxDropDownEdit, cxDBLookupComboBox,
+  Vcl.ComCtrls, dxCore, cxDateUtils, cxCalendar, cxLookupEdit, cxDBLookupEdit;
 
 type
   TfrmModalHisFac = class(TForm)
@@ -57,8 +57,7 @@ var
 
 implementation
 
-uses
-  inMtoHistoriaClientes;
+
 
 {$R *.dfm}
 

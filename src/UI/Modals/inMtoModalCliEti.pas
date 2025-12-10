@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, cxGraphics, cxLookAndFeels, cxLookAndFeelPainters, Menus,
-  dxSkinsCore, dxSkinBlue, frxClass, frxDBSet, StdCtrls, cxButtons, DB,
-  DBClient, cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
+  dxSkinsCore, dxSkinBlue, frxClass, StdCtrls, cxButtons, DB,
+  cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
   dxSkinBlack, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee,
   dxSkinDarkRoom, dxSkinDarkSide, dxSkinDevExpressDarkStyle,
   dxSkinDevExpressStyle, dxSkinFoggy, dxSkinGlassOceans,

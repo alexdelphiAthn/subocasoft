@@ -4,17 +4,17 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Grids, DBGrids, ComCtrls, StdCtrls, DBCtrls, ExtCtrls, Buttons,
-  DB, ADODB, cxStyles, cxCustomData, cxGraphics,
-  cxFilter, cxData, cxDataStorage, cxEdit, cxDBData, cxGridLevel,
+  Dialogs, ComCtrls, StdCtrls, DBCtrls, ExtCtrls, Buttons,
+  DB, ADODB, cxStyles, cxGraphics,
+  cxDataStorage, cxEdit, cxDBData, cxGridLevel,
   cxClasses, cxControls, cxGridCustomView, cxGridCustomTableView,
   cxGridTableView, cxGridDBTableView, cxGrid, cxNavigator, cxMaskEdit,
-  cxLookAndFeelPainters, cxButtons,
+  cxLookAndFeelPainters,
    cxContainer, cxTextEdit,  dxSkinsCore,
   dxSkinStardust, dxSkinSummer2008, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinXmas2008Blue, dxSkinscxPCPainter, cxLookAndFeels,
-  cxCheckBox, cxGridExportLink,  cxMemo, cxDBEdit,
-  UniDataConn, dxSkinBlueprint, dxSkinDarkRoom,
+  cxCheckBox, cxGridExportLink,  cxMemo,
+  dxSkinBlueprint, dxSkinDarkRoom,
   dxSkinDevExpressDarkStyle, dxSkinDevExpressStyle, dxSkinFoggy,
   dxSkinHighContrast, dxSkinMetropolis, dxSkinMetropolisDark,
   dxSkinOffice2010Black, dxSkinOffice2010Blue, dxSkinOffice2010Silver,
@@ -23,8 +23,8 @@ uses
   dxSkinSharpPlus, dxSkinSpringTime, dxSkinTheAsphaltWorld, dxSkinVS2010,
   dxSkinWhiteprint, cxLocalization,
   cxDataControllerConditionalFormattingRulesManagerDialog, cxLabel, dxBevel,
-  cxDBNavigator, dxDateRanges, inMtoPrincipal, dxSkinBlue,
-  dxScrollbarAnnotations, dxSkinBasic, dxSkinBlack, dxSkinCaramel, dxSkinCoffee,
+  cxDBNavigator, inMtoPrincipal, dxSkinBlue,
+  dxSkinBasic, dxSkinBlack, dxSkinCaramel, dxSkinCoffee,
   dxSkinDarkSide, dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian,
   dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
   dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
@@ -32,7 +32,8 @@ uses
   dxSkinOffice2016Dark, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
   dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinPumpkin, dxSkinSilver,
   dxSkinTheBezier, dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
-  dxSkinVisualStudio2013Light;
+  dxSkinVisualStudio2013Light, cxCustomData, cxFilter, cxData, dxDateRanges,
+  dxScrollbarAnnotations;
 
 const
   B_NB_SAVE   = 7;
@@ -110,7 +111,7 @@ var
 
 implementation
 
-uses inLibDevExp, inLibDir, inLibWin, inLibtb ;
+uses inLibDevExp;
 
 {$R *.dfm}
 {$R CXLOCALIZATION.res}
@@ -179,7 +180,7 @@ begin
   if ( dsTablaG.DataSet.State = dsInsert ) or
      ( dsTablaG.DataSet.State = dsEdit ) then
   begin
-     if ( Application.MessageBox( '¿Desea cancelar la entrada de datos?',
+     if ( Application.MessageBox( 'ï¿½Desea cancelar la entrada de datos?',
                                  'Mensaje Advertencia',
                                  MB_YESNO ) = ID_YES ) then
        Close;

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, Menus, UniDataConn,
   ExtCtrls, inLibLogVeriFactu,
-  cxGraphics, cxControls, cxLookAndFeels,MemDS, DBAccess, Uni,
+  cxGraphics, cxControls, cxLookAndFeels,DBAccess,
   cxLookAndFeelPainters,
   dxSkinsCore, dxSkinBlue, dxStatusBar, DADump, UniDump, Vcl.StdCtrls,
   DASQLMonitor, UniSQLMonitor, dxSkinsDefaultPainters, Data.DB, JvMenus,

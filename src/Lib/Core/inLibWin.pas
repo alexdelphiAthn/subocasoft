@@ -5,7 +5,7 @@ interface
 uses
    inMtoPrincipal, Classes, Windows, Forms, jpeg, System.SysUtils,
    System.Net.HttpClient, system.Math,
-   idhttp, Vcl.Dialogs,System.Win.Registry, ShellAPI, Winapi.Messages;
+   idhttp, Vcl.Dialogs,System.Win.Registry, Winapi.Messages;
 
 type
 
@@ -38,7 +38,7 @@ type
 implementation
 
 uses
-  WinInet, IOUtils;
+  WinInet;
 
 function GetTextFile(const rutaArchivo: string): string;
 var
@@ -54,7 +54,7 @@ begin
   contenido := TStringList.Create;
   try
     try
-      // Especificar codificación UTF-8 si es necesario
+      // Especificar codificaciï¿½n UTF-8 si es necesario
       contenido.LoadFromFile(rutaArchivo);
       Result := contenido.Text;
     except
@@ -76,7 +76,7 @@ begin
   Result := InternetGetConnectedState(@dwConnectionTypes, 0);
 end;
 
-// Versión alternativa más robusta que hace ping a un servidor
+// Versiï¿½n alternativa mï¿½s robusta que hace ping a un servidor
 function HayInternetConPing: Boolean;
 var
   hSession, hConnection, hRequest: HINTERNET;
@@ -147,15 +147,15 @@ end;
 //procedure TForm1.Button1Click(Sender: TObject);
 //begin
 //  if HayInternet then
-//    ShowMessage('Hay conexión a Internet')
+//    ShowMessage('Hay conexiï¿½n a Internet')
 //  else
-//    ShowMessage('No hay conexión a Internet');
+//    ShowMessage('No hay conexiï¿½n a Internet');
 //
-//  // Para la versión más robusta:
+//  // Para la versiï¿½n mï¿½s robusta:
 //  if HayInternetConPing then
-//    ShowMessage('Hay conexión real a Internet')
+//    ShowMessage('Hay conexiï¿½n real a Internet')
 //  else
-//    ShowMessage('No hay conexión real a Internet');
+//    ShowMessage('No hay conexiï¿½n real a Internet');
 //end;
 
 function GetComputerName: string;
@@ -361,12 +361,12 @@ begin
   bomInfo := DetectarBOM(rutaArchivo);
   if bomInfo.HasBOM then
   begin
-    // Si tiene BOM, usar esa información
+    // Si tiene BOM, usar esa informaciï¿½n
     Result := bomInfo;
   end
   else
   begin
-    // Si no tiene BOM, intentar detección automática de Delphi
+    // Si no tiene BOM, intentar detecciï¿½n automï¿½tica de Delphi
     contenido := TStringList.Create;
     try
       detectedEncoding := nil;
@@ -383,17 +383,17 @@ begin
           Result.Name := 'UTF-16 BE (sin BOM)'
         else if detectedEncoding = TEncoding.Default then
         begin
-          // Intentar detección heurística de UTF-8
+          // Intentar detecciï¿½n heurï¿½stica de UTF-8
           if EsProbablementeUTF8(rutaArchivo) then
           begin
             Result.Encoding := TEncoding.UTF8;
-            Result.Name := 'UTF-8 (detectado heurísticamente)';
+            Result.Name := 'UTF-8 (detectado heurï¿½sticamente)';
           end
           else
             Result.Name := 'ANSI/Default';
         end
         else
-          Result.Name := 'Codificación desconocida';
+          Result.Name := 'Codificaciï¿½n desconocida';
       end;
     finally
       contenido.Free;
@@ -414,12 +414,12 @@ begin
     if stream.Size < 2 then
       Exit;
     bytesLeidos := stream.Read(bom, Min(4, stream.Size));
-    // Verificar BOMs en orden de longitud (más largo primero)
+    // Verificar BOMs en orden de longitud (mï¿½s largo primero)
 //    if (bytesLeidos >= 4) and (bom[0] = $FF) and (bom[1] = $FE) and
 //       (bom[2] = $00) and (bom[3] = $00) then
 //    begin
 //      // UTF-32 LE BOM
-//      Result.Encoding := TEncoding.º.UTF32;
+//      Result.Encoding := TEncoding.ï¿½.UTF32;
 //      Result.Name := 'UTF-32 LE (con BOM)';
 //      Result.HasBOM := True;
 //    end   else
@@ -459,7 +459,7 @@ end;
 function EsProbablementeUTF8(const rutaArchivo: string): Boolean;
 var
   stream: TFileStream;
-  buffer: array[0..2047] of Byte; // Muestra más grande
+  buffer: array[0..2047] of Byte; // Muestra mï¿½s grande
   bytesLeidos, i, secuenciasUTF8, totalBytes: Integer;
   esValido: Boolean;
 begin
@@ -477,7 +477,7 @@ begin
     begin
       if buffer[i] < $80 then
       begin
-        // ASCII válido
+        // ASCII vï¿½lido
         Inc(i);
       end
       else if (buffer[i] and $E0) = $C0 then
@@ -520,13 +520,13 @@ begin
       end
       else
       begin
-        // Byte inválido para UTF-8
+        // Byte invï¿½lido para UTF-8
         esValido := False;
       end;
       Inc(totalBytes);
     end;
     // Es probablemente UTF-8 si:
-    // 1. Todas las secuencias son válidas
+    // 1. Todas las secuencias son vï¿½lidas
     // 2. Tiene al menos algunas secuencias UTF-8 multibyte
     // 3. O si no hay bytes > 127 (ASCII puro, compatible con UTF-8)
     Result := esValido and ((secuenciasUTF8 > 0) or (totalBytes > 0));

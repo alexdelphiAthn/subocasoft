@@ -117,7 +117,7 @@ public
 implementation
 
 uses
-  inLibData, inLibVarGlob, inLibJSON;
+  inLibVarGlob;
 
 {$R *.dfm}
 

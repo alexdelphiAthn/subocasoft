@@ -4,8 +4,8 @@ object frmNotaLegal: TfrmNotaLegal
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Nota Legal'
-  ClientHeight = 605
-  ClientWidth = 847
+  ClientHeight = 604
+  ClientWidth = 843
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,10 +16,10 @@ object frmNotaLegal: TfrmNotaLegal
   Scaled = False
   TextHeight = 23
   object pnl1: TPanel
-    Left = 720
+    Left = 716
     Top = 0
     Width = 127
-    Height = 605
+    Height = 604
     Align = alRight
     TabOrder = 0
     object btnSalir: TcxButton
@@ -31,15 +31,14 @@ object frmNotaLegal: TfrmNotaLegal
       Caption = 'Salir'
       TabOrder = 0
       OnClick = btnSalirClick
-      ExplicitLeft = 64
-      ExplicitWidth = 127
+      ExplicitTop = 546
     end
   end
   object mse1: TSynEdit
     Left = 0
     Top = 0
-    Width = 720
-    Height = 605
+    Width = 716
+    Height = 604
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText

@@ -2,35 +2,34 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
   Left = 5
   Top = 4
   Caption = 'Historia de Pacientes'
-  ClientHeight = 520
-  ClientWidth = 927
+  ClientHeight = 519
+  ClientWidth = 923
   Font.Height = -17
-  ExplicitWidth = 943
-  ExplicitHeight = 559
-  PixelsPerInch = 96
+  ExplicitWidth = 939
+  ExplicitHeight = 558
   TextHeight = 19
   inherited pButtonPage: TPanel
-    Width = 769
-    Height = 520
+    Width = 765
+    Height = 519
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
     TabOrder = 0
-    ExplicitWidth = 769
-    ExplicitHeight = 520
+    ExplicitWidth = 765
+    ExplicitHeight = 519
   end
   inherited pButtonRightBar: TPanel
-    Left = 769
+    Left = 765
     Width = 158
-    Height = 520
+    Height = 519
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitLeft = 769
+    ExplicitLeft = 765
     ExplicitWidth = 158
-    ExplicitHeight = 520
+    ExplicitHeight = 519
     object btnCrearHis: TSpeedButton [0]
       Left = 4
       Top = 97
@@ -85,7 +84,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 392
+      ExplicitTop = 391
       ExplicitWidth = 156
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
@@ -203,16 +202,16 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 769
-    Height = 520
+    Width = 765
+    Height = 519
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
     Font.Height = -17
     TabOrder = 1
-    ExplicitWidth = 769
-    ExplicitHeight = 520
+    ExplicitWidth = 765
+    ExplicitHeight = 519
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
@@ -231,8 +230,8 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
         Margins.Bottom = 4
         Font.Height = -17
         ExplicitTop = 34
-        ExplicitWidth = 761
-        ExplicitHeight = 449
+        ExplicitWidth = 757
+        ExplicitHeight = 448
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -340,7 +339,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 761
+        ExplicitWidth = 757
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -398,7 +397,6 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
       Margins.Right = 4
       Margins.Bottom = 4
       Font.Height = -12
-      ExplicitLeft = 4
       ExplicitTop = 33
       ExplicitWidth = 761
       ExplicitHeight = 483
@@ -415,6 +413,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        ExplicitWidth = 765
         object cxdbtxtdt1: TcxDBTextEdit
           Left = 26
           Top = 29
@@ -428,6 +427,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 26
           Top = 6
           Caption = 'C'#243'digo Historia'
+          TabOrder = 1
         end
         object cxdbtxtdt3: TcxDBTextEdit
           Left = 136
@@ -441,16 +441,19 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 26
           Top = 119
           Caption = 'Tratamiento'
+          TabOrder = 10
         end
         object cxlbl6: TcxLabel
           Left = 26
           Top = 59
           Caption = 'Paciente'
+          TabOrder = 11
         end
         object cxlbl1: TcxLabel
           Left = 574
           Top = 119
           Caption = 'Precio por Pieza'
+          TabOrder = 12
         end
         object btnCODIGO_CLIENTE: TcxDBButtonEdit
           Left = 26
@@ -511,6 +514,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 334
           Top = 6
           Caption = 'Odont'#243'logo'
+          TabOrder = 13
         end
         object cxdbdtdtFecha: TcxDBDateEdit
           Left = 182
@@ -529,6 +533,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 182
           Top = 6
           Caption = 'Fecha'
+          TabOrder = 14
         end
         object cxdbcrncydt1: TcxDBCurrencyEdit
           Left = 574
@@ -554,6 +559,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 364
           Top = 119
           Caption = 'Nro Pieza/s'
+          TabOrder = 18
         end
         object cxdbtxtdtDESCRIPCION_ARTICULO1: TcxDBTextEdit
           Left = 118
@@ -1391,6 +1397,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 136
           Top = 119
           Caption = 'Descripci'#243'n'
+          TabOrder = 19
         end
         object cxdbtxtdtZONA: TcxDBTextEdit
           Left = 479
@@ -1404,6 +1411,7 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
           Left = 479
           Top = 119
           Caption = 'Ctd Piezas'
+          TabOrder = 20
         end
         object cxdbtxtdtRAZONSOCIAL_CLIENTE1: TcxDBTextEdit
           Left = 431
@@ -1419,10 +1427,12 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
       object pnl2: TPanel
         Left = 0
         Top = 211
-        Width = 761
-        Height = 272
+        Width = 757
+        Height = 271
         Align = alClient
         TabOrder = 1
+        ExplicitWidth = 761
+        ExplicitHeight = 272
         object cxpgcntrl2: TcxPageControl
           Left = 1
           Top = 1
@@ -1449,6 +1459,10 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
             Margins.Bottom = 2
             Caption = 'Historia Dental'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxdbm1: TcxDBMemo
               Left = 0
               Top = 0
@@ -1460,8 +1474,8 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
               DataBinding.DataField = 'DESCRIPCION_HISTORIA'
               DataBinding.DataSource = dsTablaG
               TabOrder = 0
-              Height = 236
-              Width = 751
+              Height = 235
+              Width = 747
             end
           end
           object cxtbsht1: TcxTabSheet
@@ -1471,6 +1485,10 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
             Margins.Bottom = 2
             Caption = 'Datos Cliente'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
           end
           object cxtbsht3: TcxTabSheet
             Margins.Left = 2
@@ -1479,10 +1497,13 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
             Margins.Bottom = 2
             Caption = 'Facturaci'#243'n'
             ImageIndex = 2
+            ExplicitWidth = 751
+            ExplicitHeight = 236
             object cxlbl8: TcxLabel
               Left = 5
               Top = 23
               Caption = 'N'#250'mero de Factura'
+              TabOrder = 1
             end
             object cxdbtxtdtMOVIL_CLIENTE: TcxDBTextEdit
               Left = 189
@@ -1504,11 +1525,13 @@ inherited frmMtoHistoriaClientes: TfrmMtoHistoriaClientes
               Left = 57
               Top = 50
               Caption = 'Serie Factura'
+              TabOrder = 3
             end
             object cxlbl11: TcxLabel
               Left = 28
               Top = 79
               Caption = 'Linea de Factura'
+              TabOrder = 4
             end
             object cxdbtxtdtSERIE_FACTURA: TcxDBTextEdit
               Left = 189

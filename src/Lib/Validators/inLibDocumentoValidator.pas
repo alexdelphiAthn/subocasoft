@@ -2,17 +2,17 @@ unit inLibDocumentoValidator;
 
 interface
 uses
-  System.SysUtils, System.RegularExpressions;
+  System.SysUtils;
 type
   TTipoDocumento = (tdNIF, tdNIE, tdCIF, tdPasaporte,
                                             tdTarjetaResidencia, tdDesconocido);
   TDocumentoValidator = class
   private
-    // Letras para cálculo del NIF
+    // Letras para cï¿½lculo del NIF
     const LETRAS_NIF: string = 'TRWAGMYFPDXBNJZSQVHLCKE';
-    // Letras válidas para NIE
+    // Letras vï¿½lidas para NIE
     const LETRAS_NIE_INICIO: string = 'XYZ';
-    // Letras válidas para CIF según tipo de organización
+    // Letras vï¿½lidas para CIF segï¿½n tipo de organizaciï¿½n
     const LETRAS_CIF_ORGANIZACION: string = 'ABCDEFGHJNPQRSUVW';
     function LimpiarDocumento(const documento: string): string;
     function EsNumero(const valor: string): Boolean;
@@ -34,7 +34,7 @@ implementation
 { TDocumentoValidator }
 function TDocumentoValidator.LimpiarDocumento(const documento: string): string;
 begin
-  // Eliminar espacios, guiones y convertir a mayúsculas
+  // Eliminar espacios, guiones y convertir a mayï¿½sculas
   Result := UpperCase(StringReplace(StringReplace(Trim(documento), ' ', '', [rfReplaceAll]), '-', '', [rfReplaceAll]));
 end;
 function TDocumentoValidator.EsNumero(const valor: string): Boolean;
@@ -72,11 +72,11 @@ begin
   // Debe tener exactamente 9 caracteres
   if Length(nifLimpio) <> 9 then
     Exit;
-  // Los primeros 8 deben ser números
+  // Los primeros 8 deben ser nï¿½meros
   parteNumerica := Copy(nifLimpio, 1, 8);
   if not EsNumero(parteNumerica) then
     Exit;
-  // El último debe ser una letra válida del NIF
+  // El ï¿½ltimo debe ser una letra vï¿½lida del NIF
   letraDocumento := nifLimpio[9];
   if Pos(letraDocumento, LETRAS_NIF) = 0 then
     Exit;
@@ -106,15 +106,15 @@ begin
   letraInicial := nieLimpio[1];
   if not CharInSet(letraInicial, ['X', 'Y', 'Z']) then
     Exit;
-  // Los caracteres 2-8 deben ser números
+  // Los caracteres 2-8 deben ser nï¿½meros
   parteNumerica := Copy(nieLimpio, 2, 7);
   if not EsNumero(parteNumerica) then
     Exit;
-  // El último debe ser una letra válida del NIF
+  // El ï¿½ltimo debe ser una letra vï¿½lida del NIF
   letraFinal := nieLimpio[9];
   if Pos(letraFinal, LETRAS_NIF) = 0 then
     Exit;
-  // Convertir la letra inicial a número: X=0, Y=1, Z=2
+  // Convertir la letra inicial a nï¿½mero: X=0, Y=1, Z=2
   case letraInicial of
     'X': numeroParaCalculo := '0' + parteNumerica;
     'Y': numeroParaCalculo := '1' + parteNumerica;
@@ -140,15 +140,13 @@ begin
   parteNumerica := Copy(cif, 2, 7);
   sumaPares := 0;
   sumaImpares := 0;
-
-  // Sumar dígitos en posiciones pares (2º, 4º, 6º)
+  // Sumar dï¿½gitos en posiciones pares (2ï¿½, 4ï¿½, 6ï¿½)
   for i := 2 to 6 do
   begin
     if (i mod 2) = 0 then
       sumaPares := sumaPares + StrToInt(parteNumerica[i]);
   end;
-
-  // Para posiciones impares, multiplicar por 2 y sumar los dígitos del resultado
+  // Para posiciones impares, multiplicar por 2 y sumar los dï¿½gitos del resultado
   for i := 1 to 7 do
   begin
     if (i mod 2) = 1 then
@@ -157,28 +155,23 @@ begin
       sumaImpares := sumaImpares + (digito div 10) + (digito mod 10);
     end;
   end;
-
   suma := sumaPares + sumaImpares;
   digito := 10 - (suma mod 10);
   if digito = 10 then
     digito := 0;
-
-  // Según el tipo de organización, puede ser número o letra
+  // Segï¿½n el tipo de organizaciï¿½n, puede ser nï¿½mero o letra
   case cif[1] of
-    // DÍGITO DE CONTROL NUMÉRICO
+    // Dï¿½GITO DE CONTROL NUMï¿½RICO
     'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'U', 'V':
       Result := Chr(Ord('0') + digito);
-
-    // DÍGITO DE CONTROL EN LETRA
+    // Dï¿½GITO DE CONTROL EN LETRA
     'G', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'W':
       Result := 'JABCDEFGHI'[digito + 1];
-
-    // Casos especiales de G: pueden ser número O letra
-    // Según documentación: las embajadas (tipo G) usan letra, el resto número
-    // Se mantiene letra por ser más restrictivo
-
+    // Casos especiales de G: pueden ser nï¿½mero O letra
+    // Segï¿½n documentaciï¿½n: las embajadas (tipo G) usan letra, el resto nï¿½mero
+    // Se mantiene letra por ser mï¿½s restrictivo
   else
-    // Por defecto número para casos no contemplados
+    // Por defecto nï¿½mero para casos no contemplados
     Result := Chr(Ord('0') + digito);
   end;
 end;
@@ -194,15 +187,15 @@ begin
   // Debe tener exactamente 9 caracteres
   if Length(cifLimpio) <> 9 then
     Exit;
-  // Debe empezar con una letra válida de organización
+  // Debe empezar con una letra vï¿½lida de organizaciï¿½n
   letraOrganizacion := cifLimpio[1];
   if Pos(letraOrganizacion, LETRAS_CIF_ORGANIZACION) = 0 then
     Exit;
-  // Los caracteres 2-8 deben ser números
+  // Los caracteres 2-8 deben ser nï¿½meros
   parteNumerica := Copy(cifLimpio, 2, 7);
   if not EsNumero(parteNumerica) then
     Exit;
-  // Validar el dígito de control
+  // Validar el dï¿½gito de control
   digitoControl := cifLimpio[9];
   digitoCalculado := CalcularDigitoControlCIF(cifLimpio);
   Result := (digitoControl = digitoCalculado);
@@ -211,7 +204,7 @@ function TDocumentoValidator.ValidarPasaporte(const pasaporte: string): Boolean;
 var
   pasaporteLimpio: string;
 begin
-  // Validación básica para pasaporte español (formato AAA123456)
+  // Validaciï¿½n bï¿½sica para pasaporte espaï¿½ol (formato AAA123456)
   pasaporteLimpio := LimpiarDocumento(pasaporte);
   // Debe tener 9 caracteres
   if Length(pasaporteLimpio) <> 9 then
@@ -234,7 +227,7 @@ var
 begin
   // Las tarjetas de residencia siguen un formato similar al NIE
   tarjetaLimpia := LimpiarDocumento(tarjeta);
-  // Formato básico: debe tener entre 8 y 12 caracteres
+  // Formato bï¿½sico: debe tener entre 8 y 12 caracteres
   if (Length(tarjetaLimpia) < 8) or (Length(tarjetaLimpia) > 12) then
   begin
     Result := False;
@@ -246,8 +239,8 @@ begin
     Result := ValidarNIE(tarjetaLimpia);
     Exit;
   end;
-  // Para otros formatos, validación básica
-  Result := True; // Aceptar otros formatos válidos
+  // Para otros formatos, validaciï¿½n bï¿½sica
+  Result := True; // Aceptar otros formatos vï¿½lidos
 end;
 function TDocumentoValidator.DetectarTipoDocumento(const documento: string): TTipoDocumento;
 var
@@ -265,13 +258,13 @@ begin
     Result := tdNIE;
     Exit;
   end;
-  // NIF: 9 caracteres, empieza con número
+  // NIF: 9 caracteres, empieza con nï¿½mero
   if (Length(docLimpio) = 9) and CharInSet(docLimpio[1], ['0'..'9']) then
   begin
     Result := tdNIF;
     Exit;
   end;
-  // CIF: 9 caracteres, empieza con letra de organización
+  // CIF: 9 caracteres, empieza con letra de organizaciï¿½n
   if (Length(docLimpio) = 9) and (Pos(docLimpio[1], LETRAS_CIF_ORGANIZACION) > 0) then
   begin
     Result := tdCIF;
@@ -312,14 +305,14 @@ end;
 function TDocumentoValidator.ObtenerMensajeError(const documento: string; tipo: TTipoDocumento): string;
 begin
   case tipo of
-    tdNIF: Result := 'NIF inválido. Formato esperado: 12345678A';
-    tdNIE: Result := 'NIE inválido. Formato esperado: X1234567A';
-    tdCIF: Result := 'CIF inválido. Formato esperado: A12345674';
-    //tdPasaporte: Result := 'Pasaporte inválido. Formato esperado: AAA123456';
-    tdTarjetaResidencia: Result := 'Tarjeta de residencia inválida';
-    tdDesconocido: Result := 'NIF vacío no permitido';
+    tdNIF: Result := 'NIF invï¿½lido. Formato esperado: 12345678A';
+    tdNIE: Result := 'NIE invï¿½lido. Formato esperado: X1234567A';
+    tdCIF: Result := 'CIF invï¿½lido. Formato esperado: A12345674';
+    //tdPasaporte: Result := 'Pasaporte invï¿½lido. Formato esperado: AAA123456';
+    tdTarjetaResidencia: Result := 'Tarjeta de residencia invï¿½lida';
+    tdDesconocido: Result := 'NIF vacï¿½o no permitido';
   else
-    Result := 'Documento inválido';
+    Result := 'Documento invï¿½lido';
   end;
 end;
 end.

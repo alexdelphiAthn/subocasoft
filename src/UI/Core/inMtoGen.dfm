@@ -2,8 +2,8 @@ object frmMtoGen: TfrmMtoGen
   Left = 0
   Top = 119
   Caption = 'fT'
-  ClientHeight = 579
-  ClientWidth = 1181
+  ClientHeight = 578
+  ClientWidth = 1177
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -12,7 +12,6 @@ object frmMtoGen: TfrmMtoGen
   Font.Style = []
   FormStyle = fsMDIChild
   KeyPreview = True
-  OldCreateOrder = True
   Position = poDefault
   Visible = True
   OnActivate = FormActivate
@@ -21,25 +20,28 @@ object frmMtoGen: TfrmMtoGen
   OnKeyPress = FormKeyPress
   OnKeyUp = FormKeyUp
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 22
   object pButtonPage: TPanel
     Left = 0
     Top = 0
-    Width = 983
-    Height = 579
+    Width = 979
+    Height = 578
     Align = alClient
     ParentBackground = False
     TabOrder = 1
+    ExplicitWidth = 983
+    ExplicitHeight = 579
   end
   object pButtonRightBar: TPanel
-    Left = 983
+    Left = 979
     Top = 0
     Width = 198
-    Height = 579
+    Height = 578
     Align = alRight
     ParentBackground = False
     TabOrder = 2
+    ExplicitLeft = 983
+    ExplicitHeight = 579
     object btnExportarExcel: TSpeedButton
       Left = 80
       Top = 106
@@ -261,8 +263,8 @@ object frmMtoGen: TfrmMtoGen
   object pcPantalla: TPageControl
     Left = 0
     Top = 0
-    Width = 983
-    Height = 579
+    Width = 979
+    Height = 578
     ActivePage = tsLista
     Align = alClient
     Font.Charset = ANSI_CHARSET
@@ -274,6 +276,8 @@ object frmMtoGen: TfrmMtoGen
     ParentFont = False
     Style = tsFlatButtons
     TabOrder = 0
+    ExplicitWidth = 983
+    ExplicitHeight = 579
     object tsLista: TTabSheet
       Caption = '&Lista'
       object cxGrdPrincipal: TcxGrid
@@ -353,6 +357,7 @@ object frmMtoGen: TfrmMtoGen
         ParentBackground = False
         ParentCtl3D = False
         TabOrder = 0
+        ExplicitWidth = 979
         object dxbvl1: TdxBevel
           Left = 5
           Top = 2
@@ -452,10 +457,6 @@ object frmMtoGen: TfrmMtoGen
       Font.Style = []
       ImageIndex = 1
       ParentFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
   end
   object dsTablaG: TDataSource

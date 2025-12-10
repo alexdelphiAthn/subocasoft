@@ -3,9 +3,9 @@ unit inLibLogVeriFactu;
 interface
 uses
   System.SysUtils, System.Classes, System.Hash, System.JSON,
-  System.Win.Registry, Winapi.Messages, inLibLog, Data.DB,
-  Uni, MySQLUniProvider, MemDS, Winapi.Windows,  System.StrUtils,
-  System.Generics.Collections, System.DateUtils, inLibVarGlob ;
+  Winapi.Messages, inLibLog, Data.DB,
+  Uni, Winapi.Windows,
+  System.DateUtils, inLibVarGlob ;
 type
 
   TVeriFactuEventType = (

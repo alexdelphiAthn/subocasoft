@@ -4,8 +4,8 @@ object frmModalHisFac: TfrmModalHisFac
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Generar Factura'
-  ClientHeight = 258
-  ClientWidth = 410
+  ClientHeight = 257
+  ClientWidth = 406
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,10 +17,10 @@ object frmModalHisFac: TfrmModalHisFac
   OnCreate = FormCreate
   TextHeight = 23
   object pnl1: TPanel
-    Left = 256
+    Left = 252
     Top = 0
     Width = 154
-    Height = 258
+    Height = 257
     Align = alRight
     TabOrder = 0
     object btnSalir: TcxButton
@@ -50,6 +50,7 @@ object frmModalHisFac: TfrmModalHisFac
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Serie Factura'
+    TabOrder = 3
   end
   object cmbSerieFactura: TcxLookupComboBox
     Left = 24
@@ -72,6 +73,7 @@ object frmModalHisFac: TfrmModalHisFac
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Fecha Factura'
+    TabOrder = 4
   end
   object dtFecha: TcxDateEdit
     Left = 24
@@ -94,5 +96,6 @@ object frmModalHisFac: TfrmModalHisFac
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Nro Factura'
+    TabOrder = 6
   end
 end

@@ -3,14 +3,14 @@ unit inLibVerifactuClient;
 interface
 uses
   System.Classes, System.SysUtils, System.JSON, System.NetEncoding,
-  System.Variants, Vcl.Imaging.pngimage, System.Net.Mime,
-  IdHTTP, IdSSLOpenSSL, Uni, UniProvider, MySQLUniProvider,
+  System.Variants, Vcl.Imaging.pngimage,
+  IdSSLOpenSSL, Uni,
   DB, System.Net.URLClient,    System.Net.HttpClient,
   inLibVarGlob, inLibData, REST.Types, REST.Client, System.StrUtils,
-  Data.Bind.Components, Data.Bind.ObjectScope, REST.Authenticator.Basic;
+  Data.Bind.Components, Data.Bind.ObjectScope;
 
 type
-  // Record para configuración del servicio
+  // Record para configuraciï¿½n del servicio
   TVerifactuConfig = record
     URL: string;
     URLState:string;
@@ -87,16 +87,16 @@ type
                                                              TVerifactuResponse;
     constructor Create(AConnection: TUniConnection);
     destructor Destroy; override;
-    // Configuración
+    // Configuraciï¿½n
     function CargarConfiguracion: Boolean;
     property Config: TVerifactuConfig read FConfig write FConfig;
-    // Métodos principales
+    // Mï¿½todos principales
     function LlamarWebService(const JSONBody: string): TVerifactuResult;
     function ProcesarRespuestaWebService(const JSONRespuesta: string;
                                         const SerieFactura: string;
                                         NumeroFactura: Integer;
                                         PeticionJSON:String = ''): Boolean;
-    // Métodos específicos de la API
+    // Mï¿½todos especï¿½ficos de la API
     function CrearFacturaVerifactu(const Serie: string; const Numero: Integer;
                                 const JSONPeticion: string): TVerifactuResponse;
     function ConsultarEstadoFactura(const QueueId: Integer;
@@ -177,28 +177,28 @@ begin
       end;
     3019: // Invoice not found in queue
       begin
-        sMensajeError := 'No se encontró la factura en la cola de Verifactu';
-        sMensajeLog := 'Factura no encontrada en cola para cancelación';
+        sMensajeError := 'No se encontrï¿½ la factura en la cola de Verifactu';
+        sMensajeLog := 'Factura no encontrada en cola para cancelaciï¿½n';
       end;
-    2000..2999: // Errores de licencia/configuración
+    2000..2999: // Errores de licencia/configuraciï¿½n
       begin
-        sMensajeError := 'Error de configuración: ' +
+        sMensajeError := 'Error de configuraciï¿½n: ' +
                                                     CancelResponse.ErrorMessage;
-        sMensajeLog := 'Error de configuración en cancelación';
+        sMensajeLog := 'Error de configuraciï¿½n en cancelaciï¿½n';
       end;
     else
       begin
         sMensajeError := Format('Error desconocido (%d): %s',
                                [CancelResponse.ErrorCode,
                                CancelResponse.ErrorMessage]);
-        sMensajeLog := 'Error no catalogado en cancelación';
+        sMensajeLog := 'Error no catalogado en cancelaciï¿½n';
       end;
   end;
   // Mostrar mensaje al usuario
   //ShowMessage(sMensajeError);
   // Registrar en log
   frmOpenApp.VeriFactuLog.RegistrarError(
-    Format('%s. Código: %d, RequestId: %s',
+    Format('%s. Cï¿½digo: %d, RequestId: %s',
            [sMensajeLog, CancelResponse.ErrorCode, CancelResponse.RequestId]),
     CancelResponse.JSONCompleto, sSerie, iNumero);
 end;
@@ -224,12 +224,12 @@ begin
       QuotedStr('URL_VERIFACTU_STATE') + ', ' +
       QuotedStr('VERIFACTU_RETRY_DELAY') + ')';
     qryParams.Open;
-    // Inicializar configuración con valores por defecto
+    // Inicializar configuraciï¿½n con valores por defecto
     FillChar(FConfig, SizeOf(FConfig), 0);
     FConfig.Timeout := 30000;      // 30 segundos
     FConfig.MaxRetries := 3;       // 3 reintentos
     FConfig.RetryDelay := 2000;    // 2 segundos entre reintentos
-    // Leer parámetros
+    // Leer parï¿½metros
     while not qryParams.Eof do
     begin
       if qryParams.FieldByName('NOMBRE_PARAM').AsString =
@@ -347,7 +347,7 @@ begin
             (FConfig.Username <> '') and
             (FConfig.Password <> '');
   if not Result then
-    LogError('Configuración de Verifactu incompleta');
+    LogError('Configuraciï¿½n de Verifactu incompleta');
 end;
 
 procedure TVerifactuClient.ConfigurarCliente;
@@ -389,7 +389,7 @@ begin
   Result.ResponseContent := '';
   Result.HTTPStatusCode := 0;
 
-  // Guardar configuración original
+  // Guardar configuraciï¿½n original
   OriginalMethod := FRESTRequest.Method;
   OriginalBaseURL := FRESTClient.BaseURL;
 
@@ -403,7 +403,7 @@ begin
       FRESTClient.BaseURL := URL;
       FRESTRequest.Resource := '';
       FRESTRequest.ClearBody;
-      // Ejecutar petición
+      // Ejecutar peticiï¿½n
       FRESTRequest.Execute;
       Result.ResponseContent := FRESTResponse.Content;
       Result.HTTPStatusCode := FRESTResponse.StatusCode;
@@ -421,7 +421,7 @@ begin
         Inc(Reintentos);
         if Reintentos > FConfig.MaxRetries then
         begin
-          Result.ErrorMessage := Format('Error después de %d reintentos: %s',
+          Result.ErrorMessage := Format('Error despuï¿½s de %d reintentos: %s',
             [FConfig.MaxRetries, E.Message]);
           LogError(Result.ErrorMessage);
           Break;
@@ -431,7 +431,7 @@ begin
       end;
     end;
   end;
-  // Restaurar configuración original
+  // Restaurar configuraciï¿½n original
   FRESTRequest.Method := OriginalMethod;
   FRESTClient.BaseURL := OriginalBaseURL;
 end;
@@ -453,7 +453,7 @@ begin
       FRESTRequest.Params.Clear;
       FRESTRequest.Params.AddHeader('Content-Type', 'application/json');
       FRESTRequest.Params.AddHeader('Accept', '*/*'); // Como en Insomnia
-      // AUTENTICACIÓN - La cabecera exacta que funciona en Insomnia
+      // AUTENTICACIï¿½N - La cabecera exacta que funciona en Insomnia
       FRESTRequest.Params.AddHeader(Fconfig.Username, FConfig.Password);
       FRESTRequest.AddBody(JSONBody, ctAPPLICATION_JSON);
       FRESTRequest.Execute;
@@ -473,7 +473,7 @@ begin
         Inc(Reintentos);
         if Reintentos > FConfig.MaxRetries then
         begin
-          Result.ErrorMessage := Format('Error después de %d reintentos: %s',
+          Result.ErrorMessage := Format('Error despuï¿½s de %d reintentos: %s',
                                                [FConfig.MaxRetries, E.Message]);
           LogError(Result.ErrorMessage);
           Break;
@@ -519,7 +519,7 @@ begin
     try
       if Assigned(JSONObj) then
       begin
-        // Datos básicos
+        // Datos bï¿½sicos
         if JSONObj.TryGetValue('requestId', Result.RequestId) and
            JSONObj.TryGetValue('queueId', Result.QueueId) and
            JSONObj.TryGetValue('qrcode', Result.QRCodeBase64) then
@@ -544,7 +544,7 @@ begin
           // la cosa viene raruna
           // Intentar extraer mensaje de error
           begin
-          // Extraer mensaje y código de error de forma independiente
+          // Extraer mensaje y cï¿½digo de error de forma independiente
           if not JSONObj.TryGetValue('message', Result.ErrorMessage) then
             if not JSONObj.TryGetValue('error', Result.ErrorMessage) then
               Result.ErrorMessage := 'Error desconocido en la respuesta';
@@ -556,7 +556,7 @@ begin
       end
       else
       begin
-        Result.ErrorMessage := 'Respuesta JSON inválida';
+        Result.ErrorMessage := 'Respuesta JSON invï¿½lida';
       end;
     finally
       JSONObj.Free;
@@ -584,14 +584,14 @@ begin
     Response := ParsearRespuestaVerifactu(JSONRespuesta);
     if Response.Success then
     begin
-      // Guardar consolidación exitosa
+      // Guardar consolidaciï¿½n exitosa
       Result := GuardarConsolidacion(SerieFactura,
                                      NumeroFactura,
                                      Response,
                                      PeticionJSON);
       if Result then
       begin
-        LogOperacion('Consolidadación ONLINE OK',
+        LogOperacion('Consolidadaciï¿½n ONLINE OK',
                       NumeroFactura, SerieFactura, Response.JSONCompleto);
         // Actualizar estado de la factura
         ActualizarEstadoFactura(SerieFactura, NumeroFactura, 'ONLINE');
@@ -707,7 +707,7 @@ begin
       begin
 //        if qryConsolidacion.Connection.InTransaction then
 //          qryConsolidacion.Connection.Rollback;
-        LogError('Error guardando consolidación: ' + E.Message);
+        LogError('Error guardando consolidaciï¿½n: ' + E.Message);
         raise;
       end;
     end;
@@ -765,7 +765,7 @@ var
 begin
   // Validar factura antes de enviar
   if not ValidarFactura(Serie, Numero) then
-    raise Exception.Create('Datos de factura no válidos para Verifactu');
+    raise Exception.Create('Datos de factura no vï¿½lidos para Verifactu');
   // Enviar a Verifactu
   WSResult := LlamarWebService(JSONPeticion);
   // Parsear respuesta
@@ -786,7 +786,7 @@ begin
   try
     HTTPClient.ContentType := 'application/json';
     HTTPClient.CustomHeaders[FConfig.Username] := FConfig.Password;
-    RequestBody := IntToStr(AQueueId); // Solo el número
+    RequestBody := IntToStr(AQueueId); // Solo el nï¿½mero
     Response := HTTPClient.Post(FConfig.URLCancel,
                              TStringStream.Create(RequestBody, TEncoding.UTF8));
     if Response.StatusCode = 200 then
@@ -830,17 +830,17 @@ begin
   except
     on E: Exception do
     begin
-      LogError('Excepción en ConsultarEstadoFactura: ' + E.Message);
+      LogError('Excepciï¿½n en ConsultarEstadoFactura: ' + E.Message);
       Result := '';
     end;
   end;
 end;
 
 
-//    // Cargar configuración si es necesario
+//    // Cargar configuraciï¿½n si es necesario
 //    if not CargarConfiguracion then
 //    begin
-//      LogError('Error al cargar configuración para consulta de estado');
+//      LogError('Error al cargar configuraciï¿½n para consulta de estado');
 //      Exit;
 //    end;
     // Obtener URL del endpoint
@@ -850,11 +850,11 @@ end;
 //    URL := URL + (IntToStr(QueueId));
 //    if URL = '' then
 //    begin
-//      LogError('URL de consulta de estado está vacía');
+//      LogError('URL de consulta de estado estï¿½ vacï¿½a');
 //      Exit;
 //    end;
 
-    // Enviar petición GET usando REST
+    // Enviar peticiï¿½n GET usando REST
     //HTTPResult := EnviarPeticionGET(URL);
 
 //    if HTTPResult.Success then
@@ -946,7 +946,7 @@ begin
 end;
 
 // ============================================================================
-// Funciones globales para compatibilidad con código existente
+// Funciones globales para compatibilidad con cï¿½digo existente
 // ============================================================================
 
 function LlamarWebServiceVerifactu(IDConsolidacion: Integer): Boolean;
@@ -961,11 +961,11 @@ begin
   if ((not Assigned(frmOpenApp)) or
       (not Assigned(frmOpenApp.FDmConn)) or
       (not frmOpenApp.FDmConn.conUni.Connected)) then
-    raise Exception.Create('Conexión a base de datos no disponible');
+    raise Exception.Create('Conexiï¿½n a base de datos no disponible');
   VerifactuClient := TVerifactuClient.Create(frmOpenApp.FDmConn.conUni);
   qryConsolidacion := TUniQuery.Create(nil);
   try
-    // Obtener la petición JSON de la base de datos
+    // Obtener la peticiï¿½n JSON de la base de datos
     qryConsolidacion.Connection := frmOpenApp.FDmConn.conUni;
     qryConsolidacion.SQL.Text :=
       'SELECT PETICION_COMPLETA, '+
@@ -977,9 +977,9 @@ begin
     qryConsolidacion.Open;
     if qryConsolidacion.RecordCount = 0 then
     begin
-      VerifactuClient.LogError('No se encontró registro de consolidación con ID: ' +
+      VerifactuClient.LogError('No se encontrï¿½ registro de consolidaciï¿½n con ID: ' +
         IntToStr(IDConsolidacion));
-      raise Exception.Create('No se encontró registro de consolidación con ID: ' +
+      raise Exception.Create('No se encontrï¿½ registro de consolidaciï¿½n con ID: ' +
         IntToStr(IDConsolidacion));
     end;
     JSONPeticion := qryConsolidacion.FieldByName('PETICION_COMPLETA').AsString;
@@ -987,9 +987,9 @@ begin
     NumeroFactura := qryConsolidacion.FieldByName('NRO_FACTURA').AsInteger;
     if Trim(JSONPeticion) = '' then
     begin
-      VerifactuClient.LogError('La petición JSON está vacía para el ID: ' +
+      VerifactuClient.LogError('La peticiï¿½n JSON estï¿½ vacï¿½a para el ID: ' +
         IntToStr(IDConsolidacion));
-      raise Exception.Create('La petición JSON está vacía para el ID: ' +
+      raise Exception.Create('La peticiï¿½n JSON estï¿½ vacï¿½a para el ID: ' +
         IntToStr(IDConsolidacion));
     end;
     // Llamar al webservice
@@ -1025,11 +1025,11 @@ begin
   if ((not Assigned(frmOpenApp)) or
       (not Assigned(frmOpenApp.FDmConn)) or
       (not frmOpenApp.FDmConn.conUni.Connected)) then
-    raise Exception.Create('Conexión a base de datos no disponible');
+    raise Exception.Create('Conexiï¿½n a base de datos no disponible');
   VerifactuClient := TVerifactuClient.Create(frmOpenApp.FDmConn.conUni);
   qryConsolidacion := TUniQuery.Create(nil);
   try
-    // Verificar si ya existe consolidación para esta factura
+    // Verificar si ya existe consolidaciï¿½n para esta factura
     qryConsolidacion.Connection := frmOpenApp.FDmConn.conUni;
     qryConsolidacion.SQL.Text :=
       'SELECT * '+
@@ -1040,7 +1040,7 @@ begin
     qryConsolidacion.ParamByName('SERIE_FACTURA').AsString := SerieFactura;
     qryConsolidacion.ReadOnly := False;
     qryConsolidacion.Open;
-    // Si no existe, crear registro inicial con la petición
+    // Si no existe, crear registro inicial con la peticiï¿½n
     if qryConsolidacion.RecordCount = 0 then
     begin
       IDConsolidacion := inLibData.GetNextCont('CS');

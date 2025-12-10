@@ -4,8 +4,8 @@ object frmPrintPre: TfrmPrintPre
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Presupuesto'
-  ClientHeight = 290
-  ClientWidth = 472
+  ClientHeight = 289
+  ClientWidth = 468
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,15 +13,13 @@ object frmPrintPre: TfrmPrintPre
   Font.Name = 'Lucida Sans Unicode'
   Font.Style = []
   FormStyle = fsStayOnTop
-  OldCreateOrder = True
   Scaled = False
-  PixelsPerInch = 96
   TextHeight = 23
   object pnl1: TPanel
-    Left = 280
+    Left = 276
     Top = 0
     Width = 192
-    Height = 290
+    Height = 289
     Align = alRight
     TabOrder = 0
     object btn1: TcxButton
@@ -42,6 +40,7 @@ object frmPrintPre: TfrmPrintPre
       Caption = 'Salir'
       TabOrder = 1
       OnClick = btn3Click
+      ExplicitTop = 231
     end
   end
   object edtNroFac: TcxTextEdit
@@ -55,6 +54,7 @@ object frmPrintPre: TfrmPrintPre
     Left = 8
     Top = 4
     Caption = 'Presupuesto N'#250'mero'
+    TabOrder = 2
   end
   object edtSerie: TcxTextEdit
     Left = 8
@@ -112,17 +112,19 @@ object frmPrintPre: TfrmPrintPre
       Left = 15
       Top = 80
       Caption = 'Desde'
+      TabOrder = 3
       Visible = False
     end
     object cxlbl3: TcxLabel
       Left = 15
       Top = 108
       Caption = 'Hasta'
+      TabOrder = 5
       Visible = False
     end
   end
   object frxrprt1: TfrxReport
-    Version = '6.9.3'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -164,6 +166,10 @@ object frmPrintPre: TfrmPrintPre
       MirrorMode = []
       object mdCabecera: TfrxMasterData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
@@ -191544,6 +191550,10 @@ object frmPrintPre: TfrmPrintPre
       end
       object DetailData1: TfrxDetailData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 18.897650000000000000
         Top = 650.079160000000000000
@@ -191623,6 +191633,10 @@ object frmPrintPre: TfrmPrintPre
       end
       object Footer1: TfrxFooter
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 249.448980000000000000
         Top = 691.653990000000000000

@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Classes,  DB, Controls,  system.DateUtils,
-   inMtoPrincipal, DBClient, Provider, frxClass, frxDBSet,
+   inMtoPrincipal, frxClass, frxDBSet,
    Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni;
 
 type

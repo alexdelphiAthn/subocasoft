@@ -4,8 +4,8 @@ object frmPrintFacRec: TfrmPrintFacRec
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Recibo'
-  ClientHeight = 268
-  ClientWidth = 514
+  ClientHeight = 267
+  ClientWidth = 510
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,14 +16,12 @@ object frmPrintFacRec: TfrmPrintFacRec
   Scaled = False
   TextHeight = 23
   object pnl1: TPanel
-    Left = 352
+    Left = 348
     Top = 0
     Width = 162
-    Height = 268
+    Height = 267
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 348
-    ExplicitHeight = 267
     object btn4: TcxButton
       Left = 0
       Top = 0
@@ -74,6 +72,7 @@ object frmPrintFacRec: TfrmPrintFacRec
     Left = 8
     Top = 0
     Caption = 'Recibo N'#250'mero'
+    TabOrder = 2
   end
   object cxRadioGroup1: TcxRadioGroup
     Left = 8
@@ -225,7 +224,7 @@ object frmPrintFacRec: TfrmPrintFacRec
             7569636F6D7061745C6465666C616E67333038327B5C666F6E7474626C7B5C66
             305C666E696C5C66636861727365743020417269616C3B7D7B5C66315C666E69
             6C5C666368617273657430205461686F6D613B7D7D0D0A7B5C2A5C67656E6572
-            61746F722052696368656432302031302E302E32363130307D5C766965776B69
+            61746F722052696368656432302031302E302E31393034317D5C766965776B69
             6E64345C756331200D0A5C706172645C667332342052656369626F206465205B
             46616374757261732E2252415A4F4E534F4349414C5F434C49454E5445225D20
             6C612063616E7469646164206465205B46616374757261732E22494D504F5254

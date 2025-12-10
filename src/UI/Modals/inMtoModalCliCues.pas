@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, cxGraphics, cxLookAndFeels, cxLookAndFeelPainters, Menus,
-  dxSkinsCore, dxSkinBlue, frxClass, frxDBSet, StdCtrls, cxButtons, DB,
-  DBClient, cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
+  dxSkinsCore, dxSkinBlue, frxClass, StdCtrls, cxButtons, DB,
+  cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
   dxSkinBlack, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee,
   dxSkinDarkRoom, dxSkinDarkSide, dxSkinDevExpressDarkStyle,
   dxSkinDevExpressStyle, dxSkinFoggy, dxSkinGlassOceans,
@@ -22,7 +22,7 @@ uses
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
-  cxCalendar, frxDesgn, cxGroupBox, cxRadioGroup, frxExportBaseDialog,
+  cxCalendar, frxDesgn, cxRadioGroup, frxExportBaseDialog,
   cxSpinEdit;
 
 type

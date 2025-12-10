@@ -5,20 +5,20 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, inMtoGen, DB, ADODB, DBCtrls, StdCtrls,
-  ExtCtrls, Grids, DBGrids, ComCtrls, Buttons, Mask, //UniDataInq, //dxCntner,
+  ExtCtrls, ComCtrls, Buttons, //UniDataInq, //dxCntner,
   //dxEditor, dxExEdtr, dxEdLib, dxDBELib,
   cxControls, cxContainer, cxEdit,
   cxTextEdit, cxMaskEdit, cxDBEdit, cxNavigator, cxLookAndFeelPainters,
-  cxButtons, cxDropDownEdit, cxLookupEdit, cxDBLookupEdit,
+  cxDropDownEdit,
   cxDBLookupComboBox, cxImage, jpeg, cxCalendar, cxStyles, cxCustomData,
-  cxGraphics, cxFilter, cxData, cxDataStorage, cxDBData,
-  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGridLevel,
+  cxGraphics, cxFilter, cxDataStorage, cxDBData,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView,
   cxClasses, cxGridCustomView, cxGrid,  cxGridCardView,
   cxGridDBCardView, cxGridBandedTableView, cxGridDBBandedTableView, //dxTL,
   //dxDBCtrl, dxDBTL,
-  cxGroupBox, cxLabel, cxRadioGroup, cxListBox,
-  cxCheckBox, cxMemo, cxCurrencyEdit, ExtDlgs, OleServer, AxCtrls,
-  OleCtrls, DBOleCtl, cxLookAndFeels;
+  cxLabel, cxRadioGroup, cxListBox,
+  cxCheckBox, cxMemo, cxCurrencyEdit, OleServer, AxCtrls,
+  OleCtrls, cxLookAndFeels;
 
   procedure BusqAllGrid(var dbTvGen: TcxGridDBTableView; sDatoBusq:String);
   procedure GrabarGrids(frmMto:TComponent);
@@ -34,7 +34,7 @@ uses
 
 implementation
 
-uses inLibWin, inLibtb, inLibDir;
+uses inLibDir;
 
 procedure PonerAnchosTitulos(cxgrdtvVista: TcxGridDBTableView;
   sDes: string);
@@ -43,9 +43,9 @@ procedure PonerAnchosTitulos(cxgrdtvVista: TcxGridDBTableView;
 begin
   if sDes='Clientes' then
   begin
-    cxgrdtvVista.GetColumnByFieldName('CODIGO_CLIENTE').Caption := 'Filiación';
+    cxgrdtvVista.GetColumnByFieldName('CODIGO_CLIENTE').Caption := 'Filiaciï¿½n';
     cxgrdtvVista.GetColumnByFieldName('CODIGO_CLIENTE').Width := 60;
-    cxgrdtvVista.GetColumnByFieldName('RAZONSOCIAL_CLIENTE').Caption := 'Razón Social';
+    cxgrdtvVista.GetColumnByFieldName('RAZONSOCIAL_CLIENTE').Caption := 'Razï¿½n Social';
     cxgrdtvVista.GetColumnByFieldName('RAZONSOCIAL_CLIENTE').Width := 200;
     cxgrdtvVista.GetColumnByFieldName('NOMBRE').Caption := 'Nombre';
     cxgrdtvVista.GetColumnByFieldName('NOMBRE').Width := 100;
@@ -59,27 +59,27 @@ begin
     cxgrdtvVista.GetColumnByFieldName('APELLIDOS').Index :=
                                      cxgrdtvVista.GetColumnByFieldName('EMAIL_CLIENTE').Index;
     cxgrdtvVista.GetColumnByFieldName('EMAIL_CLIENTE').Index := iAux;
-    cxgrdtvVista.GetColumnByFieldName('MOVIL_CLIENTE').Caption := 'Teléfono Móvil';
+    cxgrdtvVista.GetColumnByFieldName('MOVIL_CLIENTE').Caption := 'Telï¿½fono Mï¿½vil';
     cxgrdtvVista.GetColumnByFieldName('MOVIL_CLIENTE').Width := 135;
     iAux := cxgrdtvVista.GetColumnByFieldName('APELLIDOS').Index;
     cxgrdtvVista.GetColumnByFieldName('APELLIDOS').Index :=
                                      cxgrdtvVista.GetColumnByFieldName('MOVIL_CLIENTE').Index;
     cxgrdtvVista.GetColumnByFieldName('MOVIL_CLIENTE').Index := iAux;
-    cxgrdtvVista.GetColumnByFieldName('DIRECCION1_CLIENTE').Caption := 'Dirección';
+    cxgrdtvVista.GetColumnByFieldName('DIRECCION1_CLIENTE').Caption := 'Direcciï¿½n';
     cxgrdtvVista.GetColumnByFieldName('DIRECCION1_CLIENTE').Width := 264;
-    cxgrdtvVista.GetColumnByFieldName('DIRECCION2_CLIENTE').Caption := 'Más Dirección';
+    cxgrdtvVista.GetColumnByFieldName('DIRECCION2_CLIENTE').Caption := 'Mï¿½s Direcciï¿½n';
     cxgrdtvVista.GetColumnByFieldName('DIRECCION2_CLIENTE').Width := 102;
-    cxgrdtvVista.GetColumnByFieldName('POBLACION_CLIENTE').Caption := 'Población';
+    cxgrdtvVista.GetColumnByFieldName('POBLACION_CLIENTE').Caption := 'Poblaciï¿½n';
     cxgrdtvVista.GetColumnByFieldName('POBLACION_CLIENTE').Width := 175;
     cxgrdtvVista.GetColumnByFieldName('PROVINCIA_CLIENTE').Caption := 'Provincia';
     cxgrdtvVista.GetColumnByFieldName('PROVINCIA_CLIENTE').Width := 135;
-    cxgrdtvVista.GetColumnByFieldName('CPOSTAL_CLIENTE').Caption := 'Código Postal';
+    cxgrdtvVista.GetColumnByFieldName('CPOSTAL_CLIENTE').Caption := 'Cï¿½digo Postal';
     cxgrdtvVista.GetColumnByFieldName('CPOSTAL_CLIENTE').Width := 95;
     cxgrdtvVista.GetColumnByFieldName('REFERENCIA_CLIENTE').Caption := 'Referencia';
     cxgrdtvVista.GetColumnByFieldName('REFERENCIA_CLIENTE').Width := 204;
     cxgrdtvVista.GetColumnByFieldName('OBSERVACIONES_CLIENTE').Caption := 'Observaciones';
     cxgrdtvVista.GetColumnByFieldName('OBSERVACIONES_CLIENTE').Width := 144;
-    cxgrdtvVista.GetColumnByFieldName('PROFESION_CLIENTE').Caption := 'Profesión';
+    cxgrdtvVista.GetColumnByFieldName('PROFESION_CLIENTE').Caption := 'Profesiï¿½n';
     cxgrdtvVista.GetColumnByFieldName('PROFESION_CLIENTE').Width := 168;
     cxgrdtvVista.GetColumnByFieldName('FECHA_NACIMIENTO').Caption := 'Fecha Nacimiento';
     cxgrdtvVista.GetColumnByFieldName('FECHA_NACIMIENTO').Width := 166;
@@ -90,7 +90,7 @@ begin
   end;
   if sDes='Productos' then
   begin
-     cxgrdtvVista.GetColumnByFieldName('CODIGO_ARTICULO').Caption := 'Código';
+     cxgrdtvVista.GetColumnByFieldName('CODIGO_ARTICULO').Caption := 'Cï¿½digo';
      cxgrdtvVista.GetColumnByFieldName('CODIGO_ARTICULO').Width := 58;
      cxgrdtvVista.GetColumnByFieldName('DESCRIPCION_ARTICULO').Caption := 'Tratamiento';
      cxgrdtvVista.GetColumnByFieldName('DESCRIPCION_ARTICULO').Width := 260;
@@ -229,7 +229,7 @@ var
 
 begin
 
-  //grabacion de los campos de la bbdd y columnas del grid, máscaras...
+  //grabacion de los campos de la bbdd y columnas del grid, mï¿½scaras...
   {
   if Assigned(dsTabla.DataSet) then
     if dsTabla.DataSet.ClassName = 'TZTable' then
@@ -250,13 +250,13 @@ begin
         cdIndex := TBetterADODataSet.Create(Application);
 
 
-        //hay problema al asignar la conexión
+        //hay problema al asignar la conexiï¿½n
         if EsBBDDPerfil(sTabla) then
           spIndex.Connection := FdmDatosg.qyDescColumn.Connection
         else
           spIndex.Connection := FdmDatosg.qyInq.Connection;
 
-        //Seleccionamos columnas de todos los índices.
+        //Seleccionamos columnas de todos los ï¿½ndices.
 
         spIndex.ProcedureName := 'sp_helpindex';
         spIndex.Parameters.Refresh;
@@ -364,7 +364,7 @@ begin
         //CagarIndices(cdIndex, FdmDatosg.tbIndex, sTabla);
       end;
 
-     //Grabación de las características de la ventana y splitters
+     //Grabaciï¿½n de las caracterï¿½sticas de la ventana y splitters
 
      //sFormName := frm;
      //bActivos  := chkSoloActivos.Checked;

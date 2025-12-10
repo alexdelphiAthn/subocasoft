@@ -2,7 +2,7 @@ unit inLibtb;
 
 interface
 
-uses  SysUtils, Variants, DB, ADODB, ExtCtrls, DBCtrls, Controls, Grids,
+uses  SysUtils, Variants, DB, ADODB, ExtCtrls, DBCtrls, Controls,
       Classes, COMObj, ComCtrls, ExtActns, OleCtrls, Forms, inifiles;
 
   type
@@ -204,7 +204,7 @@ begin
     Result  := IntToStr(CalculaDC(sBanco, sNumero));
   end
   else
-    Result := 'Número de Cuenta Inválido';
+    Result := 'Nï¿½mero de Cuenta Invï¿½lido';
 end;
 
 function TomarLetra(S: String):String;
@@ -224,7 +224,7 @@ begin
   if (sResul <> '?') then
     Result := LetraNIF(sResul)
   else
-    Result := ' NIF No Válido';
+    Result := ' NIF No Vï¿½lido';
 end;
 
 function SoloLetraNIF(S:String):Char;
@@ -277,7 +277,7 @@ end;
 
 procedure ComprobarNIF(sNIF:String);
 begin
-  //si el primer digito no es un número, es un CIF
+  //si el primer digito no es un nï¿½mero, es un CIF
   if (sNIF <> '') then
     if ( (sNIF[1] >= '0') and (sNIF[1] <= '9') ) then
       if ( SoloLetraNIF( sNIF ) <> TomarLetra( sNIF ) ) then
@@ -293,7 +293,7 @@ function AnsiSplit(const str: string;
                  const separator: string): TStringArray;
 // Devuelve un arreglo con las partes de "str" separadas por
 // "separator"
-// Versión ANSI
+// Versiï¿½n ANSI
 var
  i, n: integer;
  p, q, s: PChar;
@@ -313,8 +313,8 @@ begin
 end;
 
 function AnsiOccurs(const str: string; const substr: string): integer;
-// Devuelve la cantidad de veces que una subcadena está en una cadena
-// Versión ANSI
+// Devuelve la cantidad de veces que una subcadena estï¿½ en una cadena
+// Versiï¿½n ANSI
 var
  p, q: PChar;
  n: integer;

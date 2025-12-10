@@ -2,42 +2,31 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
   Left = 5
   Top = 4
   Caption = 'Odont'#243'logos'
-  ClientHeight = 530
-  ClientWidth = 857
+  ClientHeight = 529
+  ClientWidth = 853
   ExplicitWidth = 869
   ExplicitHeight = 568
   TextHeight = 22
   inherited pButtonPage: TPanel
-    Width = 659
-    Height = 530
-    ExplicitWidth = 379
+    Width = 655
+    Height = 529
+    ExplicitWidth = 655
     ExplicitHeight = 529
   end
   inherited pButtonRightBar: TPanel
-    Left = 659
-    Height = 530
-    ExplicitLeft = 379
+    Left = 655
+    Height = 529
+    ExplicitLeft = 655
     ExplicitHeight = 529
     inherited pButtonGen: TPanel
       Top = 371
       ExplicitTop = 370
-      ExplicitWidth = 196
-    end
-    inherited pButtonBDStat: TPanel
-      ExplicitWidth = 196
-      inherited pnTableName: TPanel
-        ExplicitWidth = 196
-      end
-      inherited Panel4: TPanel
-        ExplicitWidth = 196
-      end
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 659
-    Height = 530
-    ActivePage = tsLista
-    ExplicitWidth = 379
+    Width = 655
+    Height = 529
+    ExplicitWidth = 655
     ExplicitHeight = 529
     inherited tsLista: TTabSheet
       ExplicitWidth = 651
@@ -45,8 +34,8 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
       inherited cxGrdPrincipal: TcxGrid
         Width = 651
         Height = 447
-        ExplicitWidth = 651
-        ExplicitHeight = 447
+        ExplicitWidth = 647
+        ExplicitHeight = 446
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           object cxgrdbclmnGrdDBTabPrinODONTOLOGO: TcxGridDBColumn
             Caption = 'C'#243'digo Odont'#243'logo'
@@ -62,7 +51,7 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
       end
       inherited pnTopGrid: TPanel
         Width = 651
-        ExplicitWidth = 651
+        ExplicitWidth = 647
         inherited edtBusqGlobal: TcxTextEdit
           ExplicitHeight = 30
         end
@@ -78,7 +67,7 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
         Height = 145
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 371
+        ExplicitWidth = 655
         object cxdbtxtdt1: TcxDBTextEdit
           Left = 104
           Top = 33
@@ -92,11 +81,13 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
           Left = 49
           Top = 37
           Caption = 'C'#243'digo'
+          TabOrder = 2
         end
         object cxlbl1: TcxLabel
           Left = 46
           Top = 65
           Caption = 'Nombre'
+          TabOrder = 4
         end
         object cxdbtxtdt2: TcxDBTextEdit
           Left = 104
@@ -110,6 +101,7 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
           Left = 791
           Top = 93
           Caption = 'Modificado'
+          TabOrder = 6
         end
         object cxdbtxtdt15: TcxDBTextEdit
           Left = 856
@@ -126,8 +118,7 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
           Height = 145
           Align = alTop
           TabOrder = 0
-          ExplicitLeft = 25
-          ExplicitTop = -28
+          ExplicitWidth = 653
           object cxDBTextEdit1: TcxDBTextEdit
             Left = 128
             Top = 31
@@ -155,6 +146,7 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
             Style.Font.Name = 'Lucida Sans'
             Style.Font.Style = []
             Style.IsFontAssigned = True
+            TabOrder = 2
           end
           object cxLabel2: TcxLabel
             Left = 46
@@ -167,6 +159,7 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
             Style.Font.Name = 'Lucida Sans'
             Style.Font.Style = []
             Style.IsFontAssigned = True
+            TabOrder = 4
           end
           object cxDBTextEdit2: TcxDBTextEdit
             Left = 128
@@ -286,12 +279,11 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
       object pnl2: TPanel
         Left = 0
         Top = 145
-        Width = 651
-        Height = 345
+        Width = 647
+        Height = 344
         Align = alClient
         TabOrder = 1
         ExplicitWidth = 371
-        ExplicitHeight = 344
         object cxpgcntrl2: TcxPageControl
           Left = 1
           Top = 1
@@ -310,6 +302,8 @@ inherited frmMtoOdontologos: TfrmMtoOdontologos
           object cxtbsht3: TcxTabSheet
             Caption = 'M'#225's Datos'
             ImageIndex = 0
+            ExplicitLeft = 0
+            ExplicitTop = 0
             ExplicitWidth = 361
             ExplicitHeight = 310
           end

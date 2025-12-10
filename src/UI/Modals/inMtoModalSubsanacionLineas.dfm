@@ -10,10 +10,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
   Font.Height = -17
   Font.Name = 'Lucida Sans'
   Font.Style = []
-  OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 19
   object pnlMain: TPanel
     Left = 0
@@ -29,6 +27,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
     Font.Style = []
     ParentFont = False
     TabOrder = 0
+    ExplicitWidth = 1064
+    ExplicitHeight = 341
     DesignSize = (
       1068
       342)
@@ -40,12 +40,14 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
       Style.LookAndFeel.Kind = lfOffice11
       StyleDisabled.LookAndFeel.Kind = lfOffice11
       TabOrder = 0
+      ExplicitWidth = 1028
+      ExplicitHeight = 229
       Height = 230
-      Width = 1036
+      Width = 1032
       object grdLineas: TcxGrid
         Left = 2
         Top = 24
-        Width = 1032
+        Width = 1028
         Height = 204
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
@@ -55,14 +57,11 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        ExplicitWidth = 1024
+        ExplicitHeight = 203
         object tvLineas: TcxGridDBTableView
-          Navigator.Buttons.CustomButtons = <>
-          ScrollbarAnnotations.CustomAnnotations = <>
           OnEditValueChanged = tvLineasEditValueChanged
           DataController.DataSource = dsLineas
-          DataController.Summary.DefaultGroupSummaryItems = <>
-          DataController.Summary.FooterSummaryItems = <>
-          DataController.Summary.SummaryGroups = <>
           OptionsData.Deleting = False
           OptionsData.Inserting = False
           OptionsView.GroupByBox = False
@@ -134,7 +133,7 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
     object pnlTotales: TPanel
       Left = 8
       Top = 246
-      Width = 1036
+      Width = 1032
       Height = 88
       Anchors = [akLeft, akRight, akBottom]
       BevelOuter = bvLowered
@@ -147,11 +146,14 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
       ParentBackground = False
       ParentFont = False
       TabOrder = 1
+      ExplicitTop = 245
+      ExplicitWidth = 1028
       object lblTotalOriginal: TcxLabel
         Left = 16
         Top = 8
         Caption = 'Total Objetivo: 0,00 '#8364
         Properties.Alignment.Horz = taLeftJustify
+        TabOrder = 0
         Transparent = True
       end
       object lblTotalActual: TcxLabel
@@ -159,6 +161,7 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
         Top = 32
         Caption = 'Total Actual: 0,00 '#8364
         Properties.Alignment.Horz = taLeftJustify
+        TabOrder = 1
         Transparent = True
       end
       object lblDiferencia: TcxLabel
@@ -166,12 +169,14 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
         Top = 56
         Caption = 'Diferencia: 0,00 '#8364
         Properties.Alignment.Horz = taLeftJustify
+        TabOrder = 2
         Transparent = True
       end
       object lblStateDataset: TcxLabel
         Left = 911
         Top = 11
         Caption = 'State'
+        TabOrder = 3
       end
     end
   end
@@ -189,11 +194,13 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
     Font.Style = []
     ParentFont = False
     TabOrder = 1
+    ExplicitTop = 341
+    ExplicitWidth = 1064
     DesignSize = (
       1068
       48)
     object btnAceptar: TcxButton
-      Left = 907
+      Left = 903
       Top = 3
       Width = 132
       Height = 40
@@ -229,6 +236,7 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
       Font.Style = []
       ParentFont = False
       OnClick = btnAceptarClick
+      ExplicitLeft = 899
     end
   end
   object dsLineas: TDataSource

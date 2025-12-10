@@ -4,8 +4,8 @@ object frmGenPreFac: TfrmGenPreFac
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Generar Factura'
-  ClientHeight = 331
-  ClientWidth = 424
+  ClientHeight = 330
+  ClientWidth = 420
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,6 +20,7 @@ object frmGenPreFac: TfrmGenPreFac
     Left = 8
     Top = 4
     Caption = 'Documento Origen N'#250'mero'
+    TabOrder = 1
   end
   object edtNumFacOrigen: TcxTextEdit
     Left = 80
@@ -29,14 +30,12 @@ object frmGenPreFac: TfrmGenPreFac
     Width = 129
   end
   object pnl1: TPanel
-    Left = 277
+    Left = 273
     Top = 0
     Width = 147
-    Height = 331
+    Height = 330
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 273
-    ExplicitHeight = 330
     object btn3: TcxButton
       Left = 0
       Top = 282
@@ -93,6 +92,7 @@ object frmGenPreFac: TfrmGenPreFac
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Serie Factura'
+    TabOrder = 6
   end
   object cmbSerieFactura: TcxLookupComboBox
     Left = 16
@@ -116,6 +116,7 @@ object frmGenPreFac: TfrmGenPreFac
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Fecha Factura'
+    TabOrder = 7
   end
   object dtFecha: TcxDateEdit
     Left = 16
@@ -138,5 +139,6 @@ object frmGenPreFac: TfrmGenPreFac
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Nro Factura'
+    TabOrder = 10
   end
 end

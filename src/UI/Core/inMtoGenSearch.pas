@@ -6,13 +6,14 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, cxGraphics, cxControls, cxLookAndFeels, cxLookAndFeelPainters,
   dxSkinsCore, dxSkinBlue, dxSkinscxPCPainter, dxBarBuiltInMenu, cxStyles,
-  cxCustomData, cxFilter, cxData, cxDataStorage, cxEdit, cxNavigator, DB,
+  cxDataStorage, cxEdit, cxNavigator, DB,
   cxDBData, cxTextEdit, cxGridLevel, cxGridCustomTableView,
   cxGridTableView, cxGridDBTableView, cxClasses, cxGridCustomView, cxGrid,
   cxPC, ExtCtrls, cxContainer, StdCtrls, inLibDevExp, cxMemo, cxRichEdit,
-  Menus, cxButtons,  inMtoPrincipal,
-  cxDataControllerConditionalFormattingRulesManagerDialog, dxDateRanges,
-  cxLocalization, dxScrollbarAnnotations;
+  Menus, cxButtons,
+  cxDataControllerConditionalFormattingRulesManagerDialog,
+  cxLocalization, cxCustomData, cxFilter, cxData, dxDateRanges,
+  dxScrollbarAnnotations;
 
 type
   TfrmMtoSearch = class(TForm)

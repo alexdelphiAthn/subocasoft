@@ -4,24 +4,22 @@ object frmPrintPreRec: TfrmPrintPreRec
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Recibo'
-  ClientHeight = 201
-  ClientWidth = 351
+  ClientHeight = 200
+  ClientWidth = 347
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-   Font.Height = -15
+  Font.Height = -15
   Font.Name = 'Lucida Sans Unicode'
   Font.Style = []
   FormStyle = fsStayOnTop
-  OldCreateOrder = False
   Scaled = False
-  PixelsPerInch = 96
-  TextHeight = 16
+  TextHeight = 18
   object pnl1: TPanel
-    Left = 232
+    Left = 228
     Top = 0
     Width = 119
-    Height = 201
+    Height = 200
     Align = alRight
     TabOrder = 0
     object btn4: TcxButton
@@ -60,6 +58,7 @@ object frmPrintPreRec: TfrmPrintPreRec
       Caption = 'Salir'
       TabOrder = 3
       OnClick = btn3Click
+      ExplicitTop = 174
     end
   end
   object edtNroFac: TcxTextEdit
@@ -73,6 +72,7 @@ object frmPrintPreRec: TfrmPrintPreRec
     Left = 8
     Top = 0
     Caption = 'Recibo N'#250'mero'
+    TabOrder = 2
   end
   object cxRadioGroup1: TcxRadioGroup
     Left = 8
@@ -127,7 +127,7 @@ object frmPrintPreRec: TfrmPrintPreRec
     Width = 58
   end
   object frxrprt1: TfrxReport
-    Version = '6.2.11'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -162,8 +162,13 @@ object frmPrintPreRec: TfrmPrintPreRec
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object MasterData1: TfrxMasterData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 343.937230000000000000
         Top = 18.897650000000000000
@@ -181,7 +186,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -195,7 +200,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 49.133890000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -231,7 +236,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -247,7 +252,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 49.133890000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -279,7 +284,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -297,7 +302,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -311,7 +316,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -327,7 +332,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -345,7 +350,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -359,7 +364,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -394,7 +399,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -408,7 +413,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -426,7 +431,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -440,7 +445,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -663,6 +668,8 @@ object frmPrintPreRec: TfrmPrintPreRec
     ShowProgress = True
     OverwritePrompt = False
     DataOnly = False
+    EmbedFontsIfProtected = False
+    InteractiveFormsFontSubset = 'A-Z,a-z,0-9,#43-#47 '
     OpenAfterExport = False
     PrintOptimized = False
     Outline = False
@@ -681,11 +688,13 @@ object frmPrintPreRec: TfrmPrintPreRec
     CenterWindow = False
     PrintScaling = False
     PdfA = False
+    PDFStandard = psNone
+    PDFVersion = pv17
     Left = 32
     Top = 136
   end
   object frxrprt2: TfrxReport
-    Version = '6.2.11'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -724,8 +733,13 @@ object frmPrintPreRec: TfrmPrintPreRec
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       Frame.Typ = []
+      MirrorMode = []
       object MasterData1: TfrxMasterData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 173.858380000000000000
         Top = 18.897650000000000000
@@ -763,7 +777,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 86.929190000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -2649,6 +2663,10 @@ object frmPrintPreRec: TfrmPrintPreRec
       end
       object Footer1: TfrxFooter
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 222.992270000000000000
         Top = 260.787570000000000000
@@ -2707,7 +2725,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 49.133890000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -2741,7 +2759,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -2757,7 +2775,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 49.133890000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -2773,7 +2791,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
@@ -2787,7 +2805,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -2803,7 +2821,7 @@ object frmPrintPreRec: TfrmPrintPreRec
           Height = 18.897650000000000000
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-           Font.Height = -15
+          Font.Height = -15
           Font.Name = 'Arial'
           Font.Style = []
           Frame.Typ = []
@@ -2858,6 +2876,10 @@ object frmPrintPreRec: TfrmPrintPreRec
       end
       object DetailData1: TfrxDetailData
         FillType = ftBrush
+        FillGap.Top = 0
+        FillGap.Left = 0
+        FillGap.Bottom = 0
+        FillGap.Right = 0
         Frame.Typ = []
         Height = 22.677180000000000000
         Top = 215.433210000000000000

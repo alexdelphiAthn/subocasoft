@@ -1,15 +1,15 @@
 inherited frmMtoPre: TfrmMtoPre
   Top = 0
   Caption = 'Presupuestos'
-  ClientHeight = 775
-  ClientWidth = 1167
+  ClientHeight = 774
+  ClientWidth = 1163
   Font.Height = -15
   ExplicitWidth = 1179
   ExplicitHeight = 813
   TextHeight = 17
   inherited pButtonPage: TPanel
-    Width = 968
-    Height = 775
+    Width = 964
+    Height = 774
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -18,9 +18,9 @@ inherited frmMtoPre: TfrmMtoPre
     ExplicitHeight = 774
   end
   inherited pButtonRightBar: TPanel
-    Left = 968
+    Left = 964
     Width = 199
-    Height = 775
+    Height = 774
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -195,8 +195,8 @@ inherited frmMtoPre: TfrmMtoPre
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 968
-    Height = 775
+    Width = 964
+    Height = 774
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -212,8 +212,8 @@ inherited frmMtoPre: TfrmMtoPre
       Margins.Right = 4
       Margins.Bottom = 4
       ExplicitTop = 33
-      ExplicitWidth = 960
-      ExplicitHeight = 738
+      ExplicitWidth = 956
+      ExplicitHeight = 737
       inherited cxGrdPrincipal: TcxGrid
         Top = 34
         Width = 960
@@ -352,7 +352,7 @@ inherited frmMtoPre: TfrmMtoPre
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 960
+        ExplicitWidth = 964
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -411,21 +411,19 @@ inherited frmMtoPre: TfrmMtoPre
       Margins.Bottom = 4
       Font.Height = -12
       ExplicitTop = 33
-      ExplicitWidth = 960
-      ExplicitHeight = 738
+      ExplicitWidth = 956
+      ExplicitHeight = 737
       object pnl1: TPanel
         Left = 0
         Top = 323
-        Width = 960
-        Height = 415
+        Width = 956
+        Height = 414
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 956
-        ExplicitHeight = 414
         object cxspl1: TcxSplitter
           Left = 1
           Top = 1
-          Width = 958
+          Width = 954
           Height = 8
           HotZoneClassName = 'TcxMediaPlayer9Style'
           AlignSplitter = salTop
@@ -433,13 +431,12 @@ inherited frmMtoPre: TfrmMtoPre
           PositionAfterOpen = 24
           MinSize = 24
           Control = pnl2
-          ExplicitWidth = 954
         end
         object cxpgcntrlFacturacx: TcxPageControl
           Left = 1
           Top = 9
-          Width = 958
-          Height = 405
+          Width = 954
+          Height = 404
           Align = alClient
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
@@ -450,15 +447,17 @@ inherited frmMtoPre: TfrmMtoPre
           TabOrder = 1
           Properties.ActivePage = tsLineasFactura
           Properties.CustomButtons.Buttons = <>
-          ExplicitWidth = 954
-          ExplicitHeight = 404
-          ClientRectBottom = 401
+          ClientRectBottom = 400
           ClientRectLeft = 4
-          ClientRectRight = 954
+          ClientRectRight = 950
           ClientRectTop = 30
           object tsLineasFactura: TcxTabSheet
             Caption = 'Lineas de Presupuesto'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd5: TcxGrid
               Left = 0
               Top = 0
@@ -637,6 +636,8 @@ inherited frmMtoPre: TfrmMtoPre
           object ts5: TcxTabSheet
             Caption = 'Totales'
             ImageIndex = 2
+            ExplicitWidth = 950
+            ExplicitHeight = 371
             object cxlbl17: TcxLabel
               Left = 70
               Top = 50
@@ -719,6 +720,10 @@ inherited frmMtoPre: TfrmMtoPre
             Margins.Bottom = 2
             Caption = 'Recibos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnl4: TPanel
               Left = 0
               Top = 0
@@ -1000,8 +1005,8 @@ inherited frmMtoPre: TfrmMtoPre
             Margins.Bottom = 2
             Caption = 'Dibujo Presupuesto'
             ImageIndex = 5
-            ExplicitWidth = 946
-            ExplicitHeight = 370
+            ExplicitLeft = 0
+            ExplicitTop = 0
             object pnl6: TPanel
               Left = 0
               Top = 0
@@ -95695,23 +95700,21 @@ inherited frmMtoPre: TfrmMtoPre
       object pnl2: TPanel
         Left = 0
         Top = 0
-        Width = 960
+        Width = 956
         Height = 323
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 956
         object pnl3: TPanel
           Left = 1
           Top = 1
-          Width = 958
+          Width = 954
           Height = 321
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 954
           object cxpgcntrl1: TcxPageControl
             Left = 1
             Top = 1
-            Width = 956
+            Width = 952
             Height = 319
             Align = alClient
             Font.Charset = ANSI_CHARSET
@@ -95723,15 +95726,13 @@ inherited frmMtoPre: TfrmMtoPre
             TabOrder = 0
             Properties.ActivePage = cxtbshtCabecera
             Properties.CustomButtons.Buttons = <>
-            ExplicitWidth = 952
             ClientRectBottom = 315
             ClientRectLeft = 4
-            ClientRectRight = 952
+            ClientRectRight = 948
             ClientRectTop = 30
             object cxtbshtCabecera: TcxTabSheet
               Caption = 'Cabecera Presupuesto'
               ImageIndex = 0
-              ExplicitWidth = 944
               object cxlbl1: TcxLabel
                 Left = 26
                 Top = 13

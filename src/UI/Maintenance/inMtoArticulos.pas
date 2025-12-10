@@ -6,12 +6,12 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels,
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
-  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
+  dxSkinscxPCPainter, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer,
-   cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
+   cxCheckBox, cxTextEdit, cxClasses,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
-  dxBarBuiltInMenu, cxPC, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
+  dxBarBuiltInMenu, cxPC, cxDBLookupComboBox,
   cxMaskEdit, cxDropDownEdit, cxDBEdit, cxLabel, UniDataArticulos,
   cxGridBandedTableView, cxGridDBBandedTableView, dxSkinBlack,
   dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
@@ -26,10 +26,10 @@ uses
   dxSkinSeven, dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus,
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
-  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxLocalization,
+  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
   cxCurrencyEdit, cxDataControllerConditionalFormattingRulesManagerDialog,
-  dxBevel, cxDBNavigator, dxDateRanges, dxGDIPlusClasses, cxImage,
-  dxScrollbarAnnotations;
+  dxGDIPlusClasses, cxImage, cxCustomData, cxFilter, cxData, dxDateRanges,
+  dxScrollbarAnnotations, cxLocalization, dxBevel, cxGridLevel, cxDBNavigator;
 
 type
   TfrmMtoArticulos = class(TfrmMtoGen)

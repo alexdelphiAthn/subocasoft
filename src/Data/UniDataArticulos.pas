@@ -23,8 +23,7 @@ var
 
 implementation
 
-uses
-  inMtoArticulos;
+
 
 {$R *.dfm}
 

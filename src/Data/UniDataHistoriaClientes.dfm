@@ -1,5 +1,4 @@
 object DMHistoriaClientes: TDMHistoriaClientes
-  OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   Height = 191

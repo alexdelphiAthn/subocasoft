@@ -2,8 +2,8 @@ object frmModalSubsanacion: TfrmModalSubsanacion
   Left = 0
   Top = 0
   Caption = 'Subsanaci'#243'n Manual de Factura'
-  ClientHeight = 618
-  ClientWidth = 888
+  ClientHeight = 617
+  ClientWidth = 884
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,13 +17,11 @@ object frmModalSubsanacion: TfrmModalSubsanacion
   object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 888
-    Height = 559
+    Width = 884
+    Height = 558
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitWidth = 896
-    ExplicitHeight = 560
     object gbDatosBasicos: TcxGroupBox
       Left = 15
       Top = 15
@@ -39,11 +37,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 0
       end
       object lblNumeroFactura: TcxLabel
         Left = 20
         Top = 58
         Caption = 'N'#250'mero Factura:'
+        TabOrder = 1
       end
       object txtNumeroFactura: TcxTextEdit
         Left = 169
@@ -57,11 +57,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 3
       end
       object lblFechaFactura: TcxLabel
         Left = 350
         Top = 58
         Caption = 'Fecha Factura:'
+        TabOrder = 4
       end
       object dteFechaFactura: TcxDateEdit
         Left = 480
@@ -75,11 +77,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 6
       end
       object lblTipoFactura: TcxLabel
         Left = 630
         Top = 58
         Caption = 'Tipo Factura:'
+        TabOrder = 7
       end
       object cbbTipoFactura: TcxComboBox
         Left = 750
@@ -112,11 +116,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 0
       end
       object lblNIFCliente: TcxLabel
         Left = 20
         Top = 58
         Caption = 'NIF/ID Cliente:'
+        TabOrder = 1
       end
       object txtNIFCliente: TcxTextEdit
         Left = 150
@@ -129,11 +135,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 3
       end
       object lblNombreCliente: TcxLabel
         Left = 350
         Top = 58
         Caption = 'Raz'#243'n Social:'
+        TabOrder = 4
       end
       object txtNombreCliente: TcxTextEdit
         Left = 473
@@ -146,11 +154,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 88
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 6
       end
       object lblPaisCliente: TcxLabel
         Left = 20
         Top = 108
         Caption = 'Pa'#237's:'
+        TabOrder = 7
       end
       object txtPaisCliente: TcxTextEdit
         Left = 150
@@ -165,12 +175,14 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 88
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 9
         Visible = False
       end
       object lblTipoIdInternacional: TcxLabel
         Left = 276
         Top = 108
         Caption = 'Tipo Id Internacional:'
+        TabOrder = 10
         Visible = False
       end
       object txtTipoIdInternacional: TcxTextEdit
@@ -203,11 +215,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 0
       end
       object lblDescripcion: TcxLabel
         Left = 20
         Top = 58
         Caption = 'Descripci'#243'n:'
+        TabOrder = 1
       end
       object memoDescripcion: TcxMemo
         Left = 150
@@ -222,11 +236,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 30
         Caption = 'Original: '
         Style.TextColor = clGray
+        TabOrder = 3
       end
       object lblFechaOperacion: TcxLabel
         Left = 576
         Top = 59
         Caption = 'Fecha Operaci'#243'n:'
+        TabOrder = 4
       end
       object dteFechaOperacion: TcxDateEdit
         Left = 720
@@ -250,11 +266,13 @@ object frmModalSubsanacion: TfrmModalSubsanacion
         Top = 24
         Caption = 'Original Total: '
         Style.TextColor = clGray
+        TabOrder = 0
       end
       object lblTotalFactura: TcxLabel
         Left = 677
         Top = 57
         Caption = 'Total:'
+        TabOrder = 1
       end
       object currTotalFactura: TcxCurrencyEdit
         Left = 750
@@ -269,19 +287,17 @@ object frmModalSubsanacion: TfrmModalSubsanacion
   end
   object pnlButtons: TPanel
     Left = 0
-    Top = 559
-    Width = 888
+    Top = 558
+    Width = 884
     Height = 59
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 560
-    ExplicitWidth = 892
     DesignSize = (
-      888
+      884
       59)
     object btnAceptar: TcxButton
-      Left = 642
+      Left = 634
       Top = 10
       Width = 95
       Height = 32
@@ -291,10 +307,9 @@ object frmModalSubsanacion: TfrmModalSubsanacion
       LookAndFeel.SkinName = 'Blue'
       TabOrder = 0
       OnClick = btnAceptarClick
-      ExplicitLeft = 650
     end
     object btnCancelar: TcxButton
-      Left = 743
+      Left = 735
       Top = 10
       Width = 95
       Height = 32
@@ -304,7 +319,6 @@ object frmModalSubsanacion: TfrmModalSubsanacion
       LookAndFeel.SkinName = 'Blue'
       TabOrder = 1
       OnClick = btnCancelarClick
-      ExplicitLeft = 751
     end
   end
 end

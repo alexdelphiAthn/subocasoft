@@ -4,14 +4,14 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, inMtoGen, cxStyles, cxCustomData, cxGraphics, cxFilter, cxData,
+  Dialogs, inMtoGen, cxStyles, cxGraphics,
   cxDataStorage, cxEdit, DB, cxDBData,   DBCtrls,
   cxNavigator, ExtCtrls, //dxCntner, dxExEdtr, dxEdLib,
-  cxContainer, unidataconn,
-  cxTextEdit, cxGridLevel, cxClasses, cxControls, cxGridCustomView,
+  cxContainer,
+  cxTextEdit, cxClasses, cxControls, cxGridCustomView,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
   ComCtrls, StdCtrls, Buttons, ADODB, //BetterADODataSet,
-  cxDBEdit,
+
   dxSkinsCore, dxSkinBlack, dxSkinBlue, dxSkinCaramel, dxSkinCoffee,
   dxSkinDarkSide, dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian,
   dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
@@ -19,10 +19,10 @@ uses
   dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinPumpkin,
   dxSkinSilver, dxSkinStardust, dxSkinSummer2008, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinXmas2008Blue, dxSkinscxPCPainter, cxLookAndFeels,
-  cxLookAndFeelPainters, cxCheckBox, cxLabel, cxDBLabel, cxTimeEdit, cxCalendar, inMtoPrincipal,
-   cxLocalization,
-  cxDataControllerConditionalFormattingRulesManagerDialog, dxDateRanges, MemDS,
-  DBAccess, Uni, dxBevel, cxDBNavigator, dxScrollbarAnnotations, dxSkinBasic,
+  cxLookAndFeelPainters, cxCheckBox, cxLabel, cxTimeEdit, cxCalendar, inMtoPrincipal,
+
+  cxDataControllerConditionalFormattingRulesManagerDialog,
+  Uni, dxSkinBasic,
   dxSkinBlueprint, dxSkinDarkroom, dxSkinDevExpressDarkStyle,
   dxSkinDevExpressStyle, dxSkinFoggy, dxSkinHighContrast, dxSkinMetropolis,
   dxSkinMetropolisDark, dxSkinOffice2010Black, dxSkinOffice2010Blue,
@@ -32,7 +32,9 @@ uses
   dxSkinOffice2019White, dxSkinSeven, dxSkinSevenClassic, dxSkinSharp,
   dxSkinSharpPlus, dxSkinSpringtime, dxSkinTheAsphaltWorld, dxSkinTheBezier,
   dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
-  dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint;
+  dxSkinVisualStudio2013Light, dxSkinVS2010, dxSkinWhiteprint, cxCustomData,
+  cxFilter, cxData, dxDateRanges, dxScrollbarAnnotations, MemDS, DBAccess,
+  cxLocalization, dxBevel, cxGridLevel, cxDBNavigator;
 
 type
   TfrmMtoContadores = class(TfrmMtoGen)

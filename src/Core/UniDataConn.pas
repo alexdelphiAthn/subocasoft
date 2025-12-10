@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Classes, DB, ADODB, DBAccess, Uni, Vcl.Forms, Vcl.Dialogs,
-  UniProvider, MySQLUniProvider, DASQLMonitor, UniSQLMonitor;
+  DASQLMonitor;
 
 type
   TdmConn = class(TDataModule)
@@ -59,7 +59,7 @@ procedure TdmConn.conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
 begin
   if Fail = true then
   begin
-    ShowMessage('Ha habido un error de conexión: ' + E.Message);
+    ShowMessage('Ha habido un error de conexiï¿½n: ' + E.Message);
     Application.Terminate;
   end;
 end;

@@ -6,12 +6,12 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels,
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
-  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
+  dxSkinscxPCPainter, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer,
-   cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
+   cxCheckBox, cxTextEdit, cxClasses,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
-  dxBarBuiltInMenu, cxPC, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
+  dxBarBuiltInMenu, cxPC, cxDBLookupComboBox,
   cxMaskEdit, cxDropDownEdit, cxDBEdit, cxLabel, UniDataHistoriaClientes,
   cxGridBandedTableView, cxGridDBBandedTableView, dxSkinBlack,
   dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
@@ -26,11 +26,11 @@ uses
   dxSkinSeven, dxSkinSevenClassic, dxSkinSharp, dxSkinSharpPlus,
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
-  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxLocalization, cxCalendar,
-  cxButtonEdit, cxCurrencyEdit, inMtoPrincipal,
+  dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, cxCalendar,
+  cxButtonEdit, cxCurrencyEdit,
   cxMemo, cxRichEdit, cxDataControllerConditionalFormattingRulesManagerDialog,
-  dxBevel, cxDBNavigator, dxDateRanges, dxGDIPlusClasses, cxImage,
-  dxScrollbarAnnotations;
+  dxGDIPlusClasses, cxImage, cxCustomData, cxFilter, cxData, dxDateRanges,
+  dxScrollbarAnnotations, cxLocalization, dxBevel, cxGridLevel, cxDBNavigator;
 
 type
   TfrmMtoHistoriaClientes = class(TfrmMtoGen)
@@ -232,7 +232,7 @@ begin
       formulario.dsData.DataSet.Open;
       formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
       PonerAnchosTitulos(formulario.tvGrdDBTabPrin, 'Clientes');
-      formulario.Caption := 'Búsqueda de Pacientes en Historias';
+      formulario.Caption := 'Bï¿½squeda de Pacientes en Historias';
       formulario.ShowModal;
     finally
         inherited;
@@ -267,13 +267,13 @@ begin
       formulario.dsData.DataSet := dmmHistoriaClientes.unqryDocDataHis;
       formulario.dsData.DataSet.Open;
       formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
-      formulario.Caption := 'Búsqueda de Odontólogos en Historias';
+      formulario.Caption := 'Bï¿½squeda de Odontï¿½logos en Historias';
       formulario.ShowModal;
     finally
         inherited;
         if formulario.sFicha = 'S' then
           dmmHistoriaClientes.CopiarOdontologoaHistoria;
-          //dmmHistoriaClientes.unqryHistoria.Refresh; //da errror porque no está asignado cliente
+          //dmmHistoriaClientes.unqryHistoria.Refresh; //da errror porque no estï¿½ asignado cliente
         formulario.dsData.DataSet.Close;
         FreeAndNil(formulario);
     end;
@@ -291,7 +291,7 @@ begin
       formulario.dsData.DataSet.Open;
       formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
       PonerAnchosTitulos(formulario.tvGrdDBTabPrin, 'Productos');
-      formulario.Caption := 'Búsqueda de Tratamientos en Historias';
+      formulario.Caption := 'Bï¿½squeda de Tratamientos en Historias';
       formulario.ShowModal;
     finally
         inherited;

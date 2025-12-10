@@ -2,25 +2,23 @@ object frmMtoSearch: TfrmMtoSearch
   Left = 526
   Top = 162
   Caption = 'B'#250'squeda'
-  ClientHeight = 442
-  ClientWidth = 553
+  ClientHeight = 441
+  ClientWidth = 549
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -15
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
   OnClose = prcfrmMtoSearchFormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 96
   TextHeight = 18
   object cxpgcntrl1: TcxPageControl
     Left = 0
     Top = 0
-    Width = 553
-    Height = 442
+    Width = 549
+    Height = 441
     Align = alClient
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -31,18 +29,14 @@ object frmMtoSearch: TfrmMtoSearch
     TabOrder = 0
     Properties.ActivePage = ts1
     Properties.CustomButtons.Buttons = <>
-    ExplicitWidth = 499
-    ExplicitHeight = 441
-    ClientRectBottom = 438
+    ClientRectBottom = 437
     ClientRectLeft = 4
-    ClientRectRight = 549
+    ClientRectRight = 545
     ClientRectTop = 28
     object ts1: TcxTabSheet
       Caption = 'B'#250'squeda'
       ImageIndex = 0
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 491
+      ExplicitWidth = 541
       ExplicitHeight = 409
       object pnlCliTopPrin: TPanel
         Left = 0
@@ -51,7 +45,7 @@ object frmMtoSearch: TfrmMtoSearch
         Height = 41
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 491
+        ExplicitWidth = 541
         object lbl1: TLabel
           Left = 36
           Top = 16
@@ -76,7 +70,7 @@ object frmMtoSearch: TfrmMtoSearch
         Align = alClient
         Caption = 'pnlCliPrin'
         TabOrder = 1
-        ExplicitWidth = 491
+        ExplicitWidth = 541
         ExplicitHeight = 368
         object pnl3: TPanel
           Left = 1
@@ -87,7 +81,7 @@ object frmMtoSearch: TfrmMtoSearch
           Alignment = taLeftJustify
           TabOrder = 1
           ExplicitTop = 326
-          ExplicitWidth = 489
+          ExplicitWidth = 539
           object btn3: TcxButton
             Left = 312
             Top = 8
@@ -104,7 +98,7 @@ object frmMtoSearch: TfrmMtoSearch
             Align = alBottom
             Alignment = taLeftJustify
             TabOrder = 0
-            ExplicitWidth = 487
+            ExplicitWidth = 537
             object btnAceptar: TcxButton
               Left = 311
               Top = 7
@@ -133,7 +127,7 @@ object frmMtoSearch: TfrmMtoSearch
           Align = alClient
           Alignment = taLeftJustify
           TabOrder = 0
-          ExplicitWidth = 489
+          ExplicitWidth = 539
           ExplicitHeight = 325
           object cxgrdGrdPrincipal: TcxGrid
             Left = 1
@@ -142,10 +136,9 @@ object frmMtoSearch: TfrmMtoSearch
             Height = 324
             Align = alClient
             TabOrder = 0
-            ExplicitWidth = 487
+            ExplicitWidth = 537
             ExplicitHeight = 323
             object tvGrdDBTabPrin: TcxGridDBTableView
-              Navigator.Buttons.CustomButtons = <>
               Navigator.Buttons.First.Hint = 'Va al primer Registro'
               Navigator.Buttons.First.Visible = False
               Navigator.Buttons.PriorPage.Hint = 'Va a la p'#225'gina anterior'
@@ -180,13 +173,9 @@ object frmMtoSearch: TfrmMtoSearch
               Navigator.Buttons.GotoBookmark.Visible = False
               Navigator.Buttons.Filter.Hint = 'Filtro personalizado'
               Navigator.Visible = True
-              ScrollbarAnnotations.CustomAnnotations = <>
               OnCellDblClick = tvGrdDBTabPrinCellDblClick
               DataController.DataSource = dsData
               DataController.Options = [dcoCaseInsensitive, dcoAssignGroupingValues, dcoAssignMasterDetailKeys, dcoSaveExpanding]
-              DataController.Summary.DefaultGroupSummaryItems = <>
-              DataController.Summary.FooterSummaryItems = <>
-              DataController.Summary.SummaryGroups = <>
               OptionsBehavior.AlwaysShowEditor = True
               OptionsBehavior.GoToNextCellOnEnter = True
               OptionsBehavior.IncSearch = True
@@ -252,8 +241,8 @@ object frmMtoSearch: TfrmMtoSearch
           Lines.Strings = (
             '')
           TabOrder = 0
-          Height = 367
-          Width = 543
+          Height = 366
+          Width = 539
         end
       end
     end

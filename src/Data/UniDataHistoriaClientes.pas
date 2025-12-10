@@ -37,7 +37,7 @@ var
 implementation
 
 uses
-  inMtoHistoriaClientes, inMtoFac;
+  inMtoFac;
 
 {$R *.dfm}
 

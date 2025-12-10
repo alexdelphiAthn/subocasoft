@@ -4,8 +4,8 @@ object frmGenFacRec: TfrmGenFacRec
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Duplicar/Abonar Borrador de Venta'
-  ClientHeight = 339
-  ClientWidth = 485
+  ClientHeight = 338
+  ClientWidth = 481
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,6 +20,7 @@ object frmGenFacRec: TfrmGenFacRec
     Left = 8
     Top = 4
     Caption = 'Origen N'#250'mero'
+    TabOrder = 1
   end
   object edtNumFacOrigen: TcxTextEdit
     Left = 80
@@ -29,14 +30,12 @@ object frmGenFacRec: TfrmGenFacRec
     Width = 129
   end
   object pnl1: TPanel
-    Left = 328
+    Left = 324
     Top = 0
     Width = 157
-    Height = 272
+    Height = 271
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 324
-    ExplicitHeight = 313
     object btn3: TcxButton
       Left = 0
       Top = 274
@@ -65,15 +64,12 @@ object frmGenFacRec: TfrmGenFacRec
   end
   object cxgrpbx1: TcxGroupBox
     Left = 0
-    Top = 272
+    Top = 271
     Align = alBottom
     Caption = 'Borrador de Venta Generado'
     TabOrder = 10
-    ExplicitLeft = 8
-    ExplicitTop = 247
-    ExplicitWidth = 297
     Height = 67
-    Width = 485
+    Width = 481
     object edtNumFacAbono: TcxTextEdit
       Left = 72
       Top = 32
@@ -111,6 +107,7 @@ object frmGenFacRec: TfrmGenFacRec
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Serie'
+    TabOrder = 8
   end
   object cmbSerieFactura: TcxLookupComboBox
     Left = 35
@@ -134,6 +131,7 @@ object frmGenFacRec: TfrmGenFacRec
     Margins.Right = 4
     Margins.Bottom = 4
     Caption = 'Fecha'
+    TabOrder = 9
   end
   object dtFecha: TcxDateEdit
     Left = 35

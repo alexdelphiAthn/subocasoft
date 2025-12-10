@@ -18,12 +18,12 @@ uses
   dxSkinOffice2019Black, dxSkinOffice2019Colorful, dxSkinOffice2019DarkGray,
   dxSkinOffice2019White, dxSkinPumpkin, dxSkinSeven, dxSkinSevenClassic,
   dxSkinSharp, dxSkinSharpPlus, dxSkinSilver, dxSkinSpringtime, dxSkinStardust,
-  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinTheBezier, dexif, dMetaData,
+  dxSkinSummer2008, dxSkinTheAsphaltWorld, dxSkinTheBezier, dMetaData,
   dxSkinsDefaultPainters, dxSkinValentine, dxSkinVisualStudio2013Blue,
   dxSkinVisualStudio2013Dark, dxSkinVisualStudio2013Light, dxSkinVS2010,
-  dxSkinWhiteprint, dxSkinXmas2008Blue, dxImageSlider, data.DB,
+  dxSkinWhiteprint, dxSkinXmas2008Blue, data.DB,
   datasnap.DBClient, cxClasses, system.math, GDIPAPI, GDIPOBJ, shellapi,
-  system.IOUtils, system.StrUtils, inlibimageutils;
+  inlibimageutils;
 
 type
   TfrmMtoVisorFoto = class(TForm)

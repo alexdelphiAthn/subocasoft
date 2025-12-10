@@ -4,13 +4,14 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, cxGraphics, cxControls,
-  cxLookAndFeels, cxLookAndFeelPainters, cxStyles, dxSkinsCore, cxCustomData,
-  cxFilter, cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData,
+  cxLookAndFeels, cxLookAndFeelPainters, cxStyles, dxSkinsCore,
+  cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData,
   cxContainer, Vcl.ExtCtrls, cxGridLevel, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, cxTextEdit, cxLabel, Vcl.StdCtrls, cxButtons,
   cxCurrencyEdit, cxGroupBox, Uni, System.JSON, cxGridCustomView, inMtoPrincipal,
-  dxDateRanges, dxScrollbarAnnotations, Vcl.Menus, MemDS, DBAccess, cxClasses,
-  Datasnap.DBClient, Datasnap.Provider, cxButtonEdit, dxSkinBlue;
+  Vcl.Menus, DBAccess, cxClasses,
+  Datasnap.DBClient, Datasnap.Provider, cxButtonEdit, dxSkinBlue, cxCustomData,
+  cxFilter, cxData, dxDateRanges, dxScrollbarAnnotations, MemDS;
 type
   TfrmModalSubsanacionLineas = class(TForm)
     pnlMain: TPanel;
@@ -74,7 +75,7 @@ type
   end;
 implementation
 uses
-  inLibData, inLibVarGlob;
+  inLibVarGlob;
 {$R *.dfm}
 constructor TfrmModalSubsanacionLineas.Create(AOwner: TComponent;
   AConnection: TUniConnection; const ASerieFactura: string;

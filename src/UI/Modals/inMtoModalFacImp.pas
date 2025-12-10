@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, cxGraphics, cxLookAndFeels, cxLookAndFeelPainters, Menus,
-  dxSkinsCore, dxSkinBlue, frxClass, frxDBSet, StdCtrls, cxButtons, DB,
-  DBClient, cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
+  dxSkinsCore, dxSkinBlue, frxClass, StdCtrls, cxButtons, DB,
+  cxControls, cxContainer, cxEdit, cxTextEdit, cxLabel,
   dxSkinBlack, dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee,
   dxSkinDarkRoom, dxSkinDarkSide, dxSkinDevExpressDarkStyle,
   dxSkinDevExpressStyle, dxSkinFoggy, dxSkinGlassOceans,
@@ -22,12 +22,12 @@ uses
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
-  cxCalendar, frxDesgn, cxGroupBox, cxRadioGroup, frxExportBaseDialog,
+  cxCalendar, frxDesgn, cxRadioGroup,
   cxCheckBox, inMtoPrincipal, dxSkinBasic, dxSkinOffice2016Colorful,
   dxSkinOffice2016Dark, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
   dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinTheBezier,
   dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
-  dxSkinVisualStudio2013Light;
+  dxSkinVisualStudio2013Light, frxExportBaseDialog, cxGroupBox;
 
 type
   TfrmPrintFac = class(TForm)

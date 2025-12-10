@@ -1,34 +1,33 @@
 inherited frmMtoPreguntas: TfrmMtoPreguntas
   Top = 274
   Caption = 'Preguntas'
-  ClientHeight = 374
-  ClientWidth = 850
+  ClientHeight = 373
+  ClientWidth = 846
   Font.Height = -17
-  ExplicitWidth = 866
-  ExplicitHeight = 413
-  PixelsPerInch = 96
+  ExplicitWidth = 862
+  ExplicitHeight = 412
   TextHeight = 19
   inherited pButtonPage: TPanel
-    Width = 692
-    Height = 374
+    Width = 688
+    Height = 373
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 692
-    ExplicitHeight = 374
+    ExplicitWidth = 688
+    ExplicitHeight = 373
   end
   inherited pButtonRightBar: TPanel
-    Left = 692
+    Left = 688
     Width = 158
-    Height = 374
+    Height = 373
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitLeft = 692
+    ExplicitLeft = 688
     ExplicitWidth = 158
-    ExplicitHeight = 374
+    ExplicitHeight = 373
     inherited pButtonGen: TPanel
       Top = 246
       Width = 156
@@ -39,7 +38,7 @@ inherited frmMtoPreguntas: TfrmMtoPreguntas
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 246
+      ExplicitTop = 245
       ExplicitWidth = 156
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
@@ -148,15 +147,15 @@ inherited frmMtoPreguntas: TfrmMtoPreguntas
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 692
-    Height = 374
+    Width = 688
+    Height = 373
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
     Font.Height = -17
-    ExplicitWidth = 692
-    ExplicitHeight = 374
+    ExplicitWidth = 688
+    ExplicitHeight = 373
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
@@ -175,8 +174,8 @@ inherited frmMtoPreguntas: TfrmMtoPreguntas
         Margins.Bottom = 4
         Font.Height = -17
         ExplicitTop = 34
-        ExplicitWidth = 684
-        ExplicitHeight = 303
+        ExplicitWidth = 680
+        ExplicitHeight = 302
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -206,7 +205,7 @@ inherited frmMtoPreguntas: TfrmMtoPreguntas
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 684
+        ExplicitWidth = 680
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4

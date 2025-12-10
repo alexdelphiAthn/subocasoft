@@ -6,12 +6,12 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, inMtoGen, cxGraphics, cxControls, cxLookAndFeels, System.Diagnostics,
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue, Uni,
-  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage,
+  dxSkinscxPCPainter, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer, Jpeg, SYSTEM.Types,
-  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses, DateUtils, GDIPAPI, GDIPOBJ,
+  cxCheckBox, cxTextEdit, cxGridLevel, cxClasses, DateUtils,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
-  dxBarBuiltInMenu, cxPC, cxLookupEdit, cxDBLookupEdit, cxDBLookupComboBox,
+  dxBarBuiltInMenu, cxPC, cxDBLookupComboBox,
   cxMaskEdit, cxDropDownEdit, cxDBEdit, cxLabel, UniDataClientes,
   cxGridBandedTableView, cxGridDBBandedTableView, dxSkinBlack,
   dxSkinBlueprint, dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom,
@@ -22,8 +22,8 @@ uses
   dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
   dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinOffice2010Black,
   dxSkinOffice2010Blue, dxSkinOffice2010Silver, dxSkinOffice2013DarkGray,
-  dxSkinOffice2013LightGray, dxSkinOffice2013White, dxSkinPumpkin, dexif,
-  dxDateRanges, dxScrollbarAnnotations, Vcl.Menus, cxCalendar, cxButtonEdit,
+  dxSkinOffice2013LightGray, dxSkinOffice2013White, dxSkinPumpkin,
+  Vcl.Menus, cxCalendar, cxButtonEdit,
   cxCurrencyEdit, cxImage, Datasnap.DBClient, dxBar, cxGridCardView, dMetaData,
   cxGridDBCardView, cxGridCustomLayoutView, cxGroupBox, cxRadioGroup, cxDBLabel,
   dxGDIPlusClasses, cxButtons, cxLocalization, dxBevel, cxDBNavigator,
@@ -31,7 +31,8 @@ uses
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   inMtoPrincipal, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  system.ioutils, system.StrUtils, inLibImageUtils;
+  inLibImageUtils; , cxCustomData, cxFilter, cxData, dxDateRanges,
+  dxScrollbarAnnotations
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -318,7 +319,7 @@ implementation
 
 uses
   inLibWin, inMtoModalHistoriaCli, inMtoGenSearch, inLibDevExp, inLibVarGlob,
-  inMtoModalCliEti, inLibDocumentoValidator, inMtoModalCliCues, inLibtb,
+  inMtoModalCliEti, inMtoModalCliCues, inLibtb,
   inMtoModalVisorFoto;
 
 {$R *.dfm}
