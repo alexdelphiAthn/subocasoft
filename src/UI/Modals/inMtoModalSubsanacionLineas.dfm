@@ -2,8 +2,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
   Left = 0
   Top = 0
   Caption = 'Detalle de L'#237'neas - Subsanaci'#243'n'
-  ClientHeight = 390
-  ClientWidth = 1068
+  ClientHeight = 389
+  ClientWidth = 1064
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
   object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 1068
-    Height = 342
+    Width = 1064
+    Height = 341
     Align = alClient
     BevelOuter = bvNone
     Font.Charset = DEFAULT_CHARSET
@@ -27,11 +27,11 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1064
-    ExplicitHeight = 341
+    ExplicitWidth = 1072
+    ExplicitHeight = 342
     DesignSize = (
-      1068
-      342)
+      1064
+      341)
     object gbLineasDetalle: TcxGroupBox
       Left = 8
       Top = 8
@@ -40,15 +40,15 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
       Style.LookAndFeel.Kind = lfOffice11
       StyleDisabled.LookAndFeel.Kind = lfOffice11
       TabOrder = 0
-      ExplicitWidth = 1028
-      ExplicitHeight = 229
-      Height = 230
-      Width = 1032
+      ExplicitWidth = 1032
+      ExplicitHeight = 230
+      Height = 229
+      Width = 1024
       object grdLineas: TcxGrid
         Left = 2
         Top = 24
-        Width = 1028
-        Height = 204
+        Width = 1020
+        Height = 203
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -58,7 +58,6 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
         ParentFont = False
         TabOrder = 0
         ExplicitWidth = 1024
-        ExplicitHeight = 203
         object tvLineas: TcxGridDBTableView
           OnEditValueChanged = tvLineasEditValueChanged
           DataController.DataSource = dsLineas
@@ -132,8 +131,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
     end
     object pnlTotales: TPanel
       Left = 8
-      Top = 246
-      Width = 1032
+      Top = 245
+      Width = 1024
       Height = 88
       Anchors = [akLeft, akRight, akBottom]
       BevelOuter = bvLowered
@@ -146,8 +145,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
       ParentBackground = False
       ParentFont = False
       TabOrder = 1
-      ExplicitTop = 245
-      ExplicitWidth = 1028
+      ExplicitTop = 246
+      ExplicitWidth = 1032
       object lblTotalOriginal: TcxLabel
         Left = 16
         Top = 8
@@ -182,8 +181,8 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
   end
   object pnlButtons: TPanel
     Left = 0
-    Top = 342
-    Width = 1068
+    Top = 341
+    Width = 1064
     Height = 48
     Align = alBottom
     BevelOuter = bvNone
@@ -194,13 +193,11 @@ object frmModalSubsanacionLineas: TfrmModalSubsanacionLineas
     Font.Style = []
     ParentFont = False
     TabOrder = 1
-    ExplicitTop = 341
-    ExplicitWidth = 1064
     DesignSize = (
-      1068
+      1064
       48)
     object btnAceptar: TcxButton
-      Left = 903
+      Left = 895
       Top = 3
       Width = 132
       Height = 40

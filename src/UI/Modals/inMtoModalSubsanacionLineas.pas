@@ -520,9 +520,11 @@ begin
       end;
     end;
     // Registrar cambios en el log si está disponible
-    if (LogCambios <> '') and Assigned(frmOpenApp) and Assigned(frmOpenApp.VeriFactuLog) then
+    if (LogCambios <> '') and
+        Assigned(frmMtoPrincipal) and
+        Assigned(frmMtoPrincipal.VeriFactuLog) then
     begin
-      frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+      frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
         'Líneas modificadas en subsanación: ' + LogCambios,
         FSerieFactura, FNumeroFactura);
     end;

@@ -1,4 +1,4 @@
-object frmOpenApp: TfrmOpenApp
+object frmMtoPrincipal: TfrmMtoPrincipal
   Left = 0
   Top = 68
   Caption = 'SubocaSoft Version 109 Veri*Factu'

@@ -1,4 +1,4 @@
-unit UniDataConn;
+﻿unit UniDataConn;
 
 interface
 
@@ -66,7 +66,7 @@ end;
 
 procedure TdmConn.DataModuleCreate(Sender: TObject);
 begin
-  with frmOpenApp do
+  with frmMtoPrincipal do
   begin
     SQLMonitor1.Active := False;
   //oMemoSQL.Visible := False;

@@ -1,15 +1,15 @@
 inherited frmMtoRegVer: TfrmMtoRegVer
   Top = 274
   Caption = 'Registro Verifactu'
-  ClientHeight = 373
-  ClientWidth = 846
+  ClientHeight = 372
+  ClientWidth = 842
   Font.Height = -17
-  ExplicitWidth = 862
-  ExplicitHeight = 412
+  ExplicitWidth = 858
+  ExplicitHeight = 411
   TextHeight = 19
   inherited pButtonPage: TPanel
-    Width = 688
-    Height = 373
+    Width = 684
+    Height = 372
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -18,9 +18,9 @@ inherited frmMtoRegVer: TfrmMtoRegVer
     ExplicitHeight = 373
   end
   inherited pButtonRightBar: TPanel
-    Left = 688
+    Left = 684
     Width = 158
-    Height = 373
+    Height = 372
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -147,8 +147,8 @@ inherited frmMtoRegVer: TfrmMtoRegVer
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 688
-    Height = 373
+    Width = 684
+    Height = 372
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -162,12 +162,12 @@ inherited frmMtoRegVer: TfrmMtoRegVer
       Margins.Right = 4
       Margins.Bottom = 4
       ExplicitTop = 33
-      ExplicitWidth = 684
-      ExplicitHeight = 337
+      ExplicitWidth = 680
+      ExplicitHeight = 336
       inherited cxGrdPrincipal: TcxGrid
         Top = 34
-        Width = 684
-        Height = 303
+        Width = 680
+        Height = 302
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -242,13 +242,13 @@ inherited frmMtoRegVer: TfrmMtoRegVer
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 684
+        Width = 680
         Height = 34
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 680
+        ExplicitWidth = 684
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -307,8 +307,8 @@ inherited frmMtoRegVer: TfrmMtoRegVer
       Margins.Bottom = 4
       Font.Height = -12
       ExplicitTop = 33
-      ExplicitWidth = 684
-      ExplicitHeight = 337
+      ExplicitWidth = 680
+      ExplicitHeight = 336
     end
   end
   inherited dsTablaG: TDataSource

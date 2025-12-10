@@ -80,7 +80,7 @@ end;
 procedure TfrmMtoPreguntas.FormCreate(Sender: TObject);
 begin
   try
-    with frmopenapp do
+    with frmMtoPrincipal do
     unqryPreguntas.Connection := FDmConn.conUni;
     dsTablaG.DataSet.Open;
     inherited;

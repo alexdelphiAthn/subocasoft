@@ -1,4 +1,4 @@
-unit inLibVerifactuClient;
+﻿unit inLibVerifactuClient;
 
 interface
 uses
@@ -197,8 +197,8 @@ begin
   // Mostrar mensaje al usuario
   //ShowMessage(sMensajeError);
   // Registrar en log
-  frmOpenApp.VeriFactuLog.RegistrarError(
-    Format('%s. C�digo: %d, RequestId: %s',
+  frmMtoPrincipal.VeriFactuLog.RegistrarError(
+    Format('%s. Código: %d, RequestId: %s',
            [sMensajeLog, CancelResponse.ErrorCode, CancelResponse.RequestId]),
     CancelResponse.JSONCompleto, sSerie, iNumero);
 end;
@@ -608,7 +608,7 @@ begin
       begin
        SetConsolidationFase(NumeroFactura, SerieFactura, 'ERROR_BORRADOR', 'N');
       end;
-      frmOpenApp.VeriFactuLog.RegistrarError('ERROR WS: ' +
+      frmMtoPrincipal.VeriFactuLog.RegistrarError('ERROR WS: ' +
                                                           Response.ErrorMessage,
                                              JSONRespuesta,
                                              SerieFactura,
@@ -926,8 +926,8 @@ procedure TVerifactuClient.LogError(const Mensaje: string;
                                     sSerie:string='';
                                     iNumFactura:Integer=0);
 begin
-  if Assigned(frmOpenApp) and Assigned(frmOpenApp.VeriFactuLog) then
-    frmOpenApp.VeriFactuLog.RegistrarError(Mensaje,
+  if Assigned(frmMtoPrincipal) and Assigned(frmMtoPrincipal.VeriFactuLog) then
+    frmMtoPrincipal.VeriFactuLog.RegistrarError(Mensaje,
                                            DatosAdicionales,
                                            sSerie,
                                            iNumFactura);
@@ -938,8 +938,8 @@ procedure TVerifactuClient.LogOperacion(const Operacion:String;
                                         SerieFactura: string = '';
                                         DatosAdicionales:string='');
 begin
-  if Assigned(frmOpenApp) and Assigned(frmOpenApp.VeriFactuLog) then
-    frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(Operacion,
+  if Assigned(frmMtoPrincipal) and Assigned(frmMtoPrincipal.VeriFactuLog) then
+    frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(Operacion,
                                                       SerieFactura,
                                                       NumFactura,
                                                       DatosAdicionales);
@@ -958,15 +958,15 @@ var
   WSResult: TVerifactuResult;
 begin
   Result := False;
-  if ((not Assigned(frmOpenApp)) or
-      (not Assigned(frmOpenApp.FDmConn)) or
-      (not frmOpenApp.FDmConn.conUni.Connected)) then
+  if ((not Assigned(frmMtoPrincipal)) or
+      (not Assigned(frmMtoPrincipal.FDmConn)) or
+      (not frmMtoPrincipal.FDmConn.conUni.Connected)) then
     raise Exception.Create('Conexi�n a base de datos no disponible');
-  VerifactuClient := TVerifactuClient.Create(frmOpenApp.FDmConn.conUni);
+  VerifactuClient := TVerifactuClient.Create(frmMtoPrincipal.FDmConn.conUni);
   qryConsolidacion := TUniQuery.Create(nil);
   try
     // Obtener la petici�n JSON de la base de datos
-    qryConsolidacion.Connection := frmOpenApp.FDmConn.conUni;
+    qryConsolidacion.Connection := frmMtoPrincipal.FDmConn.conUni;
     qryConsolidacion.SQL.Text :=
       'SELECT PETICION_COMPLETA, '+
       '       SERIE_FACTURA, '+
@@ -1022,15 +1022,15 @@ var
   IDConsolidacion: Integer;
 begin
   Result := False;
-  if ((not Assigned(frmOpenApp)) or
-      (not Assigned(frmOpenApp.FDmConn)) or
-      (not frmOpenApp.FDmConn.conUni.Connected)) then
+  if ((not Assigned(frmMtoPrincipal)) or
+      (not Assigned(frmMtoPrincipal.FDmConn)) or
+      (not frmMtoPrincipal.FDmConn.conUni.Connected)) then
     raise Exception.Create('Conexi�n a base de datos no disponible');
-  VerifactuClient := TVerifactuClient.Create(frmOpenApp.FDmConn.conUni);
+  VerifactuClient := TVerifactuClient.Create(frmMtoPrincipal.FDmConn.conUni);
   qryConsolidacion := TUniQuery.Create(nil);
   try
     // Verificar si ya existe consolidaci�n para esta factura
-    qryConsolidacion.Connection := frmOpenApp.FDmConn.conUni;
+    qryConsolidacion.Connection := frmMtoPrincipal.FDmConn.conUni;
     qryConsolidacion.SQL.Text :=
       'SELECT * '+
       '  FROM suboc_consolidacion ' +

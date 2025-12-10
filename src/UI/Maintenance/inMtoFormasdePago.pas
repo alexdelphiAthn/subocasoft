@@ -100,7 +100,7 @@ end;
 procedure TfrmMtoFormasdePago.FormCreate(Sender: TObject);
 begin
   //dmmArticulos := TDMArticulos.Create(dmArticulos);
-  unqryFormasdePago.Connection := frmOpenApp.FDmConn.conUni;
+  unqryFormasdePago.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqryFormasdePago.Open;
   inherited;
 end;

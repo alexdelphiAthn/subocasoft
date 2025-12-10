@@ -69,8 +69,8 @@ end;
 
 procedure TfrmPrintFac.Preparar_consulta;
 begin
-  dmmFac.unqryFacPrint.Connection := frmOpenApp.FDmConn.conUni;
-  dmmFac.unqryLinFacPrint.Connection := frmOpenApp.FDmConn.conUni;
+  dmmFac.unqryFacPrint.Connection := frmMtoPrincipal.FDmConn.conUni;
+  dmmFac.unqryLinFacPrint.Connection := frmMtoPrincipal.FDmConn.conUni;
   if rbActual.Checked = true then
   begin
     with dmmFac.unqryFacPrint do

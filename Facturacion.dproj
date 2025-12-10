@@ -113,7 +113,7 @@
         </DCCReference>
         <DCCReference Include="src\Lib\Core\inLibtb.pas"/>
         <DCCReference Include="src\UI\Core\inMtoPrincipal.pas">
-            <Form>frmOpenApp</Form>
+            <Form>frmMtoPrincipal</Form>
         </DCCReference>
         <DCCReference Include="src\Core\UniDataConn.pas">
             <Form>dmConn</Form>

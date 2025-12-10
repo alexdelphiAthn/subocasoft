@@ -91,13 +91,13 @@ procedure TfrmMtoContadores.unqryContadoresBeforePost(DataSet: TDataSet);
 begin
   inherited;
   if (Dataset.State= dsInsert) then
-    frmOpenApp.VeriFactuLog.RegistrarCambioConfiguracion(
+    frmMtoPrincipal.VeriFactuLog.RegistrarCambioConfiguracion(
                           DataSet.FieldByName('TIPODOC_CONTADOR').AsString +'\'+
                                  DataSet.FieldByName('SERIE_CONTADOR').AsString,
                                                                'Registro nuevo',
                              DataSet.FieldByName('CONTADOR_CONTADOR').AsString);
   if (Dataset.State= dsEdit) then
-    frmOpenApp.VeriFactuLog.RegistrarCambioConfiguracion(
+    frmMtoPrincipal.VeriFactuLog.RegistrarCambioConfiguracion(
                           DataSet.FieldByName('TIPODOC_CONTADOR').AsString +'\'+
                                  DataSet.FieldByName('SERIE_CONTADOR').AsString,
                     VarToStr(DataSet.FieldByName('CONTADOR_CONTADOR').OldValue),
@@ -113,7 +113,7 @@ end;
 procedure TfrmMtoContadores.FormCreate(Sender: TObject);
 begin
   try
-    with frmopenapp do
+    with frmMtoPrincipal do
     unqryContadores.Connection := FDmConn.conUni;
     dsTablaG.DataSet.Open;
     inherited;

@@ -430,7 +430,7 @@ begin
     bConnected := False;
     sCausaOFF := 'No hay internet';
     ShowMessage(sCausaOFF);
-    frmOpenApp.VeriFactuLog.RegistrarError('', sCausaOFF);
+    frmMtoPrincipal.VeriFactuLog.RegistrarError('', sCausaOFF);
   end;
 
   if bConnected and not IsWebServiceUp(sWebServ) then
@@ -438,7 +438,7 @@ begin
     bConnected := False;
     sCausaOFF := 'WebService ' + sWebServ + ' caído';
     ShowMessage(sCausaOFF);
-    frmOpenApp.VeriFactuLog.RegistrarError('', sCausaOFF);
+    frmMtoPrincipal.VeriFactuLog.RegistrarError('', sCausaOFF);
   end;
 
   Result := bConnected;
@@ -520,7 +520,7 @@ begin
   begin
     bEsValida := False;
     ShowMessage('El borrador no tiene lineas');
-    frmOpenApp.VeriFactuLog.RegistrarError('Intento de consolidación. ' +
+    frmMtoPrincipal.VeriFactuLog.RegistrarError('Intento de consolidación. ' +
                                            'Factura sin lineas',
       'Borrador ' + sSerie + '\' + IntToStr(iNumero) + ' sin lineas',
                                                                sSerie, iNumero);
@@ -536,7 +536,7 @@ begin
   begin
     bEsValida := False;
     ShowMessage('La factura ya está consolidada');
-    frmOpenApp.VeriFactuLog.RegistrarError('Intento de consolidación. ' +
+    frmMtoPrincipal.VeriFactuLog.RegistrarError('Intento de consolidación. ' +
                                            'Factura ya consolidada',
       'Factura ' + sSerie + '\' + IntToStr(iNumero) + ' consolidada',
                                                                sSerie, iNumero);
@@ -697,7 +697,7 @@ begin
                                      iNumeroFactura,
                                      'OFFLINE',
                                      True);
-    frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+    frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
       'Consolidada OFFLINE, causa ' + sCausaOFF +
       dsTablaG.Dataset.FieldByName('TOTAL_LIQUIDO_FACTURA').AsString,
                                        sSerieFactura, iNumeroFactura );
@@ -707,7 +707,7 @@ begin
   begin
     try
       sJSONPeticion := BuildInvoiceJSON(IntToStr(iNumeroFactura), sSerieFactura);
-            frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+            frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
                                           'Enviando petición de consolidación. ',
                                                  sSerieFactura, iNumeroFactura,
                                                  sJSONPeticion);
@@ -773,14 +773,14 @@ begin
   if iQueueId = 0 then
   begin
     ShowMessage('No se encontró el Queue ID de la factura en Verifactu');
-    frmOpenApp.VeriFactuLog.RegistrarError(
+    frmMtoPrincipal.VeriFactuLog.RegistrarError(
       'Queue ID no encontrado para cancelación', '', sSerie, iNumero);
     Exit;
   end;
   if not fncHayConexion then
   begin
     ShowMessage('No hay conexión con el servicio Verifactu');
-    frmOpenApp.VeriFactuLog.RegistrarError(
+    frmMtoPrincipal.VeriFactuLog.RegistrarError(
       'Sin conexión para cancelación', '', sSerie, iNumero);
     Exit;
   end;
@@ -790,7 +790,7 @@ begin
                 mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
     Exit;
   try
-    VerifactuClient := TVerifactuClient.Create(frmOpenApp.FDmConn.conUni);
+    VerifactuClient := TVerifactuClient.Create(frmMtoPrincipal.FDmConn.conUni);
     try
       // Realizar cancelación
       sJSONResponse := VerifactuClient.CancelarFacturaPorQueueId(iQueueId);
@@ -806,7 +806,7 @@ begin
         // Guardar información de cancelación en BD
         //dmmFac.GuardarCancelacionVerifactu(sSerie, iNumero, CancelResponse);
         // Log de éxito
-        frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+        frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
           Format('Cancelada correctamente. QueueId: %d, RequestId: %s',
                  [CancelResponse.QueueId, CancelResponse.RequestId]),
           sSerie, iNumero, CancelResponse.JSONCompleto);
@@ -828,7 +828,7 @@ begin
     on E: Exception do
     begin
       ShowMessage('Error en cancelación: ' + E.Message);
-      frmOpenApp.VeriFactuLog.RegistrarError(
+      frmMtoPrincipal.VeriFactuLog.RegistrarError(
         'Excepción en cancelación: ' + E.Message, '', sSerie, iNumero);
     end;
   end;
@@ -860,7 +860,7 @@ begin
   end;
   if bConsultaOK then
   begin
-    VerifactuClient := TVerifactuClient.Create(frmOpenApp.FDmConn.conUni);
+    VerifactuClient := TVerifactuClient.Create(frmMtoPrincipal.FDmConn.conUni);
     try
       sEstadoRespuesta := VerifactuClient.ConsultarEstadoFactura(iQueueId,
                                                                sSerie, iNumero);
@@ -879,13 +879,13 @@ begin
                                 sErrorCode);
           if State = vsPending then
           begin
-              frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+              frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
                   'Factura en espera. Todavía no ha sido enviada al servidor. ',
                                              sSerie, iNumero, sEstadoRespuesta);
           end;
           if State = vsVerified then
           begin
-            frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+            frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
                   'OK. Factura enviada y aprobada en AEAT.',
                                              sSerie, iNumero, sEstadoRespuesta);
           if (dmmFac.unqryFac.FieldByName('FASE_CONSOLIDACION_FACTURA').AsString
@@ -899,7 +899,7 @@ begin
               SetConsolidationFase(iNumero, sSerie, 'ERROR', 'S');
             TVerifactuErrorHandler.HandleVerifactuError(
                        sErrorCode, sMessage, sEstadoRespuesta, sSerie, iNumero);
-//              frmOpenApp.VeriFactuLog.RegistrarError(
+//              frmMtoPrincipal.VeriFactuLog.RegistrarError(
 //                         'ERROR NO CATALOGADO ' +
 //                         'Estado: ' + sMessage,
 //                                      sEstadoRespuesta,
@@ -916,7 +916,7 @@ begin
       else
       begin
         ShowMessage('No se pudo obtener el estado de la factura');
-        frmOpenApp.VeriFactuLog.RegistrarError('',
+        frmMtoPrincipal.VeriFactuLog.RegistrarError('',
           'Error consultando estado factura ' + sSerie + '\' +
           IntToStr(iNumero));
       end;
@@ -961,7 +961,7 @@ begin
       on E: Exception do
       begin
         ShowMessage('Error al consultar estado: ' + E.Message);
-        frmOpenApp.VeriFactuLog.RegistrarError('',
+        frmMtoPrincipal.VeriFactuLog.RegistrarError('',
           'Excepción consultando estado factura ' + sSerieFactura + '/' +
           IntToStr(iNumeroFactura) + ': ' + E.Message);
       end;
@@ -999,7 +999,7 @@ begin
           'ONLINE', True);
         dmmFac.unqryFac.Refresh;
         dmmFac.unqryConsolidacion.Refresh;
-        frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+        frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
           'Re-Consolidada ONLINE ' +
           dsTablaG.DataSet.FieldByName('SERIE_FACTURA').AsString + '\' +
           IntToStr(dsTablaG.DataSet.FieldByName('NRO_FACTURA').AsInteger) +
@@ -1104,7 +1104,7 @@ begin
       on E: Exception do
       begin
         ShowMessage('Error al abrir el formulario de subsanación: ' + E.Message);
-        frmOpenApp.VeriFactuLog.RegistrarError(
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(
           'Error abriendo subsanación manual: ' + E.Message, '', sSerie, iNumero);
       end;
     end;

@@ -172,7 +172,7 @@ end;
 procedure TDMClientes.DataModuleCreate(Sender: TObject);
 begin
   inherited;
-  with frmopenapp do
+  with frmMtoPrincipal do
   begin
       unqryClientes.Connection              := FDmConn.conUni;
       unqryLinFac.Connection                := FDmConn.conUni;

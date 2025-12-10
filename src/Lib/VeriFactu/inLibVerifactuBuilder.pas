@@ -10,7 +10,7 @@ type
              vk11, vk14, vk15, vk17, vk18, vk19, vk20);
   TInvoiceType = (itF1, itF2, itF3, itR1, itR2, itR3, itR4, itR5);
   TIdType = (id02, id03, id04, id05, id06, id07);
-  // Record para configuración de IVA
+  // Record para configuraciï¿½n de IVA
   TVatConfig = record
     Operation: TVatOperation;
     Key: TVatKey;
@@ -32,7 +32,7 @@ type
     IsSpanish: Boolean;
     function ToJSON: TJSONObject;
   end;
-  // Record para datos de subsanación
+  // Record para datos de subsanaciï¿½n
   TSubsanacionData = record
     NumeroFactura: string;
     FechaFactura: TDateTime;
@@ -58,26 +58,26 @@ type
   TVerifactuJSONBuilder = class
   private
     FConnection: TUniConnection;
-    // Métodos auxiliares
+    // Mï¿½todos auxiliares
     function GetRecipientData(const ANroFactura,
                              ASerieFactura: string): TRecipientData;
     function CreateVatLinesArray(const AVatConfigs: array of TVatConfig;
                                 ATotalLiquido: Double): TJSONArray;
     function DetermineInvoiceType(AEsSimpl: Boolean): TInvoiceType;
     function CalculateAmount(ABase, ARate: Double): Double;
-    // Métodos específicos para subsanación
+    // Mï¿½todos especï¿½ficos para subsanaciï¿½n
     function CreateSubsanacionRecipient(const AData: TSubsanacionData):
                                                                     TJSONObject;
     function CreateSubsanacionVatLines(ATotalFactura: Double): TJSONArray;
   public
     constructor Create(AConnection: TUniConnection);
     destructor Destroy; override;
-    // Método principal mejorado
+    // Mï¿½todo principal mejorado
     function BuildJSON(const ANumeroFactura, ASerieFactura: string;
                       const AVatConfigs: array of TVatConfig): string;
-    // Nuevo método para subsanación
+    // Nuevo mï¿½todo para subsanaciï¿½n
     function BuildSubsanacionJSON(const AData: TSubsanacionData): string;
-    // Métodos de conveniencia para casos comunes
+    // Mï¿½todos de conveniencia para casos comunes
     function BuildStandardJSON(const ANumeroFactura,
                               ASerieFactura: string): string;
     function BuildExportJSON(const ANumeroFactura,
@@ -90,7 +90,7 @@ function IdTypeToString(AIdType: TIdType): string;
 function VatOperationToString(AVatOp: TVatOperation): string;
 function VatKeyToString(AVatKey: TVatKey): string;
 function InvoiceTypeToString(AType: TInvoiceType): string;
-// Función de compatibilidad global
+// Funciï¿½n de compatibilidad global
 function BuildInvoiceJSON(NumeroFactura, SerieFactura: String): String;
 
 implementation
@@ -207,7 +207,7 @@ begin
   Result := TJSONObject.Create;
   if IsSpanish then
   begin
-    // Para clientes españoles usar irsId
+    // Para clientes espaï¿½oles usar irsId
     Result.AddPair('irsId', IrsId);
   end
   else
@@ -294,11 +294,11 @@ var
   BaseAmount: Double;
 begin
   Result := TJSONArray.Create;
-  // Si solo hay una configuración de IVA, usar todo el importe
+  // Si solo hay una configuraciï¿½n de IVA, usar todo el importe
   if Length(AVatConfigs) = 1 then
     BaseAmount := ATotalLiquido
   else
-    // Si hay múltiples configuraciones, dividir equitativamente
+    // Si hay mï¿½ltiples configuraciones, dividir equitativamente
     BaseAmount := ATotalLiquido / Length(AVatConfigs);
   for i := 0 to High(AVatConfigs) do
   begin
@@ -322,11 +322,11 @@ var
 begin
   Result := TJSONObject.Create;
 
-  // Determinar si es cliente español o extranjero
+  // Determinar si es cliente espaï¿½ol o extranjero
   if SameText(Trim(AData.PaisCliente), 'ES') or
      (Trim(AData.PaisCliente) = '') then
   begin
-    // Cliente español - usar irsId
+    // Cliente espaï¿½ol - usar irsId
     Result.AddPair('irsId', Trim(AData.NIFCliente));
   end
   else
@@ -334,7 +334,7 @@ begin
     // Cliente extranjero - usar id + idType
     Result.AddPair('id', Trim(AData.NIFCliente));
 
-    // Determinar tipo de ID usando la misma lógica que GetRecipientData
+    // Determinar tipo de ID usando la misma lï¿½gica que GetRecipientData
     sTipoId := UpperCase(Trim(AData.TipoIdInternacional));
     if ((sTipoId = 'ID') or (sTipoId = '04')) then
       IdType := id04
@@ -353,7 +353,7 @@ begin
     else if sTipoId = '07' then
       IdType := id07
     else
-      IdType := id06; // Por defecto: Documento oficial de identificación expedido por el país o territorio de residencia
+      IdType := id06; // Por defecto: Documento oficial de identificaciï¿½n expedido por el paï¿½s o territorio de residencia
 
     Result.AddPair('idType', IdTypeToString(IdType));
   end;
@@ -398,7 +398,7 @@ begin
     IdObj.AddPair('issuedTime', FormatDateTime('yyyy-mm-dd',
                                                            AData.FechaFactura));
     InvoiceObj.AddPair('id', IdObj);
-    // Descripción
+    // Descripciï¿½n
     DescObj := TJSONObject.Create;
     DescObj.AddPair('text', Trim(AData.Descripcion));
     DescObj.AddPair('operationDate', FormatDateTime('yyyy-mm-dd',
@@ -408,12 +408,12 @@ begin
       InvoiceObj.AddPair('isFix', TJSONTrue.Create);
     // Tipo de factura
     InvoiceObj.AddPair('type', InvoiceTypeToString(AData.TipoFactura));
-    // Marcar como subsanación si está marcado
+    // Marcar como subsanaciï¿½n si estï¿½ marcado
 
     // Si es factura simplificada
 //    if AData.TipoFactura = itF2 then
 //      InvoiceObj.AddPair('simple', TJSONTrue.Create);
-    // Líneas de IVA
+    // Lï¿½neas de IVA
     VatLinesArray := CreateSubsanacionVatLines(AData.TotalFactura);
     InvoiceObj.AddPair('vatLines', VatLinesArray);
     // Totales
@@ -450,7 +450,7 @@ var
   sDescripcionLinea: string;
   i: Integer;
 begin
-  // Crear consulta local para datos básicos de la factura
+  // Crear consulta local para datos bï¿½sicos de la factura
   InvoiceQuery := TUniQuery.Create(nil);
   try
     InvoiceQuery.Connection := FConnection;
@@ -465,7 +465,7 @@ begin
     if InvoiceQuery.IsEmpty then
       raise Exception.Create('Factura no encontrada: ' +
                             ASerieFactura + '/' + ANumeroFactura);
-    // Extraer datos básicos
+    // Extraer datos bï¿½sicos
     bEsSimpl := (InvoiceQuery.FieldByName('ESSIMPL_FACTURA').AsString = 'S');
     dTotalLiquido := InvoiceQuery.FieldByName('TOTAL_LIQUIDO_FACTURA').AsFloat;
     dtFechaFactura := InvoiceQuery.FieldByName('FECHA_FACTURA').AsDateTime;
@@ -473,7 +473,7 @@ begin
   finally
     InvoiceQuery.Free;
   end;
-  // Crear consulta local para descripción de líneas
+  // Crear consulta local para descripciï¿½n de lï¿½neas
   LinesQuery := TUniQuery.Create(nil);
   try
     LinesQuery.Connection := FConnection;
@@ -494,7 +494,7 @@ begin
       sDescripcionLinea := LinesQuery.FieldByName('DESCRIPCION_ARTICULO_LINEA')
                                     .AsString
     else
-      sDescripcionLinea := 'Descripción general de la factura';
+      sDescripcionLinea := 'Descripciï¿½n general de la factura';
     LinesQuery.Close;
   finally
     LinesQuery.Free;
@@ -542,14 +542,14 @@ begin
     JSONToSend.Free;
   end;
 end;
-// Métodos de conveniencia
+// Mï¿½todos de conveniencia
 function TVerifactuJSONBuilder.BuildStandardJSON(const ANumeroFactura,
   ASerieFactura: string): string;
 var
   VatConfigs: array of TVatConfig;
 begin
   SetLength(VatConfigs, 1);
-  VatConfigs[0] := TVatConfig.ForStandardVAT(21); // IVA estándar 21%
+  VatConfigs[0] := TVatConfig.ForStandardVAT(21); // IVA estï¿½ndar 21%
   Result := BuildJSON(ANumeroFactura, ASerieFactura, VatConfigs);
 end;
 function TVerifactuJSONBuilder.BuildExportJSON(const ANumeroFactura,
@@ -570,15 +570,15 @@ begin
   VatConfigs[0] := TVatConfig.ForIntraEUVAT;
   Result := BuildJSON(ANumeroFactura, ASerieFactura, VatConfigs);
 end;
-// Función de compatibilidad global
+// Funciï¿½n de compatibilidad global
 function BuildInvoiceJSON(NumeroFactura, SerieFactura: String): String;
 var
   Builder: TVerifactuJSONBuilder;
   VatConfigs: array of TVatConfig;
 begin
-  Builder := TVerifactuJSONBuilder.Create(frmOpenApp.FDmConn.conUni);
+  Builder := TVerifactuJSONBuilder.Create(frmMtoPrincipal.FDmConn.conUni);
   try
-    // Replicar comportamiento original: IVA 0%, operación E1, clave 01
+    // Replicar comportamiento original: IVA 0%, operaciï¿½n E1, clave 01
     SetLength(VatConfigs, 1);
     VatConfigs[0] := TVatConfig.ForExemptE1;
     Result := Builder.BuildJSON(NumeroFactura, SerieFactura, VatConfigs);

@@ -4,8 +4,8 @@ object frmPrintFac: TfrmPrintFac
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Factura'
-  ClientHeight = 211
-  ClientWidth = 514
+  ClientHeight = 210
+  ClientWidth = 510
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,12 +16,14 @@ object frmPrintFac: TfrmPrintFac
   Scaled = False
   TextHeight = 23
   object pnl1: TPanel
-    Left = 336
+    Left = 332
     Top = 0
     Width = 178
-    Height = 211
+    Height = 210
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 336
+    ExplicitHeight = 211
     object btnVistaPreliminar: TcxButton
       Left = -2
       Top = 0

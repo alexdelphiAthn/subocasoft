@@ -84,7 +84,7 @@ end;
 procedure TfrmMtoPaises.FormCreate(Sender: TObject);
 begin
   try
-    with frmopenapp do
+    with frmMtoPrincipal do
     unqryPaises.Connection := FDmConn.conUni;
     dsTablaG.DataSet.Open;
     inherited;

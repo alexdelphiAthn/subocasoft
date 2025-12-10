@@ -1,4 +1,4 @@
-unit inMtoGen;
+﻿unit inMtoGen;
 
 interface
 
@@ -228,8 +228,8 @@ procedure TfrmMtoGen.sbGrabarClick(Sender: TObject);
 begin
   Screen.Cursor := crHourGlass;
   GrabarGrids(Screen.ActiveForm);
-  if frmOpenApp.FDmConn.conUni.InTransaction = True then
-    frmOpenApp.FDmConn.conUni.Commit;
+  if frmMtoPrincipal.FDmConn.conUni.InTransaction = True then
+    frmMtoPrincipal.FDmConn.conUni.Commit;
   Screen.Cursor := crDefault;
 end;
 

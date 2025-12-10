@@ -31,8 +31,8 @@ uses
   dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   inMtoPrincipal, dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue,
-  inLibImageUtils; , cxCustomData, cxFilter, cxData, dxDateRanges,
-  dxScrollbarAnnotations
+  inLibImageUtils, cxCustomData, cxFilter, cxData, dxDateRanges,
+  dxScrollbarAnnotations;
 
 type
   TfrmMtoClientes = class(TfrmMtoGen)
@@ -1285,13 +1285,13 @@ begin
     STopWatch := TStopWatch.StartNew;
     CrearClientDataSetFotos;
     StopWatch.Stop;
-    inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+    inMtoPrincipal.frmMtoPrincipal.Memo.Lines.Add(
                                   Format('%.2f mseg en CrearClientDataSetFotos',
                                         [Stopwatch.Elapsed.TotalMilliseconds]));
     STopWatch := TStopWatch.StartNew;
     SincronizarThumbnails;
     StopWatch.Stop;
-    inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+    inMtoPrincipal.frmMtoPrincipal.Memo.Lines.Add(
                                   Format('%.2f mseg en SincronizarThumnails',
                                         [Stopwatch.Elapsed.TotalMilliseconds]));
     STopWatch := TStopWatch.StartNew;
@@ -1299,7 +1299,7 @@ begin
     CargarMiniaturas;
     cxgrdFotosDBCardView1.DataController.DataSource := dsFotos;
     StopWatch.Stop;
-    inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
+    inMtoPrincipal.frmMtoPrincipal.Memo.Lines.Add(
                                   Format('%.2f mseg en CargarMiniaturas',
                                         [Stopwatch.Elapsed.TotalMilliseconds]));
   end;

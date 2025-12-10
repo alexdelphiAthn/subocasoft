@@ -2,8 +2,8 @@ object frmMtoGen: TfrmMtoGen
   Left = 0
   Top = 119
   Caption = 'fT'
-  ClientHeight = 578
-  ClientWidth = 1177
+  ClientHeight = 577
+  ClientWidth = 1173
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -24,8 +24,8 @@ object frmMtoGen: TfrmMtoGen
   object pButtonPage: TPanel
     Left = 0
     Top = 0
-    Width = 979
-    Height = 578
+    Width = 975
+    Height = 577
     Align = alClient
     ParentBackground = False
     TabOrder = 1
@@ -33,10 +33,10 @@ object frmMtoGen: TfrmMtoGen
     ExplicitHeight = 579
   end
   object pButtonRightBar: TPanel
-    Left = 979
+    Left = 975
     Top = 0
     Width = 198
-    Height = 578
+    Height = 577
     Align = alRight
     ParentBackground = False
     TabOrder = 2
@@ -263,8 +263,8 @@ object frmMtoGen: TfrmMtoGen
   object pcPantalla: TPageControl
     Left = 0
     Top = 0
-    Width = 979
-    Height = 578
+    Width = 975
+    Height = 577
     ActivePage = tsLista
     Align = alClient
     Font.Charset = ANSI_CHARSET
@@ -283,8 +283,8 @@ object frmMtoGen: TfrmMtoGen
       object cxGrdPrincipal: TcxGrid
         Left = 0
         Top = 43
-        Width = 975
-        Height = 496
+        Width = 971
+        Height = 495
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -293,6 +293,8 @@ object frmMtoGen: TfrmMtoGen
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 975
+        ExplicitHeight = 496
         object cxGrdDBTabPrin: TcxGridDBTableView
           OnDblClick = cxGrdDBTabPrinDblClick
           Navigator.Buttons.OnButtonClick = cxGrdDBTabPrinNavigatorButtonsButtonClick
@@ -349,7 +351,7 @@ object frmMtoGen: TfrmMtoGen
       object pnTopGrid: TPanel
         Left = 0
         Top = 0
-        Width = 975
+        Width = 971
         Height = 43
         Align = alTop
         BevelOuter = bvNone
@@ -357,7 +359,7 @@ object frmMtoGen: TfrmMtoGen
         ParentBackground = False
         ParentCtl3D = False
         TabOrder = 0
-        ExplicitWidth = 979
+        ExplicitWidth = 975
         object dxbvl1: TdxBevel
           Left = 5
           Top = 2

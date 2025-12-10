@@ -1,24 +1,24 @@
 inherited frmMtoFac: TfrmMtoFac
   Caption = 'Borrador de Venta'
-  ClientHeight = 600
-  ClientWidth = 1218
+  ClientHeight = 599
+  ClientWidth = 1214
   Font.Height = -15
-  ExplicitWidth = 1234
-  ExplicitHeight = 639
+  ExplicitWidth = 1230
+  ExplicitHeight = 638
   TextHeight = 17
   inherited pButtonPage: TPanel
-    Width = 1028
-    Height = 600
+    Width = 1024
+    Height = 599
     ExplicitWidth = 1028
     ExplicitHeight = 600
   end
   inherited pButtonRightBar: TPanel
-    Left = 1028
+    Left = 1024
     Width = 190
-    Height = 600
+    Height = 599
     Font.Height = -15
     ParentFont = False
-    ExplicitLeft = 1028
+    ExplicitLeft = 1032
     ExplicitWidth = 190
     ExplicitHeight = 600
     object btnRectificar: TSpeedButton [0]
@@ -82,7 +82,7 @@ inherited frmMtoFac: TfrmMtoFac
       OnClick = btnConsolidarClick
     end
     inherited pButtonGen: TPanel
-      Top = 474
+      Top = 473
       Width = 188
       Height = 126
       Constraints.MinHeight = 80
@@ -126,8 +126,8 @@ inherited frmMtoFac: TfrmMtoFac
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 1028
-    Height = 600
+    Width = 1024
+    Height = 599
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -140,11 +140,11 @@ inherited frmMtoFac: TfrmMtoFac
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      ExplicitWidth = 1024
-      ExplicitHeight = 561
+      ExplicitWidth = 1020
+      ExplicitHeight = 560
       inherited cxGrdPrincipal: TcxGrid
-        Width = 1024
-        Height = 518
+        Width = 1020
+        Height = 517
         ExplicitWidth = 1028
         ExplicitHeight = 519
         inherited cxGrdDBTabPrin: TcxGridDBTableView
@@ -291,8 +291,8 @@ inherited frmMtoFac: TfrmMtoFac
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 1024
-        ExplicitWidth = 1028
+        Width = 1020
+        ExplicitWidth = 1024
         inherited edtBusqGlobal: TcxTextEdit
           ExplicitHeight = 30
         end
@@ -304,34 +304,31 @@ inherited frmMtoFac: TfrmMtoFac
       Margins.Right = 4
       Margins.Bottom = 4
       Font.Height = -8
-      ExplicitWidth = 1024
-      ExplicitHeight = 561
+      ExplicitWidth = 1020
+      ExplicitHeight = 560
       object pnl1: TPanel
         Left = 0
         Top = 280
-        Width = 1024
-        Height = 281
+        Width = 1020
+        Height = 280
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 1020
-        ExplicitHeight = 280
         object cxspl1: TcxSplitter
           Left = 1
           Top = 1
-          Width = 1022
+          Width = 1018
           Height = 8
           HotZoneClassName = 'TcxMediaPlayer9Style'
           AlignSplitter = salTop
           DragThreshold = 2
           PositionAfterOpen = 24
           MinSize = 24
-          ExplicitWidth = 1018
         end
         object cxpgcntrlFacturacx: TcxPageControl
           Left = 1
           Top = 9
-          Width = 1022
-          Height = 271
+          Width = 1018
+          Height = 270
           Align = alClient
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
@@ -342,11 +339,9 @@ inherited frmMtoFac: TfrmMtoFac
           TabOrder = 1
           Properties.ActivePage = tsVeriFactu
           Properties.CustomButtons.Buttons = <>
-          ExplicitWidth = 1018
-          ExplicitHeight = 270
-          ClientRectBottom = 267
+          ClientRectBottom = 266
           ClientRectLeft = 4
-          ClientRectRight = 1018
+          ClientRectRight = 1014
           ClientRectTop = 30
           object tsLineasFactura: TcxTabSheet
             Caption = 'Lineas'
@@ -495,8 +490,8 @@ inherited frmMtoFac: TfrmMtoFac
           object ts5: TcxTabSheet
             Caption = 'Totales'
             ImageIndex = 2
-            ExplicitWidth = 1018
-            ExplicitHeight = 238
+            ExplicitWidth = 1014
+            ExplicitHeight = 237
             object cxlbl17: TcxLabel
               Left = 70
               Top = 50
@@ -1029,17 +1024,19 @@ inherited frmMtoFac: TfrmMtoFac
           object tsVeriFactu: TcxTabSheet
             Caption = 'VeriFactu'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object scrlbx1: TScrollBox
               Left = 0
               Top = 0
-              Width = 1014
-              Height = 237
+              Width = 1010
+              Height = 236
               HorzScrollBar.Position = 42
               VertScrollBar.ButtonSize = 20
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 1010
-              ExplicitHeight = 236
               object lbl18: TLabel
                 Left = 2
                 Top = 612
@@ -1446,7 +1443,7 @@ inherited frmMtoFac: TfrmMtoFac
       object pnl2: TPanel
         Left = 0
         Top = 0
-        Width = 1020
+        Width = 1016
         Height = 280
         Align = alTop
         Font.Charset = ANSI_CHARSET
@@ -1456,6 +1453,7 @@ inherited frmMtoFac: TfrmMtoFac
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        ExplicitWidth = 1020
         object pnl3: TPanel
           Left = 1
           Top = 1

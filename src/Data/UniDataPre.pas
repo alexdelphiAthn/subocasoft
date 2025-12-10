@@ -203,7 +203,7 @@ end;
 procedure TdmPre.DataModuleCreate(Sender: TObject);
 begin
   bEsNuevoCliente := False;
-  with frmopenapp do
+  with frmMtoPrincipal do
   begin
     unqryFac.Connection := FdmConn.conUni;
     unqryLinFac.Connection := FdmConn.conUni;
@@ -261,7 +261,7 @@ begin
   qryFormaPagoFactura := TUniQuery.Create(nil);
   with qryFormaPagoFactura do
   begin
-    Connection := frmOpenApp.FdmConn.conUni;
+    Connection := frmMtoPrincipal.FdmConn.conUni;
     SQL.Text := 'SELECT DESCRIPCION_FORMAPAGO FROM suboc_formapago WHERE DEFAULT_FACTURA = '+ QuotedStr('S') ;
     Open;
     sFormaPago := Fields[0].AsString;
@@ -368,7 +368,7 @@ end;
 
 procedure TdmPre.zqryFacAfterDelete(DataSet: TDataSet);
 begin
-  //frmOpenApp.FDmConn.conUni.Commit;
+  //frmMtoPrincipal.FDmConn.conUni.Commit;
 end;
 
 procedure TdmPre.zqryFacAfterInsert(DataSet: TDataSet);
@@ -388,7 +388,7 @@ begin
   qryBorrarLineas := TUniQuery.Create(nil);
   with qryBorrarLineas do
   begin
-    Connection := frmOpenApp.FdmConn.conUni;
+    Connection := frmMtoPrincipal.FdmConn.conUni;
     SQL.Text := 'DELETE FROM suboc_presupuestos_lineas WHERE SERIE_FACTURA_LINEA = :serie ' +
                 ' AND NRO_FACTURA_LINEA = :nrofactura';
     //Connection.StartTransaction;

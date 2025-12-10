@@ -125,7 +125,7 @@ constructor TfrmModalSubsanacion.Create(AOwner: TComponent;
   const ASerieFactura: string;
   ANumeroFactura: Integer);
 begin
-  FConnection := frmOpenApp.FDmConn.conUni;
+  FConnection := frmMtoPrincipal.FDmConn.conUni;
   if (FConnection.Connected = false) then
     FConnection.Connect;
   FSerieFactura := ASerieFactura;
@@ -613,7 +613,7 @@ begin
   try
     Screen.Cursor := crHourGlass;
       // Enviar la subsanación a Verifactu
-      frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+      frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
                                           'Enviando petición de subsanación. ',
                                                  FSerieFactura, FNumeroFactura,
                                                  JSONSubsanacion);
@@ -630,7 +630,7 @@ begin
         begin
           FSubsanacionExitosa := True;
           ShowMessage('Subsanación enviada y procesada correctamente.');
-          frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+          frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
             'Subsanación manual ejecutada correctamente',
             FSerieFactura, FNumeroFactura, JSONSubsanacion);
         end
@@ -645,7 +645,7 @@ begin
       begin
           // Error en la comunicación HTTP
           ShowMessage('Error de comunicación: ' + WSResult.ErrorMessage);
-          frmOpenApp.VeriFactuLog.RegistrarError(
+          frmMtoPrincipal.VeriFactuLog.RegistrarError(
             'Error HTTP en subsanación: ' + WSResult.ErrorMessage,
             WSResult.ResponseContent, FSerieFactura, FNumeroFactura);
       end;
@@ -844,7 +844,7 @@ begin
                                                          currTotalFactura.Value;
       Query.ExecSQL;
       // Log de los cambios realizados
-      frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+      frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
         'Datos actualizados por subsanación: ' + sLogCambios,
         FSerieFactura, FNumeroFactura);
       ShowMessage(Format('Factura %s/%d actualizada correctamente.'
@@ -854,7 +854,7 @@ begin
     else
     begin
       // Log indicando que no hubo cambios
-      frmOpenApp.VeriFactuLog.RegistrarOperacionFactura(
+      frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
                           'Subsanación completada sin cambios en datos locales',
                                                  FSerieFactura, FNumeroFactura);
     end;

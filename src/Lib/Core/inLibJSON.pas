@@ -1,4 +1,4 @@
-unit inLibJSON;
+﻿unit inLibJSON;
 
 interface
 
@@ -291,7 +291,7 @@ begin
   // Mostrar al usuario
   //ShowMessage(Format('Error %s: %s', [sErrorCode, sCompleteMessage]));
   // Registrar en log
-  frmOpenApp.VeriFactuLog.RegistrarError(
+  frmMtoPrincipal.VeriFactuLog.RegistrarError(
     Format('ERROR VERIFACTU [%s]: %s',
            [sErrorCode, sCompleteMEssage]),
             sResponse, sSerie, iNumero);

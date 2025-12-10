@@ -6,7 +6,7 @@ uses
   MidasLib,
   inMtoGen in 'src\UI\Core\inMtoGen.pas' {frmMtoGen},
   inLibtb in 'src\Lib\Core\inLibtb.pas',
-  inMtoPrincipal in 'src\UI\Core\inMtoPrincipal.pas' {frmOpenApp},
+  inMtoPrincipal in 'src\UI\Core\inMtoPrincipal.pas' {frmMtoPrincipal},
   UniDataConn in 'src\Core\UniDataConn.pas' {dmConn: TDataModule},
   inLibDir in 'src\Lib\Core\inLibDir.pas',
   inLibWin in 'src\Lib\Core\inLibWin.pas',
@@ -72,7 +72,7 @@ begin
                                      TdxDiacriticStringNormalizationMode.System;
   Application.Initialize;
   Application.Title := 'Subocasana';
-  Application.CreateForm(TfrmOpenApp, frmOpenApp);
-  Application.CreateForm(TfrmMtoVisorFoto, frmMtoVisorFoto);
+  Application.CreateForm(TfrmMtoPrincipal, frmMtoPrincipal);
+  //Application.CreateForm(TfrmMtoVisorFoto, frmMtoVisorFoto);
   Application.Run;
 end.

@@ -2,20 +2,20 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
   Left = 5
   Top = 4
   Caption = 'Formas de Pago'
-  ClientHeight = 389
-  ClientWidth = 724
-  ExplicitWidth = 740
-  ExplicitHeight = 428
+  ClientHeight = 388
+  ClientWidth = 720
+  ExplicitWidth = 736
+  ExplicitHeight = 427
   TextHeight = 22
   inherited pButtonPage: TPanel
-    Width = 526
-    Height = 389
+    Width = 522
+    Height = 388
     ExplicitWidth = 526
     ExplicitHeight = 389
   end
   inherited pButtonRightBar: TPanel
-    Left = 526
-    Height = 389
+    Left = 522
+    Height = 388
     ExplicitLeft = 526
     ExplicitHeight = 389
     inherited pButtonGen: TPanel
@@ -36,16 +36,16 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 526
-    Height = 389
+    Width = 522
+    Height = 388
     ExplicitWidth = 526
     ExplicitHeight = 389
     inherited tsLista: TTabSheet
-      ExplicitWidth = 522
-      ExplicitHeight = 350
+      ExplicitWidth = 518
+      ExplicitHeight = 349
       inherited cxGrdPrincipal: TcxGrid
-        Width = 522
-        Height = 307
+        Width = 518
+        Height = 306
         ExplicitWidth = 518
         ExplicitHeight = 306
         inherited cxGrdDBTabPrin: TcxGridDBTableView
@@ -86,24 +86,24 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 522
-        ExplicitWidth = 518
+        Width = 518
+        ExplicitWidth = 522
         inherited edtBusqGlobal: TcxTextEdit
           ExplicitHeight = 30
         end
       end
     end
     inherited tsFicha: TTabSheet
-      ExplicitWidth = 522
-      ExplicitHeight = 350
+      ExplicitWidth = 518
+      ExplicitHeight = 349
       object pnl1: TPanel
         Left = 0
         Top = 0
-        Width = 522
+        Width = 518
         Height = 145
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 526
+        ExplicitWidth = 522
         object cxdbtxtdt1: TcxDBTextEdit
           Left = 104
           Top = 33
@@ -150,7 +150,7 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
         object Panel1: TPanel
           Left = 1
           Top = 1
-          Width = 520
+          Width = 516
           Height = 145
           Align = alTop
           Font.Charset = ANSI_CHARSET
@@ -160,7 +160,7 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
           Font.Style = []
           ParentFont = False
           TabOrder = 0
-          ExplicitWidth = 524
+          ExplicitWidth = 520
           object cxDBTextEdit1: TcxDBTextEdit
             Left = 123
             Top = 32
@@ -195,26 +195,24 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
       object pnl2: TPanel
         Left = 0
         Top = 145
-        Width = 522
-        Height = 205
+        Width = 518
+        Height = 204
         Align = alClient
         TabOrder = 1
         ExplicitWidth = 371
-        ExplicitHeight = 204
         object cxpgcntrl2: TcxPageControl
           Left = 1
           Top = 1
-          Width = 520
-          Height = 203
+          Width = 516
+          Height = 202
           Align = alClient
           TabOrder = 0
           Properties.ActivePage = cxtbsht3
           Properties.CustomButtons.Buttons = <>
           ExplicitWidth = 369
-          ExplicitHeight = 202
-          ClientRectBottom = 199
+          ClientRectBottom = 198
           ClientRectLeft = 4
-          ClientRectRight = 516
+          ClientRectRight = 512
           ClientRectTop = 28
           object cxtbsht3: TcxTabSheet
             Caption = 'M'#225's Datos'
@@ -222,7 +220,6 @@ inherited frmMtoFormasdePago: TfrmMtoFormasdePago
             ExplicitLeft = 0
             ExplicitTop = 0
             ExplicitWidth = 361
-            ExplicitHeight = 170
           end
         end
       end

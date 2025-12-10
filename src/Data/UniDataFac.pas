@@ -144,7 +144,7 @@ begin
   iQueueId := 0;
   qryCon := TUniQuery.Create(nil);
   try
-    qryCon.Connection := frmOpenApp.FDmConn.conUni;
+    qryCon.Connection := frmMtoPrincipal.FDmConn.conUni;
     qryCon.SQL.Text :=
       'SELECT QUEUE_ID ' +
       'FROM suboc_consolidacion ' +
@@ -283,7 +283,7 @@ end;
 
 procedure TdmFac.DataModuleCreate(Sender: TObject);
 begin
-  with frmopenapp do
+  with frmMtoPrincipal do
   begin
     unqryFac.Connection := FdmConn.conUni;
     unqryLinFac.Connection := FdmConn.conUni;
@@ -345,7 +345,7 @@ begin
   qryFormaPagoFactura := TUniQuery.Create(nil);
   with qryFormaPagoFactura do
   begin
-    Connection := frmOpenApp.FdmConn.conUni;
+    Connection := frmMtoPrincipal.FdmConn.conUni;
     SQL.Text := 'SELECT DESCRIPCION_FORMAPAGO ' +
                 '  FROM suboc_formapago '+
                 ' WHERE DEFAULT_FACTURA = '+ QuotedStr('S') ;
@@ -363,7 +363,7 @@ var
   unqrySol: TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqrySol.sql.Text := 'SELECT VALUE_PARAM ' +
                        '  FROM suboc_param' +
                        '  WHERE NOMBRE_PARAM ='+  QuotedStr('URL_QR_OFFLINE');
@@ -380,7 +380,7 @@ var
 begin
   unqryParams := TUniQuery.Create(nil);
   try
-    unqryParams.Connection := frmOpenApp.FDmConn.conUni;
+    unqryParams.Connection := frmMtoPrincipal.FDmConn.conUni;
     unqryParams.SQL.Text := 'SELECT VALUE_PARAM '+
                             '  FROM suboc_param ' +
                             ' WHERE NOMBRE_PARAM IN ('+
@@ -439,7 +439,7 @@ var
   unqrySol: TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqrySol.sql.Text := 'SELECT SERIE_CONTADOR ' +
                        '  FROM suboc_contadores' +
                        '  WHERE TIPODOC_CONTADOR =' + QuotedStr('FC') +
@@ -456,7 +456,7 @@ var
   unqrySol: TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqrySol.sql.Text := 'SELECT SERIE_CONTADOR ' +
                        '  FROM suboc_contadores' +
                        '  WHERE SERIE_CONTADOR =' + QuotedStr(sSerie) +
@@ -472,7 +472,7 @@ var
   unqrySol: TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqrySol.sql.Text := 'SELECT COUNT(*) as NROLINEAS ' +
                        '  FROM suboc_facturas_lineas' +
                        '  WHERE SERIE_FACTURA_LINEA =' + QuotedStr(ASerie) +
@@ -497,7 +497,7 @@ var
   unqrySol: TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqrySol.sql.Text := 'SELECT SERIE_CONTADOR ' +
                        '  FROM suboc_contadores' +
                        '  WHERE TIPODOC_CONTADOR =' + QuotedStr('FC') +
@@ -566,7 +566,7 @@ end;
 
 procedure TdmFac.zqryFacAfterDelete(DataSet: TDataSet);
 begin
-  //frmOpenApp.FDmConn.conUni.Commit;
+  //frmMtoPrincipal.FDmConn.conUni.Commit;
 end;
 
 procedure TdmFac.zqryFacAfterInsert(DataSet: TDataSet);
@@ -592,7 +592,7 @@ begin
   qryBorrarLineas := TUniQuery.Create(nil);
   with qryBorrarLineas do
   begin
-    Connection := frmOpenApp.FdmConn.conUni;
+    Connection := frmMtoPrincipal.FdmConn.conUni;
     SQL.Text := 'DELETE '+
                 '  FROM suboc_facturas_lineas '+
                 ' WHERE SERIE_FACTURA_LINEA = :serie ' +
@@ -616,7 +616,7 @@ var
   unqrySol:TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   try
     with unqrySol do
     begin
@@ -647,7 +647,7 @@ var
   unqrySol:TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   Result := False;
   if ANumero = 1 then
   begin
@@ -686,7 +686,7 @@ var
   unqrySol:TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   Result := False;
   if ANumero = 1 then
   begin

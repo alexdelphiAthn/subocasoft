@@ -1,4 +1,4 @@
-unit inLibLogVeriFactu;
+﻿unit inLibLogVeriFactu;
 
 interface
 uses
@@ -128,7 +128,7 @@ end;
 constructor TVeriFactuLogComplement.Create;
 begin
   inherited Create;
-  FConnection := frmOpenApp.FDmConn.conUni;
+  FConnection := frmMtoPrincipal.FDmConn.conUni;
   FQuery := TUniQuery.Create(nil);
   FQuery.Connection := FConnection;
   if FConnection.Connected = false then

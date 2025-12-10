@@ -24,7 +24,7 @@ begin
   iQueueId := 0;
   qryConsolidacion := TUniQuery.Create(nil);
   try
-    qryConsolidacion.Connection := frmOpenApp.FDmConn.conUni;
+    qryConsolidacion.Connection := frmMtoPrincipal.FDmConn.conUni;
     qryConsolidacion.SQL.Text :=
       'SELECT QUEUE_ID ' +
       'FROM suboc_consolidacion ' +
@@ -49,7 +49,7 @@ var
   unstdprocNextCont:TUniStoredProc;
 begin
    unstdprocNextCont := TUniStoredProc.Create(nil);
-   unstdprocNextCont.Connection := frmOpenApp.FDmConn.conUni;
+   unstdprocNextCont.Connection := frmMtoPrincipal.FDmConn.conUni;
    unstdprocNextCont.StoredProcName := 'GET_NEXT_CONT';
    unstdprocNextCont.Prepare;
    unstdprocNextCont.ParamByName('pTipoDoc').AsString := sTipoDoc;
@@ -64,7 +64,7 @@ var
   unstdprocNextCont:TUniStoredProc;
 begin
    unstdprocNextCont := TUniStoredProc.Create(nil);
-   unstdprocNextCont.Connection := frmOpenApp.FDmConn.conUni;
+   unstdprocNextCont.Connection := frmMtoPrincipal.FDmConn.conUni;
    unstdprocNextCont.StoredProcName := 'SET_CONSOLIDACION_FASE';
    unstdprocNextCont.Prepare;
    unstdprocNextCont.ParamByName('pNumFactura').AsInteger := NumeroFactura;
@@ -81,7 +81,7 @@ var
   unqrySol: TUniQuery;
 begin
   unqrySol := TUniQuery.Create(nil);
-  unqrySol.Connection := frmOpenApp.FDmConn.conUni;
+  unqrySol.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqrySol.sql.Text := 'SELECT FASE_CONSOLIDACION_FACTURA ' +
                        '  FROM suboc_facturas ' +
                        '  WHERE NRO_FACTURA = ' +
@@ -100,7 +100,7 @@ var
 begin
   qryParams := TUniQuery.Create(nil);
   try
-    qryParams.Connection := frmOpenApp.FDmConn.conUni;
+    qryParams.Connection := frmMtoPrincipal.FDmConn.conUni;
     qryParams.SQL.Text :=
       'SELECT NOMBRE_PARAM, VALUE_PARAM ' +
       'FROM suboc_param ' +
@@ -109,7 +109,7 @@ begin
       QuotedStr('OFFLINE_NIF') + ')';
     qryParams.Open;
 
-    // Leer parámetros
+    // Leer parï¿½metros
     while not qryParams.Eof do
     begin
       if qryParams.FieldByName('NOMBRE_PARAM').AsString = 'OFFLINE_PREFIX' then

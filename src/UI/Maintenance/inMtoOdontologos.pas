@@ -98,7 +98,7 @@ end;
 procedure TfrmMtoOdontologos.FormCreate(Sender: TObject);
 begin
   //dmmArticulos := TDMArticulos.Create(dmArticulos);
-  unqryOdontologos.Connection := frmOpenApp.FDmConn.conUni;
+  unqryOdontologos.Connection := frmMtoPrincipal.FDmConn.conUni;
   unqryOdontologos.Open;
   inherited;
 end;

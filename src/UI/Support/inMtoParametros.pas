@@ -76,12 +76,12 @@ procedure TfrmMtoParametros.unqryParametrosBeforePost(DataSet: TDataSet);
 begin
   inherited;
      if (Dataset.State= dsInsert) then
-    frmOpenApp.VeriFactuLog.RegistrarCambioConfiguracion(
+    frmMtoPrincipal.VeriFactuLog.RegistrarCambioConfiguracion(
                                    DataSet.FieldByName('NOMBRE_PARAM').AsString,
                                    'Registro nuevo',
                                    DataSet.FieldByName('VALUE_PARAM').AsString);
   if (Dataset.State= dsEdit) then
-    frmOpenApp.VeriFactuLog.RegistrarCambioConfiguracion(
+    frmMtoPrincipal.VeriFactuLog.RegistrarCambioConfiguracion(
                                    DataSet.FieldByName('NOMBRE_PARAM').AsString,
                           VarToStr(DataSet.FieldByName('VALUE_PARAM').OldValue),
                                    DataSet.FieldByName('VALUE_PARAM').AsString);
@@ -96,7 +96,7 @@ end;
 procedure TfrmMtoParametros.FormCreate(Sender: TObject);
 begin
   try
-    with frmopenapp do
+    with frmMtoPrincipal do
     unqryParametros.Connection := FDmConn.conUni;
     dsTablaG.DataSet.Open;
     inherited;

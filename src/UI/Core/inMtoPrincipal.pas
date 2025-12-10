@@ -29,7 +29,7 @@ uses
   dxSkinWhiteprint, dxSkinXmas2008Blue;
 
 type
-  TfrmOpenApp = class(TForm)
+  TfrmMtoPrincipal = class(TForm)
     dxstsbr1: TdxStatusBar;
     tmr1: TTimer;
     undmp1: TUniDump;
@@ -109,7 +109,7 @@ type
 //  procedure ShowMtoPrin(Owner       : TComponent);
 
 var
-  frmOpenApp: TfrmOpenApp;
+  frmMtoPrincipal: TfrmMtoPrincipal;
 
 implementation
 
@@ -135,13 +135,13 @@ uses //inLibUser,
 {$R WindowsXP.res}
 {$ENDIF}
 
-procedure TfrmOpenApp.sbAppCreatePanelClass(Sender: TCustomStatusBar;
+procedure TfrmMtoPrincipal.sbAppCreatePanelClass(Sender: TCustomStatusBar;
   var PanelClass: TStatusPanelClass);
 begin
   //sbApp := GetAppFolder;
 end;
 
-procedure TfrmOpenApp.SQLMonitor1SQL(Sender: TObject; Text: string;
+procedure TfrmMtoPrincipal.SQLMonitor1SQL(Sender: TObject; Text: string;
   Flag: TDATraceFlag);
 begin
   {$IFDEF DEBUG}
@@ -151,7 +151,7 @@ begin
   {$ENDIF }
 end;
 
-procedure TfrmOpenApp.tmr1Timer(Sender: TObject);
+procedure TfrmMtoPrincipal.tmr1Timer(Sender: TObject);
 var
   ADateStr:string;
   ATimeStr:string;
@@ -162,18 +162,18 @@ begin
    + '    ';
 end;
 
-procedure TfrmOpenApp.UniSQLMonitor1SQL(Sender: TObject; Text: string;
+procedure TfrmMtoPrincipal.UniSQLMonitor1SQL(Sender: TObject; Text: string;
   Flag: TDATraceFlag);
 begin
   //m1.Lines.Add(Text);
 end;
 
-procedure TfrmOpenApp.mnArchivoSalirClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnArchivoSalirClick(Sender: TObject);
 begin
   Application.Terminate;
 end;
 
-procedure TfrmOpenApp.FormCreate(Sender: TObject);
+procedure TfrmMtoPrincipal.FormCreate(Sender: TObject);
 begin
   //oUser := rkUser.Caption;
   FdmConn := TdmConn.Create(FdmConn);
@@ -189,12 +189,12 @@ begin
   Self.Caption := Self.Caption+ FVersion;
 end;
 
-procedure TfrmOpenApp.CopiasdeSeguridad1Click(Sender: TObject);
+procedure TfrmMtoPrincipal.CopiasdeSeguridad1Click(Sender: TObject);
 begin
   CopiaSeguridad;
 end;
 
-procedure TfrmOpenApp.CopiaSeguridad;
+procedure TfrmMtoPrincipal.CopiaSeguridad;
 var
    savedialog : TSaveDialog;
 begin
@@ -214,7 +214,7 @@ begin
    FreeAndNil(savedialog);
 end;
 
-procedure TfrmOpenApp.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TfrmMtoPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   VeriFactuLog.RegistrarParadaSystem;
   FdmConn.conUni.Disconnect;
@@ -222,12 +222,12 @@ begin
   FreeAndNil(VeriFactuLog);
 end;
 
-procedure TfrmOpenApp.mnArticulosClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnArticulosClick(Sender: TObject);
 begin
    ShowMtoArticulos(Self);
 end;
 
-procedure TfrmOpenApp.FormShow(Sender: TObject);
+procedure TfrmMtoPrincipal.FormShow(Sender: TObject);
 begin
   //si ocurre una excepción durante la carga, se fuerza el cierre de la ventana
   if FException then
@@ -237,24 +237,24 @@ begin
   end;
 end;
 
-procedure TfrmOpenApp.GlobalExceptionHandler(Sender: TObject; E: Exception);
+procedure TfrmMtoPrincipal.GlobalExceptionHandler(Sender: TObject; E: Exception);
 begin
   VeriFactuLog.RegistrarError(E.ClassName, E.Message);
 end;
 
-procedure TfrmOpenApp.mnClientesClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnClientesClick(Sender: TObject);
 begin
   if mnClientes.Visible then
     ShowMtoClientes(Self);
 end;
 
-procedure TfrmOpenApp.mnContadoresClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnContadoresClick(Sender: TObject);
 begin
   if mnContadores.Visible then
     ShowMtoContadores(Self);
 end;
 
-procedure TfrmOpenApp.mnEjecutarScriptClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnEjecutarScriptClick(Sender: TObject);
 var
     openDialog : topendialog;
 begin
@@ -275,60 +275,60 @@ begin
    FreeAndNil(opendialog);
 end;
 
-procedure TfrmOpenApp.mnFacturasClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnFacturasClick(Sender: TObject);
 begin
   if mnFacturas.Visible then
   ShowMtoFac(Self);
 end;
 
-procedure TfrmOpenApp.mnFormaPagoClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnFormaPagoClick(Sender: TObject);
 begin
   if mnFormaPago.Visible then
     ShowMtoFormasdePago(Self);
 end;
 
-procedure TfrmOpenApp.mnHistoriasDentalesClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnHistoriasDentalesClick(Sender: TObject);
 begin
 if mnHistoriasDentales.Visible then
   ShowMtoHistoriaClientes(Self);
 
 end;
 
-procedure TfrmOpenApp.mnNotaLegalClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnNotaLegalClick(Sender: TObject);
 begin
   ShowMtoNotaLegal(Self);
 end;
 
-procedure TfrmOpenApp.mnOdontologosClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnOdontologosClick(Sender: TObject);
 begin
     if mnOdontologos.Visible then
     ShowMtoOdontologos(Self);
 end;
 
-procedure TfrmOpenApp.mnPreguntasClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnPreguntasClick(Sender: TObject);
 begin
    if mnPreguntas.Visible then
      ShowMtoPreguntas(Self);
 end;
 
-procedure TfrmOpenApp.mnPresupuestosClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnPresupuestosClick(Sender: TObject);
 begin
   if mnPresupuestos.Visible then
     ShowMtoPre(Self);
 end;
 
-procedure TfrmOpenApp.mnRegVerClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnRegVerClick(Sender: TObject);
 begin
   ShowMtoRegVer(Self);
 end;
 
-procedure TfrmOpenApp.mnuPaisesClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnuPaisesClick(Sender: TObject);
 begin
     if mnuPaises.Visible then
       ShowMtoPaises(Self);
 end;
 
-procedure TfrmOpenApp.mnuParametrosClick(Sender: TObject);
+procedure TfrmMtoPrincipal.mnuParametrosClick(Sender: TObject);
 begin
   if mnuParametros.Visible then
     ShowMtoParametros(Self);

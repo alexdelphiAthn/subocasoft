@@ -38,7 +38,7 @@ end;
 procedure TDMArticulos.DataModuleCreate(Sender: TObject);
 begin
   inherited;
-  with frmopenapp do
+  with frmMtoPrincipal do
   begin
     unqryArticulos.Connection := FdmConn.conUni;
 

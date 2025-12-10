@@ -1,4 +1,4 @@
-unit inLibWin;
+﻿unit inLibWin;
 
 interface
 
@@ -287,11 +287,11 @@ var
   bfound  : boolean;
 begin
   bfound := false;
-    for i:= 0 to frmOpenApp.MDIChildCount - 1 do
-      if frmOpenApp.MDIChildren[i].Caption = sCaptionName then
+    for i:= 0 to frmMtoPrincipal.MDIChildCount - 1 do
+      if frmMtoPrincipal.MDIChildren[i].Caption = sCaptionName then
       begin
         bFound := true;
-        frmOpenApp.MDIChildren[i].BringToFront  ;
+        frmMtoPrincipal.MDIChildren[i].BringToFront  ;
       end;
   Result := bFound;
 end;

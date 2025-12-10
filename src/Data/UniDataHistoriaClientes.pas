@@ -104,7 +104,7 @@ end;
 procedure TDMHistoriaClientes.DataModuleCreate(Sender: TObject);
 begin
   inherited;
-  with frmopenapp do
+  with frmMtoPrincipal do
   begin
     unqryHistoria.Connection := FDmConn.conUni;
     unqryArtDataHis.Connection := FDmConn.conUni;
