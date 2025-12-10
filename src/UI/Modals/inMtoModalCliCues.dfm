@@ -4,8 +4,8 @@ object frmPrintCliCues: TfrmPrintCliCues
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Cuestionario Cliente'
-  ClientHeight = 282
-  ClientWidth = 461
+  ClientHeight = 281
+  ClientWidth = 457
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,14 +16,12 @@ object frmPrintCliCues: TfrmPrintCliCues
   Scaled = False
   TextHeight = 23
   object pnl1: TPanel
-    Left = 264
+    Left = 260
     Top = 0
     Width = 197
-    Height = 282
+    Height = 281
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 260
-    ExplicitHeight = 281
     object btn4: TcxButton
       Left = 4
       Top = 4
@@ -77,7 +75,7 @@ object frmPrintCliCues: TfrmPrintCliCues
     TabOrder = 1
   end
   object frxrprt1: TfrxReport
-    Version = '2025.1.1'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]

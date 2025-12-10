@@ -45,12 +45,12 @@ type
   public
     constructor Create;
     destructor Destroy; virtual;
-    // Métodos principales
+    // Mï¿½todos principales
     function RegistrarEventoVeriFactu(TipoEvento: TVeriFactuEventType;
       Descripcion: string;
       const DatosAdicionales: string = '';
       Serie: string = ''; NumFactura:integer=0):String;
-    function VerificarIntegridadCadena: Boolean;
+//    function VerificarIntegridadCadena: Boolean;
     procedure RegistrarArranqueSystem;
     procedure RegistrarParadaSystem;
     procedure RegistrarOperacionFactura(Descripcion, Serie:String;
@@ -63,7 +63,7 @@ type
     procedure RegistrarAccesoArchivo(NombreArchivo, TipoAcceso, DatosAdicionales: string);
     procedure RegistrarCambioConfiguracion(Parametro, ValorAnterior, ValorNuevo: string);
     procedure RegistrarBackup;
-    function ObtenerEstadisticasTabla: string;
+//    function ObtenerEstadisticasTabla: string;
     function GetComputerName: string;
     function GetWindowsUserName: string;
   end;
@@ -82,12 +82,12 @@ begin
   // Inicializamos la longitud del buffer
   UserNameLen := 256 + 1;
 
-  // Llamamos a la función de la API de Windows
+  // Llamamos a la funciï¿½n de la API de Windows
   if GetUserName(UserName, UserNameLen) then
-    // Si la función tiene éxito, asigna el resultado
+    // Si la funciï¿½n tiene ï¿½xito, asigna el resultado
     Result := string(UserName)
   else
-    // Si falla, devuelve una cadena vacía o un mensaje de error
+    // Si falla, devuelve una cadena vacï¿½a o un mensaje de error
     Result := '';
 end;
 function TVeriFactuLogComplement.GetComputerName: string;
@@ -201,7 +201,7 @@ function TVeriFactuLogComplement.GenerarFirmaDigital(
 var
   DatosFirma: string;
 begin
-  // Simulación de firma digital - en producción usar certificado digital real
+  // Simulaciï¿½n de firma digital - en producciï¿½n usar certificado digital real
   DatosFirma := Format('VERIFACTU_%s_%s_%s', [
     HashEvento,
     GetWindowsUserName,
@@ -286,7 +286,7 @@ begin
     end;
   end;
 end;
-// Métodos específicos de eventos VeriFact.u
+// Mï¿½todos especï¿½ficos de eventos VeriFact.u
 
 procedure TVeriFactuLogComplement.RegistrarArranqueSystem;
 var
@@ -298,7 +298,7 @@ begin
                               ParamStr(0)
                             ]);
   RegistrarEventoVeriFactu(vfetArranqueSystem,
-    'Sistema de facturación iniciado', DatosAdicionales);
+    'Sistema de facturaciï¿½n iniciado', DatosAdicionales);
 end;
 
 procedure TVeriFactuLogComplement.RegistrarParadaSystem;
@@ -311,7 +311,7 @@ begin
                               ParamStr(0)
                             ]);
   RegistrarEventoVeriFactu(vfetParadaSystem,
-    'Sistema de facturación cerrado', DatosAdicionales);
+    'Sistema de facturaciï¿½n cerrado', DatosAdicionales);
 end;
 
 procedure TVeriFactuLogComplement.RegistrarOperacionFactura(Descripcion,
@@ -358,7 +358,7 @@ begin
                                                      ValorAnterior,
                                                      ValorNuevo]);
   RegistrarEventoVeriFactu(vfetCambioConfig,
-    Format('Cambio configuración: %s', [Parametro]),
+    Format('Cambio configuraciï¿½n: %s', [Parametro]),
     DatosAdicionales);
 end;
 
@@ -371,118 +371,118 @@ begin
    '');
 end;
 
-function TVeriFactuLogComplement.VerificarIntegridadCadena: Boolean;
-var
-  HashAnteriorEsperado: string;
-  id, TipoEvento: Integer;
-  TimeStamp: TDateTime;
-  Usuario, Version, Descripcion, DatosAdicionales: string;
-  HashAnterior, HashPropio, FirmaDigital: string;
-  Entry: TVeriFactuLogEntry;
-  DatosRecalculados: string;
-  HashRecalculado: string;
-  ErrorCount: Integer;
-begin
-  Result := True;
-  ErrorCount := 0;
-  HashAnteriorEsperado := StringOfChar('0', 64);
-  FQuery.SQL.Text :=
-    'SELECT id_log, ' +
-    '       timestamp_log, ' +
-    '       tipo_evento_log, ' +
-    '       usuario_log, ' +
-    '       version_log, ' +
-    '       descripcion_log, ' +
-    '       datos_adicionales_log,' +
-    '       hash_anterior_log, ' +
-    '       hash_propio_log, ' +
-    '       firma_digital_log ' +
-    '  FROM suboc_verifactu_log_eventos ORDER BY id_log';
-  FQuery.Open;
-  try
-    while not FQuery.Eof do
-    begin
-      // Leer datos del registro
-      id := FQuery.FieldByName('id_log').AsInteger;
-      TimeStamp := FQuery.FieldByName('timestamp_log').AsDateTime;
-      TipoEvento := FQuery.FieldByName('tipo_evento_log').AsInteger;
-      Usuario := FQuery.FieldByName('usuario_log').AsString;
-      Version := FQuery.FieldByName('version_log').AsString;
-      Descripcion := FQuery.FieldByName('descripcion_log').AsString;
-      DatosAdicionales := FQuery.FieldByName('datos_adicionales_log').AsString;
-      HashAnterior := FQuery.FieldByName('hash_anterior_log').AsString;
-      HashPropio := FQuery.FieldByName('hash_propio_log').AsString;
-      FirmaDigital := FQuery.FieldByName('firma_digital_log').AsString;
-      // Verificar hash anterior
-      if HashAnterior <> HashAnteriorEsperado then
-      begin
-//        if Assigned(FOriginalLog) then
-//          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad secuencia %d: hash anterior incorrecto', [Secuencia]));
-        Result := False;
-        Inc(ErrorCount);
-      end;
-      // Recalcular hash propio
-      Entry.id := id;
-      Entry.TimeStamp := TimeStamp;
-      Entry.TipoEvento := TVeriFactuEventType(TipoEvento);
-      Entry.Usuario := Usuario;
-      Entry.Version := version;
-      Entry.Descripcion := Descripcion;
-      Entry.DatosAdicionales := DatosAdicionales;
-      Entry.HashAnterior := HashAnterior;
-      DatosRecalculados := CrearDatosParaHash(Entry);
-      HashRecalculado := CalcularHashSHA256(DatosRecalculados);
-      if HashRecalculado <> HashPropio then
-      begin
-//        if Assigned(FOriginalLog) then
-//          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad secuencia %d: hash propio alterado', [Secuencia]));
-        Result := False;
-        Inc(ErrorCount);
-      end;
-      HashAnteriorEsperado := HashPropio;
-      FQuery.Next;
-    end;
-  finally
-    FQuery.Close;
-  end;
-end;
-
-function TVeriFactuLogComplement.ObtenerEstadisticasTabla: string;
-var
-  JsonObj: TJSONObject;
-begin
-  JsonObj := TJSONObject.Create;
-  try
-    // Total de eventos
-    FQuery.SQL.Text := 'SELECT COUNT(*) as total FROM suboc_verifactu_log_eventos';
-    FQuery.Open;
-    JsonObj.AddPair('total_eventos', TJSONNumber.Create(FQuery.FieldByName('total').AsLargeInt));
-    FQuery.Close;
-    // Primer evento
-    FQuery.SQL.Text := 'SELECT MIN(timestamp_log) as primer_evento FROM suboc_verifactu_log_eventos';
-    FQuery.Open;
-    if not FQuery.FieldByName('primer_evento').IsNull then
-      JsonObj.AddPair('primer_evento', DateTimeToStr(FQuery.FieldByName('primer_evento').AsDateTime));
-    FQuery.Close;
-    // Último evento
-    FQuery.SQL.Text := 'SELECT MAX(timestamp) as ultimo_evento FROM suboc_verifactu_log_eventos';
-    FQuery.Open;
-    if not FQuery.FieldByName('ultimo_evento').IsNull then
-      JsonObj.AddPair('ultimo_evento', DateTimeToStr(FQuery.FieldByName('ultimo_evento').AsDateTime));
-    FQuery.Close;
-    // Tamaño de tabla
-    FQuery.SQL.Text :=
-      'SELECT ROUND(((data_length + index_length) / 1024 / 1024), 2) AS size_mb ' +
-      'FROM information_schema.tables ' +
-      'WHERE table_schema = DATABASE() AND table_name = "verifactu_log_eventos"';
-    FQuery.Open;
-    if not FQuery.IsEmpty then
-      JsonObj.AddPair('tamano_mb', TJSONNumber.Create(FQuery.FieldByName('size_mb').AsFloat));
-    FQuery.Close;
-    Result := JsonObj.ToString;
-  finally
-    JsonObj.Free;
-  end;
-end;
+//function TVeriFactuLogComplement.VerificarIntegridadCadena: Boolean;
+//var
+//  HashAnteriorEsperado: string;
+//  id, TipoEvento: Integer;
+//  TimeStamp: TDateTime;
+//  Usuario, Version, Descripcion, DatosAdicionales: string;
+//  HashAnterior, HashPropio, FirmaDigital: string;
+//  Entry: TVeriFactuLogEntry;
+//  DatosRecalculados: string;
+//  HashRecalculado: string;
+//  ErrorCount: Integer;
+//begin
+//  Result := True;
+//
+//  HashAnteriorEsperado := StringOfChar('0', 64);
+//  FQuery.SQL.Text :=
+//    'SELECT id_log, ' +
+//    '       timestamp_log, ' +
+//    '       tipo_evento_log, ' +
+//    '       usuario_log, ' +
+//    '       version_log, ' +
+//    '       descripcion_log, ' +
+//    '       datos_adicionales_log,' +
+//    '       hash_anterior_log, ' +
+//    '       hash_propio_log, ' +
+//    '       firma_digital_log ' +
+//    '  FROM suboc_verifactu_log_eventos ORDER BY id_log';
+//  FQuery.Open;
+//  try
+//    while not FQuery.Eof do
+//    begin
+//      // Leer datos del registro
+//      id := FQuery.FieldByName('id_log').AsInteger;
+//      TimeStamp := FQuery.FieldByName('timestamp_log').AsDateTime;
+//      TipoEvento := FQuery.FieldByName('tipo_evento_log').AsInteger;
+//      Usuario := FQuery.FieldByName('usuario_log').AsString;
+//      Version := FQuery.FieldByName('version_log').AsString;
+//      Descripcion := FQuery.FieldByName('descripcion_log').AsString;
+//      DatosAdicionales := FQuery.FieldByName('datos_adicionales_log').AsString;
+//      HashAnterior := FQuery.FieldByName('hash_anterior_log').AsString;
+//      HashPropio := FQuery.FieldByName('hash_propio_log').AsString;
+//      FirmaDigital := FQuery.FieldByName('firma_digital_log').AsString;
+//      // Verificar hash anterior
+//      if HashAnterior <> HashAnteriorEsperado then
+//      begin
+////        if Assigned(FOriginalLog) then
+////          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad secuencia %d: hash anterior incorrecto', [Secuencia]));
+//        Result := False;
+//        Inc(ErrorCount);
+//      end;
+//      // Recalcular hash propio
+//      Entry.id := id;
+//      Entry.TimeStamp := TimeStamp;
+//      Entry.TipoEvento := TVeriFactuEventType(TipoEvento);
+//      Entry.Usuario := Usuario;
+//      Entry.Version := version;
+//      Entry.Descripcion := Descripcion;
+//      Entry.DatosAdicionales := DatosAdicionales;
+//      Entry.HashAnterior := HashAnterior;
+//      DatosRecalculados := CrearDatosParaHash(Entry);
+//      HashRecalculado := CalcularHashSHA256(DatosRecalculados);
+//      if HashRecalculado <> HashPropio then
+//      begin
+////        if Assigned(FOriginalLog) then
+////          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad secuencia %d: hash propio alterado', [Secuencia]));
+//        Result := False;
+//        Inc(ErrorCount);
+//      end;
+//      HashAnteriorEsperado := HashPropio;
+//      FQuery.Next;
+//    end;
+//  finally
+//    FQuery.Close;
+//  end;
+//end;
+//
+//function TVeriFactuLogComplement.ObtenerEstadisticasTabla: string;
+//var
+//  JsonObj: TJSONObject;
+//begin
+//  JsonObj := TJSONObject.Create;
+//  try
+//    // Total de eventos
+//    FQuery.SQL.Text := 'SELECT COUNT(*) as total FROM suboc_verifactu_log_eventos';
+//    FQuery.Open;
+//    JsonObj.AddPair('total_eventos', TJSONNumber.Create(FQuery.FieldByName('total').AsLargeInt));
+//    FQuery.Close;
+//    // Primer evento
+//    FQuery.SQL.Text := 'SELECT MIN(timestamp_log) as primer_evento FROM suboc_verifactu_log_eventos';
+//    FQuery.Open;
+//    if not FQuery.FieldByName('primer_evento').IsNull then
+//      JsonObj.AddPair('primer_evento', DateTimeToStr(FQuery.FieldByName('primer_evento').AsDateTime));
+//    FQuery.Close;
+//    // ï¿½ltimo evento
+//    FQuery.SQL.Text := 'SELECT MAX(timestamp) as ultimo_evento FROM suboc_verifactu_log_eventos';
+//    FQuery.Open;
+//    if not FQuery.FieldByName('ultimo_evento').IsNull then
+//      JsonObj.AddPair('ultimo_evento', DateTimeToStr(FQuery.FieldByName('ultimo_evento').AsDateTime));
+//    FQuery.Close;
+//    // Tamaï¿½o de tabla
+//    FQuery.SQL.Text :=
+//      'SELECT ROUND(((data_length + index_length) / 1024 / 1024), 2) AS size_mb ' +
+//      'FROM information_schema.tables ' +
+//      'WHERE table_schema = DATABASE() AND table_name = "verifactu_log_eventos"';
+//    FQuery.Open;
+//    if not FQuery.IsEmpty then
+//      JsonObj.AddPair('tamano_mb', TJSONNumber.Create(FQuery.FieldByName('size_mb').AsFloat));
+//    FQuery.Close;
+//    Result := JsonObj.ToString;
+//  finally
+//    JsonObj.Free;
+//  end;
+//end;
 
 end.

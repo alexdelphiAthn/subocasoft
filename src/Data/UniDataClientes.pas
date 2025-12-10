@@ -5,8 +5,7 @@ interface
 
 uses
   SysUtils, Vcl.Dialogs, Classes, DB, MemDS, inMtoPrincipal,
-  DBAccess, Uni, frxClass, frxDBSet, Datasnap.DBClient, Datasnap.Provider,
-  frCoreClasses;
+  DBAccess, Uni, frxClass, frxDBSet, Datasnap.DBClient, Datasnap.Provider;
 
 type
   TDMClientes = class(TDataModule)

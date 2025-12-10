@@ -23,7 +23,7 @@ uses
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
   cxCalendar, frxDesgn, cxGroupBox, cxRadioGroup, frxExportBaseDialog,
-  cxSpinEdit, frxSmartMemo, frCoreClasses;
+  cxSpinEdit;
 
 type
   TfrmPrintCliEti = class(TForm)

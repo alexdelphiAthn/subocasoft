@@ -4,8 +4,8 @@ object frmPrintCliEti: TfrmPrintCliEti
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Etiquetas Cliente'
-  ClientHeight = 242
-  ClientWidth = 437
+  ClientHeight = 241
+  ClientWidth = 433
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,14 +16,12 @@ object frmPrintCliEti: TfrmPrintCliEti
   Scaled = False
   TextHeight = 23
   object pnl1: TPanel
-    Left = 248
+    Left = 244
     Top = 0
     Width = 189
-    Height = 242
+    Height = 241
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 244
-    ExplicitHeight = 241
     object btn4: TcxButton
       Left = 0
       Top = 0
@@ -100,7 +98,7 @@ object frmPrintCliEti: TfrmPrintCliEti
     end
   end
   object frxrprt1: TfrxReport
-    Version = '2025.1.1'
+    Version = '2022.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]

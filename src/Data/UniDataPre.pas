@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, Classes,  DB,
    inMtoPrincipal, DBClient, Provider, frxClass, frxDBSet,
-   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni, frCoreClasses;
+   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni;
 
 type
   TdmPre = class(TDataModule)
