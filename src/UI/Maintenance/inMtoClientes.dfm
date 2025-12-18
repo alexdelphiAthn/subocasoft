@@ -168,7 +168,6 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ActivePage = tsFicha
     ExplicitWidth = 1026
     ExplicitHeight = 595
     inherited tsLista: TTabSheet
@@ -345,7 +344,6 @@ inherited frmMtoClientes: TfrmMtoClientes
           ExplicitLeft = 162
           ExplicitTop = 11
           ExplicitWidth = 184
-          ExplicitHeight = 30
           Width = 184
         end
         inherited cxlblBusq: TcxLabel
@@ -619,7 +617,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 289
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = cxtbsht1
+          Properties.ActivePage = cxtbsht3
           Properties.CustomButtons.Buttons = <>
           OnChange = pcDetalleClientesChange
           ExplicitWidth = 1016
@@ -631,8 +629,6 @@ inherited frmMtoClientes: TfrmMtoClientes
           object cxtbsht3: TcxTabSheet
             Caption = 'Domicilio fiscal'
             ImageIndex = 0
-            ExplicitWidth = 1008
-            ExplicitHeight = 251
             object cxlbl7: TcxLabel
               Left = 38
               Top = 19
@@ -780,6 +776,8 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
+            ExplicitWidth = 1008
+            ExplicitHeight = 251
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23
@@ -848,6 +846,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
               Left = 862
               Top = 0
@@ -1088,6 +1090,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
@@ -1282,6 +1288,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
@@ -1485,6 +1495,10 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
@@ -1650,6 +1664,10 @@ inherited frmMtoClientes: TfrmMtoClientes
           object tsFotos: TcxTabSheet
             Caption = 'Fotos'
             ImageIndex = 6
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxgrdFotos: TcxGrid
               Left = 0
               Top = 0
