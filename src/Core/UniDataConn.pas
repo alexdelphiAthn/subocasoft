@@ -58,8 +58,9 @@ procedure TdmConn.conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
 begin
   if Fail = true then
   begin
-    ShowMessage('Ha habido un error de conexi�n: ' + E.Message);
-    Application.Terminate;
+    ShowMessage('Ha habido un error de conexión: ' + E.Message);
+    frmMtoPrincipal.Close;
+    Halt(1);
   end;
 end;
 
@@ -68,10 +69,8 @@ begin
   with frmMtoPrincipal do
   begin
     SQLMonitor1.Active := False;
-  //oMemoSQL.Visible := False;
   {$IFDEF DEBUG}
     SQLMonitor1.Active := True;
-   // oMemoSQL.Visible := True;
   {$ENDIF }
   end;
 end;

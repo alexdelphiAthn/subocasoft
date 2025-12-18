@@ -1,4 +1,4 @@
-
+﻿
 unit UniDataClientes;
 
 interface
@@ -158,8 +158,12 @@ begin
     ParamByName('pAPELLIDOS').AsString := unqryClientes.FindField('APELLIDOS').AsString;
     ExecProc;
   end;
-  unqryCuestionario.Refresh;
+  if (unqryCuestionarioPreguntas.Active = False) then
+    unqryCuestionarioPreguntas.Open;
+  if (unqryCuestionario.Active = False) then
+    unqryCuestionario.Open;
   unqryCuestionarioPreguntas.Refresh;
+  unqryCuestionario.Refresh;
 end;
 
 constructor TDMClientes.Create(AOwner: TComponent);

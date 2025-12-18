@@ -4,8 +4,8 @@ inherited frmMtoClientes: TfrmMtoClientes
   Caption = 'Pacientes'
   ClientHeight = 596
   ClientWidth = 1228
-  ExplicitWidth = 1244
-  ExplicitHeight = 635
+  ExplicitWidth = 1240
+  ExplicitHeight = 634
   TextHeight = 22
   inherited pButtonPage: TPanel
     Width = 1030
@@ -14,8 +14,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 1034
-    ExplicitHeight = 597
+    ExplicitWidth = 1026
+    ExplicitHeight = 595
   end
   inherited pButtonRightBar: TPanel
     Left = 1030
@@ -25,8 +25,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ParentFont = False
-    ExplicitLeft = 1034
-    ExplicitHeight = 597
+    ExplicitLeft = 1026
+    ExplicitHeight = 595
     object btn1: TSpeedButton [0]
       Left = 8
       Top = 165
@@ -47,7 +47,7 @@ inherited frmMtoClientes: TfrmMtoClientes
       OnClick = btn1Click
     end
     inherited pButtonGen: TPanel
-      Top = 469
+      Top = 468
       Height = 127
       Margins.Left = 4
       Margins.Top = 4
@@ -55,7 +55,7 @@ inherited frmMtoClientes: TfrmMtoClientes
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 469
+      ExplicitTop = 467
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
         Top = 0
@@ -169,19 +169,19 @@ inherited frmMtoClientes: TfrmMtoClientes
     Margins.Right = 4
     Margins.Bottom = 4
     ActivePage = tsFicha
-    ExplicitWidth = 1034
-    ExplicitHeight = 597
+    ExplicitWidth = 1026
+    ExplicitHeight = 595
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
-      ExplicitWidth = 1026
-      ExplicitHeight = 557
+      ExplicitWidth = 1022
+      ExplicitHeight = 556
       inherited cxGrdPrincipal: TcxGrid
         Top = 49
-        Width = 1026
-        Height = 508
+        Width = 1022
+        Height = 507
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -309,13 +309,13 @@ inherited frmMtoClientes: TfrmMtoClientes
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 1026
+        Width = 1022
         Height = 49
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 1030
+        ExplicitWidth = 1026
         ExplicitHeight = 49
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -372,16 +372,16 @@ inherited frmMtoClientes: TfrmMtoClientes
       Margins.Right = 4
       Margins.Bottom = 4
       Font.Height = -19
-      ExplicitWidth = 1026
-      ExplicitHeight = 557
+      ExplicitWidth = 1022
+      ExplicitHeight = 556
       object pnl1: TPanel
         Left = 0
         Top = 0
-        Width = 1026
+        Width = 1022
         Height = 265
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 1030
+        ExplicitWidth = 1018
         object cxdbtxtdtCODIGO_CLIENTE: TcxDBTextEdit
           Left = 68
           Top = 50
@@ -610,21 +610,23 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 291
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 1026
-        ExplicitHeight = 292
+        ExplicitWidth = 1018
+        ExplicitHeight = 290
         object pcDetalleClientes: TcxPageControl
           Left = 1
           Top = 1
-          Width = 1024
-          Height = 290
+          Width = 1020
+          Height = 289
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = cxtbsht1
+          Properties.ActivePage = cxtbsht3
           Properties.CustomButtons.Buttons = <>
           OnChange = pcDetalleClientesChange
-          ClientRectBottom = 286
+          ExplicitWidth = 1016
+          ExplicitHeight = 288
+          ClientRectBottom = 285
           ClientRectLeft = 4
-          ClientRectRight = 1020
+          ClientRectRight = 1016
           ClientRectTop = 33
           object cxtbsht3: TcxTabSheet
             Caption = 'Domicilio fiscal'
@@ -776,8 +778,8 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
-            ExplicitWidth = 1016
-            ExplicitHeight = 253
+            ExplicitWidth = 1008
+            ExplicitHeight = 251
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23
@@ -1495,15 +1497,11 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'FichaDental'
             ImageIndex = 5
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrd2: TcxGrid
               Left = 0
               Top = 49
-              Width = 1016
-              Height = 204
+              Width = 1012
+              Height = 203
               Align = alClient
               TabOrder = 0
               object tv1: TcxGridDBTableView
@@ -1615,7 +1613,7 @@ inherited frmMtoClientes: TfrmMtoClientes
             object pnl4: TPanel
               Left = 0
               Top = 0
-              Width = 1016
+              Width = 1012
               Height = 49
               Margins.Left = 2
               Margins.Top = 2
