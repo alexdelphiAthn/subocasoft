@@ -187,8 +187,8 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Right = 4
         Margins.Bottom = 4
         ExplicitTop = 49
-        ExplicitWidth = 1026
-        ExplicitHeight = 508
+        ExplicitWidth = 1022
+        ExplicitHeight = 507
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -315,7 +315,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 1026
+        ExplicitWidth = 1022
         ExplicitHeight = 49
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -619,7 +619,7 @@ inherited frmMtoClientes: TfrmMtoClientes
           Height = 289
           Align = alClient
           TabOrder = 0
-          Properties.ActivePage = cxtbsht3
+          Properties.ActivePage = cxtbsht1
           Properties.CustomButtons.Buttons = <>
           OnChange = pcDetalleClientesChange
           ExplicitWidth = 1016
@@ -631,6 +631,8 @@ inherited frmMtoClientes: TfrmMtoClientes
           object cxtbsht3: TcxTabSheet
             Caption = 'Domicilio fiscal'
             ImageIndex = 0
+            ExplicitWidth = 1008
+            ExplicitHeight = 251
             object cxlbl7: TcxLabel
               Left = 38
               Top = 19
@@ -778,8 +780,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
-            ExplicitWidth = 1008
-            ExplicitHeight = 251
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23
@@ -848,15 +848,11 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia dental'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object pnlHistoriaRight: TPanel
-              Left = 866
+              Left = 862
               Top = 0
               Width = 150
-              Height = 253
+              Height = 252
               Margins.Left = 2
               Margins.Top = 2
               Margins.Right = 2
@@ -882,8 +878,8 @@ inherited frmMtoClientes: TfrmMtoClientes
             object pnl3: TPanel
               Left = 0
               Top = 0
-              Width = 866
-              Height = 253
+              Width = 862
+              Height = 252
               Margins.Left = 2
               Margins.Top = 2
               Margins.Right = 2
@@ -893,8 +889,8 @@ inherited frmMtoClientes: TfrmMtoClientes
               object cxgrd5: TcxGrid
                 Left = 1
                 Top = 1
-                Width = 864
-                Height = 251
+                Width = 860
+                Height = 250
                 Align = alClient
                 TabOrder = 0
                 object tvHistoriasClientes: TcxGridDBTableView
@@ -1092,15 +1088,11 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Historia Facturaci'#243'n'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrd1: TcxGrid
               Left = 0
               Top = 0
-              Width = 1016
-              Height = 253
+              Width = 1012
+              Height = 252
               Align = alClient
               TabOrder = 0
               object tvFacturacion: TcxGridDBTableView
@@ -1290,15 +1282,11 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'Presupuestos'
             ImageIndex = 4
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxGrid1: TcxGrid
               Left = 0
               Top = 0
-              Width = 1016
-              Height = 253
+              Width = 1012
+              Height = 252
               Align = alClient
               TabOrder = 0
               object cxGridDBTableView1: TcxGridDBTableView
@@ -1504,7 +1492,7 @@ inherited frmMtoClientes: TfrmMtoClientes
               Height = 203
               Align = alClient
               TabOrder = 0
-              object tv1: TcxGridDBTableView
+              object tvCuestionario: TcxGridDBTableView
                 Navigator.Buttons.ConfirmDelete = True
                 Navigator.Buttons.Insert.Visible = False
                 Navigator.Buttons.Delete.Enabled = False
@@ -1607,7 +1595,7 @@ inherited frmMtoClientes: TfrmMtoClientes
                 end
               end
               object cxgrdlvl1: TcxGridLevel
-                GridView = tv1
+                GridView = tvCuestionario
               end
             end
             object pnl4: TPanel
@@ -1662,15 +1650,11 @@ inherited frmMtoClientes: TfrmMtoClientes
           object tsFotos: TcxTabSheet
             Caption = 'Fotos'
             ImageIndex = 6
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object cxgrdFotos: TcxGrid
               Left = 0
               Top = 0
-              Width = 1016
-              Height = 253
+              Width = 1012
+              Height = 252
               Align = alClient
               TabOrder = 0
               object tvFotos: TcxGridDBTableView
@@ -1783,8 +1767,8 @@ inherited frmMtoClientes: TfrmMtoClientes
   end
   object dsFotos: TDataSource
     DataSet = cdsFotos
-    Left = 560
-    Top = 384
+    Left = 1032
+    Top = 424
   end
   object cdsFotos: TClientDataSet
     Aggregates = <>
@@ -1792,8 +1776,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     IndexDefs = <>
     Params = <>
     StoreDefs = True
-    Left = 424
-    Top = 384
+    Left = 1032
+    Top = 368
     object strngfldFotosNombreArchivo: TStringField
       FieldName = 'NombreArchivo'
       Size = 255
@@ -1813,8 +1797,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     end
   end
   object cxStyleRepository1: TcxStyleRepository
-    Left = 240
-    Top = 400
+    Left = 1016
+    Top = 296
     PixelsPerInch = 96
     object cxStyle1: TcxStyle
       AssignedValues = [svFont]

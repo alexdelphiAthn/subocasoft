@@ -197,7 +197,7 @@ type
     dxbrlrgbtn1: TdxBarLargeButton;
     dxbrlrgbtnCuestionario: TdxBarLargeButton;
     cxgrd2: TcxGrid;
-    tv1: TcxGridDBTableView;
+    tvCuestionario: TcxGridDBTableView;
     cxgrdbndtblvw1: TcxGridDBBandedTableView;
     cxgrdbndclmn1: TcxGridDBBandedColumn;
     cxgrdbndclmn2: TcxGridDBBandedColumn;
@@ -351,9 +351,12 @@ procedure TfrmMtoClientes.FormCreate(Sender: TObject);
 begin
   dmmClientes := TDMClientes.Create(nil);
   dsTablaG.DataSet := dmmClientes.unqryClientes;
+  cxGrdDBTabPrin.DataController.DataSource := dsTablaG;
   tvHistoriasClientes.DataController.DataSource := dmmClientes.dsHistoria;
   tvFacturacion.DataController.DataSource := dmmClientes.dsFacturas;
   tvLineasFacturacion.DataController.DataSource := dmmClientes.dsLinFac;
+  tvCuestionario.DataController.DataSource :=
+                                            dmmClientes.dsCuestionarioPreguntas;
   if not cdsFotos.Active then
     cdsFotos.CreateDataSet;
   inherited;
