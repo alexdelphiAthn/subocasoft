@@ -186,8 +186,8 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Right = 4
         Margins.Bottom = 4
         ExplicitTop = 49
-        ExplicitWidth = 1022
-        ExplicitHeight = 507
+        ExplicitWidth = 1018
+        ExplicitHeight = 506
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -314,7 +314,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 1022
+        ExplicitWidth = 1018
         ExplicitHeight = 49
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -379,7 +379,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 265
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 1018
+        ExplicitWidth = 1026
         object cxdbtxtdtCODIGO_CLIENTE: TcxDBTextEdit
           Left = 68
           Top = 50
@@ -776,8 +776,6 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
-            ExplicitWidth = 1008
-            ExplicitHeight = 251
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23

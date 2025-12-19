@@ -565,83 +565,83 @@ end;
 
 procedure TfrmMtoClientes.CargarMiniaturas;
 var
-  SR: TSearchRec;
-  RutaPaciente, RutaThumbnail, NombreArchivo, NombreMini, RutaCompleta: string;
-  iIndex:Integer;
   Lista: TStringList;
+  RutaPaciente, RutaThumbnail: string;
+  NombreArchivo, RutaCompleta, RutaOriginal: string;
   i: Integer;
-  FechaCreacion: TDateTime;
-  PosicionPipe :Integer;
-begin
-  Screen.Cursor := crHourGlass;
-  cdsFotos.DisableControls;
-  cdsFotos.EmptyDataSet;
-  iIndex := 0;
-  // CRÍTICO: Obtener la ruta del cliente ACTUAL,
-  RutaPaciente := ObtenerRutaPaciente;
-  RutaThumbnail := ObtenerRutaThumbnails;
-  // Si no hay ruta, salir sin mostrar error (cliente sin fotos)
-  if RutaPaciente = '' then
+  // --- Procedimiento anidado para buscar y rellenar la lista ---
+  procedure BuscarArchivos(const Mascara: string);
+  var
+    SR: TSearchRec;
+    FechaCreacion: TDateTime;
   begin
-    cdsFotos.EnableControls;
-    Screen.Cursor := crDefault;
-  end
-  else
-  begin
-    try
-    // Cargar Miniaturas
-    Lista := TStringList.Create;
-    if ( (FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0) ) then
+    if FindFirst(RutaPaciente + Mascara, faAnyFile, SR) = 0 then
     begin
-  //      repeat
-  //        if (SR.Name <> '.') and (SR.Name <> '..') then
-  //          AgregarFotoAGrid(iIndex, RutaPaciente + SR.Name);
-  //        Inc(iIndex);
-  //      until FindNext(SR) <> 0;
+      try
         repeat
           if (SR.Name <> '.') and (SR.Name <> '..') then
           begin
-            //FechaCreacion := TFile.GetCreationTime(RutaPaciente + SR.Name);
-            // Guardar con formato que permite ordenar: fecha + nombre
+            // Obtenemos la fecha para poder ordenar cronológicamente
             FechaCreacion := ObtenerFechaExif(RutaPaciente + SR.Name);
-            Lista.Add(FormatDateTime('yyyymmddhhnnss', FechaCreacion) + '|' +
-                                     SR.Name);
+            // Agregamos a la lista: FECHA|NOMBRE
+            Lista.Add(FormatDateTime('yyyymmddhhnnss', FechaCreacion) +
+                      '|' + SR.Name);
           end;
         until FindNext(SR) <> 0;
-        FindClose(SR);
+      finally
+        FindClose(SR); // Importante: Liberar recursos de búsqueda
       end;
+    end;
+  end;
+  // -------------------------------------------------------------
+begin
+  Screen.Cursor := crHourGlass;
+  cdsFotos.DisableControls;
+  try
+    cdsFotos.EmptyDataSet;
+    // 1. Obtener rutas
+    RutaPaciente := ObtenerRutaPaciente;
+    RutaThumbnail := ObtenerRutaThumbnails;
+    // Si no hay ruta válida, salimos (el finally se encargará de restaurar controles)
+    if RutaPaciente = '' then Exit;
+    Lista := TStringList.Create;
+    try
+      // 2. Buscar archivos (Llamamos a la función para ambas extensiones)
+      // Esto soluciona el problema del "OR"
+      BuscarArchivos('*.jpg');
+      BuscarArchivos('*.jpeg');
+      // 3. Ordenar por fecha (gracias al formato yyyymmdd...)
       Lista.Sort;
-  // Agregar al grid
+      // 4. Agregar al grid
       for i := 0 to Lista.Count - 1 do
       begin
+        // Extraer nombre real del archivo (quitando la fecha y el pipe)
         NombreArchivo := Copy(Lista[i], Pos('|', Lista[i]) + 1, MaxInt);
+        RutaOriginal := RutaPaciente + NombreArchivo;
+        // Asumiendo que ObtenerNombreThumbnail devuelve solo el nombre del
+        //thumb, no la ruta completa
         RutaCompleta := RutaThumbnail + ObtenerNombreThumbnail(NombreArchivo);
-        //OutputDebugString(PChar('Procesando: ' + IntToStr(i) +                                               // ' - ' + RutaCompleta));
         try
-          //var aStopWatch := TStopWatch.StartNew;
-          //ShowMessage('Cargando miniatura: ' + RutaCompleta);
-          AgregarFotoAGrid(i, RutaCompleta, ObtenerRutaPaciente + NombreArchivo);
-          //aStopWatch.Stop;
-//          inMtoPrincipal.frmOpenApp.Memo.Lines.Add(
-//                                  Format('%.2f mseg en cargar  %s',
-//                                        [aStopwatch.Elapsed.TotalMilliseconds,
-//                                         RutaCompleta]));
-          //OutputDebugString(PChar('OK: ' + IntToStr(i)));
+          // Pasamos 'i' como índice, la ruta del thumb y la original
+          AgregarFotoAGrid(i, RutaCompleta, RutaOriginal);
         except
           on E: Exception do
           begin
+            // Mostramos error pero salimos del bucle si falla uno crítico
             ShowMessage('Error en archivo #' + IntToStr(i) + ': ' +
-                         RutaCompleta + #13#10 + E.Message);
+                        RutaCompleta + sLineBreak + E.Message);
             Break;
           end;
         end;
       end;
     finally
       Lista.Free;
-      cdsFotos.EnableControls;
-      cdsFotos.First;
-      Screen.Cursor := crDefault;
     end;
+  finally
+    // Esto se ejecuta SIEMPRE, haya error o no, restaurando la UI
+    if cdsFotos.Active then cdsFotos.First;
+    cdsFotos.EnableControls;
+    Screen.Cursor := crDefault;
   end;
 end;
 
@@ -818,57 +818,73 @@ begin
 end;
 
 procedure TfrmMtoClientes.ProcesarMiniaturasPaciente(
-                                      const ARutaPaciente: string;
-                                      var ATotalFotos, AFotosGeneradas: Integer;
-                                      AErrores: TStringList);
+  const ARutaPaciente: string;
+  var ATotalFotos, AFotosGeneradas: Integer;
+  AErrores: TStringList);
 var
-  SR: TSearchRec;
   RutaThumbnails: string;
-  ARutaArchivo, ARutaThumbnail: string;
-  Thumbnail: TBitmap;
   CodigoPaciente: string;
+  // --- Procedimiento anidado para evitar repetir código ---
+  procedure ProcesarMascara(const Mascara: string);
+  var
+    SR: TSearchRec;
+    ARutaArchivo, ARutaThumbnail: string;
+    Thumbnail: TBitmap;
+  begin
+    // Buscamos según la máscara recibida (*.jpg o *.jpeg)
+    if FindFirst(ARutaPaciente + Mascara, faAnyFile, SR) = 0 then
+    begin
+      try
+        repeat
+          if (SR.Name <> '.') and (SR.Name <> '..') then
+          begin
+            Inc(ATotalFotos);
+            ARutaArchivo := ARutaPaciente + SR.Name;
+            ARutaThumbnail := RutaThumbnails + ChangeFileExt(SR.Name, '_thumb.bmp');
+
+            // Lógica de validación y generación
+            if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
+            begin
+              try
+                Thumbnail := CrearThumbnail(ARutaArchivo, 160);
+                try
+                  if Thumbnail <> nil then
+                  begin
+                    Thumbnail.SaveToFile(ARutaThumbnail);
+                    Inc(AFotosGeneradas);
+                  end;
+                finally
+                  Thumbnail.Free;
+                end;
+              except
+                on E: Exception do
+                begin
+                  AErrores.Add(Format('%s\%s: %s',
+                    [CodigoPaciente, SR.Name, E.Message]));
+                end;
+              end;
+            end;
+          end;
+        until FindNext(SR) <> 0;
+      finally
+        // FindClose siempre debe ir en un finally para evitar fugas de memoria
+        FindClose(SR);
+      end;
+    end;
+  end;
+  // -------------------------------------------------------
 begin
-  // Extraer código de paciente del nombre de carpeta
+  // 1. Configuración inicial
   CodigoPaciente :=
       SoloNumeros(ExtractFileName(ExcludeTrailingPathDelimiter(ARutaPaciente)));
-  // Crear carpeta de thumbnails
   RutaThumbnails := FFotosPath + '.thumbnails\' + CodigoPaciente + '\';
   if not DirectoryExists(RutaThumbnails) then
     ForceDirectories(RutaThumbnails);
-  // Procesar JPG
-  if FindFirst(ARutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
-  begin
-    repeat
-      if (SR.Name <> '.') and (SR.Name <> '..') then
-      begin
-        Inc(ATotalFotos);
-        ARutaArchivo := ARutaPaciente + SR.Name;
-        ARutaThumbnail := RutaThumbnails + ChangeFileExt(SR.Name, '_thumb.bmp');
-        // Generar solo si no existe o está desactualizado
-        if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
-        begin
-          try
-            Thumbnail := CrearThumbnail(ARutaArchivo, 160);
-            try
-              if Thumbnail <> nil then
-              begin
-                Thumbnail.SaveToFile(ARutaThumbnail);
-                Inc(AFotosGeneradas);
-              end;
-            finally
-              Thumbnail.Free;
-            end;
-          except
-            on E: Exception do
-              AErrores.Add(Format('%s\%s: %s',
-                                  [CodigoPaciente, SR.Name, E.Message]));
-          end;
-        end;
-      end;
-    until FindNext(SR) <> 0;
-    FindClose(SR);
-  end;
+  // 2. Llamamos al procedimiento para cada extensión
+  ProcesarMascara('*.jpg');
+  ProcesarMascara('*.jpeg');
 end;
+
 // *** FUNCIÓN PARA OBTENER DATOS DEL PACIENTE ***
 function TfrmMtoClientes.ObtenerDatosPaciente(const ACodigoPaciente: string;
                                              out ARazonSocial: string): Boolean;
@@ -1039,119 +1055,95 @@ end;
 
 procedure TfrmMtoClientes.SincronizarThumbnails;
 var
-  SR: TSearchRec;
   RutaPaciente, RutaThumbnails: string;
-  ARutaArchivo, ARutaThumbnail: string;
-  Thumbnail: TBitmap;
   TotalFotos, FotosProcesadas: Integer;
+  // ---------------------------------------------------------
+  // 1. Procedimiento auxiliar SOLO para contar
+  procedure ContarMascara(const Mascara: string);
+  var
+    SR: TSearchRec;
+  begin
+    if FindFirst(RutaPaciente + Mascara, faAnyFile, SR) = 0 then
+    begin
+      try
+        repeat
+          if (SR.Name <> '.') and (SR.Name <> '..') then
+            Inc(TotalFotos);
+        until FindNext(SR) <> 0;
+      finally
+        FindClose(SR);
+      end;
+    end;
+  end;
+  // ---------------------------------------------------------
+  // 2. Procedimiento auxiliar SOLO para procesar/generar
+  procedure ProcesarMascara(const Mascara: string);
+  var
+    SR: TSearchRec;
+    ARutaArchivo, ARutaThumbnail: string;
+    Thumbnail: TBitmap;
+  begin
+    if FindFirst(RutaPaciente + Mascara, faAnyFile, SR) = 0 then
+    begin
+      try
+        repeat
+          if (SR.Name <> '.') and (SR.Name <> '..') then
+          begin
+            ARutaArchivo := RutaPaciente + SR.Name;
+            // Ojo: Asegúrate que ObtenerNombreThumbnail devuelve el nombre, no la ruta completa
+            // si devuelve solo nombre, concatenamos RutaThumbnails
+            ARutaThumbnail := RutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
+
+            if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
+            begin
+              try
+                Thumbnail := CrearThumbnail(ARutaArchivo, 160); // Tamaño 160
+                try
+                  if Thumbnail <> nil then
+                  begin
+                    Thumbnail.SaveToFile(ARutaThumbnail);
+                    Inc(FotosProcesadas);
+                  end;
+                finally
+                  Thumbnail.Free;
+                end;
+              except
+                // Capturamos error silenciosamente como en tu original
+                // Podrías agregar un log aquí si quisieras
+              end;
+            end;
+          end;
+        until FindNext(SR) <> 0;
+      finally
+        FindClose(SR);
+      end;
+    end;
+  end;
+  // ---------------------------------------------------------
 begin
-//  if FCodPaciente = '' then Exit;
-//  if FSincronizando then Exit;
-  //FSincronizando := True;
-  Screen.Cursor:= crHourGlass;
+  Screen.Cursor := crHourGlass;
   try
     RutaPaciente := ObtenerRutaPaciente;
-    if RutaPaciente = '' then
-      Exit;
+    if RutaPaciente = '' then Exit;
     RutaThumbnails := ObtenerRutaThumbnails;
-    // Contar total de fotos
+    // --- FASE 1: CONTAR ---
     TotalFotos := 0;
-    if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
-    begin
-      repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
-          Inc(TotalFotos);
-      until FindNext(SR) <> 0;
-      FindClose(SR);
-    end;
-//    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
-//    begin
-//      repeat
-//        if (SR.Name <> '.') and (SR.Name <> '..') then
-//          Inc(TotalFotos);
-//      until FindNext(SR) <> 0;
-//      FindClose(SR);
-//    end;
+    ContarMascara('*.jpg');
+    ContarMascara('*.jpeg');
     if TotalFotos = 0 then
     begin
-      ShowMessage('No hay fotos para sincronizar');
+      Screen.Cursor := crDefault; // Restaurar cursor antes del mensaje
+      //ShowMessage('No hay fotos para sincronizar');
       Exit;
     end;
-    //ActualizarEstado(Format('Sincronizando %d fotos...', [TotalFotos]));
+    // --- FASE 2: PROCESAR ---
     FotosProcesadas := 0;
-    // Procesar archivos JPG
-    if FindFirst(RutaPaciente + '*.jpg', faAnyFile, SR) = 0 then
-    begin
-      repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
-        begin
-          ARutaArchivo := RutaPaciente + SR.Name;
-          ARutaThumbnail := RutaThumbnails +
-                                           ObtenerNombreThumbnail(ARutaArchivo);
-          if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
-          begin
-            Inc(FotosProcesadas);
-//            ActualizarEstado(Format('Generando thumbnail %d/%d: %s',
-//              [FotosProcesadas, TotalFotos, SR.Name]));
-            Thumbnail := CrearThumbnail(ARutaArchivo, 160); //Más grande para cards
-            try
-              if Thumbnail <> nil then
-              begin
-                try
-                  Thumbnail.SaveToFile(ARutaThumbnail);
-                except
-                  // Error al guardar
-                end;
-              end;
-            finally
-              Thumbnail.Free;
-            end;
-          end;
-        end;
-      until FindNext(SR) <> 0;
-      FindClose(SR);
-    end;
-    // Procesar archivos JPEG
-    if FindFirst(RutaPaciente + '*.jpeg', faAnyFile, SR) = 0 then
-    begin
-      repeat
-        if (SR.Name <> '.') and (SR.Name <> '..') then
-        begin
-          ARutaArchivo := RutaPaciente + SR.Name;
-          ARutaThumbnail := RutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
-          if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
-          begin
-            Inc(FotosProcesadas);
-//            ActualizarEstado(Format('Generando thumbnail %d/%d: %s',
-//              [FotosProcesadas, TotalFotos, SR.Name]));
-            Thumbnail := CrearThumbnail(ARutaArchivo, 160);
-            try
-              if Thumbnail <> nil then
-              begin
-                try
-                  Thumbnail.SaveToFile(ARutaThumbnail);
-                except
-                  // Error al guardar
-                end;
-              end;
-            finally
-              Thumbnail.Free;
-            end;
-          end;
-        end;
-      until FindNext(SR) <> 0;
-      FindClose(SR);
-    end;
-//    if FotosProcesadas > 0 then
-//      ActualizarEstado(Format('Sincronización completa: %d thumbnails generados', [FotosProcesadas]))
-//    else
-//      ActualizarEstado('Thumbnails ya están actualizados');
+    ProcesarMascara('*.jpg');
+    ProcesarMascara('*.jpeg');
   finally
-//    FSincronizando := False;
     Screen.Cursor := crDefault;
   end;
 end;
-
 
 procedure TfrmMtoClientes.btn1Click(Sender: TObject);
 begin
