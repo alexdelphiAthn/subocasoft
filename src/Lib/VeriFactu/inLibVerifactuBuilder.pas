@@ -1,8 +1,9 @@
-unit inLibVerifactuBuilder;
+﻿unit inLibVerifactuBuilder;
 
 interface
 uses
-  System.SysUtils, System.Classes, System.JSON, Data.DB, Uni, inMtoPrincipal;
+  System.SysUtils, System.Classes, System.JSON, Data.DB, Uni, inMtoPrincipal,
+  system.Math;
 type
   // Enumeraciones para mayor tipo-seguridad
   TVatOperation = (voS1, voS2, voN1, voN2, voE1, voE2, voE3, voE4, voE5, voE6);
@@ -294,12 +295,13 @@ var
   BaseAmount: Double;
 begin
   Result := TJSONArray.Create;
-  // Si solo hay una configuraci�n de IVA, usar todo el importe
+  // Si solo hay una configuración de IVA, usar todo el importe
   if Length(AVatConfigs) = 1 then
     BaseAmount := ATotalLiquido
   else
-    // Si hay m�ltiples configuraciones, dividir equitativamente
+    // Si hay múltiples configuraciones, dividir equitativamente
     BaseAmount := ATotalLiquido / Length(AVatConfigs);
+  BaseAmount := SimpleRoundTo(BaseAmount, -2);
   for i := 0 to High(AVatConfigs) do
   begin
     VatLine := TJSONObject.Create;
@@ -322,19 +324,18 @@ var
 begin
   Result := TJSONObject.Create;
 
-  // Determinar si es cliente espa�ol o extranjero
+  // Determinar si es cliente español o extranjero
   if SameText(Trim(AData.PaisCliente), 'ES') or
      (Trim(AData.PaisCliente) = '') then
   begin
-    // Cliente espa�ol - usar irsId
+    // Cliente español - usar irsId
     Result.AddPair('irsId', Trim(AData.NIFCliente));
   end
   else
   begin
     // Cliente extranjero - usar id + idType
     Result.AddPair('id', Trim(AData.NIFCliente));
-
-    // Determinar tipo de ID usando la misma l�gica que GetRecipientData
+    // Determinar tipo de ID usando la misma lógica que GetRecipientData
     sTipoId := UpperCase(Trim(AData.TipoIdInternacional));
     if ((sTipoId = 'ID') or (sTipoId = '04')) then
       IdType := id04
@@ -408,12 +409,13 @@ begin
       InvoiceObj.AddPair('isFix', TJSONTrue.Create);
     // Tipo de factura
     InvoiceObj.AddPair('type', InvoiceTypeToString(AData.TipoFactura));
-    // Marcar como subsanaci�n si est� marcado
-
+    // Marcar como subsanación si está marcado
     // Si es factura simplificada
 //    if AData.TipoFactura = itF2 then
 //      InvoiceObj.AddPair('simple', TJSONTrue.Create);
-    // L�neas de IVA
+    // Líneas de IVA
+    var dTotalFactura := AData.TotalFactura;
+    dTotalFactura := SimpleRoundTo(dTotalFactura, -2);
     VatLinesArray := CreateSubsanacionVatLines(AData.TotalFactura);
     InvoiceObj.AddPair('vatLines', VatLinesArray);
     // Totales
@@ -450,7 +452,7 @@ var
   sDescripcionLinea: string;
   i: Integer;
 begin
-  // Crear consulta local para datos b�sicos de la factura
+  // Crear consulta local para datos básicos de la factura
   InvoiceQuery := TUniQuery.Create(nil);
   try
     InvoiceQuery.Connection := FConnection;
@@ -467,7 +469,8 @@ begin
                             ASerieFactura + '/' + ANumeroFactura);
     // Extraer datos b�sicos
     bEsSimpl := (InvoiceQuery.FieldByName('ESSIMPL_FACTURA').AsString = 'S');
-    dTotalLiquido := InvoiceQuery.FieldByName('TOTAL_LIQUIDO_FACTURA').AsFloat;
+    dTotalLiquido := InvoiceQuery.FieldByName('TOTAL_LIQUIDO_FACTURA').AsCurrency;
+    dTotalLiquido := SimpleRoundTo(dTotalLiquido, -2);
     dtFechaFactura := InvoiceQuery.FieldByName('FECHA_FACTURA').AsDateTime;
     InvoiceQuery.Close;
   finally
@@ -494,7 +497,7 @@ begin
       sDescripcionLinea := LinesQuery.FieldByName('DESCRIPCION_ARTICULO_LINEA')
                                     .AsString
     else
-      sDescripcionLinea := 'Descripci�n general de la factura';
+      sDescripcionLinea := 'Descripción general de la factura';
     LinesQuery.Close;
   finally
     LinesQuery.Free;
@@ -533,6 +536,7 @@ begin
       dTotalAmount := dTotalAmount +
                      CalculateAmount(dTotalLiquido / Length(AVatConfigs),
                                    AVatConfigs[i].Rate);
+    dTotalAmount := SimpleRoundTo(dTotalAmount, -2);
     InvoiceObj.AddPair('total',
                       TJSONNumber.Create(dTotalLiquido + dTotalAmount));
     InvoiceObj.AddPair('amount', TJSONNumber.Create(dTotalAmount));
