@@ -5,6 +5,10 @@ uses
   System.SysUtils, System.Classes, System.JSON, Data.DB, Uni, inMtoPrincipal,
   system.Math;
 type
+  TJSONObjectHelper = class helper for TJSONObject
+  public
+    procedure AddPairCurrency(const AKey: string; const AValue: Currency);
+  end;
   // Enumeraciones para mayor tipo-seguridad
   TVatOperation = (voS1, voS2, voN1, voN2, voE1, voE2, voE3, voE4, voE5, voE6);
   TVatKey = (vk01, vk02, vk03, vk04, vk05, vk06, vk07, vk08, vk09, vk10,
@@ -307,10 +311,10 @@ begin
     VatLine := TJSONObject.Create;
     VatLine.AddPair('vatOperation',
                                 VatOperationToString(AVatConfigs[i].Operation));
-    VatLine.AddPair('base', TJSONNumber.Create(BaseAmount));
-    VatLine.AddPair('rate', TJSONNumber.Create(AVatConfigs[i].Rate));
-    VatLine.AddPair('amount', TJSONNumber.Create(CalculateAmount(BaseAmount,
-                                                         AVatConfigs[i].Rate)));
+    VatLine.AddPairCurrency('base', BaseAmount);
+    VatLine.AddPairCurrency('rate', AVatConfigs[i].Rate);
+    VatLine.AddPairCurrency('amount', CalculateAmount(BaseAmount,
+                                                      AVatConfigs[i].Rate));
     VatLine.AddPair('vatKey', VatKeyToString(AVatConfigs[i].Key));
     Result.AddElement(VatLine);
   end;
@@ -371,9 +375,9 @@ begin
   Result := TJSONArray.Create;
   VatLineObj := TJSONObject.Create;
   VatLineObj.AddPair('vatOperation', 'E1');
-  VatLineObj.AddPair('base', TJSONNumber.Create(ATotalFactura));
-  VatLineObj.AddPair('rate', TJSONNumber.Create(0));
-  VatLineObj.AddPair('amount', TJSONNumber.Create(0));
+  VatLineObj.AddPairCurrency('base', ATotalFactura);
+  VatLineObj.AddPairCurrency('rate', 0);
+  VatLineObj.AddPairCurrency('amount', 0);
   VatLineObj.AddPair('vatKey', '01');
   Result.AddElement(VatLineObj);
 end;
@@ -419,8 +423,8 @@ begin
     VatLinesArray := CreateSubsanacionVatLines(AData.TotalFactura);
     InvoiceObj.AddPair('vatLines', VatLinesArray);
     // Totales
-    InvoiceObj.AddPair('total', TJSONNumber.Create(AData.TotalFactura));
-    InvoiceObj.AddPair('amount', TJSONNumber.Create(0));
+    InvoiceObj.AddPairCurrency('total', AData.TotalFactura);
+    InvoiceObj.AddPairCurrency('amount', 0);
     JSONRoot.AddPair('invoice', InvoiceObj);
     Result := JSONRoot.Format;
   finally
@@ -537,9 +541,8 @@ begin
                      CalculateAmount(dTotalLiquido / Length(AVatConfigs),
                                    AVatConfigs[i].Rate);
     dTotalAmount := SimpleRoundTo(dTotalAmount, -2);
-    InvoiceObj.AddPair('total',
-                      TJSONNumber.Create(dTotalLiquido + dTotalAmount));
-    InvoiceObj.AddPair('amount', TJSONNumber.Create(dTotalAmount));
+    InvoiceObj.AddPairCurrency('total',dTotalLiquido + dTotalAmount);
+    InvoiceObj.AddPairCurrency('amount', dTotalAmount);
     JSONToSend.AddPair('invoice', InvoiceObj);
     Result := JSONToSend.Format;
   finally
@@ -589,5 +592,18 @@ begin
   finally
     Builder.Free;
   end;
+end;
+{ TJSONObjectHelper }
+
+procedure TJSONObjectHelper.AddPairCurrency(const AKey: string; const AValue: Currency);
+var
+  fs: TFormatSettings;
+begin
+  fs := TFormatSettings.Create;
+  fs.DecimalSeparator := '.';
+
+  // Creamos el par usando el string formateado '0.00'
+  // Internamente crea el TJSONNumber correcto
+  Self.AddPair(AKey, TJSONNumber.Create(FormatFloat('0.00', AValue, fs)));
 end;
 end.
