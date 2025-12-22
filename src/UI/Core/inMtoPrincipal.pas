@@ -240,9 +240,7 @@ end;
 procedure TfrmMtoPrincipal.GlobalExceptionHandler(Sender: TObject; E: Exception);
 begin
   VeriFactuLog.RegistrarError(E.ClassName, E.Message);
-  ShowMessage('Se ha producido un error');
-  Close;
-  Halt(1);
+  //ShowMessage('Se ha producido un error');
 end;
 
 procedure TfrmMtoPrincipal.mnClientesClick(Sender: TObject);
