@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Classes, DB, ADODB, DBAccess, Uni, Vcl.Forms, Vcl.Dialogs,
-  DASQLMonitor, MySQLUniProvider, Vcl.ExtCtrls;
+  DASQLMonitor, MySQLUniProvider, Vcl.ExtCtrls, IdSSLOpenSSLHeaders, inLibLog;
 
 type
   TdmConn = class(TDataModule)
@@ -14,6 +14,7 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
     procedure tmrKeepAliveTimer(Sender: TObject);
+    procedure conUniAfterConnect(Sender: TObject);
   private
     { Private declarations }
   public
@@ -48,30 +49,21 @@ begin
     ConnectString := 'Provider Name=MySQL;User ID=' + sUser + ';Password=' +
                      sPassword + ';Data Source=' + sHostName+
                      ';Database=' + sDataBase+ ';Login Prompt=False';
-// 2. CONFIGURACIÓN DE ROBUSTEZ (Esto es lo nuevo e importante)
-
     // Pooling activado para rendimiento
     SpecificOptions.Values['Pooling'] := 'True';
-
     // IMPORTANTE: 0 significa que la conexión física vive indefinidamente en el pool.
-    // No la mates a los 5 minutos.
     SpecificOptions.Values['ConnectionLifetime'] := '0';
-
     // Pide al servidor usar 'interactive_timeout' en vez de 'wait_timeout'
     // Esto suele darte 8 horas (28800s) si el servidor lo permite.
     SpecificOptions.Values['MySQL.Interactive'] := 'True';
-
     // Tiempo máximo para intentar establecer la conexión inicial
     SpecificOptions.Values['ConnectionTimeout'] := '30';
-
     // 3. LA CLAVE: AUTO-RECONEXIÓN (LocalFailover)
     // Esto hace que si se cae la red o el servidor patea la conexión,
     // UniDAC se reconecta sola y reintenta la consulta sin dar error al usuario.
     Options.LocalFailover := True;
-
     // Opcional: Si la red es muy mala, esto comprime los datos
     // SpecificOptions.Values['MySQL.Compress'] := 'True';
-
     Server := sHostName;
     Database := sDatabase;
     Username := sUser;
@@ -80,11 +72,28 @@ begin
   end;
 end;
 
+procedure TdmConn.conUniAfterConnect(Sender: TObject);
+begin
+  // Ejecutamos un comando SQL directo al servidor nada más conectar.
+  // 28800 segundos = 8 horas.
+  try
+    conUni.ExecSQL('SET SESSION wait_timeout = 28800, '+
+                   'session interactive_timeout = 28800');
+  except
+    // Si falla (por permisos), no bloqueamos la app, pero queda registrado.
+    on E: Exception do
+      {$IFDEF DEBUG}
+      ShowMessage('No se pudo establecer el timeout del servidor: ' + E.Message);
+      {$ENDIF}
+  end;
+end;
+
 procedure TdmConn.conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
 begin
   if Fail = true then
   begin
-    ShowMessage('Ha habido un error de conexión: ' + E.Message);
+    Log.LogError('Ha habido un error crítico de conexión: ' + E.Message);
+    ShowMessage('Ha habido un error crítico de conexión: ' + E.Message);
     frmMtoPrincipal.Close;
     Halt(1);
   end;
@@ -117,7 +126,9 @@ begin
       // intente hacer una consulta real.
       on E: Exception do
       begin
-        // Opcional: Podrías escribir en un log aquí si quisieras depurar
+      {$IFDEF DEBUG}
+        ShowMessage('Error al hacer ping al server: ' + E.Message);
+      {$ENDIF}
       end;
     end;
   end;

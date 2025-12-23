@@ -15,6 +15,7 @@ object dmConn: TdmConn
     Server = '127.0.0.1'
     Connected = True
     LoginPrompt = False
+    AfterConnect = conUniAfterConnect
     BeforeConnect = connBeforeConnect
     Left = 270
     Top = 150
@@ -23,7 +24,7 @@ object dmConn: TdmConn
   object tmrKeepAlive: TTimer
     Interval = 1800
     OnTimer = tmrKeepAliveTimer
-    Left = 240
-    Top = 136
+    Left = 368
+    Top = 152
   end
 end
