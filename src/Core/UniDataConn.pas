@@ -4,14 +4,16 @@ interface
 
 uses
   SysUtils, Classes, DB, ADODB, DBAccess, Uni, Vcl.Forms, Vcl.Dialogs,
-  DASQLMonitor, MySQLUniProvider;
+  DASQLMonitor, MySQLUniProvider, Vcl.ExtCtrls;
 
 type
   TdmConn = class(TDataModule)
     conUni: TUniConnection;
+    tmrKeepAlive: TTimer;
     procedure connBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
     procedure conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
+    procedure tmrKeepAliveTimer(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,6 +48,30 @@ begin
     ConnectString := 'Provider Name=MySQL;User ID=' + sUser + ';Password=' +
                      sPassword + ';Data Source=' + sHostName+
                      ';Database=' + sDataBase+ ';Login Prompt=False';
+// 2. CONFIGURACIÓN DE ROBUSTEZ (Esto es lo nuevo e importante)
+
+    // Pooling activado para rendimiento
+    SpecificOptions.Values['Pooling'] := 'True';
+
+    // IMPORTANTE: 0 significa que la conexión física vive indefinidamente en el pool.
+    // No la mates a los 5 minutos.
+    SpecificOptions.Values['ConnectionLifetime'] := '0';
+
+    // Pide al servidor usar 'interactive_timeout' en vez de 'wait_timeout'
+    // Esto suele darte 8 horas (28800s) si el servidor lo permite.
+    SpecificOptions.Values['MySQL.Interactive'] := 'True';
+
+    // Tiempo máximo para intentar establecer la conexión inicial
+    SpecificOptions.Values['ConnectionTimeout'] := '30';
+
+    // 3. LA CLAVE: AUTO-RECONEXIÓN (LocalFailover)
+    // Esto hace que si se cae la red o el servidor patea la conexión,
+    // UniDAC se reconecta sola y reintenta la consulta sin dar error al usuario.
+    Options.LocalFailover := True;
+
+    // Opcional: Si la red es muy mala, esto comprime los datos
+    // SpecificOptions.Values['MySQL.Compress'] := 'True';
+
     Server := sHostName;
     Database := sDatabase;
     Username := sUser;
@@ -72,6 +98,28 @@ begin
   {$IFDEF DEBUG}
     SQLMonitor1.Active := True;
   {$ENDIF }
+  end;
+end;
+
+procedure TdmConn.tmrKeepAliveTimer(Sender: TObject);
+begin
+  // Solo intentamos hacer ping si la conexión dice estar activa
+  if conUni.Connected then
+  begin
+    try
+      // El método Ping envía un comando ligero al servidor.
+      // Si el servidor responde, resetea el 'wait_timeout' del lado del servidor
+      // y mantiene abierto el puerto en el Firewall/NAT.
+      conUni.Ping;
+    except
+      // Si falla el ping (ej. cable desconectado), no hacemos nada.
+      // Dejamos que el 'LocalFailover' maneje el error cuando el usuario
+      // intente hacer una consulta real.
+      on E: Exception do
+      begin
+        // Opcional: Podrías escribir en un log aquí si quisieras depurar
+      end;
+    end;
   end;
 end;
 

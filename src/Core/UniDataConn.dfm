@@ -20,4 +20,10 @@ object dmConn: TdmConn
     Top = 150
     EncryptedPassword = 'A5FF9EFF92FF90FF8DFF9EFFCDFFCFFFCDFFCCFF'
   end
+  object tmrKeepAlive: TTimer
+    Interval = 1800
+    OnTimer = tmrKeepAliveTimer
+    Left = 240
+    Top = 136
+  end
 end
