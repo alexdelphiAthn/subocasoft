@@ -582,214 +582,83 @@ end;
 //  PuntoClick: TPoint;
 //  PuntoEnImagenActual: TPoint;
 //  PuntoEnOriginal: TPoint;
-//  NumColumnas, NumFilas: Integer;
-//  AnchoZonaOriginal, AltoZonaOriginal: Double;
-//  ColumnaClick, FilaClick: Integer;
-//  CentroZonaX, CentroZonaY: Double;
-//  ZoomNecesarioX, ZoomNecesarioY, NuevoZoom: Double;
+//  NuevoZoom: Double;
 //  FactorFit: Double;
-//begin
-//  if FOriginalBitmap.Empty then Exit;
-//  // CRÍTICO: Resetear el estado de arrastre inmediatamente
-//  FIsDragging := False;
-//  FactorFit := CalcularFactorFit;
-//  // Si ya hay zoom, volver a fit
-//  if FZoomFactor > (FactorFit * 1.1) then
-//  begin
-//    FZoomFactor := FactorFit;
-//    LockWindowUpdate(ScrollBox1.Handle);
-//    try
-//      AplicarZoom;
-//      Application.ProcessMessages;
-//    finally
-//      LockWindowUpdate(0);
-//      // Resetear cursor después de volver a ajustar
-//      FIsDragging := False;
-//      Image1.Cursor := crHandPoint;
-//      Screen.Cursor := crDefault;
-//    end;
-//    Exit;
-//  end;
-//  NumColumnas := 16;
-//  NumFilas := 16;
-//  GetCursorPos(PuntoClick);
-//  PuntoClick := ScrollBox1.ScreenToClient(PuntoClick);
-//  if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
-//     (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then
-//    Exit;
-//  PuntoEnImagenActual.X := PuntoClick.X + ScrollBox1.HorzScrollBar.Position;
-//  PuntoEnImagenActual.Y := PuntoClick.Y + ScrollBox1.VertScrollBar.Position;
-//  PuntoEnOriginal.X := Round(PuntoEnImagenActual.X / FZoomFactor);
-//  PuntoEnOriginal.Y := Round(PuntoEnImagenActual.Y / FZoomFactor);
-//  if (PuntoEnOriginal.X < 0) or (PuntoEnOriginal.X >= FOriginalBitmap.Width) or
-//     (PuntoEnOriginal.Y < 0) or
-//     (PuntoEnOriginal.Y >= FOriginalBitmap.Height) then
-//    Exit;
-//  AnchoZonaOriginal := FOriginalBitmap.Width / NumColumnas;
-//  AltoZonaOriginal := FOriginalBitmap.Height / NumFilas;
-//  ColumnaClick := Trunc(PuntoEnOriginal.X / AnchoZonaOriginal);
-//  FilaClick := Trunc(PuntoEnOriginal.Y / AltoZonaOriginal);
-//  ColumnaClick := Max(0, Min(ColumnaClick, NumColumnas - 1));
-//  FilaClick := Max(0, Min(FilaClick, NumFilas - 1));
-//  CentroZonaX := (ColumnaClick * AnchoZonaOriginal) + (AnchoZonaOriginal / 2);
-//  CentroZonaY := (FilaClick * AltoZonaOriginal) + (AltoZonaOriginal / 2);
-//  ZoomNecesarioX := ScrollBox1.ClientWidth / AnchoZonaOriginal;
-//  ZoomNecesarioY := ScrollBox1.ClientHeight / AltoZonaOriginal;
-//  NuevoZoom := Min(ZoomNecesarioX, ZoomNecesarioY);
-//  // Reducir el zoom para ver mejor
-//  NuevoZoom := NuevoZoom * 0.70;  // 70% del calculado
-//  // IMPORTANTE: Limitar el zoom máximo a 2.5 (250%) en lugar de 5.0
-//  if NuevoZoom > 2.5 then
-//    NuevoZoom := 2.5;
-//  // También asegurar un zoom mínimo razonable
-//  if NuevoZoom < FactorFit then
-//    NuevoZoom := FactorFit;
-//  FTargetScrollX := Round((CentroZonaX * NuevoZoom) -
-//                          (ScrollBox1.ClientWidth / 2.0));
-//  FTargetScrollY := Round((CentroZonaY * NuevoZoom) -
-//                           (ScrollBox1.ClientHeight / 2.0));
-//  LockWindowUpdate(ScrollBox1.Handle);
-//  try
-//    FZoomFactor := NuevoZoom;
-//    AplicarZoom;
-//    Application.ProcessMessages;
-//    if ScrollBox1.HorzScrollBar.Range > ScrollBox1.ClientWidth then
-//      FTargetScrollX := Max(0, Min(FTargetScrollX,
-//                            ScrollBox1.HorzScrollBar.Range -
-//                            ScrollBox1.ClientWidth))
-//    else
-//      FTargetScrollX := 0;
-//    if ScrollBox1.VertScrollBar.Range > ScrollBox1.ClientHeight then
-//      FTargetScrollY := Max(0, Min(FTargetScrollY,
-//                                   ScrollBox1.VertScrollBar.Range -
-//                                   ScrollBox1.ClientHeight))
-//    else
-//      FTargetScrollY := 0;
-//    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
-//    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
-//    Sleep(20);
-//  finally
-//    LockWindowUpdate(0);
-//    // Asegurar que el cursor está correcto
-//    FIsDragging := False;
-//    Image1.Cursor := crHandPoint;
-//    Screen.Cursor := crDefault;
-//  end;
-//  FScrollRetryCount := 0;
-//  Timer1.Enabled := False;
-//  Timer1.Interval := 100;
-//  Timer1.Enabled := True;
-//end;
-
-//procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
-//var
-//  PuntoClick: TPoint;
-//  PuntoEnImagenActual: TPoint;
-//  PuntoEnOriginal: TPoint;
-//  NumColumnas, NumFilas: Integer;
-//  AnchoZonaOriginal, AltoZonaOriginal: Double;
-//  ColumnaClick, FilaClick: Integer;
-//  CentroZonaX, CentroZonaY: Double;
-//  ZoomNecesarioX, ZoomNecesarioY, NuevoZoom: Double;
-//  FactorFit: Double;
-//  // Variables nuevas para el cálculo seguro
+//  // Variables para el cálculo seguro de scroll
 //  MaxScrollX, MaxScrollY: Integer;
 //  NuevoAnchoImg, NuevoAltoImg: Integer;
 //begin
 //  if FOriginalBitmap.Empty then Exit;
-//  // 1. Limpieza de estado
-//  FIsDragging := False;
-//  // 2. Lógica de "Volver a Fit" (sin cambios mayores)
-//  FactorFit := CalcularFactorFit;
-//  if FZoomFactor > (FactorFit * 1.1) then
-//  begin
-//    FZoomFactor := FactorFit;
-//    LockWindowUpdate(ScrollBox1.Handle);
-//    try
-//      AplicarZoom;
-//      // >>> ELIMINADO: Application.ProcessMessages (Causante del parpadeo/reset)
-//      ScrollBox1.HorzScrollBar.Position := 0;
-//      ScrollBox1.VertScrollBar.Position := 0;
-//    finally
-//      LockWindowUpdate(0);
-//      FIsDragging := False;
-//      Image1.Cursor := crHandPoint;
-//      Screen.Cursor := crDefault;
-//    end;
-//    Exit;
-//  end;
-//  // 3. Cálculos de coordenadas (Igual que tu código)
-//  NumColumnas := 16;
-//  NumFilas := 16;
+//
+//  // 1. Obtener coordenadas ANTES de calcular nada (crítico para la precisión)
 //  GetCursorPos(PuntoClick);
 //  PuntoClick := ScrollBox1.ScreenToClient(PuntoClick);
-//  // Validación de click dentro del área
+//
+//  // Validar click dentro del área visible
 //  if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
 //     (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then Exit;
+//
+//  // Resetear arrastre por seguridad
+//  FIsDragging := False;
+//
+//  // --- LÓGICA DE NIVELES DE ZOOM (MEJORADA) ---
+//  FactorFit := CalcularFactorFit;
+//
+//  // Ciclo de Zoom: Fit -> 1.7 -> 2.2 -> Fit
+//  if FZoomFactor < (1.7 - 0.01) then
+//    NuevoZoom := 1.7
+//  else if FZoomFactor < (2.5 - 0.01) then
+//    NuevoZoom := 2.5
+//  else
+//    NuevoZoom := FactorFit; // Si ya está grande, volver a encajar (Reset)
+//
+//  // Seguridad: no permitir zoom menor al fit
+//  if NuevoZoom < FactorFit then NuevoZoom := FactorFit;
+//
+//  // Si el zoom no cambia realmente, salir
+//  if Abs(NuevoZoom - FZoomFactor) < 0.01 then Exit;
+//
+//  // --- CÁLCULO DEL PUNTO EN LA IMAGEN ORIGINAL ---
+//  // Calculamos qué pixel de la imagen original está bajo el ratón AHORA
 //  PuntoEnImagenActual.X := PuntoClick.X + ScrollBox1.HorzScrollBar.Position;
 //  PuntoEnImagenActual.Y := PuntoClick.Y + ScrollBox1.VertScrollBar.Position;
+//
 //  PuntoEnOriginal.X := Round(PuntoEnImagenActual.X / FZoomFactor);
 //  PuntoEnOriginal.Y := Round(PuntoEnImagenActual.Y / FZoomFactor);
-//  // Validación de coordenadas en bitmap
-//  if (PuntoEnOriginal.X < 0) or (PuntoEnOriginal.X >= FOriginalBitmap.Width) or
-//     (PuntoEnOriginal.Y < 0) or (PuntoEnOriginal.Y >= FOriginalBitmap.Height) then Exit;
-//  // 4. Calcular zona y nuevo zoom
-//  AnchoZonaOriginal := FOriginalBitmap.Width / NumColumnas;
-//  AltoZonaOriginal := FOriginalBitmap.Height / NumFilas;
-//  ColumnaClick := Trunc(PuntoEnOriginal.X / AnchoZonaOriginal);
-//  FilaClick := Trunc(PuntoEnOriginal.Y / AltoZonaOriginal);
-//  ColumnaClick := Max(0, Min(ColumnaClick, NumColumnas - 1));
-//  FilaClick := Max(0, Min(FilaClick, NumFilas - 1));
-//  CentroZonaX := (ColumnaClick * AnchoZonaOriginal) + (AnchoZonaOriginal / 2);
-//  CentroZonaY := (FilaClick * AltoZonaOriginal) + (AltoZonaOriginal / 2);
-//  ZoomNecesarioX := ScrollBox1.ClientWidth / AnchoZonaOriginal;
-//  ZoomNecesarioY := ScrollBox1.ClientHeight / AltoZonaOriginal;
-//  NuevoZoom := Min(ZoomNecesarioX, ZoomNecesarioY);
-//  NuevoZoom := NuevoZoom * 0.70;
-//  if NuevoZoom > 2 then NuevoZoom := 2;
-//  if NuevoZoom < FactorFit then NuevoZoom := FactorFit;
-//  // 5. Calcular Scroll Objetivo PREVIO al cambio de tamaño
-//  FTargetScrollX := Round((CentroZonaX * NuevoZoom) - (ScrollBox1.ClientWidth / 2.0));
-//  FTargetScrollY := Round((CentroZonaY * NuevoZoom) - (ScrollBox1.ClientHeight / 2.0));
-//  // >>> BLOQUE CRÍTICO CORREGIDO <<<
+//
+//  // --- CÁLCULO DE LA NUEVA POSICIÓN DE SCROLL ---
+//  // OBJETIVO: Que (PuntoOriginal * NuevoZoom) caiga exactamente en PuntoClick
+//  FTargetScrollX := Round((PuntoEnOriginal.X * NuevoZoom) - PuntoClick.X);
+//  FTargetScrollY := Round((PuntoEnOriginal.Y * NuevoZoom) - PuntoClick.Y);
+//
+//  // --- APLICACIÓN DEL ZOOM ---
 //  LockWindowUpdate(ScrollBox1.Handle);
 //  try
 //    FZoomFactor := NuevoZoom;
-//    AplicarZoom;
-//    // >>> NO USAR Application.ProcessMessages AQUÍ.
-//    // Esto evita que Windows procese el mensaje de "Resize" antes de que fijemos el scroll.
-//    // >>> CALCULAR LÍMITES BASADOS EN LA IMAGEN, NO EN EL SCROLLBAR
-//    // El ScrollBar.Range a veces tarda milisegundos en actualizarse.
-//    // Usamos el tamaño real que acabamos de aplicar a la imagen.
+//    AplicarZoom; // Se asume que esto redimensiona el TImage o repinta el Bitmap
+//
+//    // Calcular límites reales basados en el nuevo tamaño
 //    NuevoAnchoImg := Round(FOriginalBitmap.Width * FZoomFactor);
 //    NuevoAltoImg := Round(FOriginalBitmap.Height * FZoomFactor);
+//
 //    MaxScrollX := NuevoAnchoImg - ScrollBox1.ClientWidth;
 //    MaxScrollY := NuevoAltoImg - ScrollBox1.ClientHeight;
-//    // Ajustar límites
-//    if MaxScrollX > 0 then
-//      FTargetScrollX := Max(0, Min(FTargetScrollX, MaxScrollX))
-//    else
-//      FTargetScrollX := 0;
-//    if MaxScrollY > 0 then
-//      FTargetScrollY := Max(0, Min(FTargetScrollY, MaxScrollY))
-//    else
-//      FTargetScrollY := 0;
-//    // Aplicar inmediatamente
+//
+//    // Ajustar límites (Clamp)
+//    // Nota: Usamos Max(0, ...) porque si la imagen es menor que el cliente, el scroll debe ser 0
+//    FTargetScrollX := Max(0, Min(FTargetScrollX, MaxScrollX));
+//    FTargetScrollY := Max(0, Min(FTargetScrollY, MaxScrollY));
+//
+//    // Aplicar Scroll
 //    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
 //    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
 //  finally
 //    LockWindowUpdate(0);
-//    // Restaurar cursor
+//    // Restaurar estado
 //    FIsDragging := False;
 //    Image1.Cursor := crHandPoint;
 //    Screen.Cursor := crDefault;
 //  end;
-//  // El Timer se mantiene como "seguro de vida", pero ya no debería ser necesario
-//  // para la operación principal.
-//  FScrollRetryCount := 0;
-//  Timer1.Enabled := False;
-//  Timer1.Interval := 50; // Un poco más rápido
-//  Timer1.Enabled := True;
 //end;
 
 procedure TfrmMtoVisorFoto.Image1DblClick(Sender: TObject);
@@ -802,69 +671,103 @@ var
   // Variables para el cálculo seguro de scroll
   MaxScrollX, MaxScrollY: Integer;
   NuevoAnchoImg, NuevoAltoImg: Integer;
+
+  // --- NUEVO: Variables para mover el ratón ---
+  PuntoGlobalMouse: TPoint;
+  PuntoExactoImagen: TPoint;
+  PuntoDestino: TPoint;
 begin
   if FOriginalBitmap.Empty then Exit;
-  // Resetear arrastre por seguridad
+
+  // 1. CAPTURAR POSICIÓN GLOBAL DEL RATÓN (Necesaria para moverlo luego)
+  GetCursorPos(PuntoGlobalMouse);
+
+  // Obtener coordenadas locales para validación
+  PuntoClick := ScrollBox1.ScreenToClient(PuntoGlobalMouse);
+
+  // Validar click dentro del área visible
+  if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
+     (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then Exit;
+
+  // --- CORRECCIÓN CRÍTICA: OBTENER EL PUNTO REAL EN LA IMAGEN ---
+  // Usamos ScreenToClient de la Imagen (no del ScrollBox) para ignorar bordes grises
+  // Esto arregla el problema de "me pone una imagen que no es"
+  PuntoExactoImagen := Image1.ScreenToClient(PuntoGlobalMouse);
+
+  // Convertimos a coordenadas del bitmap original (base 1.0)
+  PuntoEnOriginal.X := Round(PuntoExactoImagen.X / FZoomFactor);
+  PuntoEnOriginal.Y := Round(PuntoExactoImagen.Y / FZoomFactor);
+
   FIsDragging := False;
+
   // --- LÓGICA DE NIVELES DE ZOOM ---
   FactorFit := CalcularFactorFit;
-  // Tolerancia pequeña (0.01) para comparaciones de float
-  if FZoomFactor < (1.7 - 0.01) then
+  if FZoomFactor < (1.25 - 0.01) then
+    NuevoZoom := 1.25
+  else if FZoomFactor < (1.5 - 0.01) then
+    NuevoZoom := 1.5
+  else if FZoomFactor < (1.7 - 0.01) then
     NuevoZoom := 1.7
   else if FZoomFactor < (2.2 - 0.01) then
     NuevoZoom := 2.2
   else
-    NuevoZoom := 2.2; // Si ya estamos en 2.2 o más, nos quedamos ahí (o podrías volver a Fit)
-  // Si el nuevo zoom calculado es menor que el Fit (ej. imagen muy pequeña), forzar Fit
-  if NuevoZoom < FactorFit then
     NuevoZoom := FactorFit;
-  // Si el zoom no va a cambiar (ej. ya estabas en 2.2), salimos
+
+  if NuevoZoom < FactorFit then NuevoZoom := FactorFit;
   if Abs(NuevoZoom - FZoomFactor) < 0.01 then Exit;
-  // --- CÁLCULO DEL PUNTO CENTRAL (Para no perder el foco) ---
-  GetCursorPos(PuntoClick);
-  PuntoClick := ScrollBox1.ScreenToClient(PuntoClick);
-  // Validar click dentro del área
-  if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
-     (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then Exit;
-  // Calcular dónde cae ese click en la imagen original (bitmap base)
-  PuntoEnImagenActual.X := PuntoClick.X + ScrollBox1.HorzScrollBar.Position;
-  PuntoEnImagenActual.Y := PuntoClick.Y + ScrollBox1.VertScrollBar.Position;
-  PuntoEnOriginal.X := Round(PuntoEnImagenActual.X / FZoomFactor);
-  PuntoEnOriginal.Y := Round(PuntoEnImagenActual.Y / FZoomFactor);
-  // Calcular la nueva posición de scroll para que ese punto original
-  // siga estando en el centro de la pantalla con el NuevoZoom
-  FTargetScrollX := Round((PuntoEnOriginal.X * NuevoZoom) - (ScrollBox1.ClientWidth / 2.0));
-  FTargetScrollY := Round((PuntoEnOriginal.Y * NuevoZoom) - (ScrollBox1.ClientHeight / 2.0));
-  // --- APLICACIÓN DEL ZOOM (MÉTODO SEGURO) ---
-  LockWindowUpdate(ScrollBox1.Handle);
-  try
-    FZoomFactor := NuevoZoom;
-    AplicarZoom;
-    // Calcular límites reales basados en el nuevo tamaño de imagen
-    NuevoAnchoImg := Round(FOriginalBitmap.Width * FZoomFactor);
-    NuevoAltoImg := Round(FOriginalBitmap.Height * FZoomFactor);
-    MaxScrollX := NuevoAnchoImg - ScrollBox1.ClientWidth;
-    MaxScrollY := NuevoAltoImg - ScrollBox1.ClientHeight;
-    // Ajustar X
-    if MaxScrollX > 0 then
-      FTargetScrollX := Max(0, Min(FTargetScrollX, MaxScrollX))
-    else
-      FTargetScrollX := 0;
-    // Ajustar Y
-    if MaxScrollY > 0 then
-      FTargetScrollY := Max(0, Min(FTargetScrollY, MaxScrollY))
-    else
-      FTargetScrollY := 0;
-    // Aplicar Scroll Inmediato
-    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
-    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
-  finally
-    LockWindowUpdate(0);
-    // Restaurar cursores
-    FIsDragging := False;
-    Image1.Cursor := crHandPoint;
-    Screen.Cursor := crDefault;
-  end;
+
+  // --- CÁLCULO DE LA NUEVA POSICIÓN DE SCROLL ---
+  // Intentamos mover el scroll para que el punto quede bajo el ratón.
+  // Usamos la posición original del ratón (PuntoClick) como referencia.
+  FTargetScrollX := Round((PuntoEnOriginal.X * NuevoZoom) - PuntoClick.X);
+  FTargetScrollY := Round((PuntoEnOriginal.Y * NuevoZoom) - PuntoClick.Y);
+
+  // --- APLICACIÓN DEL ZOOM ---
+  // No usamos LockWindowUpdate aquí para que el salto del ratón se vea fluido
+  // (O puedes usarlo, pero SetCursorPos debe ir después)
+
+  FZoomFactor := NuevoZoom;
+  AplicarZoom;
+
+  // Forzar reajuste del ScrollBox antes de calcular límites
+  ScrollBox1.Realign;
+
+  // Calcular límites reales
+  NuevoAnchoImg := Round(FOriginalBitmap.Width * FZoomFactor);
+  NuevoAltoImg := Round(FOriginalBitmap.Height * FZoomFactor);
+
+  MaxScrollX := NuevoAnchoImg - ScrollBox1.ClientWidth;
+  MaxScrollY := NuevoAltoImg - ScrollBox1.ClientHeight;
+
+  // Ajustar límites (Clamp)
+  FTargetScrollX := Max(0, Min(FTargetScrollX, MaxScrollX));
+  FTargetScrollY := Max(0, Min(FTargetScrollY, MaxScrollY));
+
+  // Aplicar Scroll
+  ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
+  ScrollBox1.VertScrollBar.Position := FTargetScrollY;
+
+  // =========================================================================
+  // --- NUEVO: MOVER EL RATÓN FÍSICAMENTE (SETCURSORPOS) ---
+  // =========================================================================
+  // Calculamos dónde ha acabado EXACTAMENTE ese píxel en la pantalla
+  // tras aplicar el Zoom y el Scroll (que puede haber chocado con el borde).
+
+  // 1. Dónde está el punto en la nueva imagen agrandada
+  PuntoExactoImagen.X := Round(PuntoEnOriginal.X * NuevoZoom);
+  PuntoExactoImagen.Y := Round(PuntoEnOriginal.Y * NuevoZoom);
+
+  // 2. Convertimos esa coordenada interna a coordenada de PANTALLA
+  // Image1 ya se ha movido y redimensionado, así que esto nos da la posición real visual.
+  PuntoDestino := Image1.ClientToScreen(PuntoExactoImagen);
+
+  // 3. Teletransportamos el ratón a ese punto
+  SetCursorPos(PuntoDestino.X, PuntoDestino.Y);
+
+  // Restaurar estado
+  FIsDragging := False;
+  Image1.Cursor := crHandPoint;
+  Screen.Cursor := crDefault;
 end;
 
 procedure TfrmMtoVisorFoto.Timer1Timer(Sender: TObject);

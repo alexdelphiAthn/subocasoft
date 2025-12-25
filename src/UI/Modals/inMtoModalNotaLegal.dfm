@@ -24,14 +24,13 @@ object frmNotaLegal: TfrmNotaLegal
     TabOrder = 0
     object btnSalir: TcxButton
       Left = 1
-      Top = 547
+      Top = 546
       Width = 125
       Height = 57
       Align = alBottom
       Caption = 'Salir'
       TabOrder = 0
       OnClick = btnSalirClick
-      ExplicitTop = 546
     end
   end
   object mse1: TSynEdit
@@ -237,10 +236,9 @@ object frmNotaLegal: TfrmNotaLegal
         'e garantizar la legalidad de la recogida y tratamiento de los da' +
         'tos de sus clientes.'
       '')
-    Options = [eoAutoIndent, eoDisableScrollArrows, eoDragDropEditing, eoDropFiles, eoEnhanceHomeKey, eoEnhanceEndKey, eoGroupUndo, eoHideShowScrollbars, eoKeepCaretX, eoShowScrollHint, eoSmartTabDelete, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoShowLigatures]
     ReadOnly = True
     RightEdgeColor = clWhite
-    SelectedColor.Alpha = 0.400000005960464500
+    ScrollbarAnnotations = <>
     WordWrap = True
   end
 end
