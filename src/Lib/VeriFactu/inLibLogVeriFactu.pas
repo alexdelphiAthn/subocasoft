@@ -45,7 +45,7 @@ type
   public
     constructor Create;
     destructor Destroy; virtual;
-    // M�todos principales
+    // Métodos principales
     function RegistrarEventoVeriFactu(TipoEvento: TVeriFactuEventType;
       Descripcion: string;
       const DatosAdicionales: string = '';
@@ -60,8 +60,12 @@ type
                              DatosAdicionales:string = '';
                              Serie: string='';
                              NumFactura:Integer=0);
-    procedure RegistrarAccesoArchivo(NombreArchivo, TipoAcceso, DatosAdicionales: string);
-    procedure RegistrarCambioConfiguracion(Parametro, ValorAnterior, ValorNuevo: string);
+    procedure RegistrarAccesoArchivo(NombreArchivo,
+                                     TipoAcceso,
+                                     DatosAdicionales: string);
+    procedure RegistrarCambioConfiguracion(Parametro,
+                                           ValorAnterior,
+                                           ValorNuevo: string);
     procedure RegistrarBackup;
 //    function ObtenerEstadisticasTabla: string;
     function GetComputerName: string;
@@ -82,12 +86,12 @@ begin
   // Inicializamos la longitud del buffer
   UserNameLen := 256 + 1;
 
-  // Llamamos a la funci�n de la API de Windows
+  // Llamamos a la función de la API de Windows
   if GetUserName(UserName, UserNameLen) then
-    // Si la funci�n tiene �xito, asigna el resultado
+    // Si la función tiene éxito, asigna el resultado
     Result := string(UserName)
   else
-    // Si falla, devuelve una cadena vac�a o un mensaje de error
+    // Si falla, devuelve una cadena vacía o un mensaje de error
     Result := '';
 end;
 function TVeriFactuLogComplement.GetComputerName: string;
@@ -141,7 +145,8 @@ begin
   inherited;
 end;
 
-function TVeriFactuLogComplement.CalcularHashSHA256(const Datos: string): string;
+function TVeriFactuLogComplement.CalcularHashSHA256(const Datos: string):
+                                                                         string;
 begin
   Result := THashSHA2.GetHashString(Datos, THashSHA2.TSHA2Version.SHA256);
 end;
@@ -159,7 +164,8 @@ begin
   FQuery.Close;
 end;
 
-function TVeriFactuLogComplement.EventTypeToString(EventType: TVeriFactuEventType): string;
+function TVeriFactuLogComplement.EventTypeToString(EventType:
+                                                   TVeriFactuEventType): string;
 begin
   case EventType of
     vfetArranqueSystem: Result := 'ARRANQUE_SISTEMA';
@@ -201,7 +207,7 @@ function TVeriFactuLogComplement.GenerarFirmaDigital(
 var
   DatosFirma: string;
 begin
-  // Simulaci�n de firma digital - en producci�n usar certificado digital real
+  // Simulación de firma digital - en producción usar certificado digital real
   DatosFirma := Format('VERIFACTU_%s_%s_%s', [
     HashEvento,
     GetWindowsUserName,
@@ -274,7 +280,8 @@ begin
     FQuery.ParamByName('firma').AsString := Entry.FirmaDigital;
     FQuery.ParamByName('nro_fac').AsInteger := NumFactura;
     FQuery.ParamByName('ser_fac').AsString := Serie;
-  //  FQuery.ParamByName('created_at').AsDateTime := TTimeZone.Local.ToUniversalTime(Now);
+    //  FQuery.ParamByName('created_at').AsDateTime :=
+    //                                     TTimeZone.Local.ToUniversalTime(Now);
     FQuery.ExecSQL;
 //    FQuery.Connection.Commit;
     Result := Entry.HashPropio;
@@ -298,7 +305,7 @@ begin
                               ParamStr(0)
                             ]);
   RegistrarEventoVeriFactu(vfetArranqueSystem,
-    'Sistema de facturaci�n iniciado', DatosAdicionales);
+    'Sistema de facturación iniciado', DatosAdicionales);
 end;
 
 procedure TVeriFactuLogComplement.RegistrarParadaSystem;
@@ -311,13 +318,13 @@ begin
                               ParamStr(0)
                             ]);
   RegistrarEventoVeriFactu(vfetParadaSystem,
-    'Sistema de facturaci�n cerrado', DatosAdicionales);
+    'Sistema de facturación cerrado', DatosAdicionales);
 end;
 
 procedure TVeriFactuLogComplement.RegistrarOperacionFactura(Descripcion,
                                                             Serie:String;
                                                             NumFactura:Integer;
-                                                            DatosAdicionales:String = ''
+                                                    DatosAdicionales:String = ''
                                                             );
 begin
   RegistrarEventoVeriFactu(vfetOperacionFactura,Descripcion,
@@ -334,8 +341,9 @@ begin
     DatosAdicionales, Serie, NumFactura);
 end;
 
-procedure TVeriFactuLogComplement.RegistrarAccesoArchivo(
-                           NombreArchivo, TipoAcceso, DatosAdicionales: string);
+procedure TVeriFactuLogComplement.RegistrarAccesoArchivo(NombreArchivo,
+                                                         TipoAcceso,
+                                                      DatosAdicionales: string);
 //var
 //  DatosAdicionales: string;
 begin
@@ -347,9 +355,9 @@ begin
     DatosAdicionales);
 end;
 
-procedure TVeriFactuLogComplement.RegistrarCambioConfiguracion(
-                                                               Parametro,
-                                             ValorAnterior, ValorNuevo: string);
+procedure TVeriFactuLogComplement.RegistrarCambioConfiguracion(Parametro,
+                                                               ValorAnterior,
+                                                            ValorNuevo: string);
 var
   DatosAdicionales: string;
 begin
@@ -358,7 +366,7 @@ begin
                                                      ValorAnterior,
                                                      ValorNuevo]);
   RegistrarEventoVeriFactu(vfetCambioConfig,
-    Format('Cambio configuraci�n: %s', [Parametro]),
+    Format('Cambio configuración: %s', [Parametro]),
     DatosAdicionales);
 end;
 
@@ -409,7 +417,8 @@ end;
 //      Usuario := FQuery.FieldByName('usuario_log').AsString;
 //      Version := FQuery.FieldByName('version_log').AsString;
 //      Descripcion := FQuery.FieldByName('descripcion_log').AsString;
-//      DatosAdicionales := FQuery.FieldByName('datos_adicionales_log').AsString;
+//      DatosAdicionales :=
+//                         FQuery.FieldByName('datos_adicionales_log').AsString;
 //      HashAnterior := FQuery.FieldByName('hash_anterior_log').AsString;
 //      HashPropio := FQuery.FieldByName('hash_propio_log').AsString;
 //      FirmaDigital := FQuery.FieldByName('firma_digital_log').AsString;
@@ -417,7 +426,8 @@ end;
 //      if HashAnterior <> HashAnteriorEsperado then
 //      begin
 ////        if Assigned(FOriginalLog) then
-////          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad secuencia %d: hash anterior incorrecto', [Secuencia]));
+////          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad' +
+//                     ' secuencia %d: hash anterior incorrecto', [Secuencia]));
 //        Result := False;
 //        Inc(ErrorCount);
 //      end;
@@ -435,7 +445,8 @@ end;
 //      if HashRecalculado <> HashPropio then
 //      begin
 ////        if Assigned(FOriginalLog) then
-////          FOriginalLog.LogError(Format('[VERIFACTU] Error integridad secuencia %d: hash propio alterado', [Secuencia]));
+////          FOriginalLog.LogError(Format('[VERIFACTU] Error ' +
+//               'integridad secuencia %d: hash propio alterado', [Secuencia]));
 //        Result := False;
 //        Inc(ErrorCount);
 //      end;
