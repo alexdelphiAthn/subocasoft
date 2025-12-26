@@ -22,8 +22,8 @@ object dmConn: TdmConn
     EncryptedPassword = 'A5FF9EFF92FF90FF8DFF9EFFCDFFCFFFCDFFCCFF'
   end
   object tmrKeepAlive: TTimer
+    Enabled = False
     Interval = 1800
-    OnTimer = tmrKeepAliveTimer
     Left = 368
     Top = 152
   end

@@ -671,35 +671,27 @@ var
   // Variables para el cálculo seguro de scroll
   MaxScrollX, MaxScrollY: Integer;
   NuevoAnchoImg, NuevoAltoImg: Integer;
-
   // --- NUEVO: Variables para mover el ratón ---
   PuntoGlobalMouse: TPoint;
   PuntoExactoImagen: TPoint;
   PuntoDestino: TPoint;
 begin
   if FOriginalBitmap.Empty then Exit;
-
   // 1. CAPTURAR POSICIÓN GLOBAL DEL RATÓN (Necesaria para moverlo luego)
   GetCursorPos(PuntoGlobalMouse);
-
   // Obtener coordenadas locales para validación
   PuntoClick := ScrollBox1.ScreenToClient(PuntoGlobalMouse);
-
   // Validar click dentro del área visible
   if (PuntoClick.X < 0) or (PuntoClick.X >= ScrollBox1.ClientWidth) or
      (PuntoClick.Y < 0) or (PuntoClick.Y >= ScrollBox1.ClientHeight) then Exit;
-
   // --- CORRECCIÓN CRÍTICA: OBTENER EL PUNTO REAL EN LA IMAGEN ---
   // Usamos ScreenToClient de la Imagen (no del ScrollBox) para ignorar bordes grises
   // Esto arregla el problema de "me pone una imagen que no es"
   PuntoExactoImagen := Image1.ScreenToClient(PuntoGlobalMouse);
-
   // Convertimos a coordenadas del bitmap original (base 1.0)
   PuntoEnOriginal.X := Round(PuntoExactoImagen.X / FZoomFactor);
   PuntoEnOriginal.Y := Round(PuntoExactoImagen.Y / FZoomFactor);
-
   FIsDragging := False;
-
   // --- LÓGICA DE NIVELES DE ZOOM ---
   FactorFit := CalcularFactorFit;
   if FZoomFactor < (1.25 - 0.01) then
@@ -712,58 +704,44 @@ begin
     NuevoZoom := 2.2
   else
     NuevoZoom := FactorFit;
-
   if NuevoZoom < FactorFit then NuevoZoom := FactorFit;
   if Abs(NuevoZoom - FZoomFactor) < 0.01 then Exit;
-
   // --- CÁLCULO DE LA NUEVA POSICIÓN DE SCROLL ---
   // Intentamos mover el scroll para que el punto quede bajo el ratón.
   // Usamos la posición original del ratón (PuntoClick) como referencia.
   FTargetScrollX := Round((PuntoEnOriginal.X * NuevoZoom) - PuntoClick.X);
   FTargetScrollY := Round((PuntoEnOriginal.Y * NuevoZoom) - PuntoClick.Y);
-
   // --- APLICACIÓN DEL ZOOM ---
   // No usamos LockWindowUpdate aquí para que el salto del ratón se vea fluido
   // (O puedes usarlo, pero SetCursorPos debe ir después)
-
   FZoomFactor := NuevoZoom;
   AplicarZoom;
-
   // Forzar reajuste del ScrollBox antes de calcular límites
   ScrollBox1.Realign;
-
   // Calcular límites reales
   NuevoAnchoImg := Round(FOriginalBitmap.Width * FZoomFactor);
   NuevoAltoImg := Round(FOriginalBitmap.Height * FZoomFactor);
-
   MaxScrollX := NuevoAnchoImg - ScrollBox1.ClientWidth;
   MaxScrollY := NuevoAltoImg - ScrollBox1.ClientHeight;
-
   // Ajustar límites (Clamp)
   FTargetScrollX := Max(0, Min(FTargetScrollX, MaxScrollX));
   FTargetScrollY := Max(0, Min(FTargetScrollY, MaxScrollY));
-
   // Aplicar Scroll
   ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
   ScrollBox1.VertScrollBar.Position := FTargetScrollY;
-
   // =========================================================================
   // --- NUEVO: MOVER EL RATÓN FÍSICAMENTE (SETCURSORPOS) ---
   // =========================================================================
   // Calculamos dónde ha acabado EXACTAMENTE ese píxel en la pantalla
   // tras aplicar el Zoom y el Scroll (que puede haber chocado con el borde).
-
   // 1. Dónde está el punto en la nueva imagen agrandada
   PuntoExactoImagen.X := Round(PuntoEnOriginal.X * NuevoZoom);
   PuntoExactoImagen.Y := Round(PuntoEnOriginal.Y * NuevoZoom);
-
   // 2. Convertimos esa coordenada interna a coordenada de PANTALLA
   // Image1 ya se ha movido y redimensionado, así que esto nos da la posición real visual.
   PuntoDestino := Image1.ClientToScreen(PuntoExactoImagen);
-
   // 3. Teletransportamos el ratón a ese punto
   SetCursorPos(PuntoDestino.X, PuntoDestino.Y);
-
   // Restaurar estado
   FIsDragging := False;
   Image1.Cursor := crHandPoint;

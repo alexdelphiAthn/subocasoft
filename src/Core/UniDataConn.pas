@@ -13,7 +13,7 @@ type
     procedure connBeforeConnect(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
     procedure conUniError(Sender: TObject; E: EDAError; var Fail: Boolean);
-    procedure tmrKeepAliveTimer(Sender: TObject);
+//    procedure tmrKeepAliveTimer(Sender: TObject);
     procedure conUniAfterConnect(Sender: TObject);
   private
     { Private declarations }
@@ -65,6 +65,7 @@ begin
     // Esto hace que si se cae la red o el servidor patea la conexión,
     // UniDAC se reconecta sola y reintenta la consulta sin dar error al usuario.
     Options.LocalFailover := True;
+    Options.DisconnectedMode := True;
     // Opcional: Si la red es muy mala, esto comprime los datos
     // SpecificOptions.Values['MySQL.Compress'] := 'True';
     Server := sHostName;
@@ -113,28 +114,28 @@ begin
   end;
 end;
 
-procedure TdmConn.tmrKeepAliveTimer(Sender: TObject);
-begin
-  // Solo intentamos hacer ping si la conexión dice estar activa
-  if conUni.Connected then
-  begin
-    try
-      // El método Ping envía un comando ligero al servidor.
-      // Si el servidor responde, resetea el 'wait_timeout' del lado del servidor
-      // y mantiene abierto el puerto en el Firewall/NAT.
-      conUni.Ping;
-    except
-      // Si falla el ping (ej. cable desconectado), no hacemos nada.
-      // Dejamos que el 'LocalFailover' maneje el error cuando el usuario
-      // intente hacer una consulta real.
-      on E: Exception do
-      begin
-      {$IFDEF DEBUG}
-        ShowMessage('Error al hacer ping al server: ' + E.Message);
-      {$ENDIF}
-      end;
-    end;
-  end;
-end;
+//procedure TdmConn.tmrKeepAliveTimer(Sender: TObject);
+//begin
+//  // Solo intentamos hacer ping si la conexión dice estar activa
+//  if conUni.Connected then
+//  begin
+//    try
+//      // El método Ping envía un comando ligero al servidor.
+//      // Si el servidor responde, resetea el 'wait_timeout' del lado del servidor
+//      // y mantiene abierto el puerto en el Firewall/NAT.
+//      conUni.Ping;
+//    except
+//      // Si falla el ping (ej. cable desconectado), no hacemos nada.
+//      // Dejamos que el 'LocalFailover' maneje el error cuando el usuario
+//      // intente hacer una consulta real.
+//      on E: Exception do
+//      begin
+//      {$IFDEF DEBUG}
+//        ShowMessage('Error al hacer ping al server: ' + E.Message);
+//      {$ENDIF}
+//      end;
+//    end;
+//  end;
+//end;
 
 end.

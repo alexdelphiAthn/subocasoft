@@ -4,8 +4,8 @@ object frmPrintPre: TfrmPrintPre
   HorzScrollBar.Visible = False
   BorderStyle = bsSingle
   Caption = 'Imprimir Presupuesto'
-  ClientHeight = 289
-  ClientWidth = 468
+  ClientHeight = 288
+  ClientWidth = 464
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,12 +16,14 @@ object frmPrintPre: TfrmPrintPre
   Scaled = False
   TextHeight = 23
   object pnl1: TPanel
-    Left = 276
+    Left = 272
     Top = 0
     Width = 192
-    Height = 289
+    Height = 288
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 276
+    ExplicitHeight = 289
     object btn1: TcxButton
       Left = 0
       Top = 4
@@ -33,14 +35,13 @@ object frmPrintPre: TfrmPrintPre
     end
     object btn3: TcxButton
       Left = 1
-      Top = 232
+      Top = 231
       Width = 190
       Height = 57
       Align = alBottom
       Caption = 'Salir'
       TabOrder = 1
       OnClick = btn3Click
-      ExplicitTop = 231
     end
   end
   object edtNroFac: TcxTextEdit
