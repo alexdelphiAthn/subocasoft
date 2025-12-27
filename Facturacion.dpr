@@ -59,7 +59,9 @@ uses
   inMtoModalVisorFoto in 'src\UI\Modals\inMtoModalVisorFoto.pas' {frmMtoVisorFoto},
   uEncryptHelper in '..\..\OdaVeriFactu\OdaVeriFactu\uEncryptHelper.pas',
   inLibImageUtils in 'src\Lib\Core\inLibImageUtils.pas',
-  DelphiZXIngQRCode in 'src\Helpers\DelphiZXIngQRCode.pas';
+  DelphiZXIngQRCode in 'src\Helpers\DelphiZXIngQRCode.pas',
+  System.SysConst in 'src\Vcl\System.SysConst.pas',
+  Vcl.Consts in 'src\Vcl\Vcl.Consts.pas';
 
 //inIni in 'inIni.pas';
 

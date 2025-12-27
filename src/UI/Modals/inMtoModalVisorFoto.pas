@@ -43,7 +43,6 @@ type
     Rotar90dcha: TSpeedButton;
     btnAjustar: TSpeedButton;
     btnOpenFolder: TSpeedButton;
-    Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure btnZoomInClick(Sender: TObject);
     procedure btnZoomOutClick(Sender: TObject);
@@ -68,15 +67,13 @@ type
     procedure Rotar90dchaClick(Sender: TObject);
     procedure btnAjustarClick(Sender: TObject);
     procedure btnOpenFolderClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
+//    procedure Timer1Timer(Sender: TObject);
   private
 //    const WM_USER = $0400;
     FTargetScrollX: Integer;
     FTargetScrollY: Integer;
     FScrollRetryCount: Integer;
     //Timer1: TTimer;
-
-
 //    procedure WMScrollToPosition(var Msg: TMessage); message WM_USER + 100;
     function ObtenerOrientacionEXIF(const ARutaImagen: string): Integer;
     function ObtenerFechaExif(const RutaArchivo: string): TDateTime;
@@ -90,6 +87,9 @@ type
     //FListaMiniaturas: TStringList;
     FIndiceActual: Integer;
     FClientDataSet: TClientDataSet;
+    //FIsDragging: Boolean;
+    FDragStartPos: TPoint; // Usaremos TPoint para guardar X e Y de pantalla
+    FScrollStart: TPoint;  // Para guardar la posición inicial de los ScrollBars
     //FLastMouseX, FLastMouseY : Integer;
     procedure CargarImagen(const ARutaArchivo: string);
     procedure AplicarZoom;
@@ -748,20 +748,20 @@ begin
   Screen.Cursor := crDefault;
 end;
 
-procedure TfrmMtoVisorFoto.Timer1Timer(Sender: TObject);
-begin
-  Timer1.Enabled := False;
-  // Asegurar que el estado es correcto
-  FIsDragging := False;
-  Image1.Cursor := crHandPoint;
-  Screen.Cursor := crDefault;
-  if (ScrollBox1.HorzScrollBar.Position <> FTargetScrollX) or
-     (ScrollBox1.VertScrollBar.Position <> FTargetScrollY) then
-  begin
-    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
-    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
-  end;
-end;
+//procedure TfrmMtoVisorFoto.Timer1Timer(Sender: TObject);
+//begin
+////  Timer1.Enabled := False;
+////  // Asegurar que el estado es correcto
+////  FIsDragging := False;
+////  Image1.Cursor := crHandPoint;
+////  Screen.Cursor := crDefault;
+////  if (ScrollBox1.HorzScrollBar.Position <> FTargetScrollX) or
+////     (ScrollBox1.VertScrollBar.Position <> FTargetScrollY) then
+////  begin
+////    ScrollBox1.HorzScrollBar.Position := FTargetScrollX;
+////    ScrollBox1.VertScrollBar.Position := FTargetScrollY;
+////  end;
+//end;
 
 // Y restaurar AplicarZoom a su versión original SIN Visible := False
 procedure TfrmMtoVisorFoto.AplicarZoom;
@@ -813,61 +813,120 @@ end;
 //  end;
 //end;
 
+//procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject;
+//  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+//begin
+//  // 1. Lógica para el botón DERECHO (Ajustar / Fit)
+//  if Button = mbRight then
+//  begin
+//    FIsDragging := False;
+//    FZoomFactor := CalcularFactorFit; // Tu función que calcula el ajuste a ventana
+//    LockWindowUpdate(ScrollBox1.Handle);
+//    try
+//      AplicarZoom;
+//      // Centrar scrollbars a 0,0 al ajustar
+//      ScrollBox1.HorzScrollBar.Position := 0;
+//      ScrollBox1.VertScrollBar.Position := 0;
+//    finally
+//      LockWindowUpdate(0);
+//      Image1.Cursor := crHandPoint;
+//    end;
+//    Exit; // Salimos para no procesar arrastre
+//  end;
+//  // 2. Evitar conflicto si es doble click
+//  if (ssDouble in Shift) then Exit;
+//  // 3. Lógica normal de arrastre (Botón Izquierdo)
+//  if Button = mbLeft then
+//  begin
+//    FIsDragging := True;
+//    FDragStartX := X;
+//    FDragStartY := Y;
+//    FScrollStartX := ScrollBox1.HorzScrollBar.Position;
+//    FScrollStartY := ScrollBox1.VertScrollBar.Position;
+//    Image1.Cursor := crDrag;
+//  end;
+//end;
+//
+//procedure TfrmMtoVisorFoto.Image1MouseMove(Sender: TObject; Shift: TShiftState;
+//  X, Y: Integer);
+//var
+//  DeltaX, DeltaY: Integer;
+//begin
+//  if FIsDragging then
+//  begin
+//    DeltaX := FDragStartX - X;
+//    DeltaY := FDragStartY - Y;
+//    ScrollBox1.HorzScrollBar.Position := FScrollStartX + DeltaX;
+//    ScrollBox1.VertScrollBar.Position := FScrollStartY + DeltaY;
+//  end;
+//end;
+//
+//procedure TfrmMtoVisorFoto.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+//  Shift: TShiftState; X, Y: Integer);
+//begin
+//  if Button = mbLeft then
+//  begin
+//    FIsDragging := False;
+//    Image1.Cursor := crHandPoint;
+//  end;
+//end;
+
 procedure TfrmMtoVisorFoto.Image1MouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  // 1. Lógica para el botón DERECHO (Ajustar / Fit)
+  // 1. Lógica botón DERECHO (Reset / Fit)
   if Button = mbRight then
   begin
     FIsDragging := False;
-    FZoomFactor := CalcularFactorFit; // Tu función que calcula el ajuste a ventana
-    LockWindowUpdate(ScrollBox1.Handle);
-    try
-      AplicarZoom;
-      // Centrar scrollbars a 0,0 al ajustar
-      ScrollBox1.HorzScrollBar.Position := 0;
-      ScrollBox1.VertScrollBar.Position := 0;
-    finally
-      LockWindowUpdate(0);
-      Image1.Cursor := crHandPoint;
-    end;
-    Exit; // Salimos para no procesar arrastre
+    // ... tu lógica de zoom existente ...
+    Exit;
   end;
-  // 2. Evitar conflicto si es doble click
-  if (ssDouble in Shift) then Exit;
-  // 3. Lógica normal de arrastre (Botón Izquierdo)
+
+  // 2. Lógica botón IZQUIERDO (Iniciar Arrastre)
   if Button = mbLeft then
   begin
     FIsDragging := True;
-    FDragStartX := X;
-    FDragStartY := Y;
-    FScrollStartX := ScrollBox1.HorzScrollBar.Position;
-    FScrollStartY := ScrollBox1.VertScrollBar.Position;
-    Image1.Cursor := crDrag;
+
+    // IMPORTANTE: Guardamos la posición absoluta del ratón en la pantalla
+    GetCursorPos(FDragStartPos);
+
+    // Guardamos la posición actual de los scrolls
+    FScrollStart.X := ScrollBox1.HorzScrollBar.Position;
+    FScrollStart.Y := ScrollBox1.VertScrollBar.Position;
+
+    Image1.Cursor := crDrag; // O crSizeAll
   end;
 end;
 
 procedure TfrmMtoVisorFoto.Image1MouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);
 var
+  CurrentPos: TPoint;
   DeltaX, DeltaY: Integer;
 begin
   if FIsDragging then
   begin
-    DeltaX := FDragStartX - X;
-    DeltaY := FDragStartY - Y;
-    ScrollBox1.HorzScrollBar.Position := FScrollStartX + DeltaX;
-    ScrollBox1.VertScrollBar.Position := FScrollStartY + DeltaY;
+    // Obtenemos la posición actual del ratón en pantalla
+    GetCursorPos(CurrentPos);
+
+    // Calculamos cuánto se ha movido el ratón desde el clic inicial
+    // Nota: Restamos DragStart - Current para invertir el movimiento (efecto "mano")
+    DeltaX := FDragStartPos.X - CurrentPos.X;
+    DeltaY := FDragStartPos.Y - CurrentPos.Y;
+
+    // Aplicamos el desplazamiento a los ScrollBars
+    ScrollBox1.HorzScrollBar.Position := FScrollStart.X + DeltaX;
+    ScrollBox1.VertScrollBar.Position := FScrollStart.Y + DeltaY;
   end;
 end;
 
 procedure TfrmMtoVisorFoto.Image1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if Button = mbLeft then
+  if FIsDragging and (Button = mbLeft) then
   begin
     FIsDragging := False;
-    Image1.Cursor := crHandPoint;
+    Image1.Cursor := crDefault; // O crHandPoint
   end;
 end;
 
