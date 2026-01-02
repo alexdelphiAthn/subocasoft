@@ -841,7 +841,6 @@ var
             Inc(ATotalFotos);
             ARutaArchivo := ARutaPaciente + SR.Name;
             ARutaThumbnail := RutaThumbnails + ChangeFileExt(SR.Name, '_thumb.bmp');
-
             // Lógica de validación y generación
             if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
             begin
@@ -1093,7 +1092,6 @@ var
             // Ojo: Asegúrate que ObtenerNombreThumbnail devuelve el nombre, no la ruta completa
             // si devuelve solo nombre, concatenamos RutaThumbnails
             ARutaThumbnail := RutaThumbnails + ObtenerNombreThumbnail(ARutaArchivo);
-
             if NecesitaActualizacion(ARutaArchivo, ARutaThumbnail) then
             begin
               try

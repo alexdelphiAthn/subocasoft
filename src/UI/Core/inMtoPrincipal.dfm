@@ -1,7 +1,7 @@
 object frmMtoPrincipal: TfrmMtoPrincipal
   Left = 0
   Top = 68
-  Caption = 'SubocaSoft Version 109 Veri*Factu'
+  Caption = #231
   ClientHeight = 616
   ClientWidth = 1084
   Color = clAqua
@@ -1241,8 +1241,8 @@ object frmMtoPrincipal: TfrmMtoPrincipal
         MinWidth = 160
         Width = 160
       end>
-    ExplicitTop = 581
-    ExplicitWidth = 1080
+    ExplicitTop = 573
+    ExplicitWidth = 1078
   end
   object Memo: TcxMemo
     Left = 0
@@ -1250,8 +1250,8 @@ object frmMtoPrincipal: TfrmMtoPrincipal
     Align = alBottom
     TabOrder = 1
     Visible = False
-    ExplicitTop = 492
-    ExplicitWidth = 1080
+    ExplicitTop = 484
+    ExplicitWidth = 1078
     Height = 89
     Width = 1084
   end

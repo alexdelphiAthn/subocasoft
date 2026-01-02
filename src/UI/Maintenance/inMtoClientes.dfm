@@ -2,14 +2,14 @@ inherited frmMtoClientes: TfrmMtoClientes
   Left = 5
   Top = 4
   Caption = 'Pacientes'
-  ClientHeight = 596
-  ClientWidth = 1228
+  ClientHeight = 587
+  ClientWidth = 1222
   ExplicitWidth = 1240
   ExplicitHeight = 634
   TextHeight = 22
   inherited pButtonPage: TPanel
-    Width = 1030
-    Height = 596
+    Width = 1024
+    Height = 587
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -18,8 +18,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     ExplicitHeight = 595
   end
   inherited pButtonRightBar: TPanel
-    Left = 1030
-    Height = 596
+    Left = 1024
+    Height = 587
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -162,8 +162,8 @@ inherited frmMtoClientes: TfrmMtoClientes
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 1030
-    Height = 596
+    Width = 1024
+    Height = 587
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -314,7 +314,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 1018
+        ExplicitWidth = 1028
         ExplicitHeight = 49
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -379,7 +379,7 @@ inherited frmMtoClientes: TfrmMtoClientes
         Height = 265
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 1026
+        ExplicitWidth = 1028
         object cxdbtxtdtCODIGO_CLIENTE: TcxDBTextEdit
           Left = 68
           Top = 50
@@ -604,8 +604,8 @@ inherited frmMtoClientes: TfrmMtoClientes
       object pnl2: TPanel
         Left = 0
         Top = 265
-        Width = 1022
-        Height = 291
+        Width = 1016
+        Height = 282
         Align = alClient
         TabOrder = 1
         ExplicitWidth = 1018
@@ -776,6 +776,8 @@ inherited frmMtoClientes: TfrmMtoClientes
             Margins.Bottom = 2
             Caption = 'M'#225's datos personales'
             ImageIndex = 1
+            ExplicitWidth = 1012
+            ExplicitHeight = 252
             object cxedtRAZONSOCIAL_CLIENTE: TcxDBTextEdit
               Left = 225
               Top = 23
