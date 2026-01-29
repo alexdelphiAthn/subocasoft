@@ -1,4 +1,4 @@
-unit inLibDocumentoValidator;
+﻿unit inLibDocumentoValidator;
 
 interface
 uses
@@ -8,11 +8,11 @@ type
                                             tdTarjetaResidencia, tdDesconocido);
   TDocumentoValidator = class
   private
-    // Letras para c�lculo del NIF
+    // Letras para cálculo del NIF
     const LETRAS_NIF: string = 'TRWAGMYFPDXBNJZSQVHLCKE';
-    // Letras v�lidas para NIE
+    // Letras válidas para NIE
     const LETRAS_NIE_INICIO: string = 'XYZ';
-    // Letras v�lidas para CIF seg�n tipo de organizaci�n
+    // Letras válidas para CIF según tipo de organización
     const LETRAS_CIF_ORGANIZACION: string = 'ABCDEFGHJNPQRSUVW';
     function LimpiarDocumento(const documento: string): string;
     function EsNumero(const valor: string): Boolean;
@@ -34,7 +34,7 @@ implementation
 { TDocumentoValidator }
 function TDocumentoValidator.LimpiarDocumento(const documento: string): string;
 begin
-  // Eliminar espacios, guiones y convertir a may�sculas
+  // Eliminar espacios, guiones y convertir a mayúsculas
   Result := UpperCase(StringReplace(StringReplace(Trim(documento), ' ', '', [rfReplaceAll]), '-', '', [rfReplaceAll]));
 end;
 function TDocumentoValidator.EsNumero(const valor: string): Boolean;
@@ -56,10 +56,12 @@ begin
     end;
   end;
 end;
+
 function TDocumentoValidator.CalcularLetraNIF(numero: Integer): Char;
 begin
   Result := LETRAS_NIF[(numero mod 23) + 1];
 end;
+
 function TDocumentoValidator.ValidarNIF(const nif: string): Boolean;
 var
   nifLimpio: string;
@@ -89,6 +91,7 @@ begin
     Result := False;
   end;
 end;
+
 function TDocumentoValidator.ValidarNIE(const nie: string): Boolean;
 var
   nieLimpio: string;
@@ -146,7 +149,7 @@ begin
     if (i mod 2) = 0 then
       sumaPares := sumaPares + StrToInt(parteNumerica[i]);
   end;
-  // Para posiciones impares, multiplicar por 2 y sumar los d�gitos del resultado
+  // Para posiciones impares, multiplicar por 2 y sumar los dígitos del resultado
   for i := 1 to 7 do
   begin
     if (i mod 2) = 1 then
@@ -159,19 +162,19 @@ begin
   digito := 10 - (suma mod 10);
   if digito = 10 then
     digito := 0;
-  // Seg�n el tipo de organizaci�n, puede ser n�mero o letra
+  // Según el tipo de organización, puede ser número o letra
   case cif[1] of
-    // D�GITO DE CONTROL NUM�RICO
+    // DÍGITO DE CONTROL NUMÉRICO
     'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'U', 'V':
       Result := Chr(Ord('0') + digito);
-    // D�GITO DE CONTROL EN LETRA
+    // DÍGITO DE CONTROL EN LETRA
     'G', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'W':
       Result := 'JABCDEFGHI'[digito + 1];
-    // Casos especiales de G: pueden ser n�mero O letra
-    // Seg�n documentaci�n: las embajadas (tipo G) usan letra, el resto n�mero
-    // Se mantiene letra por ser m�s restrictivo
+    // Casos especiales de G: pueden ser número O letra
+    // Según documentación: las embajadas (tipo G) usan letra, el resto número
+    // Se mantiene letra por ser más restrictivo
   else
-    // Por defecto n�mero para casos no contemplados
+    // Por defecto número para casos no contemplados
     Result := Chr(Ord('0') + digito);
   end;
 end;
@@ -187,15 +190,15 @@ begin
   // Debe tener exactamente 9 caracteres
   if Length(cifLimpio) <> 9 then
     Exit;
-  // Debe empezar con una letra v�lida de organizaci�n
+  // Debe empezar con una letra válida de organización
   letraOrganizacion := cifLimpio[1];
   if Pos(letraOrganizacion, LETRAS_CIF_ORGANIZACION) = 0 then
     Exit;
-  // Los caracteres 2-8 deben ser n�meros
+  // Los caracteres 2-8 deben ser números
   parteNumerica := Copy(cifLimpio, 2, 7);
   if not EsNumero(parteNumerica) then
     Exit;
-  // Validar el d�gito de control
+  // Validar el dígito de control
   digitoControl := cifLimpio[9];
   digitoCalculado := CalcularDigitoControlCIF(cifLimpio);
   Result := (digitoControl = digitoCalculado);
@@ -204,7 +207,7 @@ function TDocumentoValidator.ValidarPasaporte(const pasaporte: string): Boolean;
 var
   pasaporteLimpio: string;
 begin
-  // Validaci�n b�sica para pasaporte espa�ol (formato AAA123456)
+  // Validación básica para pasaporte español (formato AAA123456)
   pasaporteLimpio := LimpiarDocumento(pasaporte);
   // Debe tener 9 caracteres
   if Length(pasaporteLimpio) <> 9 then
@@ -218,7 +221,9 @@ begin
             CharInSet(pasaporteLimpio[3], ['A'..'Z']) and
             EsNumero(Copy(pasaporteLimpio, 4, 6));
 end;
-function TDocumentoValidator.ValidarTarjetaResidencia(const tarjeta: string): Boolean;
+
+function TDocumentoValidator.ValidarTarjetaResidencia(
+                                                const tarjeta: string): Boolean;
 var
   tarjetaLimpia: string;
   parteNumerica: string;
@@ -227,22 +232,25 @@ var
 begin
   // Las tarjetas de residencia siguen un formato similar al NIE
   tarjetaLimpia := LimpiarDocumento(tarjeta);
-  // Formato b�sico: debe tener entre 8 y 12 caracteres
+  // Formato básico: debe tener entre 8 y 12 caracteres
   if (Length(tarjetaLimpia) < 8) or (Length(tarjetaLimpia) > 12) then
   begin
     Result := False;
     Exit;
   end;
   // Si tiene 9 caracteres y empieza con X, Y, Z, validar como NIE
-  if (Length(tarjetaLimpia) = 9) and CharInSet(tarjetaLimpia[1], ['X', 'Y', 'Z']) then
+  if (Length(tarjetaLimpia) = 9) and
+                               CharInSet(tarjetaLimpia[1], ['X', 'Y', 'Z']) then
   begin
     Result := ValidarNIE(tarjetaLimpia);
     Exit;
   end;
-  // Para otros formatos, validaci�n b�sica
-  Result := True; // Aceptar otros formatos v�lidos
+  // Para otros formatos, validación básica
+  Result := True; // Aceptar otros formatos válidos
 end;
-function TDocumentoValidator.DetectarTipoDocumento(const documento: string): TTipoDocumento;
+
+function TDocumentoValidator.DetectarTipoDocumento(
+                                       const documento: string): TTipoDocumento;
 var
   docLimpio: string;
 begin
@@ -258,13 +266,13 @@ begin
     Result := tdNIE;
     Exit;
   end;
-  // NIF: 9 caracteres, empieza con n�mero
+  // NIF: 9 caracteres, empieza con número
   if (Length(docLimpio) = 9) and CharInSet(docLimpio[1], ['0'..'9']) then
   begin
     Result := tdNIF;
     Exit;
   end;
-  // CIF: 9 caracteres, empieza con letra de organizaci�n
+  // CIF: 9 caracteres, empieza con letra de organización
   if (Length(docLimpio) = 9) and (Pos(docLimpio[1], LETRAS_CIF_ORGANIZACION) > 0) then
   begin
     Result := tdCIF;
@@ -305,14 +313,14 @@ end;
 function TDocumentoValidator.ObtenerMensajeError(const documento: string; tipo: TTipoDocumento): string;
 begin
   case tipo of
-    tdNIF: Result := 'NIF inv�lido. Formato esperado: 12345678A';
-    tdNIE: Result := 'NIE inv�lido. Formato esperado: X1234567A';
-    tdCIF: Result := 'CIF inv�lido. Formato esperado: A12345674';
-    //tdPasaporte: Result := 'Pasaporte inv�lido. Formato esperado: AAA123456';
-    tdTarjetaResidencia: Result := 'Tarjeta de residencia inv�lida';
-    tdDesconocido: Result := 'NIF vac�o no permitido';
+    tdNIF: Result := 'NIF inválido. Formato esperado: 12345678A';
+    tdNIE: Result := 'NIE inválido. Formato esperado: X1234567A';
+    tdCIF: Result := 'CIF inválido. Formato esperado: A12345674';
+    //tdPasaporte: Result := 'Pasaporte inválido. Formato esperado: AAA123456';
+    tdTarjetaResidencia: Result := 'Tarjeta de residencia inválida';
+    tdDesconocido: Result := 'NIF vacío no permitido';
   else
-    Result := 'Documento inv�lido';
+    Result := 'Documento inválido';
   end;
 end;
 end.
