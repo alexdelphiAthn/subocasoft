@@ -109,15 +109,15 @@ begin
   letraInicial := nieLimpio[1];
   if not CharInSet(letraInicial, ['X', 'Y', 'Z']) then
     Exit;
-  // Los caracteres 2-8 deben ser n�meros
+  // Los caracteres 2-8 deben ser números
   parteNumerica := Copy(nieLimpio, 2, 7);
   if not EsNumero(parteNumerica) then
     Exit;
-  // El �ltimo debe ser una letra v�lida del NIF
+  // El �ltimo debe ser una letra válida del NIF
   letraFinal := nieLimpio[9];
   if Pos(letraFinal, LETRAS_NIF) = 0 then
     Exit;
-  // Convertir la letra inicial a n�mero: X=0, Y=1, Z=2
+  // Convertir la letra inicial a número: X=0, Y=1, Z=2
   case letraInicial of
     'X': numeroParaCalculo := '0' + parteNumerica;
     'Y': numeroParaCalculo := '1' + parteNumerica;
