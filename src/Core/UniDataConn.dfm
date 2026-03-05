@@ -17,6 +17,7 @@ object dmConn: TdmConn
     LoginPrompt = False
     AfterConnect = conUniAfterConnect
     BeforeConnect = connBeforeConnect
+    OnError = conUniError
     Left = 338
     Top = 188
     EncryptedPassword = 'A5FF9EFF92FF90FF8DFF9EFFCDFFCFFFCDFFCCFF'
