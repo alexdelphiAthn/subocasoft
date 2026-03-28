@@ -23,6 +23,8 @@ object frmModalHisFac: TfrmModalHisFac
     Height = 257
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 248
+    ExplicitHeight = 256
     object btnSalir: TcxButton
       Left = 7
       Top = 143

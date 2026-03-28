@@ -1,4 +1,4 @@
-unit inMtoModalFacRecImp;
+﻿unit inMtoModalFacRecImp;
 
 interface
 
@@ -22,7 +22,8 @@ uses
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
-  cxCalendar, frxDesgn, cxRadioGroup, frxRich, frxExportBaseDialog, cxGroupBox;
+  cxCalendar, frxDesgn, cxRadioGroup, frxRich, frxExportBaseDialog, cxGroupBox,
+  frxSmartMemo, frLocalization, frLanguageSpanish, frCoreClasses;
 
 type
   TfrmPrintFacRec = class(TForm)
@@ -43,6 +44,7 @@ type
     frxrprt2: TfrxReport;
     frxrchbjct1: TfrxRichObject;
     frxrprt1: TfrxReport;
+    frLocalizationController1: TfrLocalizationController;
     procedure btn2Click(Sender: TObject);
     procedure btn3Click(Sender: TObject);
     procedure btn4Click(Sender: TObject);

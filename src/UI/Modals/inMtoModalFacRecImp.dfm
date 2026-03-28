@@ -22,6 +22,8 @@ object frmPrintFacRec: TfrmPrintFacRec
     Height = 267
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 344
+    ExplicitHeight = 266
     object btn4: TcxButton
       Left = 0
       Top = 0
@@ -51,14 +53,14 @@ object frmPrintFacRec: TfrmPrintFacRec
     end
     object btn3: TcxButton
       Left = 1
-      Top = 224
+      Top = 223
       Width = 160
       Height = 43
       Align = alBottom
       Caption = 'Salir'
       TabOrder = 3
       OnClick = btn3Click
-      ExplicitTop = 223
+      ExplicitTop = 222
     end
   end
   object edtNroFac: TcxTextEdit
@@ -157,7 +159,7 @@ object frmPrintFacRec: TfrmPrintFacRec
     Top = 200
   end
   object frxrprt2: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -2377,7 +2379,7 @@ object frmPrintFacRec: TfrmPrintFacRec
     Top = 208
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
@@ -2909,5 +2911,10 @@ object frmPrintFacRec: TfrmPrintFacRec
         end
       end
     end
+  end
+  object frLocalizationController1: TfrLocalizationController
+    Language = 'Spanish'
+    Left = 248
+    Top = 136
   end
 end

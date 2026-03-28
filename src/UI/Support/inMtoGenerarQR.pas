@@ -1,4 +1,4 @@
-unit inMtoGenerarQR;
+ï»¿unit inMtoGenerarQR;
 
 interface
 
@@ -74,10 +74,10 @@ procedure TfrmMtoGenerarQR.btnGenerarQRClick(Sender: TObject);
 var
   QRCode: TDelphiZXingQRCode;
   Row, Column: Integer;
-  Scale: Integer;  // ¡AÑADIR ESTA VARIABLE!
-  x, y: Integer;   // ¡AÑADIR ESTAS VARIABLES!
+  Scale: Integer;
+  x, y: Integer;
 begin
-  Scale := 8;  // ¡ESTA ES LA CLAVE! 8 píxeles por módulo
+  Scale := 8;
   QRCode := TDelphiZXingQRCode.Create;
   try
     QRCode.Data := edtText.Text;
@@ -100,7 +100,6 @@ begin
       begin
         if QRCode.IsBlack[Row, Column] then
         begin
-          // CAMBIO: En lugar de 1 píxel, dibujar cuadrado de Scale x Scale
           x := Column * Scale;
           y := Row * Scale;
           QRCodeBitmap.Canvas.FillRect(Rect(x, y, x + Scale, y + Scale));

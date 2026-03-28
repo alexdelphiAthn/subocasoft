@@ -22,6 +22,8 @@ object frmPrintCliCues: TfrmPrintCliCues
     Height = 281
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 256
+    ExplicitHeight = 280
     object btn4: TcxButton
       Left = 4
       Top = 4
@@ -51,14 +53,14 @@ object frmPrintCliCues: TfrmPrintCliCues
     end
     object btn3: TcxButton
       Left = 1
-      Top = 240
+      Top = 239
       Width = 195
       Height = 41
       Align = alBottom
       Caption = 'Salir'
       TabOrder = 3
       OnClick = btn3Click
-      ExplicitTop = 239
+      ExplicitTop = 238
     end
   end
   object edtCodCli: TcxTextEdit
@@ -75,7 +77,7 @@ object frmPrintCliCues: TfrmPrintCliCues
     TabOrder = 1
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]

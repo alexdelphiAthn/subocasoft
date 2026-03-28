@@ -22,6 +22,8 @@ object frmPrintPreRec: TfrmPrintPreRec
     Height = 200
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 224
+    ExplicitHeight = 199
     object btn4: TcxButton
       Left = 0
       Top = 0
@@ -51,14 +53,14 @@ object frmPrintPreRec: TfrmPrintPreRec
     end
     object btn3: TcxButton
       Left = 1
-      Top = 175
+      Top = 174
       Width = 117
       Height = 25
       Align = alBottom
       Caption = 'Salir'
       TabOrder = 3
       OnClick = btn3Click
-      ExplicitTop = 174
+      ExplicitTop = 173
     end
   end
   object edtNroFac: TcxTextEdit
@@ -127,7 +129,7 @@ object frmPrintPreRec: TfrmPrintPreRec
     Width = 58
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -694,7 +696,7 @@ object frmPrintPreRec: TfrmPrintPreRec
     Top = 136
   end
   object frxrprt2: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]

@@ -22,6 +22,8 @@ object frmPrintCliEti: TfrmPrintCliEti
     Height = 241
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 240
+    ExplicitHeight = 240
     object btn4: TcxButton
       Left = 0
       Top = 0
@@ -51,14 +53,14 @@ object frmPrintCliEti: TfrmPrintCliEti
     end
     object btn3: TcxButton
       Left = 1
-      Top = 192
+      Top = 191
       Width = 187
       Height = 49
       Align = alBottom
       Caption = 'Salir'
       TabOrder = 3
       OnClick = btn3Click
-      ExplicitTop = 191
+      ExplicitTop = 190
     end
   end
   object edtCodCli: TcxTextEdit
@@ -98,7 +100,7 @@ object frmPrintCliEti: TfrmPrintCliEti
     end
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -276,6 +278,11 @@ object frmPrintCliEti: TfrmPrintCliEti
     PDFStandard = psNone
     PDFVersion = pv17
     Left = 296
+    Top = 128
+  end
+  object frLocalizationController1: TfrLocalizationController
+    Language = 'Spanish'
+    Left = 208
     Top = 128
   end
 end

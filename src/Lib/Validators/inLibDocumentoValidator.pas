@@ -143,7 +143,7 @@ begin
   parteNumerica := Copy(cif, 2, 7);
   sumaPares := 0;
   sumaImpares := 0;
-  // Sumar d�gitos en posiciones pares (2�, 4�, 6�)
+  // Sumar dígitos en posiciones pares (2º, 4º, 6º)
   for i := 2 to 6 do
   begin
     if (i mod 2) = 0 then

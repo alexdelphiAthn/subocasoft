@@ -1,4 +1,4 @@
-unit inMtoModalCliCues;
+﻿unit inMtoModalCliCues;
 
 interface
 
@@ -23,7 +23,7 @@ uses
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
   cxCalendar, frxDesgn, cxRadioGroup, frxExportBaseDialog,
-  cxSpinEdit;
+  cxSpinEdit, frxSmartMemo, frCoreClasses;
 
 type
   TfrmPrintCliCues = class(TForm)

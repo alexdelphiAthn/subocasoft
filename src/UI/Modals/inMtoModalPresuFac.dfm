@@ -36,6 +36,8 @@ object frmGenPreFac: TfrmGenPreFac
     Height = 330
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 269
+    ExplicitHeight = 329
     object btn3: TcxButton
       Left = 0
       Top = 282

@@ -22,8 +22,8 @@ object frmPrintFac: TfrmPrintFac
     Height = 210
     Align = alRight
     TabOrder = 0
-    ExplicitLeft = 336
-    ExplicitHeight = 211
+    ExplicitLeft = 328
+    ExplicitHeight = 209
     object btnVistaPreliminar: TcxButton
       Left = -2
       Top = 0
@@ -35,7 +35,7 @@ object frmPrintFac: TfrmPrintFac
     end
     object btnSalir: TcxButton
       Left = 1
-      Top = 168
+      Top = 166
       Width = 176
       Height = 43
       Align = alBottom
@@ -48,7 +48,7 @@ object frmPrintFac: TfrmPrintFac
       Font.Style = []
       ParentFont = False
       OnClick = btnSalirClick
-      ExplicitTop = 167
+      ExplicitTop = 165
     end
   end
   object edtNroFac: TcxTextEdit
@@ -99,7 +99,7 @@ object frmPrintFac: TfrmPrintFac
     TabOrder = 5
   end
   object frxrprt1: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -128,11 +128,11 @@ object frmPrintFac: TfrmPrintFac
     Top = 24
     Datasets = <
       item
-        DataSet = dmFac.fxdsPrintFac
+        DataSet = dmPre.fxdsPrintFac
         DataSetName = 'Facturas'
       end
       item
-        DataSet = dmFac.fxdstPrintLinFac
+        DataSet = dmPre.fxdstPrintLinFac
         DataSetName = 'Lineas Facturas'
       end>
     Variables = <>
@@ -161,7 +161,7 @@ object frmPrintFac: TfrmPrintFac
         Height = 335.378170000000000000
         Top = 18.897650000000000000
         Width = 755.906000000000000000
-        DataSet = dmFac.fxdsPrintFac
+        DataSet = dmPre.fxdsPrintFac
         DataSetName = 'Facturas'
         FooterAfterEach = True
         KeepChild = True
@@ -494,7 +494,7 @@ object frmPrintFac: TfrmPrintFac
           Width = 181.417440000000000000
           Height = 188.976500000000000000
           DataField = 'QRCODE_PNG'
-          DataSet = dmFac.fxdsPrintFac
+          DataSet = dmPre.fxdsPrintFac
           DataSetName = 'Facturas'
           Frame.Typ = []
           HightQuality = True
@@ -545,7 +545,7 @@ object frmPrintFac: TfrmPrintFac
         Height = 37.795300000000000000
         Top = 377.953000000000000000
         Width = 755.906000000000000000
-        DataSet = dmFac.fxdstPrintLinFac
+        DataSet = dmPre.fxdstPrintLinFac
         DataSetName = 'Lineas Facturas'
         RowCount = 0
         object LineasFacturasneto: TfrxMemoView
@@ -2639,7 +2639,7 @@ object frmPrintFac: TfrmPrintFac
           Top = 76.047310000000000000
           Width = 445.984540000000000000
           Height = 18.897650000000000000
-          DataSet = dmFac.fxdsPrintFac
+          DataSet = dmPre.fxdsPrintFac
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -2674,7 +2674,7 @@ object frmPrintFac: TfrmPrintFac
           Width = 616.063390000000000000
           Height = 45.354360000000000000
           DataField = 'COMENTARIOS_FACTURA'
-          DataSet = dmFac.fxdsPrintFac
+          DataSet = dmPre.fxdsPrintFac
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -2724,7 +2724,7 @@ object frmPrintFac: TfrmPrintFac
     Top = 24
   end
   object fxrptSimple: TfrxReport
-    Version = '2022.3'
+    Version = '2025.1.1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -2741,11 +2741,11 @@ object frmPrintFac: TfrmPrintFac
     Top = 88
     Datasets = <
       item
-        DataSet = dmFac.fxdsPrintFac
+        DataSet = dmPre.fxdsPrintFac
         DataSetName = 'Facturas'
       end
       item
-        DataSet = dmFac.fxdstPrintLinFac
+        DataSet = dmPre.fxdstPrintLinFac
         DataSetName = 'Lineas Facturas'
       end>
     Variables = <>
@@ -2774,7 +2774,7 @@ object frmPrintFac: TfrmPrintFac
         Height = 335.378170000000000000
         Top = 18.897650000000000000
         Width = 521.575140000000000000
-        DataSet = dmFac.fxdsPrintFac
+        DataSet = dmPre.fxdsPrintFac
         DataSetName = 'Facturas'
         FooterAfterEach = True
         KeepChild = True
@@ -2975,7 +2975,7 @@ object frmPrintFac: TfrmPrintFac
           Width = 185.196970000000000000
           Height = 173.858380000000000000
           DataField = 'QRCODE_PNG'
-          DataSet = dmFac.fxdsPrintFac
+          DataSet = dmPre.fxdsPrintFac
           DataSetName = 'Facturas'
           Frame.Typ = []
           HightQuality = True
@@ -3013,7 +3013,7 @@ object frmPrintFac: TfrmPrintFac
         Height = 37.795300000000000000
         Top = 377.953000000000000000
         Width = 521.575140000000000000
-        DataSet = dmFac.fxdstPrintLinFac
+        DataSet = dmPre.fxdstPrintLinFac
         DataSetName = 'Lineas Facturas'
         RowCount = 0
         object LineasFacturasneto: TfrxMemoView
@@ -3198,7 +3198,7 @@ object frmPrintFac: TfrmPrintFac
           Top = 64.708720000000000000
           Width = 279.685220000000000000
           Height = 18.897650000000000000
-          DataSet = dmFac.fxdsPrintFac
+          DataSet = dmPre.fxdsPrintFac
           DataSetName = 'Facturas'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -3226,5 +3226,10 @@ object frmPrintFac: TfrmPrintFac
         end
       end
     end
+  end
+  object frLocalizationController1: TfrLocalizationController
+    Language = 'Spanish'
+    Left = 248
+    Top = 112
   end
 end

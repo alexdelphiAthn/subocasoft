@@ -26,18 +26,18 @@ resourcestring
    SOleGraphic = 'Operación no válida en TOleGraphic';
    SUnknownExtension = 'Extensión de archivo de imagen desconocida (.%s)';
    SUnknownClipboardFormat = 'Formato de portapapeles no compatible';
-   SUnknownStreamFormat = 'Formato de transmisi�n no compatible';
+   SUnknownStreamFormat = 'Formato de transmisión no compatible';
    SOutOfResources = 'Fuera de recursos del sistema';
    SNoCanvasHandle = 'El lienzo no permite dibujar';
    SInvalidTextFormatFlag = 'El indicador de formato de texto ''%s'' no es compatible';
-   SInvalidFrameIndex = '�ndice de marco de imagen no v�lido %d: Hay %d marcos (0-%d)';
-   SInvalidImageSize = 'Tama�o de imagen no v�lido';
-   STooManyImages = 'Demasiadas im�genes';
+   SInvalidFrameIndex = 'Índice de marco de imagen no válido %d: Hay %d marcos (0-%d)';
+   SInvalidImageSize = 'Tamaño de imagen no válido';
+   STooManyImages = 'Demasiadas imágenes';
    SDimsDoNotMatch = 'Las dimensiones de la imagen no coinciden con las dimensiones de la lista de imágenes';
    SInvalidImageList = 'Lista de imágenes no válida';
    SReplaceImage = 'No se puede reemplazar la imagen';
    SInsertImage = 'No se puede insertar la imagen';
-   SImageIndexError = '�ndice de lista de imágenes no válido';
+   SImageIndexError = 'Índice de lista de imágenes no válido';
    SImageReadFail = 'Error al leer los datos de ImageList de la secuencia';
    SImageWriteFail = 'Error al escribir los datos de ImageList en la transmisión';
    SWindowDCError = 'Error al crear el contexto del dispositivo de ventana';
@@ -102,15 +102,15 @@ resourcestring
    SVBitmaps = 'Mapas de bits';
    SVTIFFImages = 'Imágenes TIFF';
 {$IF DEFINED(CLR)}
-   SVJPGImages = 'Im�genes JPEG';
-   SVPNGImages = 'Im�genes PNG';
-   SVGIFImages = 'Im�genes GIF';
+   SVJPGImages = 'Imágenes JPEG';
+   SVPNGImages = 'Imágenes PNG';
+   SVGIFImages = 'Imágenes GIF';
 {$ENDIF}
    SGridTooLarge = 'Cuadrícula demasiado grande para su funcionamiento';
    STooManyDeleted = 'Demasiadas filas o columnas eliminadas';
-   SIndexOutOfRange = '�ndice de cuadrícula fuera de rango';
-SFixedColTooBig = 'El n�mero de columnas fijas debe ser menor que el número de columnas';
-   SFixedRowTooBig = 'El n�mero de filas fijas debe ser menor que el número de filas';
+   SIndexOutOfRange = 'Índice de cuadrícula fuera de rango';
+SFixedColTooBig = 'El número de columnas fijas debe ser menor que el número de columnas';
+   SFixedRowTooBig = 'El número de filas fijas debe ser menor que el número de filas';
    SInvalidStringGridOp = 'No se pueden insertar ni eliminar filas de la cuadrícula';
    SInvalidEnumValue = 'Valor de enumeración no válido';
    SInvalidNumber = 'Valor numérico no válido';
@@ -168,7 +168,7 @@ SFixedColTooBig = 'El n�mero de columnas fijas debe ser menor que el número d
    srNone = '(Ninguno)';
    SOutOfRange = 'El valor debe estar entre %dy %d';
 
-   SDateEncodeError = 'Argumento no válido para la codificaci�n de fecha';
+   SDateEncodeError = 'Argumento no válido para la codificación de fecha';
    SDefaultFilter = 'Todos los archivos (*.*)|*.*';
    sAllFilter = 'Todos';
    SNoVolumeLabel = ': [ - sin etiqueta de volumen - ]';
@@ -204,7 +204,7 @@ SFixedColTooBig = 'El n�mero de columnas fijas debe ser menor que el número d
 
    SInvalidRegType = 'Tipo de datos no válido para ''%s''';
 
-   SUnknownConversion = 'Extensi�n de archivo de conversión RichEdit desconocida (.%s)';
+   SUnknownConversion = 'Extensión de archivo de conversión RichEdit desconocida (.%s)';
    SDuplicateMenus = 'El menú ''%s'' ya está siendo utilizado por otro formulario';
 
    SPictureLabel = 'Imagen:';

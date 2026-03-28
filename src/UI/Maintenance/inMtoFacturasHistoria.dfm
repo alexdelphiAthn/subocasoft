@@ -3,8 +3,8 @@ object frmFacturasHistoria: TfrmFacturasHistoria
   Top = 0
   BorderIcons = [biSystemMenu]
   Caption = 'Historia'
-  ClientHeight = 453
-  ClientWidth = 470
+  ClientHeight = 452
+  ClientWidth = 466
   Color = clWindow
   Ctl3D = False
   Font.Charset = DEFAULT_CHARSET
@@ -25,7 +25,7 @@ object frmFacturasHistoria: TfrmFacturasHistoria
     DataBinding.DataField = 'DESCRIPCION_HISTORIA'
     Properties.ScrollBars = ssVertical
     TabOrder = 0
-    Height = 453
-    Width = 470
+    Height = 452
+    Width = 466
   end
 end

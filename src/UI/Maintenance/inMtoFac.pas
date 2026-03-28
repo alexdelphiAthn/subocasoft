@@ -758,7 +758,7 @@ begin
      (dsTablaG.DataSet.FieldByName('FASE_CONSOLIDACION_FACTURA').AsString =
                                                                 'OFFLINE')) then
   begin
-    ShowMessage('Solo se pueden cancelar facturas consolidadas y enviadas');
+    ShowMessage('Sólo se pueden cancelar facturas consolidadas y enviadas');
     Exit;
   end;
   // Verificar que no esté ya cancelada
@@ -948,7 +948,7 @@ begin
                                                                  'VERIFICADA');
   if not bPuedeConsultar then
   begin
-    ShowMessage('Solo se puede consultar el estado de facturas consolidadas');
+    ShowMessage('Sólo se puede consultar el estado de facturas consolidadas');
   end
   else
   begin

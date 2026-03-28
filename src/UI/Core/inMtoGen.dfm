@@ -2,8 +2,8 @@ object frmMtoGen: TfrmMtoGen
   Left = 0
   Top = 119
   Caption = 'fT'
-  ClientHeight = 577
-  ClientWidth = 1173
+  ClientHeight = 576
+  ClientWidth = 1169
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -24,8 +24,8 @@ object frmMtoGen: TfrmMtoGen
   object pButtonPage: TPanel
     Left = 0
     Top = 0
-    Width = 975
-    Height = 577
+    Width = 971
+    Height = 576
     Align = alClient
     ParentBackground = False
     TabOrder = 1
@@ -33,10 +33,10 @@ object frmMtoGen: TfrmMtoGen
     ExplicitHeight = 579
   end
   object pButtonRightBar: TPanel
-    Left = 975
+    Left = 971
     Top = 0
     Width = 198
-    Height = 577
+    Height = 576
     Align = alRight
     ParentBackground = False
     TabOrder = 2
@@ -263,8 +263,8 @@ object frmMtoGen: TfrmMtoGen
   object pcPantalla: TPageControl
     Left = 0
     Top = 0
-    Width = 975
-    Height = 577
+    Width = 971
+    Height = 576
     ActivePage = tsLista
     Align = alClient
     Font.Charset = ANSI_CHARSET
@@ -283,8 +283,8 @@ object frmMtoGen: TfrmMtoGen
       object cxGrdPrincipal: TcxGrid
         Left = 0
         Top = 43
-        Width = 971
-        Height = 495
+        Width = 967
+        Height = 494
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -351,7 +351,7 @@ object frmMtoGen: TfrmMtoGen
       object pnTopGrid: TPanel
         Left = 0
         Top = 0
-        Width = 971
+        Width = 967
         Height = 43
         Align = alTop
         BevelOuter = bvNone
@@ -359,7 +359,7 @@ object frmMtoGen: TfrmMtoGen
         ParentBackground = False
         ParentCtl3D = False
         TabOrder = 0
-        ExplicitWidth = 975
+        ExplicitWidth = 971
         object dxbvl1: TdxBevel
           Left = 5
           Top = 2

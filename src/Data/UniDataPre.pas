@@ -1,11 +1,11 @@
-unit UniDataPre;
+﻿unit UniDataPre;
 
 interface
 
 uses
   SysUtils, Classes,  DB,
    inMtoPrincipal, frxClass, frxDBSet,
-   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni;
+   Windows, Dialogs, System.Variants, MemDS, DBAccess, Uni, frCoreClasses;
 
 type
   TdmPre = class(TDataModule)

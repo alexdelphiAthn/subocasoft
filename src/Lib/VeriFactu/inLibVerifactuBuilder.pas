@@ -37,7 +37,7 @@ type
     IsSpanish: Boolean;
     function ToJSON: TJSONObject;
   end;
-  // Record para datos de subsanaci�n
+  // Record para datos de subsanación
   TSubsanacionData = record
     NumeroFactura: string;
     FechaFactura: TDateTime;
@@ -63,14 +63,14 @@ type
   TVerifactuJSONBuilder = class
   private
     FConnection: TUniConnection;
-    // M�todos auxiliares
+    // Métodos auxiliares
     function GetRecipientData(const ANroFactura,
                              ASerieFactura: string): TRecipientData;
     function CreateVatLinesArray(const AVatConfigs: array of TVatConfig;
                                 ATotalLiquido: Double): TJSONArray;
     function DetermineInvoiceType(AEsSimpl: Boolean): TInvoiceType;
     function CalculateAmount(ABase, ARate: Double): Double;
-    // M�todos espec�ficos para subsanaci�n
+    // Métodos específicos para subsanación
     function CreateSubsanacionRecipient(const AData: TSubsanacionData):
                                                                     TJSONObject;
     function CreateSubsanacionVatLines(ATotalFactura: Double): TJSONArray;
@@ -80,7 +80,7 @@ type
     // M�todo principal mejorado
     function BuildJSON(const ANumeroFactura, ASerieFactura: string;
                       const AVatConfigs: array of TVatConfig): string;
-    // Nuevo m�todo para subsanaci�n
+    // Nuevo m�todo para subsanación
     function BuildSubsanacionJSON(const AData: TSubsanacionData): string;
     // M�todos de conveniencia para casos comunes
     function BuildStandardJSON(const ANumeroFactura,
@@ -480,7 +480,7 @@ begin
   finally
     InvoiceQuery.Free;
   end;
-  // Crear consulta local para descripci�n de l�neas
+  // Crear consulta local para descripción de líneas
   LinesQuery := TUniQuery.Create(nil);
   try
     LinesQuery.Connection := FConnection;
@@ -577,7 +577,7 @@ begin
   VatConfigs[0] := TVatConfig.ForIntraEUVAT;
   Result := BuildJSON(ANumeroFactura, ASerieFactura, VatConfigs);
 end;
-// Funci�n de compatibilidad global
+// Función de compatibilidad global
 function BuildInvoiceJSON(NumeroFactura, SerieFactura: String): String;
 var
   Builder: TVerifactuJSONBuilder;

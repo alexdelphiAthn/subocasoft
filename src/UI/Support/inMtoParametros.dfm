@@ -4,8 +4,8 @@ inherited frmMtoParametros: TfrmMtoParametros
   ClientHeight = 372
   ClientWidth = 842
   Font.Height = -17
-  ExplicitWidth = 858
-  ExplicitHeight = 411
+  ExplicitWidth = 854
+  ExplicitHeight = 410
   TextHeight = 19
   inherited pButtonPage: TPanel
     Width = 684
@@ -14,8 +14,8 @@ inherited frmMtoParametros: TfrmMtoParametros
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitWidth = 688
-    ExplicitHeight = 373
+    ExplicitWidth = 680
+    ExplicitHeight = 371
   end
   inherited pButtonRightBar: TPanel
     Left = 684
@@ -25,11 +25,11 @@ inherited frmMtoParametros: TfrmMtoParametros
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ExplicitLeft = 688
+    ExplicitLeft = 680
     ExplicitWidth = 158
-    ExplicitHeight = 373
+    ExplicitHeight = 371
     inherited pButtonGen: TPanel
-      Top = 245
+      Top = 244
       Width = 156
       Height = 127
       Margins.Left = 4
@@ -38,7 +38,7 @@ inherited frmMtoParametros: TfrmMtoParametros
       Margins.Bottom = 4
       Constraints.MinHeight = 80
       Constraints.MinWidth = 99
-      ExplicitTop = 245
+      ExplicitTop = 243
       ExplicitWidth = 156
       ExplicitHeight = 127
       inherited sbGrabar: TSpeedButton
@@ -154,28 +154,28 @@ inherited frmMtoParametros: TfrmMtoParametros
     Margins.Right = 4
     Margins.Bottom = 4
     Font.Height = -17
-    ExplicitWidth = 688
-    ExplicitHeight = 373
+    ExplicitWidth = 680
+    ExplicitHeight = 371
     inherited tsLista: TTabSheet
       Margins.Left = 4
       Margins.Top = 4
       Margins.Right = 4
       Margins.Bottom = 4
       ExplicitTop = 33
-      ExplicitWidth = 680
-      ExplicitHeight = 336
+      ExplicitWidth = 676
+      ExplicitHeight = 335
       inherited cxGrdPrincipal: TcxGrid
         Top = 34
-        Width = 680
-        Height = 302
+        Width = 676
+        Height = 301
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
         Font.Height = -17
         ExplicitTop = 34
-        ExplicitWidth = 680
-        ExplicitHeight = 302
+        ExplicitWidth = 672
+        ExplicitHeight = 300
         inherited cxGrdDBTabPrin: TcxGridDBTableView
           FilterRow.SeparatorWidth = 5
           FixedDataRows.SeparatorWidth = 5
@@ -197,13 +197,13 @@ inherited frmMtoParametros: TfrmMtoParametros
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 680
+        Width = 676
         Height = 34
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 684
+        ExplicitWidth = 672
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -262,8 +262,8 @@ inherited frmMtoParametros: TfrmMtoParametros
       Margins.Bottom = 4
       Font.Height = -12
       ExplicitTop = 33
-      ExplicitWidth = 680
-      ExplicitHeight = 336
+      ExplicitWidth = 676
+      ExplicitHeight = 335
     end
   end
   inherited dsTablaG: TDataSource

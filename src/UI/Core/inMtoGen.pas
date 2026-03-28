@@ -180,7 +180,7 @@ begin
   if ( dsTablaG.DataSet.State = dsInsert ) or
      ( dsTablaG.DataSet.State = dsEdit ) then
   begin
-     if ( Application.MessageBox( '�Desea cancelar la entrada de datos?',
+     if ( Application.MessageBox( '¿Desea cancelar la entrada de datos?',
                                  'Mensaje Advertencia',
                                  MB_YESNO ) = ID_YES ) then
        Close;

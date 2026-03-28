@@ -1,4 +1,4 @@
-unit inMtoPre;
+﻿unit inMtoPre;
 
 interface
 
@@ -356,13 +356,13 @@ end;
 
 procedure TfrmMtoPre.SetButtonHints;
 begin
-  // Hints descriptivos y claros para cada bot�n
+  // Hints descriptivos y claros para cada botón
   btnNuevo.Hint := 'Cargar imagen por defecto' + #13#10 +
                    'Reemplaza el dibujo actual con la imagen inicial limpia';
   btnNuevo.ShowHint := True;
   btnResetear.Hint := 'Restaurar imagen guardada' + #13#10 +
                       'Descarta los cambios actuales y vuelve a la' +
-                                                      '�ltima versi�n guardada';
+                                                      'última versión guardada';
   btnResetear.ShowHint := True;
   btnGuardar.Hint := 'Guardar en base de datos' + #13#10 +
                      'Guarda permanentemente los cambios' +
@@ -375,9 +375,9 @@ begin
                     'Borra partes del dibujo restaurando la' +
                                                   'imagen original en esa zona';
   btnBorrar.ShowHint := True;
-  btnLinea.Hint := 'Dibujar l�neas rectas' + #13#10 +
+  btnLinea.Hint := 'Dibujar líneas rectas' + #13#10 +
                    'Haz clic en el punto inicial, luego en el punto final' +
-                                                  'para trazar una l�nea recta';
+                                                  'para trazar una línea recta';
   btnLinea.ShowHint := True;
 
   btnColorRojo.Hint := 'Cambiar color a rojo' + #13#10 +
@@ -389,11 +389,11 @@ begin
   btnColorAzul.Hint := 'Cambiar color a azul' + #13#10 +
                                         'Selecciona el color azul para dibujar';
   btnColorAzul.ShowHint := True;
-  btnCirculo.Hint := 'Dibujar c�rculos' + #13#10 +
-                                    'Haz clic y arrastra para crear un c�rculo';
+  btnCirculo.Hint := 'Dibujar círculos' + #13#10 +
+                                    'Haz clic y arrastra para crear un círculo';
   btnCirculo.ShowHint := True;
-  btnRectangulo.Hint := 'Dibujar rect�ngulos' + #13#10 +
-                                 'Haz clic y arrastra para crear un rect�ngulo';
+  btnRectangulo.Hint := 'Dibujar rectángulos' + #13#10 +
+                                 'Haz clic y arrastra para crear un rectángulo';
   btnRectangulo.ShowHint := True;
   btnCruz.Hint := 'Dibujar cruz (X)' + #13#10 +
                                       'Haz clic y arrastra para crear una cruz';
@@ -459,7 +459,7 @@ begin
     formulario.dsData.DataSet.Open;
     formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
     PonerAnchosTitulos(formulario.tvGrdDBTabPrin, 'Paises');
-    formulario.Caption := 'B�squeda de Paises en Presupuestos de Cliente';
+    formulario.Caption := 'Búsqueda de Paises en Presupuestos de Cliente';
     formulario.ShowModal;
   finally
       inherited;
@@ -569,7 +569,7 @@ begin
     formulario.dsData.DataSet.Open;
     formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
     PonerAnchosTitulos(formulario.tvGrdDBTabPrin, 'Clientes');
-    formulario.Caption := 'B�squeda de Pacientes en Presupuestos';
+    formulario.Caption := 'Búsqueda de Pacientes en Presupuestos';
     formulario.ShowModal;
   finally
       inherited;
@@ -726,7 +726,7 @@ begin
       formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
       PonerAnchosTitulos(formulario.tvGrdDBTabPrin, 'Productos');
       formulario.Caption :=
-                          'B�squeda de Tratamientos en Lineas de Presupuestos';
+                          'Búsqueda de Tratamientos en Lineas de Presupuestos';
       formulario.ShowModal;
     finally
      inherited;
@@ -772,7 +772,7 @@ begin
       formulario.dsData.DataSet := dmmPre.unqryDocDataFac;
       formulario.dsData.DataSet.Open;
       formulario.tvGrdDBTabPrin.DataController.CreateAllItems();
-      formulario.Caption := 'B�squeda de Odont�logos en Lineas de Facturas';
+      formulario.Caption := 'Búsqueda de Odontólogos en Lineas de Facturas';
       formulario.ShowModal;
     finally
       inherited;
@@ -1000,7 +1000,7 @@ begin
         JpegImage.LoadFromStream(Stream);
         FDisplayBitmap.Assign(JpegImage);
         FOriginalBitmap.Assign(JpegImage);
-        // Actualizar visualizaci�n sin forzar
+        // Actualizar visualización sin forzar
         if Assigned(pbDibujo) then
           pbDibujo.Invalidate;
         FModified := False;
@@ -1194,11 +1194,11 @@ begin
   Y1 := Max(0, Min(Y1, FDisplayBitmap.Height - 1));
   X2 := Max(0, Min(X2, FDisplayBitmap.Width - 1));
   Y2 := Max(0, Min(Y2, FDisplayBitmap.Height - 1));
-  // Configurar l�piz para l�nea
+  // Configurar lápiz para línea
   FDisplayBitmap.Canvas.Pen.Color := FCurrentColor;
   FDisplayBitmap.Canvas.Pen.Width := 3;
   FDisplayBitmap.Canvas.Pen.Style := psSolid;
-  // Dibujar l�nea
+  // Dibujar línea
   FDisplayBitmap.Canvas.MoveTo(X1, Y1);
   FDisplayBitmap.Canvas.LineTo(X2, Y2);
   FModified := True;
@@ -1210,19 +1210,19 @@ begin
   if not Assigned(FDisplayBitmap) then
     Exit;
 
-  // Asegurar que las coordenadas est�n dentro del bitmap
+  // Asegurar que las coordenadas estén dentro del bitmap
   X1 := Max(0, Min(X1, FDisplayBitmap.Width - 1));
   Y1 := Max(0, Min(Y1, FDisplayBitmap.Height - 1));
   X2 := Max(0, Min(X2, FDisplayBitmap.Width - 1));
   Y2 := Max(0, Min(Y2, FDisplayBitmap.Height - 1));
 
-  // Configurar l�piz para c�rculo
+  // Configurar lápiz para círculo
   FDisplayBitmap.Canvas.Pen.Color := FCurrentColor;
   FDisplayBitmap.Canvas.Pen.Width := 3;
   FDisplayBitmap.Canvas.Pen.Style := psSolid;
   FDisplayBitmap.Canvas.Brush.Style := bsClear; // Solo contorno
 
-  // Dibujar c�rculo/elipse
+  // Dibujar círculo/elipse
   FDisplayBitmap.Canvas.Ellipse(X1, Y1, X2, Y2);
 
   FModified := True;
@@ -1234,19 +1234,19 @@ begin
   if not Assigned(FDisplayBitmap) then
     Exit;
 
-  // Asegurar que las coordenadas est�n dentro del bitmap
+  // Asegurar que las coordenadas estén dentro del bitmap
   X1 := Max(0, Min(X1, FDisplayBitmap.Width - 1));
   Y1 := Max(0, Min(Y1, FDisplayBitmap.Height - 1));
   X2 := Max(0, Min(X2, FDisplayBitmap.Width - 1));
   Y2 := Max(0, Min(Y2, FDisplayBitmap.Height - 1));
 
-  // Configurar l�piz para rect�ngulo
+  // Configurar lápiz para rectángulo
   FDisplayBitmap.Canvas.Pen.Color := FCurrentColor;
   FDisplayBitmap.Canvas.Pen.Width := 3;
   FDisplayBitmap.Canvas.Pen.Style := psSolid;
   FDisplayBitmap.Canvas.Brush.Style := bsClear; // Solo contorno
 
-  // Dibujar rect�ngulo
+  // Dibujar rectángulo
   FDisplayBitmap.Canvas.Rectangle(X1, Y1, X2, Y2);
 
   FModified := True;
@@ -1258,22 +1258,22 @@ begin
   if not Assigned(FDisplayBitmap) then
     Exit;
 
-  // Asegurar que las coordenadas est�n dentro del bitmap
+  // Asegurar que las coordenadas estén dentro del bitmap
   X1 := Max(0, Min(X1, FDisplayBitmap.Width - 1));
   Y1 := Max(0, Min(Y1, FDisplayBitmap.Height - 1));
   X2 := Max(0, Min(X2, FDisplayBitmap.Width - 1));
   Y2 := Max(0, Min(Y2, FDisplayBitmap.Height - 1));
 
-  // Configurar l�piz para cruz
+  // Configurar lápiz para cruz
   FDisplayBitmap.Canvas.Pen.Color := FCurrentColor;
   FDisplayBitmap.Canvas.Pen.Width := 3;
   FDisplayBitmap.Canvas.Pen.Style := psSolid;
 
-  // Dibujar l�nea diagonal principal (\)
+  // Dibujar línea diagonal principal (\)
   FDisplayBitmap.Canvas.MoveTo(X1, Y1);
   FDisplayBitmap.Canvas.LineTo(X2, Y2);
 
-  // Dibujar l�nea diagonal secundaria (/)
+  // Dibujar línea diagonal secundaria (/)
   FDisplayBitmap.Canvas.MoveTo(X2, Y1);
   FDisplayBitmap.Canvas.LineTo(X1, Y2);
 
@@ -1293,15 +1293,15 @@ begin
       btnNuevoClick(Sender);
 end;
 
-// Implementaci�n de las funciones de conversi�n de coordenadas
-// Funci�n para obtener el rect�ngulo donde se muestra la imagen
+// Implementación de las funciones de conversión de coordenadas
+// Función para obtener el rectángulo donde se muestra la imagen
 function TfrmMtoPre.GetImageRect: TRect;
 var
   ImageWidth, ImageHeight: Integer;
   ScaleX, ScaleY, Scale: Double;
   DisplayWidth, DisplayHeight: Integer;
 begin
-  // Inicializar resultado vac�o
+  // Inicializar resultado vacío
   Result := Rect(0, 0, 0, 0);
   // Verificaciones de seguridad
   if not Assigned(FDisplayBitmap) or FDisplayBitmap.Empty or
@@ -1312,7 +1312,7 @@ begin
   ImageHeight := FDisplayBitmap.Height;
   if (ImageWidth <= 0) or (ImageHeight <= 0) then
     Exit;
-  // Calcular escala manteniendo proporci�n
+  // Calcular escala manteniendo proporción
   ScaleX := pbDibujo.Width / ImageWidth;
   ScaleY := pbDibujo.Height / ImageHeight;
   Scale := Min(ScaleX, ScaleY);
@@ -1332,15 +1332,15 @@ var
   ScaleX, ScaleY: Double;
 begin
   Result := Point(-1, -1);
-  // Verificar que tenemos bitmap v�lido
+  // Verificar que tenemos bitmap válido
   if not Assigned(FDisplayBitmap) or FDisplayBitmap.Empty then
     Exit;
-  // Obtener el rect�ngulo donde se muestra la imagen
+  // Obtener el rectángulo donde se muestra la imagen
   ImageRect := GetImageRect;
-  // Verificar que el rect�ngulo es v�lido
+  // Verificar que el rectángulo es válido
   if (ImageRect.Width <= 0) or (ImageRect.Height <= 0) then
     Exit;
-  // Verificar que el clic est� dentro del �rea de la imagen
+  // Verificar que el clic está dentro del área de la imagen
   if (X < ImageRect.Left) or (X >= ImageRect.Right) or
      (Y < ImageRect.Top) or (Y >= ImageRect.Bottom) then
     Exit;
@@ -1357,7 +1357,7 @@ end;
 
 procedure TfrmMtoPre.RestoreOriginalImage;
 begin
-  // Verificar que tenemos una imagen original v�lida
+  // Verificar que tenemos una imagen original válida
   if not Assigned(FOriginalBitmap) or FOriginalBitmap.Empty then
   begin
     // Si no hay imagen original, cargar la imagen por defecto
@@ -1378,7 +1378,7 @@ begin
   begin
     // Restaurar desde la imagen original guardada
     FDisplayBitmap.Assign(FOriginalBitmap);
-    ShowMessage('Imagen restaurada a la versi�n original.');
+    ShowMessage('Imagen restaurada a la versión original.');
   end;
 
   // Actualizar la visualizaci�n en el TPaintBox
@@ -1499,7 +1499,7 @@ begin
         end
         else
         begin
-          // Segundo clic: establecer punto final y dibujar l�nea
+          // Segundo clic: establecer punto final y dibujar línea
           FLineEndX := BitmapPoint.X;
           FLineEndY := BitmapPoint.Y;
           DrawLineOnBitmap(FLineStartX, FLineStartY, FLineEndX, FLineEndY);
@@ -1510,7 +1510,7 @@ begin
         end;
       end;
 
-      // NUEVOS casos para formas geom�tricas
+      // NUEVOS casos para formas geométricas
       dmCircle, dmRectangle, dmCross:
       begin
         if not FIsDrawingShape then
@@ -1556,7 +1556,7 @@ var
 begin
   NeedUpdate := False;
   BitmapPoint := MouseToBitmapCoords(X, Y);
-  // Preview de l�nea mientras se est� dibujando
+  // Preview de línea mientras se está dibujando
   if (FDrawMode = dmLine) and FIsDrawingLine and
      (BitmapPoint.X <> -1) and (BitmapPoint.Y <> -1) then
   begin
@@ -1597,7 +1597,7 @@ begin
   begin
     if (BitmapPoint.X <> -1) and (BitmapPoint.Y <> -1) then
     begin
-      // Solo dibujar si la posici�n cambi� lo suficiente
+      // Solo dibujar si la posición cambió lo suficiente
       if (Abs(BitmapPoint.X - FLastX) > 1) or (Abs(BitmapPoint.Y - FLastY) > 1)
                                                                             then
       begin
@@ -1628,7 +1628,7 @@ begin
   NeedUpdate := False;
   BitmapPoint := MouseToBitmapCoords(X, Y);
 
-  // Preview de l�nea mientras se est� dibujando
+  // Preview de línea mientras se está dibujando
   if (FDrawMode = dmLine) and FIsDrawingLine and
      (BitmapPoint.X <> -1) and (BitmapPoint.Y <> -1) then
   begin
@@ -1641,7 +1641,7 @@ begin
     end;
   end;
 
-  // NUEVO: Preview de formas geom�tricas mientras se est�n dibujando
+  // NUEVO: Preview de formas geométricas mientras se están dibujando
   if (FDrawMode in [dmCircle, dmRectangle, dmCross]) and FIsDrawingShape and
      (BitmapPoint.X <> -1) and (BitmapPoint.Y <> -1) then
   begin
@@ -1730,7 +1730,7 @@ end;
 //  DestRect := GetImageRect;
 //  if (DestRect.Width <= 0) or (DestRect.Height <= 0) then
 //    Exit;
-//  // Si estamos dibujando una l�nea, mostrar preview
+//  // Si estamos dibujando una línea, mostrar preview
 //  if (FDrawMode = dmLine) and FIsDrawingLine and
 //     (FLineStartX <> -1) and (FLineStartY <> -1) then
 //  begin
@@ -1738,7 +1738,7 @@ end;
 //    TempBitmap := TBitmap.Create;
 //    try
 //      TempBitmap.Assign(FDisplayBitmap);
-//      // Dibujar l�nea de preview
+//      // Dibujar línea de preview
 //      TempBitmap.Canvas.Pen.Color := clRed;
 //      TempBitmap.Canvas.Pen.Width := 2;
 //      TempBitmap.Canvas.Pen.Style := psDot;
@@ -1761,7 +1761,7 @@ end;
 //    end;
 //  end;
 //
-//  // Dibujar fantasma del borrador si est� activo
+//  // Dibujar fantasma del borrador si está activo
 //  if FShowGhost and (FDrawMode = dmErase) and
 //     (FGhostX >= DestRect.Left) and (FGhostX < DestRect.Right) and
 //     (FGhostY >= DestRect.Top) and (FGhostY < DestRect.Bottom) then
@@ -1770,7 +1770,7 @@ end;
 //    PaintBox.Canvas.Pen.Color := clRed;
 //    PaintBox.Canvas.Pen.Style := psDot;
 //    PaintBox.Canvas.Pen.Width := 1;
-//    // Dibujar c�rculo del borrador
+//    // Dibujar círculo del borrador
 //    PaintBox.Canvas.Ellipse(
 //      FGhostX - 12, FGhostY - 12,
 //      FGhostX + 12, FGhostY + 12
@@ -1795,7 +1795,7 @@ begin
   if not Assigned(FDisplayBitmap) or FDisplayBitmap.Empty then
     Exit;
 
-  // Obtener rect�ngulo de destino
+  // Obtener rectángulo de destino
   DestRect := GetImageRect;
   if (DestRect.Width <= 0) or (DestRect.Height <= 0) then
     Exit;
@@ -1804,7 +1804,7 @@ begin
   ScaleX := DestRect.Width / FDisplayBitmap.Width;
   ScaleY := DestRect.Height / FDisplayBitmap.Height;
 
-  // Mostrar preview seg�n el modo activo
+  // Mostrar preview según el modo activo
   if ((FDrawMode = dmLine) and FIsDrawingLine and (FLineStartX <> -1) and (FLineStartY <> -1)) or
      ((FDrawMode in [dmCircle, dmRectangle, dmCross]) and FIsDrawingShape and
       (FShapeStartX <> -1) and (FShapeStartY <> -1)) then
@@ -1845,10 +1845,10 @@ begin
 
         dmCross:
         begin
-          // Dibujar l�nea diagonal principal (\)
+          // Dibujar línea diagonal principal (\)
           TempBitmap.Canvas.MoveTo(FShapeStartX, FShapeStartY);
           TempBitmap.Canvas.LineTo(FShapeEndX, FShapeEndY);
-          // Dibujar l�nea diagonal secundaria (/)
+          // Dibujar línea diagonal secundaria (/)
           TempBitmap.Canvas.MoveTo(FShapeEndX, FShapeStartY);
           TempBitmap.Canvas.LineTo(FShapeStartX, FShapeEndY);
         end;
@@ -1871,7 +1871,7 @@ begin
     end;
   end;
 
-  // Dibujar fantasma del borrador si est� activo
+  // Dibujar fantasma del borrador si está activo
   if FShowGhost and (FDrawMode = dmErase) and
      (FGhostX >= DestRect.Left) and (FGhostX < DestRect.Right) and
      (FGhostY >= DestRect.Top) and (FGhostY < DestRect.Bottom) then
@@ -1880,7 +1880,7 @@ begin
     PaintBox.Canvas.Pen.Color := clGray;
     PaintBox.Canvas.Pen.Style := psDot;
     PaintBox.Canvas.Pen.Width := 1;
-    // Dibujar c�rculo del borrador
+    // Dibujar círculo del borrador
     PaintBox.Canvas.Ellipse(
       FGhostX - 12, FGhostY - 12,
       FGhostX + 12, FGhostY + 12
@@ -1894,7 +1894,7 @@ begin
 
 end;
 
-// Funci�n optimizada para actualizar la pantalla sin parpadeo
+// Función optimizada para actualizar la pantalla sin parpadeo
 procedure TfrmMtoPre.UpdateDisplay;
 begin
   // Solo invalidar si realmente es necesario
@@ -1911,7 +1911,7 @@ var
   Stream: TMemoryStream;
   JpegImage: TJPEGImage;
 begin
-  // Verificar que tenemos un bitmap v�lido para guardar
+  // Verificar que tenemos un bitmap válido para guardar
   if not Assigned(FDisplayBitmap) or FDisplayBitmap.Empty then
   begin
     ShowMessage('No hay imagen para guardar.');
@@ -1933,21 +1933,21 @@ begin
   JpegImage := TJPEGImage.Create;
   try
     try
-      // Convertir el bitmap a JPEG para optimizar el tama�o
+      // Convertir el bitmap a JPEG para optimizar el tamaño
       JpegImage.Assign(FDisplayBitmap);
-      JpegImage.CompressionQuality := 95;  // Buena calidad, tama�o razonable
+      JpegImage.CompressionQuality := 95;  // Buena calidad, tamaño razonable
       JpegImage.Compress;
       // Guardar el JPEG en el stream
       JpegImage.SaveToStream(Stream);
       Stream.Position := 0;
-      // Verificar que se gener� contenido
+      // Verificar que se generó contenido
       if Stream.Size = 0 then
       begin
         ShowMessage('Error: No se pudo generar la imagen para guardar.');
         Exit;
       end;
 
-      // Abrir el dataset si no est� abierto
+      // Abrir el dataset si no está abierto
       if not FDataSource.DataSet.Active then
       begin
         try
@@ -1961,7 +1961,7 @@ begin
         end;
       end;
 
-      // Poner el dataset en modo edici�n
+      // Poner el dataset en modo edición
       try
         if FDataSource.DataSet.State = dsBrowse then
           FDataSource.DataSet.Edit;
@@ -1984,11 +1984,11 @@ begin
         // Marcar que no hay cambios pendientes
         FModified := False;
         UpdateButtonStates;
-        //ShowMessage('Gr�fico guardado correctamente en la base de datos.');
+        //ShowMessage('Gráfico guardado correctamente en la base de datos.');
       except
         on E: Exception do
         begin
-          // Cancelar la edici�n en caso de error
+          // Cancelar la edición en caso de error
           try
             FDataSource.DataSet.Cancel;
           except
@@ -2064,7 +2064,7 @@ begin
       // Marcar que no hay cambios pendientes
       FModified := False;
       UpdateButtonStates;
-      ShowMessage('Gr�fico cargado correctamente desde la base de datos.');
+      ShowMessage('Gráfico cargado correctamente desde la base de datos.');
     except
       on E: Exception do
       begin

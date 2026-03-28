@@ -36,6 +36,8 @@ object frmGenFacRec: TfrmGenFacRec
     Height = 271
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 320
+    ExplicitHeight = 270
     object btn3: TcxButton
       Left = 0
       Top = 274
@@ -68,6 +70,8 @@ object frmGenFacRec: TfrmGenFacRec
     Align = alBottom
     Caption = 'Borrador de Venta Generado'
     TabOrder = 10
+    ExplicitTop = 270
+    ExplicitWidth = 477
     Height = 67
     Width = 481
     object edtNumFacAbono: TcxTextEdit

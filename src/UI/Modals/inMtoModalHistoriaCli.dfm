@@ -26,6 +26,8 @@ object frmModalHistoriaCli: TfrmModalHistoriaCli
     DataBinding.DataSource = DMClientes.dsHistoria
     Properties.ScrollBars = ssVertical
     TabOrder = 0
+    ExplicitWidth = 466
+    ExplicitHeight = 452
     Height = 453
     Width = 470
   end

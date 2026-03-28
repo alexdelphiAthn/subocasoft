@@ -22,6 +22,8 @@ object frmNotaLegal: TfrmNotaLegal
     Height = 604
     Align = alRight
     TabOrder = 0
+    ExplicitLeft = 712
+    ExplicitHeight = 603
     object btnSalir: TcxButton
       Left = 1
       Top = 546
@@ -31,6 +33,7 @@ object frmNotaLegal: TfrmNotaLegal
       Caption = 'Salir'
       TabOrder = 0
       OnClick = btnSalirClick
+      ExplicitTop = 545
     end
   end
   object mse1: TSynEdit
@@ -46,12 +49,15 @@ object frmNotaLegal: TfrmNotaLegal
     Font.Style = []
     Font.Quality = fqClearTypeNatural
     TabOrder = 1
+    CodeFolding.IndentGuidesColor = clBlack
+    CodeFolding.IndentGuides = False
     UseCodeFolding = False
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clWindowText
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Consolas'
     Gutter.Font.Style = []
+    Gutter.Width = 0
     Gutter.Bands = <
       item
         Kind = gbkMarks
@@ -240,5 +246,8 @@ object frmNotaLegal: TfrmNotaLegal
     RightEdgeColor = clWhite
     ScrollbarAnnotations = <>
     WordWrap = True
+    FontSmoothing = fsmNone
+    ExplicitWidth = 712
+    ExplicitHeight = 603
   end
 end

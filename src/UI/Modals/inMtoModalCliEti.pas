@@ -1,4 +1,4 @@
-unit inMtoModalCliEti;
+﻿unit inMtoModalCliEti;
 
 interface
 
@@ -23,7 +23,7 @@ uses
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
   cxCalendar, frxDesgn, cxGroupBox, cxRadioGroup, frxExportBaseDialog,
-  cxSpinEdit;
+  cxSpinEdit, frxSmartMemo, frCoreClasses, frLocalization, frLanguageSpanish;
 
 type
   TfrmPrintCliEti = class(TForm)
@@ -39,6 +39,7 @@ type
     cxRadioGroup1: TcxRadioGroup;
     cxlbl2: TcxLabel;
     speDejarBlancos: TcxSpinEdit;
+    frLocalizationController1: TfrLocalizationController;
     procedure btn2Click(Sender: TObject);
     procedure btn3Click(Sender: TObject);
     procedure btn4Click(Sender: TObject);

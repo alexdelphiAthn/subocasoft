@@ -1,4 +1,4 @@
-unit inMtoModalFacImp;
+﻿unit inMtoModalFacImp;
 
 interface
 
@@ -27,7 +27,8 @@ uses
   dxSkinOffice2016Dark, dxSkinOffice2019Black, dxSkinOffice2019Colorful,
   dxSkinOffice2019DarkGray, dxSkinOffice2019White, dxSkinTheBezier,
   dxSkinVisualStudio2013Blue, dxSkinVisualStudio2013Dark,
-  dxSkinVisualStudio2013Light, frxExportBaseDialog, cxGroupBox;
+  dxSkinVisualStudio2013Light, frxExportBaseDialog, cxGroupBox, frxSmartMemo,
+  frCoreClasses, frLocalization, frLanguageSpanish;
 
 type
   TfrmPrintFac = class(TForm)
@@ -43,6 +44,7 @@ type
     rbActual: TcxRadioButton;
     fxrptSimple: TfrxReport;
     cxchkEsSimpl: TcxCheckBox;
+    frLocalizationController1: TfrLocalizationController;
     procedure btnVistaPreliminarClick(Sender: TObject);
     procedure btnSalirClick(Sender: TObject);
   private

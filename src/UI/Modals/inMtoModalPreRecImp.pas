@@ -1,4 +1,4 @@
-unit inMtoModalPreRecImp;
+﻿unit inMtoModalPreRecImp;
 
 interface
 
@@ -22,7 +22,8 @@ uses
   dxSkinTheAsphaltWorld, dxSkinsDefaultPainters, dxSkinValentine,
   dxSkinVS2010, dxSkinWhiteprint, dxSkinXmas2008Blue, frxExportPDF,
   ExtCtrls, ComCtrls, dxCore, cxDateUtils, cxMaskEdit, cxDropDownEdit,
-  cxCalendar, frxDesgn, cxRadioGroup, frxRich, frxExportBaseDialog, cxGroupBox;
+  cxCalendar, frxDesgn, cxRadioGroup, frxRich, frxExportBaseDialog, cxGroupBox,
+  frxSmartMemo, frCoreClasses;
 
 type
   TfrmPrintPreRec = class(TForm)

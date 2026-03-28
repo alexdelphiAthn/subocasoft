@@ -127,7 +127,7 @@ function TStateHandler.GetStateDescription(State: TVerificationState): string;
 begin
   case State of
     vsVerified: Result := 'Verificada';
-    vsPending: Result := 'Pendiente de verificación';
+    vsPending: Result := 'Pendiente de verificaciï¿½n';
     vsErrorFatal: Result := 'ERROR FATAL';
     vsUnknown: Result := 'Estado desconocido';
   end;
@@ -148,7 +148,7 @@ begin
         vsVerified:
           Message := 'Documento verificado correctamente';
         vsPending:
-          Message := 'Documento pendiente de verificación';
+          Message := 'Documento pendiente de verificaciÃ³n';
         vsErrorFatal:
           begin
             Message := 'ERROR FATAL: ' + GetErrorMessage(JSONObj);
@@ -189,7 +189,7 @@ begin
         vsVerified:
           sMessage := 'Documento verificado correctamente';
         vsPending:
-          sMessage := 'Documento pendiente de verificación';
+          sMessage := 'Documento pendiente de verificaciï¿½n';
         vsErrorFatal:
           begin
             sErrorCode := GetErrorCode(JSONObj);

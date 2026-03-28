@@ -1,15 +1,15 @@
 inherited frmMtoPre: TfrmMtoPre
   Top = 0
   Caption = 'Presupuestos'
-  ClientHeight = 774
-  ClientWidth = 1163
+  ClientHeight = 773
+  ClientWidth = 1159
   Font.Height = -15
-  ExplicitWidth = 1179
-  ExplicitHeight = 813
+  ExplicitWidth = 1175
+  ExplicitHeight = 812
   TextHeight = 17
   inherited pButtonPage: TPanel
-    Width = 964
-    Height = 774
+    Width = 960
+    Height = 773
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -18,9 +18,9 @@ inherited frmMtoPre: TfrmMtoPre
     ExplicitHeight = 774
   end
   inherited pButtonRightBar: TPanel
-    Left = 964
+    Left = 960
     Width = 199
-    Height = 774
+    Height = 773
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -195,8 +195,8 @@ inherited frmMtoPre: TfrmMtoPre
     end
   end
   inherited pcPantalla: TPageControl
-    Width = 964
-    Height = 774
+    Width = 960
+    Height = 773
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
@@ -216,8 +216,8 @@ inherited frmMtoPre: TfrmMtoPre
       ExplicitHeight = 737
       inherited cxGrdPrincipal: TcxGrid
         Top = 34
-        Width = 960
-        Height = 704
+        Width = 956
+        Height = 703
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
@@ -346,13 +346,13 @@ inherited frmMtoPre: TfrmMtoPre
         end
       end
       inherited pnTopGrid: TPanel
-        Width = 960
+        Width = 956
         Height = 34
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
-        ExplicitWidth = 964
+        ExplicitWidth = 960
         ExplicitHeight = 34
         inherited dxbvl1: TdxBevel
           Left = 4
@@ -431,6 +431,7 @@ inherited frmMtoPre: TfrmMtoPre
           PositionAfterOpen = 24
           MinSize = 24
           Control = pnl2
+          ExplicitWidth = 8
         end
         object cxpgcntrlFacturacx: TcxPageControl
           Left = 1
@@ -636,8 +637,6 @@ inherited frmMtoPre: TfrmMtoPre
           object ts5: TcxTabSheet
             Caption = 'Totales'
             ImageIndex = 2
-            ExplicitWidth = 950
-            ExplicitHeight = 371
             object cxlbl17: TcxLabel
               Left = 70
               Top = 50
@@ -693,6 +692,10 @@ inherited frmMtoPre: TfrmMtoPre
           object ts8: TcxTabSheet
             Caption = 'Otros'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object cxlbl12: TcxLabel
               Left = 13
               Top = 16
@@ -1007,6 +1010,8 @@ inherited frmMtoPre: TfrmMtoPre
             ImageIndex = 5
             ExplicitLeft = 0
             ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnl6: TPanel
               Left = 0
               Top = 0
@@ -95700,10 +95705,11 @@ inherited frmMtoPre: TfrmMtoPre
       object pnl2: TPanel
         Left = 0
         Top = 0
-        Width = 956
+        Width = 952
         Height = 323
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 956
         object pnl3: TPanel
           Left = 1
           Top = 1
@@ -95939,6 +95945,7 @@ inherited frmMtoPre: TfrmMtoPre
             object cxtbshtDatosCliente: TcxTabSheet
               Caption = 'Datos Paciente - Cabecera Presupuesto'
               ImageIndex = 1
+              ExplicitWidth = 944
               object cxdbtxtdtRAZONSOCIAL_CLIENTE_FACTURA: TcxDBTextEdit
                 Left = 390
                 Top = 17

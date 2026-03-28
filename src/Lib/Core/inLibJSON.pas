@@ -81,10 +81,10 @@ begin
     begin
       // --- RECIPIENT (Datos del cliente) ---
       RecipienTForm1 := TJSONObject.Create;
-      // L�gica diferente seg�n sea nacional o internacional
+      // Lógica diferente según sea nacional o internacional
       if sPaisCliente = 'ES' then
       begin
-        // Para facturas nacionales (Espa�a) - usar irsId
+        // Para facturas nacionales (España) - usar irsId
         if not unqryFac.FieldByName('NIF_CLIENTE_FACTURA').IsNull then
           RecipienTForm1.AddPair('irsId',
                           unqryFac.FieldByName('NIF_CLIENTE_FACTURA').AsString)
@@ -146,11 +146,11 @@ begin
       InvoiceObj.AddPair('type', 'F2')
     else
       InvoiceObj.AddPair('type', 'F1');
-    // --- VAT LINES (L�neas de IVA) ---
+    // --- VAT LINES (Líneas de IVA) ---
     VatLinesArray := TJSONArray.Create;
     VatLineObj := TJSONObject.Create;
     VatLineObj.AddPair('vatOperation', 'E1'); // Valor por defecto
-    // Base imponible (usar el total l�quido)
+    // Base imponible (usar el total líquido)
     if not unqryFac.FieldByName('TOTAL_LIQUIDO_FACTURA').IsNull then
       VatLineObj.AddPair('base',
       TJSONNumber.Create
@@ -194,19 +194,19 @@ begin
   Result.RequiresSubsanation := False;
   if sErrorCode = '1110' then
   begin
-    Result.Description := 'NIF/CIF no v�lido o no encontrado en censo AEAT';
-    Result.UserMessage := 'El NIF/CIF del cliente no es v�lido o no est� registrado en Hacienda';
+    Result.Description := 'NIF/CIF no válido o no encontrado en censo AEAT';
+    Result.UserMessage := 'El NIF/CIF del cliente no es válido o no está registrado en Hacienda';
     Result.RequiresSubsanation := True;
   end
   else if sErrorCode = '1115' then
   begin
-    Result.Description := 'Raz�n social no coincide con NIF en censo AEAT';
-    Result.UserMessage := 'La raz�n social no coincide con el NIF registrado en Hacienda';
+    Result.Description := 'Razón social no coincide con NIF en censo AEAT';
+    Result.UserMessage := 'La razón social no coincide con el NIF registrado en Hacienda';
     Result.RequiresSubsanation := True;
   end
   else if sErrorCode = '1120' then
   begin
-    Result.Description := 'Error en validaci�n de campos obligatorios';
+    Result.Description := 'Error en validación de campos obligatorios';
     Result.UserMessage := 'Faltan datos obligatorios en la factura';
     Result.RequiresSubsanation := True;
   end
@@ -218,38 +218,38 @@ begin
   end
   else if sErrorCode = '1131' then
   begin
-    Result.Description := 'Fecha de factura muy antigua (m�s de 20 a�os)';
+    Result.Description := 'Fecha de factura muy antigua (más de 20 años)';
     Result.UserMessage := 'La fecha de la factura es demasiado antigua';
     Result.RequiresSubsanation := True;
   end
   else if sErrorCode = '1140' then
   begin
-    Result.Description := 'Error en c�lculo de IVA';
+    Result.Description := 'Error en cálculo de IVA';
     Result.UserMessage := 'Los importes de IVA no son correctos';
     Result.RequiresSubsanation := True;
   end
   else if sErrorCode = '1142' then
   begin
-    Result.Description := 'Diferencia superior a 10� en c�lculo de IVA';
-    Result.UserMessage := 'Hay una diferencia significativa en el c�lculo del IVA';
+    Result.Description := 'Diferencia superior a 10€ en cálculo de IVA';
+    Result.UserMessage := 'Hay una diferencia significativa en el cálculo del IVA';
     Result.RequiresSubsanation := True;
   end
   else if sErrorCode = '1150' then
   begin
-    Result.Description := 'Factura simplificada supera l�mite de 3.000�';
-    Result.UserMessage := 'Las facturas simplificadas no pueden superar los 3.000�';
+    Result.Description := 'Factura simplificada supera límite de 3.000€';
+    Result.UserMessage := 'Las facturas simplificadas no pueden superar los 3.000€';
     Result.RequiresSubsanation := True;
   end
   else if sErrorCode = '2001' then
   begin
     Result.Description := 'Servicio temporalmente no disponible';
-    Result.UserMessage := 'El servicio de Hacienda no est� disponible temporalmente. Reintente m�s tarde';
+    Result.UserMessage := 'El servicio de Hacienda no está disponible temporalmente. Reintente más tarde';
     Result.IsTemporary := True;
   end
   else if sErrorCode = '2002' then
   begin
-    Result.Description := 'Error de comunicaci�n con AEAT';
-    Result.UserMessage := 'Error de comunicaci�n con Hacienda. Reintente en unos minutos';
+    Result.Description := 'Error de comunicación con AEAT';
+    Result.UserMessage := 'Error de comunicación con Hacienda. Reintente en unos minutos';
     Result.IsTemporary := True;
   end
   else if sErrorCode = '3010' then
@@ -267,7 +267,7 @@ begin
   else
   begin
     Result.Description := 'Error no catalogado: ' + sErrorCode;
-    Result.UserMessage := 'Error desconocido. C�digo: ' + sErrorCode;
+    Result.UserMessage := 'Error desconocido. Código: ' + sErrorCode;
     Result.RequiresSubsanation := False;
   end;
 end;
@@ -284,10 +284,10 @@ begin
   sCompleteMessage := ErrorInfo.UserMessage;
   if ErrorInfo.RequiresSubsanation then
     sCompleteMessage := sCompleteMessage + ' ' +
-                       'Esta factura requiere subsanaci�n para ser corregida.';
+                       'Esta factura requiere subsanación para ser corregida.';
   if ErrorInfo.IsTemporary then
     sCompleteMessage := sCompleteMessage + ' ' +
-                       'Este es un error temporal. Puede reintentar m�s tarde.';
+                       'Este es un error temporal. Puede reintentar más tarde.';
   // Mostrar al usuario
   //ShowMessage(Format('Error %s: %s', [sErrorCode, sCompleteMessage]));
   // Registrar en log

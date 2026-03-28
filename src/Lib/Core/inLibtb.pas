@@ -1,4 +1,4 @@
-unit inLibtb;
+﻿unit inLibtb;
 
 interface
 
@@ -204,7 +204,7 @@ begin
     Result  := IntToStr(CalculaDC(sBanco, sNumero));
   end
   else
-    Result := 'N�mero de Cuenta Inv�lido';
+    Result := 'Número de Cuenta Inválido';
 end;
 
 function TomarLetra(S: String):String;
@@ -224,7 +224,7 @@ begin
   if (sResul <> '?') then
     Result := LetraNIF(sResul)
   else
-    Result := ' NIF No V�lido';
+    Result := ' NIF No Válido';
 end;
 
 function SoloLetraNIF(S:String):Char;
@@ -277,7 +277,7 @@ end;
 
 procedure ComprobarNIF(sNIF:String);
 begin
-  //si el primer digito no es un n�mero, es un CIF
+  //si el primer digito no es un número, es un CIF
   if (sNIF <> '') then
     if ( (sNIF[1] >= '0') and (sNIF[1] <= '9') ) then
       if ( SoloLetraNIF( sNIF ) <> TomarLetra( sNIF ) ) then

@@ -54,7 +54,7 @@ begin
   contenido := TStringList.Create;
   try
     try
-      // Especificar codificaci�n UTF-8 si es necesario
+      // Especificar codificación UTF-8 si es necesario
       contenido.LoadFromFile(rutaArchivo);
       Result := contenido.Text;
     except
@@ -76,7 +76,7 @@ begin
   Result := InternetGetConnectedState(@dwConnectionTypes, 0);
 end;
 
-// Versi�n alternativa m�s robusta que hace ping a un servidor
+// Versión alternativa más robusta que hace ping a un servidor
 function HayInternetConPing: Boolean;
 var
   hSession, hConnection, hRequest: HINTERNET;
@@ -147,15 +147,15 @@ end;
 //procedure TForm1.Button1Click(Sender: TObject);
 //begin
 //  if HayInternet then
-//    ShowMessage('Hay conexi�n a Internet')
+//    ShowMessage('Hay conexión a Internet')
 //  else
-//    ShowMessage('No hay conexi�n a Internet');
+//    ShowMessage('No hay conexión a Internet');
 //
-//  // Para la versi�n m�s robusta:
+//  // Para la versión más robusta:
 //  if HayInternetConPing then
-//    ShowMessage('Hay conexi�n real a Internet')
+//    ShowMessage('Hay conexión real a Internet')
 //  else
-//    ShowMessage('No hay conexi�n real a Internet');
+//    ShowMessage('No hay conexión real a Internet');
 //end;
 
 function GetComputerName: string;
@@ -387,7 +387,7 @@ begin
           if EsProbablementeUTF8(rutaArchivo) then
           begin
             Result.Encoding := TEncoding.UTF8;
-            Result.Name := 'UTF-8 (detectado heur�sticamente)';
+            Result.Name := 'UTF-8 (detectado heurísticamente)';
           end
           else
             Result.Name := 'ANSI/Default';
@@ -414,15 +414,6 @@ begin
     if stream.Size < 2 then
       Exit;
     bytesLeidos := stream.Read(bom, Min(4, stream.Size));
-    // Verificar BOMs en orden de longitud (m�s largo primero)
-//    if (bytesLeidos >= 4) and (bom[0] = $FF) and (bom[1] = $FE) and
-//       (bom[2] = $00) and (bom[3] = $00) then
-//    begin
-//      // UTF-32 LE BOM
-//      Result.Encoding := TEncoding.�.UTF32;
-//      Result.Name := 'UTF-32 LE (con BOM)';
-//      Result.HasBOM := True;
-//    end   else
     if (bytesLeidos >= 4) and (bom[0] = $00) and (bom[1] = $00) and
             (bom[2] = $FE) and (bom[3] = $FF) then
     begin
@@ -459,7 +450,7 @@ end;
 function EsProbablementeUTF8(const rutaArchivo: string): Boolean;
 var
   stream: TFileStream;
-  buffer: array[0..2047] of Byte; // Muestra m�s grande
+  buffer: array[0..2047] of Byte; // Muestra más grande
   bytesLeidos, i, secuenciasUTF8, totalBytes: Integer;
   esValido: Boolean;
 begin
@@ -520,13 +511,13 @@ begin
       end
       else
       begin
-        // Byte inv�lido para UTF-8
+        // Byte inválido para UTF-8
         esValido := False;
       end;
       Inc(totalBytes);
     end;
     // Es probablemente UTF-8 si:
-    // 1. Todas las secuencias son v�lidas
+    // 1. Todas las secuencias son válidas
     // 2. Tiene al menos algunas secuencias UTF-8 multibyte
     // 3. O si no hay bytes > 127 (ASCII puro, compatible con UTF-8)
     Result := esValido and ((secuenciasUTF8 > 0) or (totalBytes > 0));
