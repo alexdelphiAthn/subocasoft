@@ -23,6 +23,7 @@ interface
 
 type
   TQRCodeEncoding = (qrAuto, qrNumeric, qrAlphanumeric, qrISO88591, qrUTF8NoBOM, qrUTF8BOM);
+  TQRCodeCorrectionLevel = (qreL, qreM, qreQ, qreH);
   T2DBooleanArray = array of array of Boolean;
 
   TDelphiZXingQRCode = class
@@ -31,9 +32,12 @@ type
     FRows: Integer;
     FColumns: Integer;
     FEncoding: TQRCodeEncoding;
+    FErrorCorrectionLevel: TQRCodeCorrectionLevel;
     FQuietZone: Integer;
     FElements: T2DBooleanArray;
     procedure SetEncoding(NewEncoding: TQRCodeEncoding);
+    procedure SetErrorCorrectionLevel(
+      NewErrorCorrectionLevel: TQRCodeCorrectionLevel);
     procedure SetData(const NewData: WideString);
     procedure SetQuietZone(NewQuietZone: Integer);
     function GetIsBlack(Row, Column: Integer): Boolean;
@@ -42,6 +46,8 @@ type
     constructor Create;
     property Data: WideString read FData write SetData;
     property Encoding: TQRCodeEncoding read FEncoding write SetEncoding;
+    property ErrorCorrectionLevel: TQRCodeCorrectionLevel
+      read FErrorCorrectionLevel write SetErrorCorrectionLevel;
     property QuietZone: Integer read FQuietZone write SetQuietZone;
     property Rows: Integer read FRows;
     property Columns: Integer read FColumns;
@@ -193,8 +199,10 @@ type
   TErrorCorrectionLevel = class
   private
     FBits: Integer;
+    FOrdinal: Integer;
   public
     procedure Assign(Source: TErrorCorrectionLevel);
+    procedure SetLevel(NewLevel: TQRCodeCorrectionLevel);
     function Ordinal: Integer;
     property Bits: Integer read FBits;
   end;
@@ -2321,11 +2329,36 @@ end;
 procedure TErrorCorrectionLevel.Assign(Source: TErrorCorrectionLevel);
 begin
   Self.FBits := Source.FBits;
+  Self.FOrdinal := Source.FOrdinal;
+end;
+
+procedure TErrorCorrectionLevel.SetLevel(NewLevel: TQRCodeCorrectionLevel);
+begin
+  case NewLevel of
+    qreM:
+      begin
+        FBits := 0;
+        FOrdinal := 1;
+      end;
+    qreQ:
+      begin
+        FBits := 3;
+        FOrdinal := 2;
+      end;
+    qreH:
+      begin
+        FBits := 2;
+        FOrdinal := 3;
+      end;
+  else
+    FBits := 1;
+    FOrdinal := 0;
+  end;
 end;
 
 function TErrorCorrectionLevel.Ordinal: Integer;
 begin
-  Result := 0;
+  Result := FOrdinal;
 end;
 
 { TVersion }
@@ -3479,7 +3512,8 @@ begin
   end;
 end;
 
-function GenerateQRCode(const Input: WideString; EncodeOptions: Integer): T2DBooleanArray;
+function GenerateQRCode(const Input: WideString; EncodeOptions: Integer;
+  CorrectionLevel: TQRCodeCorrectionLevel): T2DBooleanArray;
 var
   Encoder: TEncoder;
   Level: TErrorCorrectionLevel;
@@ -3488,7 +3522,7 @@ var
   Y: Integer;
 begin
   Level := TErrorCorrectionLevel.Create;
-  Level.FBits := 1;
+  Level.SetLevel(CorrectionLevel);
   Encoder := TEncoder.Create;
   QRCode := TQRCode.Create;
   try
@@ -3518,6 +3552,7 @@ constructor TDelphiZXingQRCode.Create;
 begin
   FData := '';
   FEncoding := qrAuto;
+  FErrorCorrectionLevel := qreM;
   FQuietZone := 4;
   FRows := 0;
   FColumns := 0;
@@ -3554,6 +3589,16 @@ begin
   end;
 end;
 
+procedure TDelphiZXingQRCode.SetErrorCorrectionLevel(
+  NewErrorCorrectionLevel: TQRCodeCorrectionLevel);
+begin
+  if (FErrorCorrectionLevel <> NewErrorCorrectionLevel) then
+  begin
+    FErrorCorrectionLevel := NewErrorCorrectionLevel;
+    Update;
+  end;
+end;
+
 procedure TDelphiZXingQRCode.SetQuietZone(NewQuietZone: Integer);
 begin
   if ((FQuietZone <> NewQuietZone) and (NewQuietZone >= 0) and (NewQuietZone <= 100)) then
@@ -3565,7 +3610,7 @@ end;
 
 procedure TDelphiZXingQRCode.Update;
 begin
-  FElements := GenerateQRCode(FData, Ord(FEncoding));
+  FElements := GenerateQRCode(FData, Ord(FEncoding), FErrorCorrectionLevel);
   FRows := Length(FElements) + FQuietZone * 2;
   FColumns := FRows;
 end;
