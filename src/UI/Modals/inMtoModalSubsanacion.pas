@@ -87,6 +87,7 @@ type
     FNumeroFactura: Integer;
     FDatosOriginales: TJSONObject;
     FSubsanacionExitosa: Boolean;
+    FTipoFacturaInicial: Integer;
     function HayCambios: Boolean;
     function IsoToDate(const DateTimeStr: string): TDateTime;
     function IfThen(AValue: Boolean; const ATrue: integer;
@@ -94,11 +95,13 @@ type
     function IfThen(AValue: Boolean; const ATrue: string;
                                    const AFalse: string = ''): string; overload;
     procedure CargarDatosOriginales;
+    procedure CargarDatosDesdeFactura;
     procedure MostrarDatosOriginales;
     procedure InicializarComboBoxes;
     procedure ActualizarVisibilidadTipoId;
     function ValidarDatos: Boolean;
     function GenerarJSONSubsanacion: string;
+    function TipoFacturaSeleccionado: string;
     procedure EjecutarSubsanacion;
     procedure ActualizarFacturaOriginal;
     //subsanar lineas de factura
@@ -117,7 +120,7 @@ public
 implementation
 
 uses
-  inLibVarGlob;
+  inLibVarGlob, inLibVerifactuAeat;
 
 {$R *.dfm}
 
@@ -144,6 +147,8 @@ begin
   InicializarComboBoxes;
   CargarDatosOriginales;
   MostrarDatosOriginales;
+  // Solo se fuerza el tipo de factura si el usuario lo cambia
+  FTipoFacturaInicial := cbbTipoFactura.ItemIndex;
   // Marcar por defecto como subsanación
   chkEsSubsanacion.Checked := True;
 end;
@@ -378,8 +383,71 @@ begin
           // Si hay error al parsear JSON, continúa con datos básicos
         end;
       end;
+      // Envíos directos a la AEAT: PETICION_COMPLETA es el XML SOAP (o está
+      // vacía en las OFFLINE); los datos se toman de la propia factura
+      if FDatosOriginales.GetValue('fecha_factura') = nil then
+        CargarDatosDesdeFactura;
     end;
 
+  finally
+    Query.Free;
+  end;
+end;
+
+procedure TfrmModalSubsanacion.CargarDatosDesdeFactura;
+var
+  Query: TUniQuery;
+  sTipo, sTipoId, sDescripcion: string;
+begin
+  Query := TUniQuery.Create(nil);
+  try
+    Query.Connection := FConnection;
+    Query.SQL.Text :=
+      'SELECT f.*, ' +
+      '       (SELECT l.DESCRIPCION_ARTICULO_LINEA ' +
+      '          FROM suboc_facturas_lineas l ' +
+      '         WHERE l.SERIE_FACTURA_LINEA = f.SERIE_FACTURA ' +
+      '           AND l.NRO_FACTURA_LINEA = f.NRO_FACTURA ' +
+      '         ORDER BY CAST(l.LINEA_LINEA AS UNSIGNED) LIMIT 1) ' +
+      '         AS DESCRIPCION_PRIMERA_LINEA ' +
+      '  FROM suboc_facturas f ' +
+      ' WHERE f.NRO_FACTURA = :NRO_FACTURA ' +
+      '   AND f.SERIE_FACTURA = :SERIE_FACTURA';
+    Query.ParamByName('NRO_FACTURA').AsInteger := FNumeroFactura;
+    Query.ParamByName('SERIE_FACTURA').AsString := FSerieFactura;
+    Query.Open;
+    if Query.IsEmpty then
+      Exit;
+    if Query.FieldByName('ESSIMPL_FACTURA').AsString = 'S' then
+      sTipo := 'F2'
+    else
+      sTipo := 'F1';
+    gbDatosCliente.Visible := sTipo <> 'F2';
+    FDatosOriginales.AddPair('tipo_factura', sTipo);
+    FDatosOriginales.AddPair('fecha_factura', FormatDateTime('dd/mm/yyyy',
+      Query.FieldByName('FECHA_FACTURA').AsDateTime));
+    FDatosOriginales.AddPair('nif_cliente',
+      Query.FieldByName('NIF_CLIENTE_FACTURA').AsString);
+    FDatosOriginales.AddPair('nombre_cliente',
+      Query.FieldByName('RAZONSOCIAL_CLIENTE_FACTURA').AsString);
+    FDatosOriginales.AddPair('pais_cliente',
+      Query.FieldByName('PAIS_CLIENTE_FACTURA').AsString);
+    sTipoId := UpperCase(Trim(
+      Query.FieldByName('TIPOID_INT_CLIENTE_FACTURA').AsString));
+    if sTipoId = 'ID' then
+      sTipoId := '04'
+    else if sTipoId = 'PASAPORTE' then
+      sTipoId := '03';
+    FDatosOriginales.AddPair('tipo_id_internacional', sTipoId);
+    FDatosOriginales.AddPair('id_type_original', sTipoId);
+    sDescripcion := Query.FieldByName('DESCRIPCION_PRIMERA_LINEA').AsString;
+    FDatosOriginales.AddPair('descripcion', sDescripcion);
+    FDatosOriginales.AddPair('fecha_operacion', FormatDateTime('yyyy-mm-dd',
+      Query.FieldByName('FECHA_FACTURA').AsDateTime));
+    FDatosOriginales.AddPair('total_factura', TJSONNumber.Create(
+      Query.FieldByName('TOTAL_LIQUIDO_FACTURA').AsFloat));
+    FDatosOriginales.AddPair('total_liquido', TJSONNumber.Create(
+      Query.FieldByName('TOTAL_LIQUIDO_FACTURA').AsFloat));
   finally
     Query.Free;
   end;
@@ -601,58 +669,70 @@ begin
   end;
 end;
 
+function TfrmModalSubsanacion.TipoFacturaSeleccionado: string;
+begin
+  // Sin cambio del usuario se envía el tipo que corresponde a la factura
+  // (p. ej. R1/R5 en los abonos)
+  if cbbTipoFactura.ItemIndex = FTipoFacturaInicial then
+    Exit('');
+  case cbbTipoFactura.ItemIndex of
+    0: Result := 'F1'; // Factura normal
+    1: Result := 'F2'; // Factura simplificada
+    2: Result := 'F3'; // Factura sustitutiva
+    3: Result := 'R1'; // Rectificativa Art. 80.1 y 80.2
+    4: Result := 'R2'; // Rectificativa Art. 80.3
+    5: Result := 'R3'; // Rectificativa Art. 80.4
+    6: Result := 'R4'; // Rectificativa Resto
+    7: Result := 'R5'; // Rectificativa Simplificada
+  else
+    Result := '';      // El que corresponda a la factura
+  end;
+end;
+
 procedure TfrmModalSubsanacion.EjecutarSubsanacion;
 var
-  JSONSubsanacion: string;
-  VerifactuClient: TVerifactuClient;
-  WSResult: TVerifactuResult;
-  bProcesarOK: Boolean;
+  Resultado: TResultadoEnvioAeat;
 begin
-  JSONSubsanacion := GenerarJSONSubsanacion;
-  VerifactuClient := TVerifactuClient.Create(FConnection);
+  Screen.Cursor := crHourGlass;
   try
-    Screen.Cursor := crHourGlass;
-      // Enviar la subsanación a Verifactu
+    try
+      // Registro de alta con Subsanacion=S y los datos ya corregidos en la
+      // factura (misma transacción: si la AEAT lo rechaza se deshace todo)
       frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
-                                          'Enviando petición de subsanación. ',
-                                                 FSerieFactura, FNumeroFactura,
-                                                 JSONSubsanacion);
-      WSResult := VerifactuClient.LlamarWebService(JSONSubsanacion);
-      if WSResult.Success then
+        'Enviando subsanación a la AEAT. ', FSerieFactura, FNumeroFactura);
+      Resultado := EnviarFacturaAeat(FConnection, FSerieFactura,
+                                     FNumeroFactura, opAeatSubsanacion,
+                                     TipoFacturaSeleccionado);
+      if Resultado.Ok then
       begin
-        // Procesar respuesta del WebService
-        bProcesarOK := VerifactuClient.ProcesarRespuestaWebService(
-                                                      WSResult.ResponseContent,
-                                                      FSerieFactura,
-                                                      FNumeroFactura,
-                                                      JSONSubsanacion);
-        if bProcesarOK then
-        begin
-          FSubsanacionExitosa := True;
-          ShowMessage('Subsanación enviada y procesada correctamente.');
-          frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
-            'Subsanación manual ejecutada correctamente',
-            FSerieFactura, FNumeroFactura, JSONSubsanacion);
-        end
-        else
-        begin
-          ShowMessage('Error al procesar la respuesta de la subsanación.'
-                       + sLineBreak +
-                     'Consulte la pestaña de eventos para más detalles.');
-        end
+        FSubsanacionExitosa := True;
+        ShowMessage('Subsanación registrada en la AEAT. ' +
+                    Resultado.MensajeError);
+        frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
+          Format('Subsanación registrada en la AEAT: %s. CSV: %s',
+                 [Resultado.EstadoRegistro, Resultado.Csv]),
+          FSerieFactura, FNumeroFactura, Resultado.Respuesta);
       end
       else
       begin
-          // Error en la comunicación HTTP
-          ShowMessage('Error de comunicación: ' + WSResult.ErrorMessage);
-          frmMtoPrincipal.VeriFactuLog.RegistrarError(
-            'Error HTTP en subsanación: ' + WSResult.ErrorMessage,
-            WSResult.ResponseContent, FSerieFactura, FNumeroFactura);
+        ShowMessage('La AEAT ha rechazado la subsanación: ' +
+                    Resultado.MensajeError + sLineBreak +
+                    'Consulte la pestaña de eventos para más detalles.');
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(
+          'Subsanación rechazada por la AEAT: ' + Resultado.MensajeError,
+          Resultado.Respuesta, FSerieFactura, FNumeroFactura);
       end;
-
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error enviando la subsanación: ' + E.Message);
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(
+          'Error en subsanación: ' + E.Message, '', FSerieFactura,
+          FNumeroFactura);
+      end;
+    end;
   finally
     Screen.Cursor := crDefault;
-    VerifactuClient.Free;
   end;
 end;
 
@@ -913,21 +993,39 @@ begin
   begin
     if HayCambios then
     begin
+      // Primero se graban las correcciones en la factura (el registro de
+      // eventos ya confirma la transacción) y después se envía la
+      // subsanación en una transacción propia, la del encadenamiento. Si la
+      // AEAT la rechaza, la factura conserva los datos corregidos y se
+      // puede volver a subsanar.
       FConnection.StartTransaction;
-      ActualizarFacturaOriginal;
+      try
+        ActualizarFacturaOriginal;
+        if FConnection.InTransaction then
+          FConnection.Commit;
+      except
+        if FConnection.InTransaction then
+          FConnection.Rollback;
+        raise;
+      end;
+      // Control de flujo de la AEAT; el formulario no admite clics mientras
+      Enabled := False;
+      try
+        EsperarTurnoEnvioAeat(FConnection,
+          procedure(ASegundos: Integer)
+          begin
+            Application.ProcessMessages;
+          end);
+      finally
+        Enabled := True;
+      end;
       EjecutarSubsanacion;
     end
     else
       ShowMessage('No hay cambios que subsanar');
 
     if FSubsanacionExitosa then
-    begin
-      Fconnection.Commit;
       ModalResult := mrOk;
-    end
-    else
-      if Fconnection.InTransaction then
-        Fconnection.Rollback;
   end;
 end;
 
