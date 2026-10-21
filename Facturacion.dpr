@@ -44,6 +44,8 @@ uses
   inLibLog in 'src\Lib\Core\inLibLog.pas',
   inLibDocumentoValidator in 'src\Lib\Validators\inLibDocumentoValidator.pas',
   inMtoParametros in 'src\UI\Support\inMtoParametros.pas' {frmMtoParametros},
+  inLibCertificates in 'src\Lib\Core\inLibCertificates.pas',
+  inMtoModalSelCer in 'src\UI\Modals\inMtoModalSelCer.pas' {frmModalSelCer},
   inMtoPaises in 'src\UI\Maintenance\inMtoPaises.pas' {frmMtoPaises},
   inMtoModalNotaLegal in 'src\UI\Modals\inMtoModalNotaLegal.pas' {frmNotaLegal},
   inLibLogVeriFactu in 'src\Lib\VeriFactu\inLibLogVeriFactu.pas',

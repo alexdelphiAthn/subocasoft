@@ -212,6 +212,10 @@
         <DCCReference Include="src\UI\Support\inMtoParametros.pas">
             <Form>frmMtoParametros</Form>
         </DCCReference>
+        <DCCReference Include="src\Lib\Core\inLibCertificates.pas"/>
+        <DCCReference Include="src\UI\Modals\inMtoModalSelCer.pas">
+            <Form>frmModalSelCer</Form>
+        </DCCReference>
         <DCCReference Include="src\UI\Maintenance\inMtoPaises.pas">
             <Form>frmMtoPaises</Form>
         </DCCReference>

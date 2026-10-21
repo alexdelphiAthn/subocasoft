@@ -145,6 +145,19 @@ inherited frmMtoParametros: TfrmMtoParametros
       ExplicitWidth = 144
       ExplicitHeight = 41
     end
+    object btnSeleccionarCertificado: TcxButton
+      Left = 4
+      Top = 140
+      Width = 150
+      Height = 57
+      Hint = 'Buscar el certificado digital en el almac'#233'n de Windows'
+      Caption = 'Seleccionar certificado'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      WordWrap = True
+      OnClick = btnSeleccionarCertificadoClick
+    end
   end
   inherited pcPantalla: TPageControl
     Width = 684

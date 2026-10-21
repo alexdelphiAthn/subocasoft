@@ -23,20 +23,24 @@ uses
 
   cxDataControllerConditionalFormattingRulesManagerDialog,
   Uni, cxCustomData, cxFilter, cxData, dxDateRanges, dxScrollbarAnnotations,
-  MemDS, DBAccess, cxLocalization, dxBevel, cxGridLevel, cxDBNavigator;
+  MemDS, DBAccess, cxLocalization, dxBevel, cxGridLevel, cxDBNavigator,
+  Menus, cxButtons;
 
 type
   TfrmMtoParametros = class(TfrmMtoGen)
     unqryParametros: TUniQuery;
     dbcGrdDBTabPrinNOMBRE_PARAM: TcxGridDBColumn;
     dbcGrdDBTabPrinVALUE_PARAM: TcxGridDBColumn;
+    btnSeleccionarCertificado: TcxButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure unqryParametrosBeforePost(DataSet: TDataSet);
+    procedure btnSeleccionarCertificadoClick(Sender: TObject);
   private
     //FDmConn:TdmConn;
     FException: boolean;
+    procedure GuardarParametro(const ANombre, AValor: string);
   public
     { Public declarations }
   end;
@@ -48,7 +52,13 @@ var
 
 implementation
 
-uses inLibWin;
+uses inLibWin, inMtoModalSelCer;
+
+const
+  PARAM_CERTIFICADO_SERIE    = 'CERTIFICADO_SERIE_VERIFACTU';
+  PARAM_CERTIFICADO_TITULAR  = 'CERTIFICADO_TITULAR_VERIFACTU';
+  PARAM_CERTIFICADO_TIPO     = 'CERTIFICADO_TIPO_VERIFACTU';
+  PARAM_CERTIFICADO_CADUCIDAD = 'CERTIFICADO_CADUCIDAD_VERIFACTU';
 
 {$R *.dfm}
 
@@ -85,6 +95,39 @@ begin
                                    DataSet.FieldByName('NOMBRE_PARAM').AsString,
                           VarToStr(DataSet.FieldByName('VALUE_PARAM').OldValue),
                                    DataSet.FieldByName('VALUE_PARAM').AsString);
+end;
+
+procedure TfrmMtoParametros.GuardarParametro(const ANombre, AValor: string);
+begin
+  if unqryParametros.Locate('NOMBRE_PARAM', ANombre, [loCaseInsensitive]) then
+    unqryParametros.Edit
+  else
+  begin
+    unqryParametros.Append;
+    unqryParametros.FieldByName('NOMBRE_PARAM').AsString := ANombre;
+  end;
+  unqryParametros.FieldByName('VALUE_PARAM').AsString := AValor;
+  unqryParametros.Post;
+end;
+
+procedure TfrmMtoParametros.btnSeleccionarCertificadoClick(Sender: TObject);
+var
+  Certificado: TCertificadoSeleccionado;
+begin
+  if (unqryParametros.State = dsInsert) or
+     (unqryParametros.State = dsEdit) then
+    unqryParametros.Post;
+  if SeleccionarCertificado(Certificado) then
+  begin
+    GuardarParametro(PARAM_CERTIFICADO_SERIE, Certificado.NumeroSerie);
+    GuardarParametro(PARAM_CERTIFICADO_TITULAR, Certificado.Titular);
+    GuardarParametro(PARAM_CERTIFICADO_TIPO, Certificado.Tipo);
+    GuardarParametro(PARAM_CERTIFICADO_CADUCIDAD, Certificado.FechaHasta);
+    if frmMtoPrincipal.FDmConn.conUni.InTransaction then
+      frmMtoPrincipal.FDmConn.conUni.Commit;
+    ShowMessage('Certificado seleccionado: ' + Certificado.Titular +
+                ' (válido hasta ' + Certificado.FechaHasta + ')');
+  end;
 end;
 
 procedure TfrmMtoParametros.FormClose(Sender: TObject; var Action: TCloseAction);
