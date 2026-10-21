@@ -8,6 +8,7 @@ uses
   cxLookAndFeelPainters, cxStyles, dxSkinsCore, dxSkinBlue,
   dxSkinscxPCPainter, cxDataStorage,
   cxEdit, cxNavigator, DB, cxDBData, cxContainer, inLibVerifactuBuilder,
+  inLibVerifactuAeat,
   cxCheckBox, cxTextEdit, cxGridLevel, cxClasses,
   cxGridCustomView, cxGridCustomTableView, cxGridTableView, UniDataFac,
   cxGridDBTableView, cxGrid, ComCtrls, StdCtrls, Buttons, ExtCtrls,
@@ -326,6 +327,8 @@ type
       const iNumero: Integer);
     procedure prcCancelarFacturaVerifactu(const sSerie: string;
       const iNumero: Integer);
+    function fncEnviarAeat(const sSerie: string; const iNumero: Integer;
+      AOperacion: TOperacionAeat; out AResultado: TResultadoEnvioAeat): Boolean;
   public
     procedure CheckConsolidacion;
     procedure CheckSimpl;
@@ -350,7 +353,8 @@ uses
   inLibWin, inMtoGenSearch, inMtoModalFacRec, inMtoModalFacImp,
   inMtoModalFacRecImp, inLibData,
   inLibVerifactuClient, inMtoPrincipal, inMtoModalSubsanacion,
-  inMtoModalHistoriaCli, inLibJSON, inLibVarGlob, inLibJSONState;
+  inMtoModalHistoriaCli, inLibJSON, inLibVarGlob, inLibJSONState,
+  Uni, System.JSON;
 
 {$R *.dfm}
 
@@ -420,11 +424,11 @@ end;
 function TfrmMtoFac.fncHayConexion: Boolean;
 var
   bConnected: Boolean;
-  sWebServ, sCausaOFF: String;
+  sCausaOFF: String;
 begin
+  // El envío va directo a la AEAT: el servicio exige el certificado en la
+  // conexión, así que no se sondea; basta con comprobar que hay internet
   bConnected := True;
-  sWebServ := dmmFac.GetWebServiceInvoice;
-
   if not HayInternetConPing then
   begin
     bConnected := False;
@@ -432,16 +436,33 @@ begin
     ShowMessage(sCausaOFF);
     frmMtoPrincipal.VeriFactuLog.RegistrarError('', sCausaOFF);
   end;
-
-  if bConnected and not IsWebServiceUp(sWebServ) then
-  begin
-    bConnected := False;
-    sCausaOFF := 'WebService ' + sWebServ + ' caído';
-    ShowMessage(sCausaOFF);
-    frmMtoPrincipal.VeriFactuLog.RegistrarError('', sCausaOFF);
-  end;
-
   Result := bConnected;
+end;
+
+function TfrmMtoFac.fncEnviarAeat(const sSerie: string;
+  const iNumero: Integer; AOperacion: TOperacionAeat;
+  out AResultado: TResultadoEnvioAeat): Boolean;
+begin
+  // Control de flujo de la AEAT: entre envíos hay que esperar el
+  // TiempoEsperaEnvio que devolvió el anterior
+  EsperarTurnoEnvioAeat(frmMtoPrincipal.FDmConn.conUni,
+    procedure(ASegundos: Integer)
+    begin
+      Application.ProcessMessages;
+    end);
+  AResultado := EnviarFacturaAeat(frmMtoPrincipal.FDmConn.conUni, sSerie,
+                                  iNumero, AOperacion);
+  Result := AResultado.Ok;
+  if Result then
+    frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
+      Format('AEAT: %s. CSV: %s. Huella: %s %s',
+             [AResultado.EstadoRegistro, AResultado.Csv, AResultado.Huella,
+              AResultado.MensajeError]),
+      sSerie, iNumero, AResultado.Respuesta)
+  else
+    frmMtoPrincipal.VeriFactuLog.RegistrarError(
+      'Rechazado por la AEAT: ' + AResultado.MensajeError,
+      AResultado.Respuesta, sSerie, iNumero);
 end;
 
 procedure TfrmMtoFac.prcCheckConsolidacion;
@@ -558,58 +579,37 @@ end;
 
 procedure TfrmMtoFac.prcGenerarQRProvisionalyencolar;
 var
-  sURLQR, sPref, sNif: String;
-  frmQR: TfrmMtoGenerarQR;
-  bmpQR: TBitmap;
-  PngImage: TPngImage;
+  sURLQR: String;
+  aQRPng: TBytes;
   Stream: TMemoryStream;
-  formatSettings: TFormatSettings;
 begin
   Stream := TMemoryStream.Create;
   try
+    // El QR de VERI*FACTU solo depende de NIF, número, fecha e importe: el
+    // que se imprime ahora es el definitivo aunque el envío quede pendiente
+    sURLQR := ConstruirUrlQRFacturaAeat(frmMtoPrincipal.FDmConn.conUni,
+      dsTablaG.dataset.FieldByName('SERIE_FACTURA').AsString,
+      dsTablaG.dataset.FieldByName('NRO_FACTURA').AsInteger);
+    aQRPng := GenerarQRPngVerifactu(sURLQR);
+    Stream.WriteBuffer(aQRPng, Length(aQRPng));
+    Stream.Position := 0;
     dmmFac.unqryConsolidacion.ReadOnly := false;
-    dmmFac.unqryConsolidacion.Insert;
-    sURLQR := dmmFac.GetURLOffLineVerifactu;
-    formatSettings := TFormatSettings.Create;
-    formatSettings.DecimalSeparator := '.';
-    CargarConfiguracionOffline(sPref, sNif);
-    sURLQR := sURLQR + 'nif=' + sNif + '&numserie=' + sPref+
-      dsTablaG.dataset.FieldByName('SERIE_FACTURA').AsString +
-      '%2F' + dsTablaG.dataset.FieldByName('NRO_FACTURA').AsString +
-      '&fecha=' + FormatDateTime('dd-mm-yyyy',
-      dsTablaG.dataset.FieldByName('FECHA_FACTURA').AsDateTime) +
-      '&importe=' + FormatFloat('0.00',
-      dsTablaG.dataset.FieldByName('TOTAL_LIQUIDO_FACTURA').AsFloat,
-      formatSettings);
-    try
-      frmQR := TfrmMtoGenerarQR.Create(Self);
-      frmQR.Hide;
-      bmpQR := frmQR.GetQRImage(sURLQR);
-    finally
-      FreeAndNil(frmQR);
-    end;
-    PngImage := TPngImage.Create;
-    try
-      bmpQR.PixelFormat := pf1bit;
-      PngImage.Assign(bmpQR);
-      PngImage.SaveToStream(Stream);
-      Stream.Position := 0;
+    if dmmFac.unqryConsolidacion.IsEmpty then
+    begin
+      dmmFac.unqryConsolidacion.Insert;
       dmmFac.unqryConsolidacion.FieldByName('ID_CONSOLIDACION').AsInteger :=
         GetNextCont('CS');
-      (dmmFac.unqryConsolidacion.FieldByName('QRCODE_PNG') as
-        TBlobField).LoadFromStream(Stream);
-      dmmFac.unqryConsolidacion.FieldByName('ESTADO').AsString := 'PENDIENTE';
-      dmmFac.unqryConsolidacion.FieldByName('VERIFACTU_URL').AsString :=
-        sURLQR;
-      dmmFac.unqryConsolidacion.FieldByName('PETICION_COMPLETA').AsString :=
-        BuildInvoiceJSON(dmmFac.unqryFac.FieldByName('NRO_FACTURA').AsString,
-        dmmFac.unqryFac.FieldByName('SERIE_FACTURA').AsString);
-      dmmFac.unqryConsolidacion.Post;
-      dmmFac.unqryConsolidacion.Refresh;
-      dmmFac.unqryConsolidacion.ReadOnly := true;
-    finally
-      PngImage.Free;
-    end;
+    end
+    else
+      dmmFac.unqryConsolidacion.Edit;
+    (dmmFac.unqryConsolidacion.FieldByName('QRCODE_PNG') as
+      TBlobField).LoadFromStream(Stream);
+    dmmFac.unqryConsolidacion.FieldByName('ESTADO').AsString := 'PENDIENTE';
+    dmmFac.unqryConsolidacion.FieldByName('VERIFACTU_URL').AsString := sURLQR;
+    dmmFac.unqryConsolidacion.FieldByName('PETICION_COMPLETA').AsString := '';
+    dmmFac.unqryConsolidacion.Post;
+    dmmFac.unqryConsolidacion.Refresh;
+    dmmFac.unqryConsolidacion.ReadOnly := true;
   finally
     Stream.Free;
   end;
@@ -679,8 +679,8 @@ var
   sCausaOFF: string;
   sSerieFactura: String;
   iNumeroFactura: Integer;
-  sJSONPeticion: string;
   bProcesarOK: Boolean;
+  ResultadoAeat: TResultadoEnvioAeat;
 begin
   Screen.Cursor := crHourGlass;
   sbGrabarClick(Sender);
@@ -706,34 +706,44 @@ begin
   else
   begin
     try
-      sJSONPeticion := BuildInvoiceJSON(IntToStr(iNumeroFactura), sSerieFactura);
-            frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
-                                          'Enviando petición de consolidación. ',
-                                                 sSerieFactura, iNumeroFactura,
-                                                 sJSONPeticion);
-      bProcesarOK := CrearYProcesarConsolidacion(sSerieFactura,
-                                                 iNumeroFactura,
-                                                 sJSONPeticion);
+      frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
+        'Enviando registro de alta a la AEAT. ', sSerieFactura, iNumeroFactura);
+      bProcesarOK := fncEnviarAeat(sSerieFactura, iNumeroFactura, opAeatAlta,
+                                   ResultadoAeat);
       if bProcesarOK then
       begin
         dmmFac.unqryConsolidacion.Refresh;
-        if (dmmFac.unqryConsolidacion.RecordCount > 0) then
-          if (dmmFac.unqryConsolidacion.FieldByName('ESTADO').AsString <>
-                                                               'PENDIENTE') then
-          begin
-            prcActualizarEstadoConsolidacion(sSerieFactura, iNumeroFactura,
-              'ONLINE', True);
-            dmmFac.unqryFac.Refresh;
-            btnImprimirClick(Self);
-          end;
-        end
-        else
-          ShowMessage('Error al procesar la consolidación de la factura.' +
-                      ' Verifique en pestaña Eventos');
+        dmmFac.unqryFac.Refresh;
+        if ResultadoAeat.MensajeError <> '' then
+          ShowMessage('Factura registrada en la AEAT con avisos: ' +
+                      ResultadoAeat.MensajeError);
+        btnImprimirClick(Self);
+      end
+      else
+        ShowMessage('La AEAT ha rechazado la factura: ' +
+                    ResultadoAeat.MensajeError + sLineBreak +
+                    'Verifique en pestaña Eventos');
     except
+      on E: EVerifactuAeatIncierto do
+      begin
+        // Sin respuesta de la AEAT: queda pendiente como una factura
+        // sin conexión y se reenvía (misma huella) con Re-consolidar
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(E.Message, '',
+                                                    sSerieFactura,
+                                                    iNumeroFactura);
+        ShowMessage(E.Message + sLineBreak +
+                    'La factura queda pendiente de envío (OFFLINE).');
+        prcGenerarQRProvisionalYEncolar;
+        prcActualizarEstadoConsolidacion(sSerieFactura, iNumeroFactura,
+                                         'OFFLINE', True);
+        btnImprimirClick(Self);
+      end;
       on E: Exception do
       begin
         ShowMessage('Error en consolidación: ' + E.Message);
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(
+          'Error en consolidación: ' + E.Message, '', sSerieFactura,
+          iNumeroFactura);
       end;
     end;
   end;
@@ -745,14 +755,9 @@ end;
 procedure TfrmMtoFac.prcCancelarFacturaVerifactu(const sSerie: string;
   const iNumero: Integer);
 var
-  VerifactuClient: TVerifactuClient;
   iQueueId: Integer;
-  sJSONResponse: string;
-  CancelResponse: TCancelationResponse;
-  bPuedeCancelar: Boolean;
+  ResultadoAeat: TResultadoEnvioAeat;
 begin
-  // Validaciones iniciales
-  bPuedeCancelar := True;
   // Verificar que la factura esté consolidada
   if ((dsTablaG.DataSet.FieldByName('CONSOLIDACION_FACTURA').AsString = 'N') or
      (dsTablaG.DataSet.FieldByName('FASE_CONSOLIDACION_FACTURA').AsString =
@@ -768,60 +773,37 @@ begin
     ShowMessage('La factura ya está cancelada');
     Exit;
   end;
-  Screen.Cursor := crHourGlass;
   iQueueId := dmmFac.fncObtenerQueueIdFactura(sSerie, iNumero);
-  if iQueueId = 0 then
+  if iQueueId <= 0 then
   begin
-    ShowMessage('No se encontró el Queue ID de la factura en Verifactu');
+    ShowMessage('La factura no consta como registrada en Verifactu');
     frmMtoPrincipal.VeriFactuLog.RegistrarError(
-      'Queue ID no encontrado para cancelación', '', sSerie, iNumero);
+      'Registro Verifactu no encontrado para anulación', '', sSerie, iNumero);
     Exit;
   end;
   if not fncHayConexion then
   begin
-    ShowMessage('No hay conexión con el servicio Verifactu');
     frmMtoPrincipal.VeriFactuLog.RegistrarError(
       'Sin conexión para cancelación', '', sSerie, iNumero);
     Exit;
   end;
   // Confirmar cancelación
-  if MessageDlg(Format('¿Está seguro de cancelar la factura %s/%d?',
+  if MessageDlg(Format('¿Está seguro de anular la factura %s/%d en la AEAT?',
                        [sSerie, iNumero]),
                 mtConfirmation, [mbYes, mbNo], 0) <> mrYes then
     Exit;
+  Screen.Cursor := crHourGlass;
   try
-    VerifactuClient := TVerifactuClient.Create(frmMtoPrincipal.FDmConn.conUni);
     try
-      // Realizar cancelación
-      sJSONResponse := VerifactuClient.CancelarFacturaPorQueueId(iQueueId);
-      // Procesar respuesta
-      CancelResponse :=
-                    VeriFactuClient.ProcesarRespuestaCancelacion(sJSONResponse);
-      if CancelResponse.Success then
-      begin
-        // Cancelación exitosa
-        ShowMessage('Factura cancelada correctamente en AEAT');
-        // Actualizar estado
-        prcActualizarEstadoConsolidacion(sSerie, iNumero, 'CANCELADA', True);
-        // Guardar información de cancelación en BD
-        //dmmFac.GuardarCancelacionVerifactu(sSerie, iNumero, CancelResponse);
-        // Log de éxito
-        frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
-          Format('Cancelada correctamente. QueueId: %d, RequestId: %s',
-                 [CancelResponse.QueueId, CancelResponse.RequestId]),
-          sSerie, iNumero, CancelResponse.JSONCompleto);
-        // Refrescar datos
-        dmmFac.unqryFac.Refresh;
-        dmmFac.unqryConsolidacion.Refresh;
-      end
+      // Registro de anulación encadenado
+      if fncEnviarAeat(sSerie, iNumero, opAeatAnulacion, ResultadoAeat) then
+        ShowMessage('Factura anulada correctamente en la AEAT')
       else
-      begin
-        // Error en cancelación
-        VerifactuClient.ProcesarErrorCancelacion(CancelResponse,
-                                                               sSerie, iNumero);
-      end;
+        ShowMessage('La AEAT ha rechazado la anulación: ' +
+                    ResultadoAeat.MensajeError);
+      dmmFac.unqryFac.Refresh;
+      dmmFac.unqryConsolidacion.Refresh;
     finally
-      FreeAndNil(VerifactuClient);
       Screen.Cursor := crDefault;
     end;
   except
@@ -831,6 +813,50 @@ begin
       frmMtoPrincipal.VeriFactuLog.RegistrarError(
         'Excepción en cancelación: ' + E.Message, '', sSerie, iNumero);
     end;
+  end;
+end;
+
+function fncConsultarEstadoAeatLocal(const sSerie: string;
+  const iNumero: Integer): Boolean;
+var
+  Qry: TUniQuery;
+  oJson: TJSONValue;
+  sSistema, sEstado, sCsv, sDescripcion: string;
+begin
+  Result := False;
+  Qry := TUniQuery.Create(nil);
+  try
+    Qry.Connection := frmMtoPrincipal.FDmConn.conUni;
+    Qry.SQL.Text := 'SELECT ESTADO, RESPUESTA_COMPLETA ' +
+                    '  FROM suboc_consolidacion ' +
+                    ' WHERE SERIE_FACTURA = :SERIE AND NRO_FACTURA = :NUMERO';
+    Qry.ParamByName('SERIE').AsString := sSerie;
+    Qry.ParamByName('NUMERO').AsInteger := iNumero;
+    Qry.Open;
+    if Qry.IsEmpty then
+      Exit;
+    oJson := TJSONObject.ParseJSONValue(
+      Qry.FieldByName('RESPUESTA_COMPLETA').AsString);
+    try
+      if (oJson = nil) or
+         (not oJson.TryGetValue<string>('sistema', sSistema)) or
+         (sSistema <> 'AEAT') then
+        Exit;
+      oJson.TryGetValue<string>('estadoRegistro', sEstado);
+      oJson.TryGetValue<string>('csv', sCsv);
+      oJson.TryGetValue<string>('descripcionError', sDescripcion);
+    finally
+      oJson.Free;
+    end;
+    Result := True;
+    frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
+      Format('Estado AEAT: %s. CSV: %s. %s', [sEstado, sCsv, sDescripcion]),
+      sSerie, iNumero);
+    if SameText(sEstado, 'Correcto') and
+       (Qry.FieldByName('ESTADO').AsString = 'PROCESADO') then
+      SetConsolidationFase(iNumero, sSerie, 'VERIFICADA', 'S');
+  finally
+    FreeAndNil(Qry);
   end;
 end;
 
@@ -845,6 +871,10 @@ var
   State: TVerificationState;
   sMessage, sErrorCode: string;
 begin
+  // Registros enviados directamente a la AEAT: la respuesta es definitiva
+  // y quedó guardada al enviar; no hay cola externa que consultar
+  if fncConsultarEstadoAeatLocal(sSerie, iNumero) then
+    Exit;
   Screen.Cursor := crHourGlass;
   bConsultaOK := True;
   iQueueId := fncObtenerQueueIdFactura(sSerie, iNumero);
@@ -974,6 +1004,7 @@ procedure TfrmMtoFac.btnReconsolidarClick(Sender: TObject);
 var
   iIDConsolidacion: Integer;
   bProcessOK: Boolean;
+  ResultadoAeat: TResultadoEnvioAeat;
 begin
   inherited;
   Screen.Cursor := crHourGlass;
@@ -988,15 +1019,28 @@ begin
     end;
     if (dmmFac.unqryFac.FieldByName('FASE_CONSOLIDACION_FACTURA').AsString = 'OFFLINE') then
     begin
-      bProcessOK := LlamarWebServiceVerifactu(iIDConsolidacion);
+      try
+        bProcessOK := fncEnviarAeat(
+          dsTablaG.DataSet.FieldByName('SERIE_FACTURA').AsString,
+          dsTablaG.DataSet.FieldByName('NRO_FACTURA').AsInteger,
+          opAeatAlta, ResultadoAeat);
+        if not bProcessOK then
+          ShowMessage('La AEAT ha rechazado la factura: ' +
+                      ResultadoAeat.MensajeError);
+      except
+        on E: Exception do
+        begin
+          bProcessOK := False;
+          ShowMessage(E.Message);
+          frmMtoPrincipal.VeriFactuLog.RegistrarError(E.Message, '',
+            dsTablaG.DataSet.FieldByName('SERIE_FACTURA').AsString,
+            dsTablaG.DataSet.FieldByName('NRO_FACTURA').AsInteger);
+        end;
+      end;
       if bProcessOK then
       begin
         ShowMessage('Consolidación ' + IntToStr(iIDConsolidacion) +
           ' procesada correctamente');
-        prcActualizarEstadoConsolidacion(
-          dsTablaG.DataSet.FieldByName('SERIE_FACTURA').AsString,
-          dsTablaG.DataSet.FieldByName('NRO_FACTURA').AsInteger,
-          'ONLINE', True);
         dmmFac.unqryFac.Refresh;
         dmmFac.unqryConsolidacion.Refresh;
         frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(

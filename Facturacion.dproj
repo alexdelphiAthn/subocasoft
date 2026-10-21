@@ -232,6 +232,7 @@
         <DCCReference Include="src\Lib\VeriFactu\inLibVerifactuClient.pas"/>
         <DCCReference Include="src\Lib\Core\inLibJSONState.pas"/>
         <DCCReference Include="src\Lib\VeriFactu\inLibVerifactuBuilder.pas"/>
+        <DCCReference Include="src\Lib\VeriFactu\inLibVerifactuAeat.pas"/>
         <DCCReference Include="src\UI\Modals\inMtoModalSubsanacion.pas">
             <Form>frmModalSubsanacion</Form>
         </DCCReference>

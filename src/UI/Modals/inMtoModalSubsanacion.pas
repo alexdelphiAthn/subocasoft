@@ -99,6 +99,7 @@ type
     procedure ActualizarVisibilidadTipoId;
     function ValidarDatos: Boolean;
     function GenerarJSONSubsanacion: string;
+    function TipoFacturaSeleccionado: string;
     procedure EjecutarSubsanacion;
     procedure ActualizarFacturaOriginal;
     //subsanar lineas de factura
@@ -117,7 +118,7 @@ public
 implementation
 
 uses
-  inLibVarGlob;
+  inLibVarGlob, inLibVerifactuAeat;
 
 {$R *.dfm}
 
@@ -601,58 +602,66 @@ begin
   end;
 end;
 
+function TfrmModalSubsanacion.TipoFacturaSeleccionado: string;
+begin
+  case cbbTipoFactura.ItemIndex of
+    0: Result := 'F1'; // Factura normal
+    1: Result := 'F2'; // Factura simplificada
+    2: Result := 'F3'; // Factura sustitutiva
+    3: Result := 'R1'; // Rectificativa Art. 80.1 y 80.2
+    4: Result := 'R2'; // Rectificativa Art. 80.3
+    5: Result := 'R3'; // Rectificativa Art. 80.4
+    6: Result := 'R4'; // Rectificativa Resto
+    7: Result := 'R5'; // Rectificativa Simplificada
+  else
+    Result := '';      // El que corresponda a la factura
+  end;
+end;
+
 procedure TfrmModalSubsanacion.EjecutarSubsanacion;
 var
-  JSONSubsanacion: string;
-  VerifactuClient: TVerifactuClient;
-  WSResult: TVerifactuResult;
-  bProcesarOK: Boolean;
+  Resultado: TResultadoEnvioAeat;
 begin
-  JSONSubsanacion := GenerarJSONSubsanacion;
-  VerifactuClient := TVerifactuClient.Create(FConnection);
+  Screen.Cursor := crHourGlass;
   try
-    Screen.Cursor := crHourGlass;
-      // Enviar la subsanación a Verifactu
+    try
+      // Registro de alta con Subsanacion=S y los datos ya corregidos en la
+      // factura (misma transacción: si la AEAT lo rechaza se deshace todo)
       frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
-                                          'Enviando petición de subsanación. ',
-                                                 FSerieFactura, FNumeroFactura,
-                                                 JSONSubsanacion);
-      WSResult := VerifactuClient.LlamarWebService(JSONSubsanacion);
-      if WSResult.Success then
+        'Enviando subsanación a la AEAT. ', FSerieFactura, FNumeroFactura);
+      Resultado := EnviarFacturaAeat(FConnection, FSerieFactura,
+                                     FNumeroFactura, opAeatSubsanacion,
+                                     TipoFacturaSeleccionado);
+      if Resultado.Ok then
       begin
-        // Procesar respuesta del WebService
-        bProcesarOK := VerifactuClient.ProcesarRespuestaWebService(
-                                                      WSResult.ResponseContent,
-                                                      FSerieFactura,
-                                                      FNumeroFactura,
-                                                      JSONSubsanacion);
-        if bProcesarOK then
-        begin
-          FSubsanacionExitosa := True;
-          ShowMessage('Subsanación enviada y procesada correctamente.');
-          frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
-            'Subsanación manual ejecutada correctamente',
-            FSerieFactura, FNumeroFactura, JSONSubsanacion);
-        end
-        else
-        begin
-          ShowMessage('Error al procesar la respuesta de la subsanación.'
-                       + sLineBreak +
-                     'Consulte la pestaña de eventos para más detalles.');
-        end
+        FSubsanacionExitosa := True;
+        ShowMessage('Subsanación registrada en la AEAT. ' +
+                    Resultado.MensajeError);
+        frmMtoPrincipal.VeriFactuLog.RegistrarOperacionFactura(
+          Format('Subsanación registrada en la AEAT: %s. CSV: %s',
+                 [Resultado.EstadoRegistro, Resultado.Csv]),
+          FSerieFactura, FNumeroFactura, Resultado.Respuesta);
       end
       else
       begin
-          // Error en la comunicación HTTP
-          ShowMessage('Error de comunicación: ' + WSResult.ErrorMessage);
-          frmMtoPrincipal.VeriFactuLog.RegistrarError(
-            'Error HTTP en subsanación: ' + WSResult.ErrorMessage,
-            WSResult.ResponseContent, FSerieFactura, FNumeroFactura);
+        ShowMessage('La AEAT ha rechazado la subsanación: ' +
+                    Resultado.MensajeError + sLineBreak +
+                    'Consulte la pestaña de eventos para más detalles.');
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(
+          'Subsanación rechazada por la AEAT: ' + Resultado.MensajeError,
+          Resultado.Respuesta, FSerieFactura, FNumeroFactura);
       end;
-
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error enviando la subsanación: ' + E.Message);
+        frmMtoPrincipal.VeriFactuLog.RegistrarError(
+          'Error en subsanación: ' + E.Message, '', FSerieFactura,
+          FNumeroFactura);
+      end;
+    end;
   finally
     Screen.Cursor := crDefault;
-    VerifactuClient.Free;
   end;
 end;
 
@@ -913,6 +922,12 @@ begin
   begin
     if HayCambios then
     begin
+      // Control de flujo de la AEAT, antes de bloquear nada
+      EsperarTurnoEnvioAeat(FConnection,
+        procedure(ASegundos: Integer)
+        begin
+          Application.ProcessMessages;
+        end);
       FConnection.StartTransaction;
       ActualizarFacturaOriginal;
       EjecutarSubsanacion;

@@ -56,6 +56,7 @@ uses
   inLibVerifactuClient in 'src\Lib\VeriFactu\inLibVerifactuClient.pas',
   inLibJSONState in 'src\Lib\Core\inLibJSONState.pas',
   inLibVerifactuBuilder in 'src\Lib\VeriFactu\inLibVerifactuBuilder.pas',
+  inLibVerifactuAeat in 'src\Lib\VeriFactu\inLibVerifactuAeat.pas',
   inMtoModalSubsanacion in 'src\UI\Modals\inMtoModalSubsanacion.pas' {frmModalSubsanacion},
   inMtoModalSubsanacionLineas in 'src\UI\Modals\inMtoModalSubsanacionLineas.pas' {frmModalSubsanacionLineas},
   inMtoModalVisorFoto in 'src\UI\Modals\inMtoModalVisorFoto.pas' {frmMtoVisorFoto},
