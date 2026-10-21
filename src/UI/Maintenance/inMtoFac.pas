@@ -443,13 +443,23 @@ function TfrmMtoFac.fncEnviarAeat(const sSerie: string;
   const iNumero: Integer; AOperacion: TOperacionAeat;
   out AResultado: TResultadoEnvioAeat): Boolean;
 begin
+  // El envío abre su propia transacción: lo pendiente se graba antes,
+  // igual que hace el botón Grabar
+  if frmMtoPrincipal.FDmConn.conUni.InTransaction then
+    frmMtoPrincipal.FDmConn.conUni.Commit;
   // Control de flujo de la AEAT: entre envíos hay que esperar el
-  // TiempoEsperaEnvio que devolvió el anterior
-  EsperarTurnoEnvioAeat(frmMtoPrincipal.FDmConn.conUni,
-    procedure(ASegundos: Integer)
-    begin
-      Application.ProcessMessages;
-    end);
+  // TiempoEsperaEnvio que devolvió el anterior. Mientras, la ficha no
+  // admite clics (se refresca la pantalla con ProcessMessages)
+  Enabled := False;
+  try
+    EsperarTurnoEnvioAeat(frmMtoPrincipal.FDmConn.conUni,
+      procedure(ASegundos: Integer)
+      begin
+        Application.ProcessMessages;
+      end);
+  finally
+    Enabled := True;
+  end;
   AResultado := EnviarFacturaAeat(frmMtoPrincipal.FDmConn.conUni, sSerie,
                                   iNumero, AOperacion);
   Result := AResultado.Ok;
@@ -835,6 +845,13 @@ begin
     Qry.Open;
     if Qry.IsEmpty then
       Exit;
+    // Factura OFFLINE: el QR está generado pero falta el envío
+    if Qry.FieldByName('ESTADO').AsString = 'PENDIENTE' then
+    begin
+      ShowMessage('La factura está pendiente de envío a la AEAT. ' +
+                  'Use Re-consolidar.');
+      Exit(True);
+    end;
     oJson := TJSONObject.ParseJSONValue(
       Qry.FieldByName('RESPUESTA_COMPLETA').AsString);
     try

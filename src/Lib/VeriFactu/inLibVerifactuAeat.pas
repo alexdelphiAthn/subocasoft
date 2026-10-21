@@ -80,8 +80,9 @@ function ConstruirUrlQRFacturaAeat(AConn: TUniConnection;
 function GenerarQRPngVerifactu(const AUrl: string;
                                AEscala: Integer = 4): TBytes;
 
-// Formato del número de factura enviado a la AEAT y en el QR
-function ComponerNumSerieFacturaAeat(const ASerie: string;
+// Formato del número de factura enviado a la AEAT y en el QR:
+// prefijo (VERIFACTU_PREFIJO_NUMSERIE u OFFLINE_PREFIX) + serie/número
+function ComponerNumSerieFacturaAeat(const APrefijo, ASerie: string;
                                      ANumero: Integer): string;
 
 implementation
@@ -116,6 +117,7 @@ type
   // Configuración leída de suboc_param
   TConfigAeat = record
     Entorno:            string;  // PRE / PRO
+    PrefijoNumSerie:    string;
     UrlEnvio:           string;
     UrlQR:              string;
     NifEmisor:          string;
@@ -137,6 +139,7 @@ type
     Serie:              string;
     Numero:             Integer;
     NumSerieFactura:    string;
+    RectNumSerie:       string;
     FechaFac:           TDateTime;
     FechaExpedicion:    string;  // dd-mm-yyyy
     TipoFactura:        string;  // F1 / F2 / F3 / R1..R5
@@ -279,18 +282,29 @@ begin
   end;
 end;
 
-function ComponerNumSerieFacturaAeat(const ASerie: string;
+function ComponerNumSerieFacturaAeat(const APrefijo, ASerie: string;
                                      ANumero: Integer): string;
 begin
-  // Mismo valor que figura en la factura impresa y en el QR
-  Result := Trim(ASerie) + '/' + IntToStr(ANumero);
+  // Mismo valor con el que se registraron las facturas enviadas por la
+  // API anterior (p. ej. LAO-PRU/1) y que figura en el QR impreso
+  Result := APrefijo + Trim(ASerie) + '/' + IntToStr(ANumero);
 end;
 
-function ClaveOperacion(const ASerie: string; ANumero: Integer;
+function ClaveOperacion(const ANumSerie: string;
                         AOperacion: TOperacionAeat): string;
 begin
-  Result := ComponerNumSerieFacturaAeat(ASerie, ANumero) + '#' +
-            IntToStr(Ord(AOperacion));
+  Result := ANumSerie + '#' + IntToStr(Ord(AOperacion));
+end;
+
+// Número de factura guardado en la clave de un envío en vuelo
+function NumSerieDeClave(const AClave: string): string;
+var
+  iPos: Integer;
+begin
+  Result := AClave;
+  iPos := LastDelimiter('#', AClave);
+  if iPos > 0 then
+    Result := Copy(AClave, 1, iPos - 1);
 end;
 
 // ===========================================================================
@@ -384,9 +398,8 @@ begin
     Qry.Open;
     while not Qry.Eof do
     begin
-      Result.Values[UpperCase(Trim(
-        Qry.FieldByName('NOMBRE_PARAM').AsString))] :=
-        Trim(Qry.FieldByName('VALUE_PARAM').AsString);
+      Result.Add(UpperCase(Trim(Qry.FieldByName('NOMBRE_PARAM').AsString)) +
+        '=' + Trim(Qry.FieldByName('VALUE_PARAM').AsString));
       Qry.Next;
     end;
   finally
@@ -422,10 +435,17 @@ begin
                                cUrlEnvioPre);
       Result.UrlQR := Param(oParams, 'VERIFACTU_URL_QR_PRE', cUrlQRPre);
     end;
+    if oParams.IndexOfName('VERIFACTU_PREFIJO_NUMSERIE') >= 0 then
+      Result.PrefijoNumSerie := oParams.Values['VERIFACTU_PREFIJO_NUMSERIE']
+    else
+      Result.PrefijoNumSerie := oParams.Values['OFFLINE_PREFIX'];
     Result.NifEmisor := NormalizarNif(Param(oParams,
       'VERIFACTU_NIF_EMISOR', Param(oParams, 'OFFLINE_NIF', '')));
-    Result.NombreEmisor := Param(oParams, 'VERIFACTU_NOMBRE_EMISOR', '');
-    Result.SifNombreRazon := Param(oParams, 'VERIFACTU_SIF_NOMBRE_RAZON', '');
+    // NombreRazon admite 120 caracteres en el XSD
+    Result.NombreEmisor := Copy(Param(oParams, 'VERIFACTU_NOMBRE_EMISOR',
+      ''), 1, 120);
+    Result.SifNombreRazon := Copy(Param(oParams,
+      'VERIFACTU_SIF_NOMBRE_RAZON', ''), 1, 120);
     Result.SifNif := NormalizarNif(Param(oParams, 'VERIFACTU_SIF_NIF', ''));
     Result.SifNombre := Param(oParams, 'VERIFACTU_SIF_NOMBRE', 'Subocasana');
     Result.SifId := Param(oParams, 'VERIFACTU_SIF_ID', 'SB');
@@ -597,7 +617,10 @@ begin
     Qry.Connection := AConn;
     Qry.SQL.Text :=
       ' UPDATE suboc_verifactu_cadena ' +
-      ' SET PROXIMO_ENVIO_VFCAD = DATE_ADD(NOW(), INTERVAL :ESPERA SECOND) ' +
+      ' SET PROXIMO_ENVIO_VFCAD = DATE_ADD(NOW(), INTERVAL :ESPERA SECOND), ' +
+      '     VUELO_CLAVE_VFCAD = NULL, ' +
+      '     VUELO_FHGEN_VFCAD = NULL, ' +
+      '     VUELO_HUELLA_VFCAD = NULL ' +
       ' WHERE NIF_VFCAD = :NIF';
     Qry.ParamByName('ESPERA').AsInteger := AEsperaSegundos;
     Qry.ParamByName('NIF').AsString := ANif;
@@ -617,12 +640,18 @@ begin
   Qry := TUniQuery.Create(nil);
   try
     Qry.Connection := AConn;
+    // La fila de la cadena pudo crearse en la transacción deshecha (primer
+    // envío del NIF): se inserta si no existe
     Qry.SQL.Text :=
-      ' UPDATE suboc_verifactu_cadena ' +
-      ' SET VUELO_CLAVE_VFCAD = :CLAVE, ' +
-      '     VUELO_FHGEN_VFCAD = :FHGEN, ' +
-      '     VUELO_HUELLA_VFCAD = :HUELLA ' +
-      ' WHERE NIF_VFCAD = :NIF';
+      ' INSERT INTO suboc_verifactu_cadena ' +
+      ' (NIF_VFCAD, CONTADOR_VFCAD, VUELO_CLAVE_VFCAD, VUELO_FHGEN_VFCAD, ' +
+      '  VUELO_HUELLA_VFCAD, INSTANTE_MODIF_VFCAD) ' +
+      ' VALUES (:NIF, 0, :CLAVE, :FHGEN, :HUELLA, NOW()) ' +
+      ' ON DUPLICATE KEY UPDATE ' +
+      '     VUELO_CLAVE_VFCAD = VALUES(VUELO_CLAVE_VFCAD), ' +
+      '     VUELO_FHGEN_VFCAD = VALUES(VUELO_FHGEN_VFCAD), ' +
+      '     VUELO_HUELLA_VFCAD = VALUES(VUELO_HUELLA_VFCAD), ' +
+      '     INSTANTE_MODIF_VFCAD = NOW()';
     Qry.ParamByName('CLAVE').AsString := AClave;
     Qry.ParamByName('FHGEN').AsString := AFhGen;
     Qry.ParamByName('HUELLA').AsString := AHuellaAnterior;
@@ -672,6 +701,8 @@ begin
     begin
       if Assigned(AProgreso) then
         AProgreso(Integer((iFin - GetTickCount64) div 1000) + 1);
+      if GetTickCount64 >= iFin then
+        Break;
       Sleep(200);
     end;
   end;
@@ -692,6 +723,10 @@ begin
     Result := '04'
   else if Pos('PASAPORTE', sTipo) > 0 then
     Result := '03'
+  else if Pos('CERTIFICADO', sTipo) > 0 then
+    Result := '05'
+  else if Pos('OTRO', sTipo) > 0 then
+    Result := '06'
   else if AEsUE then
     Result := '02'
   else
@@ -733,7 +768,8 @@ begin
     begin
       ADatos.Serie := ASerie;
       ADatos.Numero := ANumero;
-      ADatos.NumSerieFactura := ComponerNumSerieFacturaAeat(ASerie, ANumero);
+      ADatos.NumSerieFactura := ComponerNumSerieFacturaAeat(
+        AConfig.PrefijoNumSerie, ASerie, ANumero);
       ADatos.FechaFac := Qry.FieldByName('FECHA_FACTURA').AsDateTime;
       ADatos.FechaExpedicion := FormatDateTime('dd-mm-yyyy', ADatos.FechaFac);
       ADatos.ImporteTotal := Qry.FieldByName(
@@ -745,6 +781,7 @@ begin
       if ADatos.NombreCliente = '' then
         ADatos.NombreCliente := Trim(Qry.FieldByName('NOMBRE').AsString +
           ' ' + Qry.FieldByName('APELLIDOS').AsString);
+      ADatos.NombreCliente := Copy(ADatos.NombreCliente, 1, 120);
       ADatos.PaisClienteISO2 := UpperCase(Trim(
         Qry.FieldByName('PAIS_CLIENTE_FACTURA').AsString));
       if ADatos.PaisClienteISO2 = '' then
@@ -772,6 +809,8 @@ begin
         if not Qry.FieldByName('FECHA_RECTIFICADA_FACTURA').IsNull then
           ADatos.RectFecha := FormatDateTime('dd-mm-yyyy',
             Qry.FieldByName('FECHA_RECTIFICADA_FACTURA').AsDateTime);
+        ADatos.RectNumSerie := ComponerNumSerieFacturaAeat(
+          AConfig.PrefijoNumSerie, ADatos.RectSerie, ADatos.RectNumero);
       end;
       bEsSimpl := Qry.FieldByName('ESSIMPL_FACTURA').AsString = 'S';
       if ATipoFactura <> '' then
@@ -894,8 +933,8 @@ begin
       '<sum1:FacturasRectificadas><sum1:IDFacturaRectificada>' +
       '<sum1:IDEmisorFactura>' + EscaparXml(ANif) +
       '</sum1:IDEmisorFactura>' +
-      '<sum1:NumSerieFactura>' + EscaparXml(ComponerNumSerieFacturaAeat(
-        ADatos.RectSerie, ADatos.RectNumero)) + '</sum1:NumSerieFactura>' +
+      '<sum1:NumSerieFactura>' + EscaparXml(ADatos.RectNumSerie) +
+      '</sum1:NumSerieFactura>' +
       '<sum1:FechaExpedicionFactura>' + ADatos.RectFecha +
       '</sum1:FechaExpedicionFactura>' +
       '</sum1:IDFacturaRectificada></sum1:FacturasRectificadas>';
@@ -1077,7 +1116,8 @@ begin
               (ExtraerEtiqueta(AXml, 'faultstring') <> '');
 end;
 
-procedure InterpretarRespuesta(var AResultado: TResultadoEnvioAeat);
+procedure InterpretarRespuesta(var AResultado: TResultadoEnvioAeat;
+                               ARepiteVuelo: Boolean);
 var
   sXml: string;
 begin
@@ -1102,12 +1142,24 @@ begin
   // Duplicado: un intento anterior ya quedó registrado en la AEAT
   AResultado.Duplicado := (AResultado.CodigoError = '3000') or
     ContainsText(AResultado.DescripcionError, 'duplicado');
+  // Un duplicado solo confirma el envío si se ha repetido idéntico el
+  // registro en vuelo (misma huella). Si no, la AEAT tiene otro registro de
+  // esta factura cuya huella no conocemos: no se avanza la cadena con la
+  // nuestra y se deja para revisión manual.
   AResultado.Ok :=
     SameText(AResultado.EstadoRegistro, 'Correcto') or
     SameText(AResultado.EstadoRegistro, 'AceptadoConErrores') or
-    AResultado.Duplicado;
+    (AResultado.Duplicado and ARepiteVuelo);
   if AResultado.Duplicado then
     AResultado.EstadoRegistro := 'Duplicado';
+  if AResultado.Duplicado and (not ARepiteVuelo) then
+  begin
+    AResultado.MensajeError := Trim(Format('AEAT [%s] %s. La factura ya ' +
+      'estaba registrada en la AEAT con otro registro: revísela en la sede ' +
+      'electrónica antes de volver a enviarla.',
+      [AResultado.CodigoError, AResultado.DescripcionError]));
+    Exit;
+  end;
   if (not AResultado.Ok) or
      SameText(AResultado.EstadoRegistro, 'AceptadoConErrores') or
      AResultado.Duplicado then
@@ -1343,12 +1395,13 @@ begin
 end;
 
 procedure GuardarConsolidacion(AConn: TUniConnection; const ASerie: string;
-                               ANumero, AIdNuevo: Integer;
+                               ANumero: Integer;
                                AOperacion: TOperacionAeat;
                                const AResultado: TResultadoEnvioAeat);
 var
-  Qry:     TUniQuery;
-  oStream: TBytesStream;
+  Qry:      TUniQuery;
+  oStream:  TBytesStream;
+  iIdNuevo: Integer;
 begin
   Qry := TUniQuery.Create(nil);
   try
@@ -1359,21 +1412,30 @@ begin
     Qry.ParamByName('NUMERO').AsInteger := ANumero;
     Qry.ReadOnly := False;
     Qry.Open;
+    if AOperacion = opAeatAnulacion then
+    begin
+      // La anulación conserva el CSV, la huella y el XML del alta; los de
+      // la anulación quedan en el registro de eventos
+      if not Qry.IsEmpty then
+      begin
+        Qry.Edit;
+        Qry.FieldByName('ESTADO').AsString := 'ANULADA';
+        Qry.FieldByName('FECHA_PROCESAMIENTO').AsDateTime := Now;
+        Qry.Post;
+      end;
+      Exit;
+    end;
     if Qry.IsEmpty then
     begin
-      if AIdNuevo <= 0 then
-        raise Exception.Create('No se pudo reservar el ID de consolidación.');
+      iIdNuevo := ReservarIdConsolidacion(AConn, ASerie, ANumero);
       Qry.Insert;
-      Qry.FieldByName('ID_CONSOLIDACION').AsInteger := AIdNuevo;
+      Qry.FieldByName('ID_CONSOLIDACION').AsInteger := iIdNuevo;
       Qry.FieldByName('SERIE_FACTURA').AsString := ASerie;
       Qry.FieldByName('NRO_FACTURA').AsInteger := ANumero;
     end
     else
       Qry.Edit;
-    if AOperacion = opAeatAnulacion then
-      Qry.FieldByName('ESTADO').AsString := 'ANULADA'
-    else
-      Qry.FieldByName('ESTADO').AsString := 'PROCESADO';
+    Qry.FieldByName('ESTADO').AsString := 'PROCESADO';
     Qry.FieldByName('REQUEST_ID').AsString := AResultado.Csv;
     // QUEUE_ID: eslabón de la cadena (lo usan las comprobaciones de la ficha)
     Qry.FieldByName('QUEUE_ID').AsInteger := Integer(AResultado.Contador);
@@ -1384,19 +1446,15 @@ begin
     Qry.FieldByName('FECHA_PROCESAMIENTO').AsDateTime := Now;
     Qry.FieldByName('RESPUESTA_COMPLETA').AsString := RespuestaJson(AResultado);
     Qry.FieldByName('PETICION_COMPLETA').AsString := AResultado.Peticion;
-    if AOperacion <> opAeatAnulacion then
+    Qry.FieldByName('VERIFACTU_URL').AsString := AResultado.VerifactuUrl;
+    Qry.FieldByName('QRCODE_BASE64').AsString := AResultado.QRCodeBase64;
+    if Length(AResultado.QRCodePng) > 0 then
     begin
-      Qry.FieldByName('VERIFACTU_URL').AsString := AResultado.VerifactuUrl;
-      Qry.FieldByName('QRCODE_BASE64').AsString := AResultado.QRCodeBase64;
-      if Length(AResultado.QRCodePng) > 0 then
-      begin
-        oStream := TBytesStream.Create(AResultado.QRCodePng);
-        try
-          (Qry.FieldByName('QRCODE_PNG') as TBlobField).LoadFromStream(
-            oStream);
-        finally
-          FreeAndNil(oStream);
-        end;
+      oStream := TBytesStream.Create(AResultado.QRCodePng);
+      try
+        (Qry.FieldByName('QRCODE_PNG') as TBlobField).LoadFromStream(oStream);
+      finally
+        FreeAndNil(oStream);
       end;
     end;
     Qry.Post;
@@ -1429,7 +1487,6 @@ end;
 procedure PersistirResultado(AConn: TUniConnection;
                              const AConfig: TConfigAeat;
                              const ADatos: TDatosFacturaAeat;
-                             AIdNuevo: Integer;
                              AOperacion: TOperacionAeat;
                              const AResultado: TResultadoEnvioAeat);
 begin
@@ -1437,8 +1494,8 @@ begin
   begin
     AvanzarCadena(AConn, AConfig.NifEmisor, ADatos, AResultado.Huella,
                   AResultado.EsperaSegundos);
-    GuardarConsolidacion(AConn, ADatos.Serie, ADatos.Numero, AIdNuevo,
-                         AOperacion, AResultado);
+    GuardarConsolidacion(AConn, ADatos.Serie, ADatos.Numero, AOperacion,
+                         AResultado);
     if AOperacion = opAeatAnulacion then
       ActualizarFaseFactura(AConn, ADatos.Serie, ADatos.Numero, 'S',
                             'CANCELADA')
@@ -1474,37 +1531,49 @@ function EnviarFacturaAeat(AConn: TUniConnection;
                            const ATipoFactura: string = ''):
                            TResultadoEnvioAeat;
 var
-  oConfig:      TConfigAeat;
-  oDatos:       TDatosFacturaAeat;
-  oCadena:      TCadenaAnterior;
-  sRegistro:    string;
-  sClave:       string;
-  iIdNuevo:     Integer;
-  bTransaccion: Boolean;
+  oConfig:       TConfigAeat;
+  oDatos:        TDatosFacturaAeat;
+  oCadena:       TCadenaAnterior;
+  sRegistro:     string;
+  sClave:        string;
+  bRepiteVuelo:  Boolean;
+  bDefinitiva:   Boolean;
+  sMensaje:      string;
 begin
   Result := Default(TResultadoEnvioAeat);
+  // El envío necesita su propia transacción: el bloqueo de la cadena debe
+  // durar hasta guardar el resultado y nada ajeno puede confirmarse con él
+  if AConn.InTransaction then
+    raise Exception.Create('Hay una transacción pendiente en la conexión. ' +
+      'Grabe o cancele los cambios antes de enviar a la AEAT.');
   oConfig := CargarConfigAeat(AConn);
   ValidarConfigAeat(oConfig);
   if not CargarDatosFactura(AConn, ASerie, ANumero, oConfig, ATipoFactura,
                             oDatos) then
-    raise Exception.CreateFmt('No se encontró la factura %s.',
-      [ComponerNumSerieFacturaAeat(ASerie, ANumero)]);
+    raise Exception.CreateFmt('No se encontró la factura %s/%d.',
+      [ASerie, ANumero]);
   Result.NifEmisor := oConfig.NifEmisor;
   Result.NumSerieFactura := oDatos.NumSerieFactura;
   AsegurarTablaCadena(AConn);
-  iIdNuevo := 0;
-  sClave := ClaveOperacion(ASerie, ANumero, AOperacion);
-  bTransaccion := not AConn.InTransaction;
-  if bTransaccion then
-    AConn.StartTransaction;
+  sClave := ClaveOperacion(oDatos.NumSerieFactura, AOperacion);
+  bDefinitiva := False;
+  bRepiteVuelo := False;
+  oCadena := Default(TCadenaAnterior);
+  AConn.StartTransaction;
   try
-    if AOperacion <> opAeatAnulacion then
-      iIdNuevo := ReservarIdConsolidacion(AConn, ASerie, ANumero);
     ObtenerCadena(AConn, oConfig.NifEmisor, oCadena);
+    // Un envío incierto de otro registro se resuelve antes: si la AEAT lo
+    // registró, encadenar otro detrás de su predecesor bifurcaría la cadena
+    if (oCadena.VueloClave <> '') and (oCadena.VueloClave <> sClave) then
+      raise Exception.CreateFmt('La factura %s quedó pendiente de ' +
+        'confirmar por la AEAT. Re-consolídela antes de enviar otra.',
+        [NumSerieDeClave(oCadena.VueloClave)]);
     Result.Contador := oCadena.Contador + 1;
     // Un intento incierto de este mismo registro se repite idéntico: misma
     // huella si la AEAT llegó a registrarlo sin que recibiéramos respuesta
-    if (oCadena.VueloClave = sClave) and (oCadena.VueloFhGen <> '') then
+    bRepiteVuelo := (oCadena.VueloClave = sClave) and
+                    (oCadena.VueloFhGen <> '');
+    if bRepiteVuelo then
       Result.FechaHoraGen := oCadena.VueloFhGen
     else
       Result.FechaHoraGen := FechaHoraHusoGen(Now);
@@ -1527,31 +1596,50 @@ begin
     // Solo el servicio SOAP de la AEAT resuelve un envío. Cualquier otra
     // respuesta (proxy, portal cautivo, cuerpo truncado) deja el registro
     // incierto y se reenvía idéntico
+    // 401/403: la AEAT no acepta el certificado. No es un corte de red:
+    // reintentar no lo arregla
+    if (Result.EstadoHttp = 401) or (Result.EstadoHttp = 403) then
+      raise Exception.CreateFmt('La AEAT no acepta el certificado digital ' +
+        '(HTTP %d). Revise el certificado seleccionado en Parámetros.',
+        [Result.EstadoHttp]);
     if not EsRespuestaAeatDefinitiva(Result.EstadoHttp, Result.Respuesta) then
       raise EVerifactuAeatIncierto.CreateFmt('La AEAT no ha dado una ' +
         'respuesta válida (HTTP %d). Vuelva a intentarlo.',
         [Result.EstadoHttp]);
-    InterpretarRespuesta(Result);
+    bDefinitiva := True;
+    InterpretarRespuesta(Result, bRepiteVuelo);
     if Result.Ok and (AOperacion <> opAeatAnulacion) then
       GenerarQrResultado(oConfig, oDatos, Result);
-    PersistirResultado(AConn, oConfig, oDatos, iIdNuevo, AOperacion, Result);
-    if bTransaccion then
-      AConn.Commit;
+    PersistirResultado(AConn, oConfig, oDatos, AOperacion, Result);
+    AConn.Commit;
   except
-    on E: EVerifactuAeatIncierto do
-    begin
-      if bTransaccion then
-      begin
-        AConn.Rollback;
-        GuardarEnvioEnVuelo(AConn, oConfig.NifEmisor, sClave,
-                            Result.FechaHoraGen, oCadena.Huella);
-      end;
-      raise;
-    end;
     on E: Exception do
     begin
-      if bTransaccion and AConn.InTransaction then
-        AConn.Rollback;
+      sMensaje := E.Message;
+      try
+        if AConn.InTransaction then
+          AConn.Rollback;
+      except
+        // La conexión puede haber caído: se informa del error original
+      end;
+      // Si la AEAT pudo registrarlo (envío incierto, o respuesta recibida
+      // pero no guardada) el reintento debe repetir la misma huella
+      if (E is EVerifactuAeatIncierto) or bDefinitiva then
+      begin
+        try
+          GuardarEnvioEnVuelo(AConn, oConfig.NifEmisor, sClave,
+                              Result.FechaHoraGen, oCadena.Huella);
+        except
+          on EVuelo: Exception do
+            sMensaje := sMensaje + ' (no se pudo anotar el envío pendiente: ' +
+              EVuelo.Message + ')';
+        end;
+        if bDefinitiva and not (E is EVerifactuAeatIncierto) then
+          raise EVerifactuAeatIncierto.Create('La AEAT respondió pero no se ' +
+            'pudo guardar el resultado: ' + sMensaje +
+            '. Re-consolide la factura.');
+        raise EVerifactuAeatIncierto.Create(sMensaje);
+      end;
       raise;
     end;
   end;

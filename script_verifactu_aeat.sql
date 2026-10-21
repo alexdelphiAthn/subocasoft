@@ -33,7 +33,7 @@ ALTER TABLE suboc_facturas
 -- El abono guarda la referencia a la factura original
 DELIMITER $$
 DROP PROCEDURE IF EXISTS PRC_CREAR_FACTURA_ABONO $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `PRC_CREAR_FACTURA_ABONO`(IN `pidseriefactura` varchar(200),
+CREATE PROCEDURE `PRC_CREAR_FACTURA_ABONO`(IN `pidseriefactura` varchar(200),
 	IN `pidnumfactura` varchar(200),
 	IN `pidseriefacturaabono` varchar(200),
 	IN `pfechafacturaabono` date,
@@ -118,6 +118,8 @@ END $$
 DELIMITER ;
 
 -- Parámetros del envío directo (solo se crean si no existen).
+-- El número enviado a la AEAT lleva delante VERIFACTU_PREFIJO_NUMSERIE o,
+-- si no existe ese parámetro, OFFLINE_PREFIX (como hacía la API anterior).
 -- Rellenar en Parámetros: NIF y nombre del emisor y datos del productor
 -- del software. VERIFACTU_ENTORNO: PRE (pruebas) o PRO (producción).
 INSERT INTO suboc_param (NOMBRE_PARAM, VALUE_PARAM)
